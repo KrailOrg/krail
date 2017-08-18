@@ -61,7 +61,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         bindingManager.contextDestroyed(servletContextEvent)
 
         then:
-        logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop services")
+        logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop service")
     }
 
     def "InMemory option dao is active dao by default"() {

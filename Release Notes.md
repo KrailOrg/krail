@@ -87,6 +87,11 @@ All classes relating to the provision of In Memory "persistence", are within **o
 
 - added `PersistenceConfigurationException`
 
+
+### services
+
+- root package becomes `service` instead of `services`
+
 ### uk.q3c.util
 
 Project **q3c-util** contains all of the `uk.q3c.util` package

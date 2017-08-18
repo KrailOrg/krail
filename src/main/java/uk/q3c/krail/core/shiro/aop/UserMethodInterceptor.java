@@ -40,7 +40,7 @@ public class UserMethodInterceptor extends ShiroMethodInterceptor<RequiresUser> 
     /**
      * Ensures that the calling <code>Subject</code> is a <em>user</em>, that is, they are <em>either</code>
      * {@link org.apache.shiro.subject.Subject#isAuthenticated() authenticated} <b><em>or</em></b> remembered via remember
-     * me services before allowing access
+     * me service before allowing access
      *
      * @param a
      *         the RequiresUser annotation to check

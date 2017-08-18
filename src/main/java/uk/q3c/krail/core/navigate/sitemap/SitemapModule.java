@@ -17,8 +17,8 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.set.DefaultMasterSitemapQueue;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
-import uk.q3c.krail.core.services.AbstractServiceModule;
-import uk.q3c.krail.core.services.Dependency;
+import uk.q3c.krail.core.service.AbstractServiceModule;
+import uk.q3c.krail.core.service.Dependency;
 
 public class SitemapModule extends AbstractServiceModule {
 

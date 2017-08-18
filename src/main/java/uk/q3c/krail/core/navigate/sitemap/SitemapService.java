@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.service.Service;
 
 public interface SitemapService extends Service {
 

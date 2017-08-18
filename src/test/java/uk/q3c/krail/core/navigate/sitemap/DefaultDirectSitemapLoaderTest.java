@@ -28,7 +28,7 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDirectSitemapModule_A;
 import uk.q3c.krail.core.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDirectSitemapModule_B;
-import uk.q3c.krail.core.services.ServicesModule;
+import uk.q3c.krail.core.service.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;

@@ -60,8 +60,8 @@ package com.example.tutorial.service;
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.core.service.AbstractService;
+import uk.q3c.krail.core.service.ServicesModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -97,8 +97,8 @@ package com.example.tutorial.service;
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.core.service.AbstractService;
+import uk.q3c.krail.core.service.ServicesModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -135,8 +135,8 @@ package com.example.tutorial.service;
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.core.service.AbstractService;
+import uk.q3c.krail.core.service.ServicesModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -173,8 +173,8 @@ package com.example.tutorial.service;
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.core.service.AbstractService;
+import uk.q3c.krail.core.service.ServicesModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -220,8 +220,8 @@ All Service classes must be registered. We can do that very simply by sub-classi
 package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
-import uk.q3c.krail.core.services.AbstractServiceModule;
-import uk.q3c.krail.core.services.Dependency;
+import uk.q3c.krail.core.service.AbstractServiceModule;
+import uk.q3c.krail.core.service.Dependency;
 
 public class TutorialServicesModule extends AbstractServiceModule {
 
@@ -279,7 +279,7 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
-import uk.q3c.krail.core.services.ServiceBusMessage;
+import uk.q3c.krail.core.service.ServiceBusMessage;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;

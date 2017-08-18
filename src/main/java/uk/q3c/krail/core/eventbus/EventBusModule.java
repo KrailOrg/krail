@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.service.Service;
 import uk.q3c.krail.eventbus.BusMessage;
 
 import java.util.concurrent.atomic.AtomicInteger;

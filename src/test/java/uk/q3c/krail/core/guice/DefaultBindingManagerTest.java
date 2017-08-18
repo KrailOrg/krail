@@ -25,10 +25,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.services.DefaultServicesModel;
-import uk.q3c.krail.core.services.Service;
-import uk.q3c.krail.core.services.ServiceKey;
-import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.core.service.DefaultServicesModel;
+import uk.q3c.krail.core.service.Service;
+import uk.q3c.krail.core.service.ServiceKey;
+import uk.q3c.krail.core.service.ServicesModel;
 import uk.q3c.krail.core.shiro.KrailSecurityManager;
 import uk.q3c.krail.testutil.dummy.Dummy;
 import uk.q3c.krail.testutil.guice.TestBindingManager;
@@ -39,9 +39,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import java.io.File;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({UtilsModule.class})
@@ -100,7 +99,7 @@ public class DefaultBindingManagerTest {
         bindingManager.contextDestroyed(servletContextEvent);
 
         // then
-        assertThat(logMonitor.infoLogs()).contains("Stopping all services");
+        assertThat(logMonitor.infoLogs()).contains("Stopping all service");
 
 
     }
