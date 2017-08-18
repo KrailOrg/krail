@@ -13,7 +13,6 @@
 package uk.q3c.krail.i18n.persist;
 
 import com.google.inject.BindingAnnotation;
-import uk.q3c.krail.i18n.bind.I18NModule;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -22,7 +21,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 /**
- * Annotation which identifies the order in which bundles sources should queried, see {@link I18NModule}
+ * Annotation which identifies the order in which bundles sources should queried, see  I18NModule in the implementation, davidsowerby/krail-i18n
  */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})

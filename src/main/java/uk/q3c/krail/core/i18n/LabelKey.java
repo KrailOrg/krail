@@ -62,7 +62,6 @@ public enum LabelKey implements I18NKey {
     Simple_User_Hierarchy,
     Sitemap_Service,
     Small,
-    Source_Order,
     Splash,
     Submit,
     System_Account,
@@ -71,13 +70,13 @@ public enum LabelKey implements I18NKey {
     User_Name,
     Warning,
     Maxiumum_Depth, Sort_Ascending, Sort_Type, Locale_Flag_Size, Use_Field_Name_in_Validation_Message, Use_Key_Path,
-    Path, Write_Path, Preferred_Locale, Source_Order_Default, Auto_Stub, Stub_with_Key_Name, Stub_Value,
+    Path, Write_Path, Preferred_Locale, Auto_Stub, Stub_with_Key_Name, Stub_Value,
     Maximum_Cache_Size, Edit, Save, Breadcrumb_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Message_bar_is_Visible,
     SubPage_Panel_is_Visible, System_Administration, Sitemap_Build_Report, Information, Notification_Options, Reset_to_Default, Username_Cannot_be_Empty,
     Password_Cannot_be_Empty, Application_Options, Options, Description, Connection_URL, Source_Data, In_Memory, Name, Active_Source, Selected_Source,
     Option_Source_Selection, Is_Volatile, Name_Caption_Style, Name_Style, Description_Caption_Style, Description_Style, Default_Caption_Style,
     Default_Value_Style, Connection_url_Caption_Style, Connection_url_Style, Is_volatile_Caption_Style, Is_volatile_Style, I18N, Export, Progress, Locales,
-    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, Selected_Pattern_Targets, This_feature_has_not_been_implemented, Yes
+    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, This_feature_has_not_been_implemented, Yes
 
 
 }

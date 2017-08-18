@@ -21,6 +21,8 @@ import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.i18n.persist.*;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
+import uk.q3c.krail.option.OptionKey;
 import uk.q3c.util.data.collection.AnnotationList;
 
 import java.lang.annotation.Annotation;
@@ -33,8 +35,10 @@ import static com.google.common.base.Preconditions.*;
  * <p>
  * Created by David Sowerby on 01/08/15.
  */
-public class DefaultPatternSourceProvider implements PatternSourceProvider {
-
+public class DefaultPatternSourceProvider implements PatternSourceProvider, OptionContext<Object> {
+    public static final OptionKey<AnnotationList> optionKeySourceOrder = new OptionKey<>(new AnnotationList(), DefaultPatternSourceProvider.class, I18NPersistLabelKey.Source_Order, I18NPersistDescriptionKey.Source_Order);
+    public static final OptionKey<AnnotationList> optionKeySourceOrderDefault = new OptionKey<>(new AnnotationList(), DefaultPatternSourceProvider.class, I18NPersistLabelKey.Source_Order_Default, I18NPersistDescriptionKey.Source_Order_Default);
+    public static final OptionKey<AnnotationList> optionKeySelectedTargets = new OptionKey<>(new AnnotationList(), DefaultPatternSourceProvider.class, I18NPersistLabelKey.Selected_Pattern_Targets, I18NPersistDescriptionKey.Selected_Pattern_Targets);
 
     private final Map<Class<? extends Annotation>, Provider<PatternDao>> sources;
     private final Map<Class<? extends Annotation>, Provider<PatternDao>> targets;
@@ -46,7 +50,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     public DefaultPatternSourceProvider(@PatternSources Map<Class<? extends Annotation>, Provider<PatternDao>> sources, @PatternTargets Map<Class<? extends
             Annotation>, Provider<PatternDao>> targets, Option option, @PatternSourceOrderByBundle Map<Class<?
             extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>> sourceOrderByBundle, @PatternSourceOrderDefault Set<Class<? extends Annotation>>
-            sourceOrderDefault) {
+                                                sourceOrderDefault) {
         this.sources = sources;
         this.targets = targets;
         this.option = option;
@@ -100,9 +104,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
      * If the source order contains more elements than the number of sources, any elements not in {@link #sources} are removed and a warning logged
      * </ol>
      *
-     * @param key
-     *         used to identify the bundle, from {@link I18NKey#bundleName()}
-     *
+     * @param key used to identify the bundle, from {@link I18NKey#bundleName()}
      * @return a list containing the sources to be processed, in the order that they should be processed
      */
     @Override
@@ -136,9 +138,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     /**
      * Checks that source order has the correct number of elements as described in javadoc for {@link #orderedSources}
      *
-     * @param sourceOrder
-     *         the order as retrieved from configuration
-     *
+     * @param sourceOrder the order as retrieved from configuration
      * @return the finals source order, adjusted if necessary, as described in javadoc for {@link #orderedSources}
      */
     private ImmutableSet<Class<? extends Annotation>> verifySourceOrder(Collection<Class<? extends Annotation>> sourceOrder) {
@@ -161,11 +161,11 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
 
         //we have missing sources, so add them to new order
         sources.keySet()
-               .forEach(a -> {
-                   if (!newOrder.contains(a)) {
-                       newOrder.add(a);
-                   }
-               });
+                .forEach(a -> {
+                    if (!newOrder.contains(a)) {
+                        newOrder.add(a);
+                    }
+                });
 
         return ImmutableSet.copyOf(newOrder);
     }
@@ -188,11 +188,11 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
         if (!optionTargets.isEmpty()) {
             List<Class<? extends Annotation>> copyTargets = new ArrayList<>(optionTargets.getList());
             optionTargets.getList()
-                         .forEach(t -> {
-                if (!targets.containsKey(t)) {
-                    copyTargets.remove(t);
-                }
-                         });
+                    .forEach(t -> {
+                        if (!targets.containsKey(t)) {
+                            copyTargets.remove(t);
+                        }
+                    });
             return new AnnotationList(copyTargets);
         }
         return new AnnotationList(Lists.newArrayList(targets.keySet()));

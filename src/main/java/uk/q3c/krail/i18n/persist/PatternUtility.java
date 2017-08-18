@@ -14,8 +14,6 @@
 package uk.q3c.krail.i18n.persist;
 
 import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.bind.I18NModule;
-import uk.q3c.krail.option.Option;
 
 import java.util.Locale;
 import java.util.Set;
@@ -53,7 +51,7 @@ public interface PatternUtility {
 
     /**
      * Export I18N Pattern key value pairs from {@link PatternSource} to {@code targetDao} for all bundles and locales specified.  Because this method employs
-     * {@link PatternSource}, the output will be a combination of all sources currently defined by the {@link I18NModule} and the {@link Option} values used by
+     * {@link PatternSource}, the output will be a combination of all sources currently defined by the I18NModule and possibly Option values used by
      * {@link PatternSource#retrievePattern}
      *
      * @param target
@@ -74,7 +72,7 @@ public interface PatternUtility {
     long export(PatternDao target, Set<Class<? extends I18NKey>> bundles, Set<Locale> locales);
 
     /**
-     * Exports all the core Krail I18NKeys for all supported Locales (as defined by the {@link I18NModule}
+     * Exports all the core Krail I18NKeys for all supported Locales (as defined by the I18NModule
      *
      * @param target
      *         the PatternDao to export to

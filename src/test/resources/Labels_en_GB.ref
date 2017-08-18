@@ -58,8 +58,6 @@ public class Labels_en_GB extends EnumResourceBundle<LabelKey> {
         put(LabelKey.Small, "Small");
         put(LabelKey.Sort_Ascending, "Sort Ascending");
         put(LabelKey.Sort_Type, "Sort Type");
-        put(LabelKey.Source_Order, "Source Order");
-        put(LabelKey.Source_Order_Default, "Source Order Default");
         put(LabelKey.Splash, "Splash");
         put(LabelKey.Stub_Value, "Stub Value");
         put(LabelKey.Stub_with_Key_Name, "Stub with Key Name");

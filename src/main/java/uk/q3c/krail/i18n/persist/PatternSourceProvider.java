@@ -14,13 +14,7 @@
 package uk.q3c.krail.i18n.persist;
 
 import com.google.common.collect.ImmutableSet;
-import uk.q3c.krail.core.i18n.DescriptionKey;
-import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.bind.I18NModule;
-import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
-import uk.q3c.krail.option.OptionKey;
 import uk.q3c.util.data.collection.AnnotationList;
 
 import java.lang.annotation.Annotation;
@@ -30,35 +24,26 @@ import java.util.Optional;
  * Implementations provide a common access point to the various elements of I18N configuration, such as the defines sources, targets and source order.
  * <p>
  * Sources are accessed in a prescribed order by {@link PatternSource}.  The order in which they are accessed is
- * determined by a combination of {@link Option}, {#sourceOrderByBundle} and {#sourceOrderDefault}.
+ * determined by a combination of Option, {#sourceOrderByBundle} and {#sourceOrderDefault}.
  * <p>
  * <p>
  * Returns the order in which sources are processed.  The first non-null of the following is used:
  * <ol>
- * <li>the order returned by{@link #optionKeySourceOrder)} from {@link Option}</li>
- * <li>the order returned by {@link #optionKeySourceOrderDefault}  from {@link Option}</li>
- * <li> {@link I18NModule#sourcesOrderByBundle}</li>
- * <li> {@link I18NModule#sourcesDefaultOrder} </li>
- * <li> the keys from {@link I18NModule#sources} - note that the order for this will be unreliable if sources have been defined by multiple Guice modules</li>
+ * <li>the order returned by source order (usually defined using Option, by optionKeySourceOrder)</li>
+ * <li>the order returned by sourceOrderDefault}  (usually defined using Option, by optionKeySourceOrderDefault)</li>
+ * <li>  I18NModule#sourcesOrderByBundle</li>
+ * <li>  I18NModule#sourcesDefaultOrder </li>
+ * <li> the keys from I18NModule#sources - note that the order for this will be unreliable if sources have been defined by multiple Guice modules</li>
  * <p>
- * <p>If the source order contains less elements than the number of sources, missing elements are added in the order declared in {@link I18NModule#sources}<br>
- * If the source order contains more elements than the number of sources, any elements not in {@link I18NModule#sources} are removed and a warning logged
+ * <p>If the source order contains less elements than the number of sources, missing elements are added in the order declared in I18NModule#sources<br>
+ * If the source order contains more elements than the number of sources, any elements not in I18NModule#sources are removed and a warning logged
  * </ol>
  * <p>
  * <p>
  * <p>
  * Created by David Sowerby on 01/08/15.
  */
-public interface PatternSourceProvider extends OptionContext<Object> {
-
-    OptionKey<AnnotationList> optionKeySourceOrder = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class, LabelKey
-            .Source_Order, DescriptionKey.Source_Order);
-
-    OptionKey<AnnotationList> optionKeySourceOrderDefault = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class,
-            LabelKey.Source_Order_Default, DescriptionKey.Source_Order_Default);
-
-    OptionKey<AnnotationList> optionKeySelectedTargets = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class,
-            LabelKey.Selected_Pattern_Targets, DescriptionKey.Selected_Pattern_Targets);
+public interface PatternSourceProvider {
 
 
     Optional<PatternDao> sourceFor(Class<? extends Annotation> sourceAnnotation);
@@ -68,9 +53,9 @@ public interface PatternSourceProvider extends OptionContext<Object> {
     ImmutableSet<Class<? extends Annotation>> orderedSources(I18NKey i18NKey);
 
     /**
-     * Returns targets selected, but removes any which are not declared as targets in the {@link I18NModule}
+     * Returns targets selected, but removes any which are not declared as targets in the I18NModule
      *
-     * @return targets selected, but removes any which are not declared as targets in the {@link I18NModule}
+     * @return targets selected, but removes any which are not declared as targets in the I18NModule
      */
     AnnotationList selectedTargets();
 }
