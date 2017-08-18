@@ -55,7 +55,7 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.15'
+version = '0.9.10.16'
 //version = versionFromFile(project.projectDir)
 
 repositories {
@@ -66,7 +66,9 @@ repositories {
 
 dependencies {
     compile 'uk.q3c.krail:krail-option-persist-api:0.9.0.0.d5631b0'
-    compile 'uk.q3c.krail:krail-i18n-persist-api:0.9.0.0.2c07f9b'
+    compile 'uk.q3c.krail:krail-i18n-persist-api:0.9.1.0.9a52d0d'
+
+    compile 'uk.q3c.krail:krail-service-api:0.9.0.0.a4ea6c0'
 
 
     //Dependency Injection
@@ -74,8 +76,7 @@ dependencies {
     compile 'com.google.inject.extensions:guice-assistedinject:' + guiceVersion
     compile 'com.google.inject.extensions:guice-multibindings:' + guiceVersion
 
-    //event bus
-    compile 'net.engio:mbassador:1.2.1'
+
 
     //groovy
     compile 'org.codehaus.groovy:groovy-all:' + groovyVersion

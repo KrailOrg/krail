@@ -16,6 +16,7 @@ package uk.q3c.krail.core.eventbus;
 import net.engio.mbassy.bus.config.ConfigurationError;
 import net.engio.mbassy.bus.config.ConfigurationErrorHandler;
 import net.engio.mbassy.bus.config.IBusConfiguration;
+import uk.q3c.krail.eventbus.EventBusException;
 
 /**
  * Created by David Sowerby on 10/03/15.

@@ -42,7 +42,7 @@ import com.example.tutorial.i18n.DescriptionKey;
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.i18n.Translate;
@@ -168,7 +168,7 @@ package com.example.tutorial.eventbus;
 
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.push.PushMessage;
 

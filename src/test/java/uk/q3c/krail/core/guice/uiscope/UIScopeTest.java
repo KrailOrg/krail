@@ -28,28 +28,28 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapService;
 import uk.q3c.krail.core.push.PushModule;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.RelatedServicesExecutor;
-import uk.q3c.krail.core.service.ServicesModule;
 import uk.q3c.krail.core.shiro.*;
 import uk.q3c.krail.core.ui.*;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.inmemory.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.RelatedServiceExecutor;
+import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.DefaultResourceUtils;
@@ -166,7 +166,7 @@ public class UIScopeTest {
     static class MockSitemapService extends AbstractService implements SitemapService {
 
         @Inject
-        protected MockSitemapService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServicesExecutor
+        protected MockSitemapService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServiceExecutor
                 servicesExecutor) {
             super(translate, globalBusProvider, servicesExecutor);
         }

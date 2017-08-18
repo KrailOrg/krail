@@ -37,8 +37,6 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
 import uk.q3c.krail.core.push.PushModule;
-import uk.q3c.krail.core.service.ServicesModel;
-import uk.q3c.krail.core.service.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.aop.KrailShiroAopModule;
@@ -53,6 +51,8 @@ import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.inmemory.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.service.ServiceModel;
+import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
@@ -83,7 +83,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         log.info("Stopping service");
         try {
             if (injector != null) {
-                injector.getInstance(ServicesModel.class)
+                injector.getInstance(ServiceModel.class)
                         .stopAllServices();
             } else {
                 log.debug("Injector has not been constructed, no call made to stop service");

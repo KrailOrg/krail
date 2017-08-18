@@ -15,10 +15,10 @@ package uk.q3c.krail.core.view;
 
 import com.vaadin.ui.Component;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import uk.q3c.krail.core.i18n.NamedAndDescribed;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.NamedAndDescribed;
 
 
 /**

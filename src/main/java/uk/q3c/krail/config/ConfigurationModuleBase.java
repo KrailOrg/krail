@@ -15,7 +15,7 @@ package uk.q3c.krail.config;
 import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.config.config.InheritingConfiguration;
 import uk.q3c.krail.config.config.IniFileConfig;
-import uk.q3c.krail.core.service.AbstractServiceModule;
+import uk.q3c.krail.service.bind.AbstractServiceModule;
 
 import java.util.HashMap;
 import java.util.Map;

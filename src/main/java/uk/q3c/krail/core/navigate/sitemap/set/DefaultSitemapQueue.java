@@ -18,10 +18,10 @@ import net.engio.mbassy.bus.common.PubSubSupport;
 import org.slf4j.Logger;
 import uk.q3c.krail.config.ApplicationConfiguration;
 import uk.q3c.krail.config.config.ConfigKeys;
-import uk.q3c.krail.core.eventbus.BusProvider;
 import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.BusProvider;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

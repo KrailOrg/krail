@@ -17,10 +17,10 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
 import uk.q3c.krail.config.bind.ApplicationConfigurationModule
-import uk.q3c.krail.core.service.ServicesModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.test.TestOptionModule
 import uk.q3c.krail.persist.inmemory.InMemoryModule
+import uk.q3c.krail.service.bind.ServicesModule
 import uk.q3c.krail.testutil.eventbus.TestEventBusModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule

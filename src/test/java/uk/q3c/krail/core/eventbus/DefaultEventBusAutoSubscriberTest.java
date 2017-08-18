@@ -27,6 +27,8 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;

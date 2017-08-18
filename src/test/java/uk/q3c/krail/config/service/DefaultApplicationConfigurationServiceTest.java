@@ -27,21 +27,21 @@ import uk.q3c.krail.config.ApplicationConfiguration;
 import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
 import uk.q3c.krail.config.config.IniFileConfig;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.service.DefaultServicesModel;
-import uk.q3c.krail.core.service.RelatedServicesExecutor;
-import uk.q3c.krail.core.service.Service.Cause;
-import uk.q3c.krail.core.service.Service.State;
-import uk.q3c.krail.core.service.ServiceStatus;
-import uk.q3c.krail.core.service.ServicesModule;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.MockCurrentLocale;
+import uk.q3c.krail.service.RelatedServiceExecutor;
+import uk.q3c.krail.service.Service.Cause;
+import uk.q3c.krail.service.Service.State;
+import uk.q3c.krail.service.ServiceStatus;
+import uk.q3c.krail.service.bind.ServicesModule;
+import uk.q3c.krail.service.model.DefaultServiceModel;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
@@ -71,10 +71,10 @@ public class DefaultApplicationConfigurationServiceTest {
     ApplicationConfiguration configuration;
 
     @Mock
-    DefaultServicesModel servicesModel;
+    DefaultServiceModel servicesModel;
 
     @Mock
-    RelatedServicesExecutor servicesExecutor;
+    RelatedServiceExecutor servicesExecutor;
 
     @Inject
     GlobalBusProvider globalBusProvider;
@@ -103,7 +103,7 @@ public class DefaultApplicationConfigurationServiceTest {
         service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, globalBusProvider, resourceUtils,
                 servicesExecutor);
         currentLocale.setLocale(Locale.UK);
-        when(servicesExecutor.execute(RelatedServicesExecutor.Action.START, Cause.STARTED)).thenReturn(true);
+        when(servicesExecutor.execute(RelatedServiceExecutor.Action.START, Cause.STARTED)).thenReturn(true);
         File ff = new File(resourceUtils.configurationDirectory(), "test.krail.ini");
         //noinspection ResultOfMethodCallIgnored
         ff.setReadable(true);

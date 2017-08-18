@@ -19,8 +19,8 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.eventbus.UIBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 
 /**
  * Created by David Sowerby on 26/05/15.

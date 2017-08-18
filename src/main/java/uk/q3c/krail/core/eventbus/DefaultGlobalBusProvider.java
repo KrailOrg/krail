@@ -16,6 +16,8 @@ package uk.q3c.krail.core.eventbus;
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 
 
 public class DefaultGlobalBusProvider implements GlobalBusProvider {

@@ -22,14 +22,14 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ApplicationConfiguration;
 import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.config.config.InheritingConfiguration;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.RelatedServicesExecutor;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.util.clazz.ClassNameUtils;
 
@@ -60,7 +60,7 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
             directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Provider<MasterSitemap> sitemapProvider,
                                     SitemapFinisher sitemapFinisher, MasterSitemapQueue masterSitemapQueue, ApplicationConfiguration configuration,
                                     GlobalBusProvider globalBusProvider, ResourceUtils resourceUtils, ClassNameUtils
-                                                classNameUtils, RelatedServicesExecutor servicesExecutor) {
+                                            classNameUtils, RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor);
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;

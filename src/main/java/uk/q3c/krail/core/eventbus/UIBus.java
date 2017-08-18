@@ -13,12 +13,13 @@ package uk.q3c.krail.core.eventbus;
 
 import com.google.inject.BindingAnnotation;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
+import uk.q3c.krail.eventbus.GlobalBus;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.*;
 
 /**
  * Binding annotation to identify an Event Bus as having {@link VaadinSessionScope}, as opposed to the global Event Bus, which is annotated with {@link

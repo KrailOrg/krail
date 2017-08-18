@@ -33,10 +33,6 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
-import uk.q3c.krail.core.service.Service;
-import uk.q3c.krail.core.service.ServiceStatus;
-import uk.q3c.krail.core.service.ServicesModel;
-import uk.q3c.krail.core.service.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -47,6 +43,10 @@ import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.service.Service;
+import uk.q3c.krail.service.ServiceModel;
+import uk.q3c.krail.service.ServiceStatus;
+import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.krail.util.DefaultResourceUtils;
 import uk.q3c.krail.util.ResourceUtils;
@@ -81,7 +81,7 @@ public class DefaultSitemapServiceTest {
     @Inject
     DefaultSitemapService service;
     @Inject
-    ServicesModel servicesModel;
+    ServiceModel serviceModel;
     @Inject
     MasterSitemapQueue masterSitemapQueue;
     HierarchicalINIConfiguration iniConfig;
@@ -100,7 +100,7 @@ public class DefaultSitemapServiceTest {
         iniConfig = new HierarchicalINIConfiguration(inifile);
         iniConfig.clear();
         iniConfig.save();
-        servicesModel.addService(service.getServiceKey());
+        serviceModel.addService(service.getServiceKey());
     }
 
     @After

@@ -59,9 +59,9 @@ package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.ServicesModel;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -69,8 +69,8 @@ import uk.q3c.krail.i18n.Translate;
 public class ServiceA extends AbstractService {
     
     @Inject
-    protected ServiceA(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
-        super(translate, servicesModel, globalBusProvider);
+    protected ServiceA(Translate translate, ServicesModel serviceModel, GlobalBusProvider globalBusProvider) {
+        super(translate, serviceModel, globalBusProvider);
     }
 
     @Override
@@ -96,9 +96,9 @@ package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.ServicesModel;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -106,8 +106,8 @@ import uk.q3c.krail.i18n.Translate;
 public class ServiceB extends AbstractService {
 
     @Inject
-    protected ServiceB(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
-        super(translate, servicesModel, globalBusProvider);
+    protected ServiceB(Translate translate, ServicesModel serviceModel, GlobalBusProvider globalBusProvider) {
+        super(translate, serviceModel, globalBusProvider);
     }
 
     @Override
@@ -134,9 +134,9 @@ package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.ServicesModel;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -144,8 +144,8 @@ import uk.q3c.krail.i18n.Translate;
 public class ServiceC extends AbstractService {
 
     @Inject
-    protected ServiceC(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
-        super(translate, servicesModel, globalBusProvider);
+    protected ServiceC(Translate translate, ServicesModel serviceModel, GlobalBusProvider globalBusProvider) {
+        super(translate, serviceModel, globalBusProvider);
     }
 
     @Override
@@ -172,9 +172,9 @@ package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.ServicesModel;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -182,8 +182,8 @@ import uk.q3c.krail.i18n.Translate;
 public class ServiceD extends AbstractService {
 
     @Inject
-    protected ServiceD(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
-        super(translate, servicesModel, globalBusProvider);
+    protected ServiceD(Translate translate, ServicesModel serviceModel, GlobalBusProvider globalBusProvider) {
+        super(translate, serviceModel, globalBusProvider);
     }
 
     @Override
@@ -220,8 +220,8 @@ All Service classes must be registered. We can do that very simply by sub-classi
 package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
-import uk.q3c.krail.core.service.AbstractServiceModule;
-import uk.q3c.krail.core.service.Dependency;
+import uk.q3c.krail.service.bind.AbstractServiceModule;
+import uk.q3c.krail.service.Dependency;
 
 public class TutorialServicesModule extends AbstractServiceModule {
 
@@ -277,9 +277,9 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
-import uk.q3c.krail.core.eventbus.GlobalBus;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
-import uk.q3c.krail.core.service.ServiceBusMessage;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.service.ServiceBusMessage;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
@@ -398,8 +398,8 @@ In ```ServiceA``` we inject ```ServiceD``` and store in a field in order to anno
     private ServiceD serviceD;
 
     @Inject
-    protected ServiceA(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider, ServiceD serviceD) {
-        super(translate, servicesModel, globalBusProvider);
+    protected ServiceA(Translate translate, ServicesModel serviceModel, GlobalBusProvider globalBusProvider, ServiceD serviceD) {
+        super(translate, serviceModel, globalBusProvider);
         this.serviceD = serviceD;
     }
 

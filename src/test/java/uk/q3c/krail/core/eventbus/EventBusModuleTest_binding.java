@@ -34,6 +34,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
 import uk.q3c.krail.core.ui.BasicUI;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.GlobalBus;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 
 import static org.assertj.core.api.Assertions.*;

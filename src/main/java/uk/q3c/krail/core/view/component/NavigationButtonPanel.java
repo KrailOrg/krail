@@ -22,12 +22,12 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.util.forest.NodeFilter;
 

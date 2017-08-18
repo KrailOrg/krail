@@ -15,9 +15,9 @@ package uk.q3c.krail.testutil.eventbus;
 
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.UIBus;
+import uk.q3c.krail.eventbus.GlobalBus;
 
 /**
  * Overrides the error handlers to just log the errors, rather than rethrow exceptions

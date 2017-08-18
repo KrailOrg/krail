@@ -20,13 +20,13 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionKey;
 

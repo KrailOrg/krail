@@ -18,6 +18,9 @@ import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Listener;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 
 import java.lang.annotation.Annotation;
 

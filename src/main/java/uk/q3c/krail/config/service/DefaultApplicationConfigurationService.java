@@ -25,14 +25,14 @@ import uk.q3c.krail.config.ApplicationConfigurationService;
 import uk.q3c.krail.config.ConfigurationException;
 import uk.q3c.krail.config.config.InheritingConfiguration;
 import uk.q3c.krail.config.config.IniFileConfig;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.service.AbstractService;
-import uk.q3c.krail.core.service.RelatedServicesExecutor;
-import uk.q3c.krail.core.service.Service;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.RelatedServiceExecutor;
+import uk.q3c.krail.service.Service;
 import uk.q3c.krail.util.ResourceUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -75,7 +75,7 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
     @Inject
     protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration, Map<Integer, IniFileConfig> iniFiles,
                                                      GlobalBusProvider globalBusProvider, ResourceUtils resourceUtils,
-                                                     RelatedServicesExecutor servicesExecutor) {
+                                                     RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor);
         this.configuration = configuration;
         this.iniFiles = iniFiles;
