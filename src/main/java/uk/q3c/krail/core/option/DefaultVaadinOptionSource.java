@@ -2,7 +2,9 @@ package uk.q3c.krail.core.option;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.vaadin.data.Container;
+import uk.q3c.krail.option.persist.OptionContainerProvider;
 import uk.q3c.krail.option.persist.source.DefaultOptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
 
@@ -21,8 +23,10 @@ public class DefaultVaadinOptionSource extends DefaultOptionSource implements Va
     @Override
     public Container getContainer(Class<? extends Annotation> annotationClass) {
         checkAnnotationKey(annotationClass);
-        Key<OptionContainerProvider> containerProviderKey = Key.get(OptionContainerProvider.class, annotationClass);
-        OptionContainerProvider provider = injector.getInstance(containerProviderKey);
+        TypeLiteral<OptionContainerProvider<Container>> providerLiteral = new TypeLiteral<OptionContainerProvider<Container>>() {
+        };
+        Key<OptionContainerProvider<Container>> containerProviderKey = Key.get(providerLiteral, annotationClass);
+        OptionContainerProvider<Container> provider = injector.getInstance(containerProviderKey);
         return provider.get();
     }
 }

@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.option.inmemory;
 
-import uk.q3c.krail.core.option.OptionContainerProvider;
+import uk.q3c.krail.option.persist.OptionContainerProvider;
 
 /**
  * Used solely to enable a Krail developer to replace the default implementation if desired

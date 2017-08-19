@@ -19,6 +19,7 @@ were needed to achieve effective separation of concerns
 - `OptionContext` is parameterised to enable response to different change event types.  
 - `VaadinOptionContext` extends `OptionContext` and replaces most existing uses of `OptionContext`
 - `OptionSource` and `DefaultOptionSource` have getContainer() method moved to `VaadinOptionSource` and `DefaultOptionSource`, to remove dependency on Vaadin
+- `VaadinContainerProvider` is paramterised and moved to `uk.q3c.krail.persist` in **krail-persist-api**
 
 ## Name changes
 
@@ -79,9 +80,9 @@ Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` 
 ### Option
 projects: **option**, **option-api**
 
-All Container related classes remain in the core, as they relate only to Vaadin (though they will become redundant under Vaadin 8)
 All classes relating to the provision of In Memory "persistence", are within **option** and **option-api**, primarily for use in testing
 
+- `OptionContainerProvider` moves to `uk.q3c.krail.option.persist.OptionContainerProvider`
 - `uk.q3c.krail.core.testutil.option` moved to `uk.q3c.krail.option.test`
 - `uk.q3c.krail.option.test.MockOptionPermissionVerifier` added
 - `SimpleUserHierarchy` moved to `uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy`
