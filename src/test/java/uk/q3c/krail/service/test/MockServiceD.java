@@ -11,20 +11,21 @@
  *
  */
 
-package uk.q3c.krail.config;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.SubnodeConfiguration;
-
-/**
- * Created by David Sowerby on 15 Jan 2016
- */
-public interface ApplicationConfiguration extends Configuration {
+package uk.q3c.krail.service.test;
 
 
-    void addConfiguration(Configuration config);
+import com.google.inject.Inject;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.i18n.test.TestLabelKey;
+import uk.q3c.krail.service.RelatedServiceExecutor;
 
-    int getNumberOfConfigurations();
+public class MockServiceD extends MockService {
 
-    SubnodeConfiguration getSection(String configSectionName);
+    @Inject
+    protected MockServiceD(Translate translate, GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
+        super(translate, globalBusProvider, servicesExecutor);
+        setNameKey(TestLabelKey.ServiceD);
+    }
+
 }

@@ -13,6 +13,8 @@ out
 .classpath
 .project
 
+deps.txt
+
 settings.gradle~
 .gitattributes~
 build.gradle~

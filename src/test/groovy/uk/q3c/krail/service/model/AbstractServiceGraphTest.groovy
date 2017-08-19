@@ -14,7 +14,9 @@
 package uk.q3c.krail.service.model
 
 import spock.lang.Specification
-import uk.q3c.krail.service.*
+import uk.q3c.krail.service.DuplicateDependencyException
+import uk.q3c.krail.service.Service
+import uk.q3c.krail.service.test.*
 import uk.q3c.util.dag.CycleDetectedException
 
 import static org.assertj.core.api.Assertions.*

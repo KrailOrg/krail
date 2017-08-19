@@ -11,11 +11,13 @@
  *
  */
 
-package uk.q3c.krail.service;
+package uk.q3c.krail.service.test;
 
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.RelatedServiceExecutor;
 
 /**
  * Created by David Sowerby on 01/11/15.

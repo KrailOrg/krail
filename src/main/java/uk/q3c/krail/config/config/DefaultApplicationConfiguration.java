@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.config.ApplicationConfiguration;
+import uk.q3c.krail.config.InheritingConfiguration;
 
 import javax.annotation.concurrent.NotThreadSafe;
 

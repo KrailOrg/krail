@@ -55,7 +55,7 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.16'
+version = '0.9.10.17'
 //version = versionFromFile(project.projectDir)
 
 repositories {
@@ -67,14 +67,13 @@ repositories {
 dependencies {
     compile 'uk.q3c.krail:krail-option-persist-api:0.9.0.0.d5631b0'
     compile 'uk.q3c.krail:krail-i18n-persist-api:0.9.1.0.9a52d0d'
-
-    compile 'uk.q3c.krail:krail-service-api:0.9.0.0.a4ea6c0'
+    compile 'uk.q3c.krail:krail-config-api:0.9.0.1.1a175d3'
 
 
     //Dependency Injection
     compile 'com.google.inject.extensions:guice-servlet:' + guiceVersion
     compile 'com.google.inject.extensions:guice-assistedinject:' + guiceVersion
-    compile 'com.google.inject.extensions:guice-multibindings:' + guiceVersion
+
 
 
 
@@ -94,7 +93,7 @@ dependencies {
     compile 'net.sf.jung:jung-samples:2.0.1'
     compile 'org.apache.commons:commons-lang3:' + commonsLangVersion
     compile 'commons-io:commons-io:2.4'
-    compile 'commons-configuration:commons-configuration:1.10'
+
     compile 'org.reflections:reflections:0.9.10'
     compile 'net.jodah:typetools:0.4.3'
 

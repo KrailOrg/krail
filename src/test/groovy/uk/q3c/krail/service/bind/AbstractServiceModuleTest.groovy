@@ -20,7 +20,8 @@ import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.test.TestOptionModule
 import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.service.*
-import uk.q3c.krail.service.model.DependencyDefinition
+import uk.q3c.krail.service.test.MockServiceA
+import uk.q3c.krail.service.test.MockServiceB
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.util.UtilModule

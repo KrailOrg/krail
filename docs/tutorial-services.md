@@ -220,7 +220,7 @@ All Service classes must be registered. We can do that very simply by sub-classi
 package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
-import uk.q3c.krail.service.bind.AbstractServiceModule;
+import uk.q3c.krail.service.AbstractServiceModule;
 import uk.q3c.krail.service.Dependency;
 
 public class TutorialServicesModule extends AbstractServiceModule {

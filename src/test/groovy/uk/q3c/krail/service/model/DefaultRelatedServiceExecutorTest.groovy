@@ -21,6 +21,7 @@ import uk.q3c.krail.eventbus.BusMessage
 import uk.q3c.krail.eventbus.GlobalBusProvider
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
+import uk.q3c.krail.service.test.MockService
 
 import static uk.q3c.krail.service.RelatedServiceExecutor.Action.*
 import static uk.q3c.krail.service.Service.*
