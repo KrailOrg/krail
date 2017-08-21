@@ -110,6 +110,7 @@ All classes relating to the provision of In Memory "persistence", are within **o
 
 - added `PersistenceConfigurationException`
 - "InMemory" storage for both Option and I18N patterns are in the **krail-option** project
+- `TestPersistenceModule` becomes `TestPersistenceModuleVaadin`
 
 
 ### services
