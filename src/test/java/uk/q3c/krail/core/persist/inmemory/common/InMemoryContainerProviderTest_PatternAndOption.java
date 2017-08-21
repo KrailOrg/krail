@@ -22,11 +22,11 @@ import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItemContainer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.option.inmemory.OptionEntity;
+import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
 import uk.q3c.krail.persist.ContainerType;
+import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.VaadinContainerProvider;
-import uk.q3c.krail.persist.inmemory.InMemory;
-import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.persist.inmemory.OptionEntity;
 import uk.q3c.krail.persist.inmemory.entity.PatternEntity;
 
 import static org.assertj.core.api.Assertions.*;
@@ -56,7 +56,7 @@ public class InMemoryContainerProviderTest_PatternAndOption {
 
     @ModuleProvider
     protected AbstractModule moduleProvider() {
-        return new InMemoryModule().providePatternDao()
+        return new VaadinInMemoryModule().providePatternDao()
                                    .provideOptionDao();
     }
 }

@@ -10,23 +10,35 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.i18n.test;
+
+package uk.q3c.krail.i18n.util;
+
+
+import uk.q3c.krail.core.i18n.VaadinI18NModule;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.test.MockCurrentLocale;
+
+import java.util.Locale;
 
 /**
- * @author David Sowerby 9 Feb 2013
+ * Different from
  */
-public class TestLabels_it extends TestLabels {
+
+public class TestVaadinI18NModule extends VaadinI18NModule {
+
+    MockCurrentLocale currentLocale = new MockCurrentLocale();
 
     @Override
-    protected void loadMap() {
-        put(TestLabelKey.Home, "it_Home");
-        put(TestLabelKey.Yes, "it_Yes");
-        put(TestLabelKey.No, "it_No");
-        put(TestLabelKey.ViewA, "it_ViewA");
-        put(TestLabelKey.ViewB, "it_ViewB");
-        put(TestLabelKey.MoneyInOut, "it_MoneyInOut");
-        put(TestLabelKey.Blank, "");
+    protected void bindCurrentLocale() {
+        bind(CurrentLocale.class).toInstance(currentLocale);
+    }
 
+
+    @Override
+    protected void define() {
+        super.define();
+        supportedLocales(Locale.ITALY, Locale.UK, Locale.GERMANY);
+        supportedLocales(new Locale("de", "CH"));
     }
 
 

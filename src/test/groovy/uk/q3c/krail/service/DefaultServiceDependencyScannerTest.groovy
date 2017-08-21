@@ -19,6 +19,7 @@ import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.eventbus.GlobalBusProvider
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.i18n.i18n.PatternLabelKey
 import uk.q3c.krail.service.model.DefaultServiceDependencyScanner
 import uk.q3c.util.UtilModule
 import uk.q3c.util.clazz.ClassNameUtils
@@ -51,7 +52,7 @@ class DefaultServiceDependencyScannerTest extends Specification {
         mockA.getServiceKey() >> new ServiceKey(LabelKey.Authentication)
         mockB.getServiceKey() >> new ServiceKey(LabelKey.Application_Configuration_Service)
         mockC.getServiceKey() >> new ServiceKey(LabelKey.Active_Source)
-        mockD.getServiceKey() >> new ServiceKey(LabelKey.Auto_Stub)
+        mockD.getServiceKey() >> new ServiceKey(PatternLabelKey.Auto_Stub)
         translate.from(LabelKey.Yes) >> "Yes"
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(DefaultServiceDependencyScanner.class)

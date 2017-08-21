@@ -28,7 +28,7 @@ import uk.q3c.krail.option.UserHierarchy
 import uk.q3c.krail.option.persist.OptionCacheKey
 import uk.q3c.krail.option.persist.OptionDao
 import uk.q3c.krail.option.persist.OptionSource
-import uk.q3c.krail.persist.inmemory.InMemory
+import uk.q3c.krail.persist.InMemory
 import uk.q3c.util.data.DataConverter
 import uk.q3c.util.data.collection.AnnotationList
 import uk.q3c.util.data.collection.DataList

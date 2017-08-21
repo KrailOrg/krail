@@ -36,14 +36,14 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, TestVaadinSessionScopeModule.class, UtilModule.class})
+@GuiceContext({TestOptionModule.class, TestPersistenceModuleVaadin.class, TestVaadinSessionScopeModule.class, UtilModule.class})
 public class DefaultApplicationUITest {
 
 

@@ -36,6 +36,7 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
+import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -49,8 +50,7 @@ import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
-import uk.q3c.krail.persist.inmemory.InMemory;
-import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.UtilsModule;
@@ -362,7 +362,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      *         the list used to collect modules for injector creation
      */
     protected void addPersistenceModules(List<Module> modules) {
-        modules.add(new InMemoryModule().provideOptionDao()
+        modules.add(new VaadinInMemoryModule().provideOptionDao()
                                         .providePatternDao());
     }
 }

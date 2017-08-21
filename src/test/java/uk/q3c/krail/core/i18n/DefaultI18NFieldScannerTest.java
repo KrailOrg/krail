@@ -28,7 +28,7 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.test.MockOption;
 import uk.q3c.krail.option.test.TestOptionModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.clazz.UnenhancedClassIdentifier;
 import uk.q3c.util.test.AOPTestModule;
@@ -41,7 +41,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModule.class,
+@GuiceContext({TestI18NModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class,
         VaadinSessionScopeModule.class,
         AOPTestModule.class, UtilModule.class})
 public class DefaultI18NFieldScannerTest {

@@ -11,18 +11,26 @@
  *
  */
 
-package uk.q3c.krail.persist.inmemory;
+package uk.q3c.krail.i18n.util;
 
-import com.google.inject.BindingAnnotation;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import uk.q3c.krail.core.i18n.VaadinI18NModule;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+import java.util.Locale;
 
-@BindingAnnotation
-@Target({FIELD, PARAMETER, METHOD})
-@Retention(RUNTIME)
-public @interface InMemory {
+/**
+ * Different from
+ */
+
+public class TestVaadinI18NModule2 extends VaadinI18NModule {
+
+
+    @Override
+    protected void define() {
+        super.define();
+        supportedLocales(Locale.ITALY, Locale.UK, Locale.GERMANY);
+        supportedLocales(new Locale("de", "CH"));
+    }
+
+
 }

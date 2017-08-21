@@ -24,22 +24,22 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.VaadinCurrentLocale;
 import uk.q3c.krail.core.persist.inmemory.InMemoryContainer;
+import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
 import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.option.RankOption;
 import uk.q3c.krail.option.UserHierarchy;
-import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
-import uk.q3c.krail.option.inmemory.OptionEntity;
-import uk.q3c.krail.option.inmemory.dao.InMemoryOptionDaoDelegate;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.persist.OptionDao;
 import uk.q3c.krail.option.persist.OptionSource;
 import uk.q3c.krail.option.persist.dao.DefaultOptionDao;
 import uk.q3c.krail.option.test.TestOptionModule;
-import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternDao;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternStore;
+import uk.q3c.krail.persist.inmemory.OptionEntity;
+import uk.q3c.krail.persist.inmemory.dao.InMemoryOptionDaoDelegate;
 import uk.q3c.krail.persist.inmemory.entity.PatternEntity;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.data.DataConverter;
@@ -74,7 +74,7 @@ public class InMemoryContainerTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(new InMemoryModule().provideOptionDao(), new TestOptionModule(), new VaadinSessionScopeModule(), new UtilModule());
+        Injector injector = Guice.createInjector(new VaadinInMemoryModule().provideOptionDao(), new TestOptionModule(), new VaadinSessionScopeModule(), new UtilModule());
         optionStore = injector.getInstance(InMemoryOptionStore.class);
         patternStore = injector.getInstance(InMemoryPatternStore.class);
 

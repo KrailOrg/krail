@@ -37,13 +37,13 @@ import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class,
         TestUIScopeModule.class, UtilModule.class})
 public class DefaultUserNavigationTreeBuilderTest {
     CurrentLocale currentLocale = new MockCurrentLocale();

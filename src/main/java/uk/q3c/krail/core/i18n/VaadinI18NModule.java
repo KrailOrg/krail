@@ -18,8 +18,10 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.EnumResourceBundle;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.i18n.persist.PatternSource;
+import uk.q3c.krail.i18n.persist.PatternUtility;
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource;
 import uk.q3c.krail.i18n.persist.source.DefaultPatternSource;
+import uk.q3c.krail.i18n.util.DefaultPatternUtility;
 
 /**
  * Configures I18N for an application.
@@ -34,6 +36,13 @@ import uk.q3c.krail.i18n.persist.source.DefaultPatternSource;
 
 public class VaadinI18NModule extends I18NModule {
 
+    @Override
+    protected void configure() {
+        super.configure();
+        bindFieldScanner();
+        bindProcessor();
+        bindPatternUtility();
+    }
 
     @Override
     protected void bindPatternSource() {
@@ -48,6 +57,27 @@ public class VaadinI18NModule extends I18NModule {
     @Override
     protected void bindCurrentLocale() {
         bind(CurrentLocale.class).to(VaadinCurrentLocale.class).in(VaadinSessionScoped.class);
+    }
+
+    /**
+     * See javadoc for {@link I18NFieldScanner} for an explanation of what this is for.  Override this method if you provide your own implementation
+     */
+    protected void bindFieldScanner() {
+        bind(I18NFieldScanner.class).to(DefaultI18NFieldScanner.class);
+    }
+
+    /**
+     * Override this method to provide your own implementation of {@link I18NProcessor}
+     */
+    protected void bindProcessor() {
+        bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+    }
+
+    /**
+     * See javadoc for {@link PatternUtility} for an explanation of what this is for.  Override this method if you provide your own implementation
+     */
+    protected void bindPatternUtility() {
+        bind(PatternUtility.class).to(DefaultPatternUtility.class);
     }
 }
 

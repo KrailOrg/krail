@@ -26,12 +26,12 @@ import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.i18n.Caption
+import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
 import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.test.TestOptionModule
-import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.util.UtilModule
@@ -330,7 +330,7 @@ class KrailShiroAopModuleTest extends Specification {
 
 
     private void createInjector(Module module) {
-        injector = Guice.createInjector(module, new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new EventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new InMemoryModule())
+        injector = Guice.createInjector(module, new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new EventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new VaadinInMemoryModule())
         VaadinSession.setCurrent(vaadinSession)
     }
 }

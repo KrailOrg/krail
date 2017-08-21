@@ -30,14 +30,15 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.i18n.test.TestI18NModule;
+import uk.q3c.krail.i18n.util.TestVaadinI18NModule2;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestUIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class,
-        EventBusModule.class, UtilModule.class})
+@GuiceContext({TestVaadinI18NModule2.class, DefaultShiroModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class,
+        EventBusModule.class, UtilModule.class, TestUIScopeModule.class})
 public class DefaultUserNavigationMenuTest {
 
     @Inject

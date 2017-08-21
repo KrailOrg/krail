@@ -20,11 +20,11 @@ import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper
-import uk.q3c.krail.option.inmemory.dao.InMemoryOptionDaoDelegate
 import uk.q3c.krail.option.persist.ActiveOptionSourceDefault
 import uk.q3c.krail.option.persist.OptionContainerProvider
 import uk.q3c.krail.option.persist.OptionDaoDelegate
-import uk.q3c.krail.persist.inmemory.InMemory
+import uk.q3c.krail.persist.InMemory
+import uk.q3c.krail.persist.inmemory.dao.InMemoryOptionDaoDelegate
 import uk.q3c.krail.testutil.dummy.Dummy
 import uk.q3c.krail.testutil.dummy.DummyModule
 import uk.q3c.util.testutil.LogMonitor

@@ -30,13 +30,13 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.test.TestOptionModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule
+@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, TestI18NModule.class, TestOptionModule.class, EventBusModule
         .class, UIScopeModule.class, UtilModule.class})
 public class DefaultSitemapFinisherTest {
 

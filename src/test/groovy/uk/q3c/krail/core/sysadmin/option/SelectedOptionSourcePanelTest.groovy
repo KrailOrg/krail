@@ -20,8 +20,8 @@ import uk.q3c.krail.core.option.OptionPopup
 import uk.q3c.krail.core.option.VaadinOptionSource
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
+import uk.q3c.krail.persist.InMemory
 import uk.q3c.krail.persist.PersistenceInfo
-import uk.q3c.krail.persist.inmemory.InMemory
 
 import java.lang.annotation.Annotation
 

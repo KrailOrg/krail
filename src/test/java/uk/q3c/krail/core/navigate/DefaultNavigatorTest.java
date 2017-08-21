@@ -61,7 +61,7 @@ import uk.q3c.krail.option.test.MockOption;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
@@ -72,7 +72,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class,
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestPersistenceModuleVaadin.class, TestOptionModule.class, EventBusModule.class,
         TestUIScopeModule.class, SitemapModule.class, ServicesModule.class, UtilModule.class, UtilsModule.class, ApplicationConfigurationModule.class})
 public class DefaultNavigatorTest {
 

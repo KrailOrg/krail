@@ -1,9 +1,17 @@
 ## Release Notes for krail 0.10.0.0
 
+### Introduction
+
 This release is a major refactor to extract some elements which can actually stand alone from Krail itself - notably this includes I18N and Options - and also to improve separation of concerns.
 
 Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but there are some code changes
 were needed to achieve effective separation of concerns
+
+### Testing and Mocks
+
+A number of packages now contain Mocks and test support classes - this is to avoid recreating Mocks individually within a wide range of tests. This approach is still fairly ad-hoc, but it worth checking to see if there is a 'test' package before setting up mocks.
+
+
 
 ## Functional Code Changes
 
@@ -76,6 +84,9 @@ Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` 
 
 - `uk.q3c.krail.core.testutil.i18n` moved to `uk.q3c.krail.i18n.test` (in src folder)
 - `MockTranslate` provided in `uk.q3c.krail.i18n.test` (in src folder) with more complete response (includes locale and arguments) and a bit more functionality as a Mock
+- bindings for `I18NProcessor` and`I18NFieldScanner` moved from `I18NModule` to `VaadinI18NModule`
+- `DefaultPatternUtility` remains in core with binding in `VaadinI18NModule` (see [open issue](https://github.com/davidsowerby/krail/issues/614))
+- relevant `LabelKey` and `DescriptionKey` constants moved to **I18n** and renamed `PatternLabelKey` and `PatternDescriptionKey` (used primarily in `OptionKey` definitions)
 
 ### Option
 projects: **option**, **option-api**
@@ -98,6 +109,7 @@ All classes relating to the provision of In Memory "persistence", are within **o
 ### persist
 
 - added `PersistenceConfigurationException`
+- "InMemory" storage for both Option and I18N patterns are in the **krail-option** project
 
 
 ### services

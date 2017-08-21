@@ -33,7 +33,7 @@ import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.service.bind.ServicesModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ServicesModule.class, SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class,
         SitemapModule.class, UserModule.class, DataTypeModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule
-        .class, VaadinSessionScopeModule.class, NavigationModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class,
+        .class, VaadinSessionScopeModule.class, NavigationModule.class, TestPersistenceModuleVaadin.class, TestOptionModule.class, EventBusModule.class,
         DefaultUIModule.class, UtilsModule.class, UtilModule.class})
 public class SystemAccountManagementPagesTest {
 
