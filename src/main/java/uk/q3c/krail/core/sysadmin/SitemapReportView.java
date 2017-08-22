@@ -48,7 +48,6 @@ public class SitemapReportView extends Grid3x3ViewBase {
     protected void doBuild(ViewChangeBusMessage busMessage) {
         super.doBuild(busMessage);
         reportArea = new TextArea();
-        //        reportArea.setEnabled(false);
         reportArea.setSizeFull();
         reportArea.setValue(masterSitemap.getReport());
         setCentreCell(reportArea);

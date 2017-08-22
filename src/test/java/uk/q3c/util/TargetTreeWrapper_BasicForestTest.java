@@ -28,8 +28,6 @@ public class TargetTreeWrapper_BasicForestTest {
     private BasicForest<TargetTestNode> forest;
     private SourceTestNode sourceNodeA;
     private SourceTestNode sourceNodeB;
-    // private SourceTestNode sourceNodeC;
-    // private SourceTestNode sourceNodeD;
     private TargetTestNode targetNodeA;
     private TargetTestNode targetNodeB;
     private TargetTreeWrapper_BasicForest<SourceTestNode, TargetTestNode> wrapper;
@@ -39,8 +37,6 @@ public class TargetTreeWrapper_BasicForestTest {
         forest = new BasicForest<>();
         sourceNodeA = new SourceTestNode("sa");
         sourceNodeB = new SourceTestNode("sb");
-        // sourceNodeC = new SourceTestNode("sc");
-        // sourceNodeD = new SourceTestNode("sd");
         wrapper = new TargetTreeWrapper_BasicForest<>(forest);
         wrapper.setNodeModifier(new TestNodeModifier());
         wrapper.setCaptionReader(captionReader);

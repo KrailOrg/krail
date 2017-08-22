@@ -21,14 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TargetTreeWrapper_VaadinTreeTest {
 
-    // private TargetTestNode targetNodeB;
-    // private TargetTestNode targetNodeC;
-    // private TargetTestNode targetNodeD;
     private TestCaptionReader captionReader;
     private SourceTestNode sourceNodeA;
     private SourceTestNode sourceNodeB;
     private SourceTestNode sourceNodeC;
-    // private SourceTestNode sourceNodeD;
     private TargetTestNode targetNodeA;
     private Tree tree;
     private TargetTreeWrapper_VaadinTree<SourceTestNode, SourceTestNode> wrapper;
@@ -39,11 +35,7 @@ public class TargetTreeWrapper_VaadinTreeTest {
         sourceNodeA = new SourceTestNode("sa");
         sourceNodeB = new SourceTestNode("sb");
         sourceNodeC = new SourceTestNode("sc");
-        // sourceNodeD = new SourceTestNode("sd");
         targetNodeA = new TargetTestNode("ta");
-        // targetNodeB = new TargetTestNode("tb");
-        // targetNodeC = new TargetTestNode("tc");
-        // targetNodeD = new TargetTestNode("td");
     }
 
     @Test(expected = NullPointerException.class)

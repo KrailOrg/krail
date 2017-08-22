@@ -173,7 +173,6 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
 
             if (locale != this.locale) {
                 this.locale = locale;
-                //                Locale.setDefault(locale);
                 log.debug("CurrentLocale set to {}", locale);
                 if (fireListeners) {
                     log.debug("publish locale change");

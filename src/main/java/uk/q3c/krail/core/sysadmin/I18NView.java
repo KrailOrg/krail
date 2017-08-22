@@ -96,24 +96,6 @@ public class I18NView extends Grid3x3ViewBase {
     protected void export() {
 
         userNotifier.notifyInformation(LabelKey.This_feature_has_not_been_implemented);
-        //        exportStatus.setValue("");
-        //        Optional<DatabaseBundleWriter> writerOpt = findWriter();
-        //        Set<Locale> locales = retrieveLocales();
-        //        if (locales.isEmpty()) {
-        //            userNotifier.notifyInformation(MessageKey.There_are_no_Locales_to_process);
-        //            return;
-        //        }
-        //        if (writerOpt.isPresent()) {
-        //            try {
-        //                patternUtility.writeExclusive(locales, writerOpt.get());
-        //                exportStatus.setValue(translate.from(MessageKey.Keys_exported, writerOpt.get()
-        //                                                                                        .count(), locales.size()));
-        //                userNotifier.notifyInformation(LabelKey.Export_complete);
-        //            } catch (Exception e) {
-        //                log.info("Export I18NKeys failed due to exception", e);
-        //                userNotifier.notifyError(MessageKey.I18NKey_export_failed, e.getMessage());
-        //            }
-        //        }
     }
 
     @Handler
@@ -122,44 +104,6 @@ public class I18NView extends Grid3x3ViewBase {
         instructions1.setValue(translate.from(MessageKey.Setup_I18NKey_export, LabelKey.Export));
         instructions2.setValue('\n' + translate.from(MessageKey.All_Keys_exported));
     }
-
-    //    private Optional<DatabaseBundleWriter> findWriter() {
-    //        exportStatus.setValue(translate.from(LabelKey.Looking_for_Database_Writer));
-    //        Reflections reflections = new Reflections();
-    //        final Set<Class<? extends DatabaseBundleWriter>> writers = reflections.getSubTypesOf(DatabaseBundleWriter.class);
-    //        writers.remove(DatabaseBundleWriterBase.class);
-    //        if (writers.size() == 1) {
-    //            return Optional.of(injector.getInstance(writers.iterator()
-    //                                                           .next()));
-    //        }
-    //        if (writers.size() == 0) {
-    //            userNotifier.notifyWarning(MessageKey.Needs_at_least_one_database_writer);
-    //            return Optional.empty();
-    //        }
-    //        userNotifier.notifyWarning(MessageKey.Currently_limited_to_supporting_one_database_writer);
-    //        return Optional.empty();
-    //    }
-
-//    @Nonnull
-//    protected Set<Locale> retrieveLocales() {
-//        exportStatus.setValue(translate.from(LabelKey.Retrieving_Locales));
-//        String userInput = localeList.getValue();
-//        List<String> localeTags = Splitter.on("\n")
-//                                          .trimResults()
-//                                          .omitEmptyStrings()
-//                                          .splitToList(userInput);
-//        Set<Locale> locales = new HashSet<>();
-//        localeTags.forEach(tag -> {
-//            try {
-//                Locale locale = new Locale.Builder().setLanguageTag(tag)
-//                                                    .build();
-//                locales.add(locale);
-//            } catch (IllformedLocaleException e) {
-//                userNotifier.notifyWarning(MessageKey.Invalid_Locale_Langugage_Tag, tag);
-//            }
-//        });
-//        return locales;
-//    }
 
 
 }

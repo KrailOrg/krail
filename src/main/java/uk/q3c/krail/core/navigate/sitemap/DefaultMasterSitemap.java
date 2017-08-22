@@ -44,7 +44,6 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         // find the node (parent) to attach to, by looping and removing the trailing segment each
         // time until we find a matching node or run out of segments
         List<String> segments = new ArrayList(navState.getPathSegments());
-//        segments.remove(segments.size() - 1);
 
         MasterSitemapNode node = null;
         while ((segments.size() > 0) && (node == null)) {

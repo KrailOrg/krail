@@ -245,7 +245,6 @@ public class DefaultCurrentLocaleTest {
         currentLocale.setLocale(Locale.FRANCE, false);
         // then
         assertThat(listenerFired).isFalse();
-        //        assertThat(Locale.getDefault()).isEqualTo(Locale.FRANCE);
     }
 
     @Test
@@ -260,7 +259,6 @@ public class DefaultCurrentLocaleTest {
         currentLocale.setLocale(Locale.FRANCE, true);
         // then
         assertThat(listenerFired).isTrue();
-        //        assertThat(Locale.getDefault()).isEqualTo(Locale.FRANCE);
     }
 
     @Test

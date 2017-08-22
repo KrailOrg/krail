@@ -124,13 +124,11 @@ public abstract class SourcePanel extends Panel implements OptionContext {
     }
 
     private void styles() {
-//        String defaultCaptionStyleName = option.get(defaultCaptionStyleOptionKey);
         applyStyle(nameCaption, nameCaptionStyleOptionKey);
         applyStyle(descriptionCaption, descriptionCaptionStyleOptionKey);
         applyStyle(connectionUrlCaption, connectionUrlCaptionStyleOptionKey);
         applyStyle(volatileCaption, is_volatileCaptionStyleOptionKey);
 
-//        String defaultValueStyleName = option.get(defaultValueStyleOptionKey);
         applyStyle(nameLabel, nameValueStyleOptionKey);
         applyStyle(descriptionLabel, descriptionValueStyleOptionKey);
         applyStyle(connectionUrlLabel, connectionUrlValueStyleOptionKey);

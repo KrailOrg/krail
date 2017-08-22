@@ -210,8 +210,6 @@ public class DefaultNavigatorTest {
     public void login_rule_invoked() {
 
         // given
-
-        //        assertThat(loginNavigationRule.changedNavigationState(navigator,loginSource)).isNotNull();
         navigator = createNavigator();
         when(loginNavigationRule.changedNavigationState(navigator, loginSource)).thenReturn(Optional.empty());
         // when

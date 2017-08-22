@@ -133,9 +133,6 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
     public boolean hasNoVisibleChildren(@Nonnull UserSitemapNode sourceNode) {
         checkNotNull(sourceNode);
         List<UserSitemapNode> children = this.getChildren(sourceNode);
-//        if (children == null) { //FindBugs reports this unnecessary
-//            return true;
-//        }
         for (UserSitemapNode child : children) {
             if (child.getPositionIndex() >= 0) {
                 return false;
