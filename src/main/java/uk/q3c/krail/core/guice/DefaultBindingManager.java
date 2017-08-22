@@ -32,10 +32,12 @@ import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.i18n.VaadinI18NModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
+import uk.q3c.krail.core.option.KrailOptionModule;
 import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
@@ -255,16 +257,16 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * @return module instance
      */
     protected Module optionModule() {
-        return new OptionModule().activeSource(InMemory.class);
+        return new KrailOptionModule().activeSource(InMemory.class);
     }
 
     /**
      * Override this if you have provided your own {@link I18NModule}
      *
-     * @return a Module fr I18N
+     * @return a Module for I18N
      */
     protected Module i18NModule() {
-        return new I18NModule();
+        return new VaadinI18NModule();
     }
 
     /**

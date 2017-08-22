@@ -1,10 +1,13 @@
 package uk.q3c.krail.core.option;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.vaadin.data.Container;
+import uk.q3c.krail.option.persist.ActiveOptionSourceDefault;
 import uk.q3c.krail.option.persist.OptionContainerProvider;
+import uk.q3c.krail.option.persist.OptionDaoProviders;
 import uk.q3c.krail.option.persist.source.DefaultOptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
 
@@ -16,7 +19,8 @@ import java.util.Map;
  */
 public class DefaultVaadinOptionSource extends DefaultOptionSource implements VaadinOptionSource {
 
-    public DefaultVaadinOptionSource(Injector injector, Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders, Class<? extends Annotation> activeSource) {
+    @Inject
+    public DefaultVaadinOptionSource(Injector injector, @OptionDaoProviders Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders, @ActiveOptionSourceDefault Class<? extends Annotation> activeSource) {
         super(injector, optionDaoProviders, activeSource);
     }
 

@@ -28,10 +28,16 @@ import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
 public class KrailOptionModule extends OptionModule {
 
     @Override
-    protected void bindPermissionVerifier() {
-        bind(OptionPermissionVerifier.class).to(KrailOptionPermissionVerifier.class);
+    protected void configure() {
+        super.configure();
         bindVaadinOptionSource();
         bindOptionPopup();
+    }
+
+    @Override
+    protected void bindPermissionVerifier() {
+        bind(OptionPermissionVerifier.class).to(KrailOptionPermissionVerifier.class);
+
     }
 
     protected void bindVaadinOptionSource() {
