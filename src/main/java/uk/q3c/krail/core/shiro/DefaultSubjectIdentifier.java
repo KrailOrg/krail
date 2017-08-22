@@ -82,7 +82,7 @@ public class DefaultSubjectIdentifier implements SubjectIdentifier {
         String userId = subject.getPrincipal()
                                .toString();
         if (StringUtils.isEmpty(userId)) {
-            return userId = "?";
+            return "?";
         }
         return userId;
     }

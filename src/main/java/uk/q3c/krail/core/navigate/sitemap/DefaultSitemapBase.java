@@ -410,10 +410,10 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     public synchronized List<T> nodeChainForSegments(List<String> segments, boolean allowPartialPath) {
         List<T> nodeChain = new ArrayList<>();
         int i = 0;
-        String currentSegment = null;
+        String currentSegment;
         List<T> nodes = forest.getRoots();
         boolean segmentNotFound = false;
-        T node = null;
+        T node;
         while ((i < segments.size()) && (!segmentNotFound)) {
             currentSegment = segments.get(i);
             node = findNodeBySegment(nodes, currentSegment, false);

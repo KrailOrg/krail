@@ -102,7 +102,6 @@ public class InheritingConfigurationTest {
         // given
         config1 = config("config1.ini");
         config2 = config("config2.ini");
-        String key1 = "a";
         // when
         configuration.addConfiguration(config1);
         configuration.addConfiguration(config2);

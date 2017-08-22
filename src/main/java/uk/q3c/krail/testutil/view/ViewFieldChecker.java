@@ -51,7 +51,6 @@ public class ViewFieldChecker {
     public boolean check() throws IllegalAccessException {
         Class<? extends ViewBase> cut = view.getClass();
         System.out.println("Checking " + cut + " for I18N annotated component fields");
-        boolean allI18N = true;
         Field[] declaredFields = cut.getDeclaredFields();
         for (int i = 0; i < declaredFields.length; i++) {
             Field field = declaredFields[i];

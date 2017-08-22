@@ -76,7 +76,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
 
                 // process the View annotations
                 for (Class<?> clazz : typesWithView) {
-                    Class<? extends KrailView> viewClass = null;
+                    Class<? extends KrailView> viewClass;
                     if (KrailView.class.isAssignableFrom(clazz)) {
                         viewClass = (Class<? extends KrailView>) clazz;
                         View annotation = viewClass.getAnnotation(View.class);
@@ -108,7 +108,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                 }
                 // process the RedirectFrom annotations
                 for (Class<?> clazz : typesWithRedirectFrom) {
-                    Class<? extends KrailView> viewClass = null;
+                    Class<? extends KrailView> viewClass;
                     if (KrailView.class.isAssignableFrom(clazz)) {
                         viewClass = (Class<? extends KrailView>) clazz;
                         RedirectFrom redirectAnnotation = viewClass.getAnnotation(RedirectFrom.class);
