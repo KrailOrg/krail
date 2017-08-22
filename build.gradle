@@ -46,7 +46,7 @@ description = 'A rapid development framework for web apps using Vaadin, Guice, S
 ext.assertjVersion = '3.3.0'
 ext.commonsLangVersion = '3.3.2'
 ext.groovyVersion = '2.4.1'
-ext.guiceVersion = '4.0'
+ext.guiceVersion = '4.1.0'
 ext.shiroVersion = '1.2.4'
 ext.slf4jVersion = '1.7.6'
 ext.vaadinVersion = '7.6.3'
@@ -55,7 +55,7 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.26'
+version = '0.9.10.27'
 //version = versionFromFile(project.projectDir)
 
 repositories {
@@ -66,15 +66,16 @@ repositories {
 
 dependencies {
     compile 'uk.q3c.krail:krail-option:0.10.0.0.9e825e2'
+
+
     compile 'uk.q3c.krail:krail-config:0.9.0.0.3ec3948'
 
+
+    compile 'commons-beanutils:commons-beanutils:1.9.3' // need this for Guice 4.1.0 to override older version brought in by Bval
 
     //Dependency Injection
     compile 'com.google.inject.extensions:guice-servlet:' + guiceVersion
     compile 'com.google.inject.extensions:guice-assistedinject:' + guiceVersion
-
-
-
 
     //groovy
     compile 'org.codehaus.groovy:groovy-all:' + groovyVersion
@@ -112,7 +113,6 @@ dependencies {
     compile 'com.vaadin:vaadin-server:' + vaadinVersion
     compile 'com.vaadin:vaadin-push:' + vaadinVersion
 
-
     //included in compile to enable the production of test utils
     compile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
     compile 'org.mockito:mockito-all:1.10.19'
@@ -132,7 +132,6 @@ dependencies {
     testCompile 'org.spockframework:spock-guice:1.0-groovy-2.4'
     testCompile 'cglib:cglib-nodep:3.2.0' // needed for Spock mocking
 //    testCompile "javax.servlet:javax.servlet-api:3.+"
-
 
 
     testCompile 'uk.q3c:q3c-testUtil:0.8.1'
