@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -41,9 +41,12 @@ public class PagePermissionTest {
         // when
         PagePermission p = new PagePermission(navigationState);
         // then
-        // for some reason parts are stored by WildcardPermission with [] around them
-        assertThat(p.toString()).isEqualTo("[page]:[view]:[private]:[wiggly]");
+        // for some reason parts were stored by WildcardPermission with [] around them
+        //        assertThat(p.toString()).isEqualTo("page]:[view]:[private]:[wiggly]");
+        // this changed on upgrade to Shiro 1.4.0
+        assertThat(p.toString()).isEqualTo("page:view:private:wiggly");
         assertThat(p).isEqualTo(new WildcardPermission("page:view:private:wiggly"));
+
 
     }
 
