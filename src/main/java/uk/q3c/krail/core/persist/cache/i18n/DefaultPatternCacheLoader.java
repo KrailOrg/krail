@@ -145,7 +145,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      */
     protected String stubValue(Class<? extends Annotation> source, PatternCacheKey cacheKey) {
         Boolean stubWithKeyName = option.get(optionKeyStubWithKeyName.qualifiedWith(source.getSimpleName()));
-        return (stubWithKeyName) ? cacheKey.getKeyAsEnum()
+        return stubWithKeyName ? cacheKey.getKeyAsEnum()
                                            .name() : option.get(optionKeyStubValue.qualifiedWith(source.getSimpleName()));
     }
 

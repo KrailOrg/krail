@@ -73,7 +73,7 @@ public class VaadinSessionScope implements Scope {
     }
 
     private Map<Key<?>, Object> createCacheEntry(VaadinSession vaadinSession) {
-        Map<Key<?>, Object> sessionEntry = new HashMap<Key<?>, Object>();
+        Map<Key<?>, Object> sessionEntry = new HashMap<>();
         cache.put(vaadinSession, sessionEntry);
         log.debug("created a scope cache for VaadinSessionScope with key: {}", vaadinSession);
         return sessionEntry;
@@ -102,7 +102,7 @@ public class VaadinSessionScope implements Scope {
 
     @Override
     public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
-        return new VaadinSessionScopeProvider<T>(this, key, unscoped);
+        return new VaadinSessionScopeProvider<>(this, key, unscoped);
     }
 
     public ImmutableList<VaadinSession> scopeKeys() {

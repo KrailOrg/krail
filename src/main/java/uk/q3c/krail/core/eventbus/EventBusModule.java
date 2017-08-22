@@ -109,11 +109,11 @@ public class EventBusModule extends AbstractModule {
      * All buses use the default error handler by default.  Override this method to provide alternative bindings.
      */
     protected void bindPublicationErrorHandlers() {
-        bind((IPublicationErrorHandler.class)).annotatedWith(UIBus.class)
+        bind(IPublicationErrorHandler.class).annotatedWith(UIBus.class)
                                               .to(DefaultEventBusErrorHandler.class);
-        bind((IPublicationErrorHandler.class)).annotatedWith(SessionBus.class)
+        bind(IPublicationErrorHandler.class).annotatedWith(SessionBus.class)
                                               .to(DefaultEventBusErrorHandler.class);
-        bind((IPublicationErrorHandler.class)).annotatedWith(GlobalBus.class)
+        bind(IPublicationErrorHandler.class).annotatedWith(GlobalBus.class)
                                               .to(DefaultEventBusErrorHandler.class);
     }
 
@@ -187,7 +187,7 @@ public class EventBusModule extends AbstractModule {
         config.setProperty(Properties.Handler.PublicationError, publicationErrorHandler);
         config.addConfigurationErrorHandler(configurationErrorHandler);
         PubSubSupport<BusMessage> eventBus;
-        eventBus = (useAsync) ? new MBassador<>(config) : new SyncMessageBus<>(config);
+        eventBus = useAsync ? new MBassador<>(config) : new SyncMessageBus<>(config);
         ((AbstractPubSubSupport) eventBus).addErrorHandler(publicationErrorHandler);
         log.debug("instantiated a {} Bus with id {}", name, eventBus.getRuntime()
                                                                     .get(Properties.Common.Id));

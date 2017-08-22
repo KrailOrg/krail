@@ -79,6 +79,6 @@ public class OptionListConverter<E> {
             String unescaped = StringEscapeUtils.unescapeCsv(s);
             elementList.add(converter.convertStringToValue(elementClass, unescaped));
         });
-        return new OptionList<E>(elementList, elementClass);
+        return new OptionList<>(elementList, elementClass);
     }
 }

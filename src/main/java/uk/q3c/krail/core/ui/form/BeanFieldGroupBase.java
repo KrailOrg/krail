@@ -188,7 +188,7 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
      *         The bean to use as data source.
      */
     public void setItemDataSource(T bean) {
-        BeanItem<T> beanItem = new BeanItem<T>(bean);
+        BeanItem<T> beanItem = new BeanItem<>(bean);
         setItemDataSource(beanItem);
     }
 

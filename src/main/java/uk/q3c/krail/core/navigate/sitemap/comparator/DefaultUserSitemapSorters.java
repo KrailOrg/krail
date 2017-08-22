@@ -60,13 +60,13 @@ public class DefaultUserSitemapSorters implements UserSitemapSorters {
     private void select() {
         switch (sortType) {
             case ALPHA:
-                selectedComparator = (ascending) ? alphaAscending : alphaDescending;
+                selectedComparator = ascending ? alphaAscending : alphaDescending;
                 break;
             case INSERTION:
-                selectedComparator = (ascending) ? insertionAscending : insertionDescending;
+                selectedComparator = ascending ? insertionAscending : insertionDescending;
                 break;
             case POSITION:
-                selectedComparator = (ascending) ? positionAscending : positionDescending;
+                selectedComparator = ascending ? positionAscending : positionDescending;
                 break;
         }
     }

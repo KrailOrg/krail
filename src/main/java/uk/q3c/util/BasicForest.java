@@ -50,7 +50,7 @@ public class BasicForest<V> implements Serializable {
     private Forest<V, Integer> graph;
 
     public BasicForest() {
-        graph = new DelegateForest<V, Integer>(new DirectedOrderedSparseMultigraph<>());
+        graph = new DelegateForest<>(new DirectedOrderedSparseMultigraph<>());
     }
 
     public boolean hasChild(V parentNode, V childNode) {
@@ -133,7 +133,7 @@ public class BasicForest<V> implements Serializable {
      */
     public V getNode(V node) {
         Collection<V> x = graph.getVertices();
-        List<V> list = new ArrayList<V>(x);
+        List<V> list = new ArrayList<>(x);
         int n = list.indexOf(node);
         if (n < 0) {
             return null;
@@ -143,7 +143,7 @@ public class BasicForest<V> implements Serializable {
 
     public List<V> getChildren(V parentNode) {
         Collection<V> children = graph.getChildren(parentNode);
-        List<V> result = new ArrayList<V>();
+        List<V> result = new ArrayList<>();
         if (children != null) {
             result.addAll(children);
         }
@@ -159,7 +159,7 @@ public class BasicForest<V> implements Serializable {
      */
     public List<V> getSubtreeNodes(V parentNode) {
         Collection<V> children = graph.getChildren(parentNode);
-        List<V> list = new ArrayList<V>();
+        List<V> list = new ArrayList<>();
         list.add(parentNode);
         if (children != null) {
             for (V v : children) {
@@ -200,13 +200,13 @@ public class BasicForest<V> implements Serializable {
      * @see #findLeaves(Object)
      */
     public List<V> findLeaves() {
-        List<V> leaves = new ArrayList<V>();
+        List<V> leaves = new ArrayList<>();
         findLeaves(getRoot(), leaves);
         return leaves;
     }
 
     public List<V> findLeaves(V parentNode) {
-        List<V> leaves = new ArrayList<V>();
+        List<V> leaves = new ArrayList<>();
         findLeaves(parentNode, leaves);
         return leaves;
     }
@@ -221,7 +221,7 @@ public class BasicForest<V> implements Serializable {
     }
 
     public void clear() {
-        graph = new DelegateForest<V, Integer>();
+        graph = new DelegateForest<>();
         edgeCount = 0;
     }
 
@@ -233,7 +233,7 @@ public class BasicForest<V> implements Serializable {
      */
     public List<V> getRoots() {
         Collection<Tree<V, Integer>> t = graph.getTrees();
-        List<V> branchRoots = new ArrayList<V>();
+        List<V> branchRoots = new ArrayList<>();
         for (Tree<V, Integer> branch : t) {
             branchRoots.add(branch.getRoot());
         }
@@ -295,7 +295,7 @@ public class BasicForest<V> implements Serializable {
      * @return
      */
     public List<V> getAllNodes() {
-        return new ArrayList<V>(graph.getVertices());
+        return new ArrayList<>(graph.getVertices());
     }
 
     public V getRootFor(V node) {
@@ -359,7 +359,7 @@ public class BasicForest<V> implements Serializable {
      * @return
      */
     private BasicForest<V> subGraph(V root, V newRoot) {
-        BasicForest<V> subGraph = new BasicForest<V>();
+        BasicForest<V> subGraph = new BasicForest<>();
         copyChildren(this, root, subGraph, newRoot);
         return subGraph;
     }

@@ -76,7 +76,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements
         log.debug("{} nodes to display before filtering", nodeList.size());
         List<UserSitemapNode> filteredList = filteredList(nodeList);
         log.debug("{} nodes to display after filtering", filteredList.size());
-        int maxIndex = (filteredList.size() > buttons.size() ? filteredList.size() : buttons.size());
+        int maxIndex = filteredList.size() > buttons.size() ? filteredList.size() : buttons.size();
         for (int i = 0; i < maxIndex; i++) {
             // nothing left in chain
             if (i + 1 > filteredList.size()) {
