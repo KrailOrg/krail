@@ -16,6 +16,7 @@ package uk.q3c.krail.service
 import com.google.inject.Inject
 import spock.guice.UseModules
 import spock.lang.Specification
+import uk.q3c.krail.config.i18n.ConfigurationLabelKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.eventbus.GlobalBusProvider
 import uk.q3c.krail.i18n.Translate
@@ -50,7 +51,7 @@ class DefaultServiceDependencyScannerTest extends Specification {
 
     def setup() {
         mockA.getServiceKey() >> new ServiceKey(LabelKey.Authentication)
-        mockB.getServiceKey() >> new ServiceKey(LabelKey.Application_Configuration_Service)
+        mockB.getServiceKey() >> new ServiceKey(ConfigurationLabelKey.Application_Configuration_Service)
         mockC.getServiceKey() >> new ServiceKey(LabelKey.Active_Source)
         mockD.getServiceKey() >> new ServiceKey(PatternLabelKey.Auto_Stub)
         translate.from(LabelKey.Yes) >> "Yes"

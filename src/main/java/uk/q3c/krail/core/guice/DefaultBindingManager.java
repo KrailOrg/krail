@@ -28,6 +28,7 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
+import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
@@ -276,7 +277,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      */
 
     protected Module applicationConfigurationModule() {
-        return new ApplicationConfigurationModule();
+        return new KrailApplicationConfigurationModule();
     }
 
     /**

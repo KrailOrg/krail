@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
+import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -113,7 +113,7 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(),
+        injector = Guice.createInjector(new PushModule(), new TestModule(), new KrailApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(),
                 new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
                 new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(),
                 new TestPersistenceModuleVaadin(), new NavigationModule(), new EventBusModule(), new UtilModule(), new DataModule(),

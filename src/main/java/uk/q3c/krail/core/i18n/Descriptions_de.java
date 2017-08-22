@@ -23,8 +23,7 @@ public class Descriptions_de extends Descriptions {
         put(DescriptionKey.Account_is_Disabled, "Das Konto ist deaktiviert");
         put(DescriptionKey.Account_Expired, "Ihr Konto ist abgelaufen");
         put(DescriptionKey.Account_Locked, "Ihr Konto ist gesperrt");
-        put(DescriptionKey.Application_Configuration_Service, "Dieser Service lädt die Anwendungs-Konfiguration aus "
-                + "krail.ini");
+
         put(DescriptionKey.Enter_your_user_name, "Geben Sie ihren Benutzernamen ein");
         put(DescriptionKey.Invalid_Login, "ungültiger Login");
         put(DescriptionKey.No_Permission, "Sie haben keine Berechtigung für diese Aktion");

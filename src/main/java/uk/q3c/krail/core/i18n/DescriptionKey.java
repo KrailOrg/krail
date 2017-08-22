@@ -19,7 +19,6 @@ public enum DescriptionKey implements I18NKey {
     Account_is_Disabled,
     Account_Expired,
     Account_Locked,
-    Application_Configuration_Service,
     Confirm_Ok,
     Enter_your_user_name,
     Invalid_Login,

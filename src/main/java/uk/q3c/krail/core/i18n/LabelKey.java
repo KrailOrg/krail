@@ -22,7 +22,6 @@ public enum LabelKey implements I18NKey {
     Large,
     Alphabetic_Ascending,
     Alphabetic_Descending,
-    Application_Configuration_Service,
     Authentication,
     Authorisation,
     Broadcast_Messages,

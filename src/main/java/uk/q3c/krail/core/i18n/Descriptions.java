@@ -38,8 +38,6 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
         put(Last_Name, "the last name or family name");
         put(Confirm_Ok, "Confirm this Value is Ok");
         put(No_Permission, "You do not have permission for that action");
-        put(Application_Configuration_Service, "This service loads the application configuration " +
-                "from krail.ini");
         put(Sitemap_Service, "This service creates the Sitemap using options from the application" +
                 " configuration");
         put(Unknown_Account, "That username or password was not recognised");
