@@ -8,9 +8,12 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap
 import uk.q3c.krail.core.option.OptionPopup
 import uk.q3c.krail.core.option.VaadinOptionSource
+import uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy
 import uk.q3c.krail.i18n.persist.PatternCacheLoader
 import uk.q3c.krail.i18n.persist.PatternDao
 import uk.q3c.krail.option.Option
+import uk.q3c.krail.option.UserHierarchy
+import uk.q3c.krail.option.UserHierarchyDefault
 import uk.q3c.krail.option.persist.OptionCache
 import uk.q3c.krail.option.persist.OptionDao
 import uk.q3c.krail.option.persist.OptionDaoDelegate
@@ -29,6 +32,7 @@ class DefaultBindingManagerBindingsTest extends Specification {
         DefaultBindingManager manager = new TestBindingManager()
         Key patternDaoKey = Key.get(PatternDao.class, InMemory)
         Key optionDaoDelegateKey = Key.get(OptionDaoDelegate.class, InMemory)
+        Key userHierarchyKey = Key.get(UserHierarchy.class, UserHierarchyDefault)
 
         when:
         Injector injector = manager.getInjector()
@@ -46,6 +50,7 @@ class DefaultBindingManagerBindingsTest extends Specification {
         injector.getInstance(optionDaoDelegateKey) != null
         injector.getInstance(OptionDao.class) != null
         injector.getInstance(OptionCache.class) != null
+        injector.getInstance(userHierarchyKey) instanceof SimpleUserHierarchy
 
 
     }

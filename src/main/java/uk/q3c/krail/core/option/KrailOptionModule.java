@@ -14,8 +14,11 @@
 package uk.q3c.krail.core.option;
 
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionPermissionVerifier;
+import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.UserHierarchyDefault;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
@@ -55,5 +58,11 @@ public class KrailOptionModule extends OptionModule {
     @Override
     protected void bindOptionCache() {
         bind(OptionCache.class).to(DefaultOptionCache.class).in(VaadinSessionScoped.class);
+    }
+
+    @Override
+    protected void bindUserHierarchies() {
+        bind(UserHierarchy.class).annotatedWith(UserHierarchyDefault.class)
+                .to(SimpleUserHierarchy.class);
     }
 }
