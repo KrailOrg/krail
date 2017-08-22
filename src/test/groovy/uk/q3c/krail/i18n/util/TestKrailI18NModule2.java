@@ -14,7 +14,7 @@
 package uk.q3c.krail.i18n.util;
 
 
-import uk.q3c.krail.core.i18n.VaadinI18NModule;
+import uk.q3c.krail.core.i18n.KrailI18NModule;
 
 import java.util.Locale;
 
@@ -22,7 +22,7 @@ import java.util.Locale;
  * Different from
  */
 
-public class TestVaadinI18NModule2 extends VaadinI18NModule {
+public class TestKrailI18NModule2 extends KrailI18NModule {
 
 
     @Override

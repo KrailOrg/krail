@@ -38,7 +38,7 @@ import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
@@ -53,7 +53,7 @@ import static org.assertj.core.api.Assertions.*;
  * Loads the MasterSitemap using annotations - one class in this file ({@link View1}) and {@link TestAnnotatedView}
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestPersistenceModuleVaadin.class, TestVaadinI18NModule.class, VaadinSessionScopeModule.class,
+@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestPersistenceModuleVaadin.class, TestKrailI18NModule.class, VaadinSessionScopeModule.class,
         EventBusModule.class, UIScopeModule.class, UtilModule.class, TestOptionModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 

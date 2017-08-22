@@ -14,7 +14,7 @@
 package uk.q3c.krail.i18n.util;
 
 
-import uk.q3c.krail.core.i18n.VaadinI18NModule;
+import uk.q3c.krail.core.i18n.KrailI18NModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.test.MockCurrentLocale;
 
@@ -24,7 +24,7 @@ import java.util.Locale;
  * Different from
  */
 
-public class TestVaadinI18NModule extends VaadinI18NModule {
+public class TestKrailI18NModule extends KrailI18NModule {
 
     MockCurrentLocale currentLocale = new MockCurrentLocale();
 

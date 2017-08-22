@@ -39,11 +39,11 @@ import uk.q3c.util.UtilModule
 import java.lang.annotation.Annotation
 
 /**
- * Unit tests for {@link VaadinI18NModule}, and also its ancestor {@link I18NModule}
+ * Unit tests for {@link KrailI18NModule}, and also its ancestor {@link I18NModule}
  *
  * Created by David Sowerby on 21/07/15.
  */
-class VaadinI18NModuleTest extends GuiceModuleTestBase {
+class KrailI18NModuleTest extends GuiceModuleTestBase {
 
 
 

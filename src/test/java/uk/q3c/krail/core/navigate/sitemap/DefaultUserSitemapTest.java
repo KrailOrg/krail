@@ -30,7 +30,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule2;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
@@ -41,7 +41,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestVaadinI18NModule2.class, VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class,
+@GuiceContext({TestKrailI18NModule2.class, VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class,
         TestUIScopeModule.class, TestOptionModule.class, UtilModule.class, DefaultShiroModule.class})
 @Listener
 public class DefaultUserSitemapTest {

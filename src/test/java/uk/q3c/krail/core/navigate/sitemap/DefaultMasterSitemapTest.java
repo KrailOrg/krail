@@ -32,7 +32,7 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
@@ -47,7 +47,7 @@ import static uk.q3c.krail.core.navigate.sitemap.StandardPageKey.*;
 import static uk.q3c.krail.core.shiro.PageAccessControl.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestVaadinI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModuleVaadin.class, UIScopeModule.class,})
+@GuiceContext({TestKrailI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModuleVaadin.class, UIScopeModule.class,})
 public class DefaultMasterSitemapTest {
 
     @Mock

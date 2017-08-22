@@ -36,7 +36,7 @@ import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule2;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
@@ -51,7 +51,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinSessionScopeModule.class, EventBusModule.class,
-        TestUIScopeModule.class, UtilModule.class, TestVaadinI18NModule2.class, DefaultShiroModule.class})
+        TestUIScopeModule.class, UtilModule.class, TestKrailI18NModule2.class, DefaultShiroModule.class})
 public class BreadcrumbTest {
 
     DefaultBreadcrumb breadcrumb;

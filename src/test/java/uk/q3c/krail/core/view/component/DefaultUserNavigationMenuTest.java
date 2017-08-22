@@ -34,7 +34,7 @@ import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule2;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
@@ -50,7 +50,7 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestVaadinI18NModule2.class, DefaultShiroModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class,
+@GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class,
         EventBusModule.class, UtilModule.class, TestUIScopeModule.class})
 public class DefaultUserNavigationMenuTest {
 

@@ -87,6 +87,7 @@ Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` 
 - bindings for `I18NProcessor` and`I18NFieldScanner` moved from `I18NModule` to `VaadinI18NModule`
 - `DefaultPatternUtility` remains in core with binding in `VaadinI18NModule` (see [open issue](https://github.com/davidsowerby/krail/issues/614))
 - relevant `LabelKey` and `DescriptionKey` constants moved to **I18n** and renamed `PatternLabelKey` and `PatternDescriptionKey` (used primarily in `OptionKey` definitions)
+- Use `KrailI18NModule` instead of `I18NModule`.  The latter is for use outside Krail
 
 ### Option
 projects: **option**, **option-api**
@@ -98,6 +99,7 @@ All classes relating to the provision of In Memory "persistence", are within **o
 - `uk.q3c.krail.option.test.MockOptionPermissionVerifier` added
 - `SimpleUserHierarchy` moved to `uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy`
 - new `DefaultUserHierarchy`, removes dependency on Shiro
+- Use `KrailOptionModule` instead of `OptionModule`.  The latter is for use outside Krail
 
 ### Data
 

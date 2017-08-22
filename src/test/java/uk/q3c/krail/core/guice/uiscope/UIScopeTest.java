@@ -44,7 +44,7 @@ import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.service.AbstractService;
@@ -114,7 +114,7 @@ public class UIScopeTest {
         // when
 
         injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(),
-                new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestVaadinI18NModule(),
+                new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
                 new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(),
                 new TestPersistenceModuleVaadin(), new NavigationModule(), new EventBusModule(), new UtilModule(), new DataModule(),
                 new DataTypeModule(), new UtilsModule(), new VaadinInMemoryModule().provideOptionDao());

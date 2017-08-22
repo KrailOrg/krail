@@ -34,7 +34,7 @@ import uk.q3c.krail.i18n.util.DefaultPatternUtility;
  * An I18NKey implementation - for example, {@link LabelKey}, and its associated {@link EnumResourceBundle}s, are the equivalent to a Java Resource bundle
  */
 
-public class VaadinI18NModule extends I18NModule {
+public class KrailI18NModule extends I18NModule {
 
     @Override
     protected void configure() {

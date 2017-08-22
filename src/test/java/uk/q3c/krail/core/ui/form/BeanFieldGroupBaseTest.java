@@ -32,7 +32,7 @@ import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.util.TestVaadinI18NModule;
+import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.test.MockOption;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
@@ -66,7 +66,7 @@ public class BeanFieldGroupBaseTest {
     @Before
     public void setup() {
         VaadinSession.setCurrent(null);
-        injector = Guice.createInjector(new TestVaadinI18NModule(), new TestUIScopeModule(), new TestPersistenceModuleVaadin(), new UtilModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
+        injector = Guice.createInjector(new TestKrailI18NModule(), new TestUIScopeModule(), new TestPersistenceModuleVaadin(), new UtilModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
 
                 TestOptionModule(), Modules.override(new
                 ValidationModule())
