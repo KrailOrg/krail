@@ -30,6 +30,8 @@ import java.lang.annotation.Annotation;
  */
 public class KrailPersistenceUnitHelper {
 
+    private KrailPersistenceUnitHelper(){}
+
     public static final String PROVIDE_PATTERN_DAO = "ProvidePatternDao";
     public static final String PROVIDE_OPTION_DAO = "ProvideOptionDao";
 

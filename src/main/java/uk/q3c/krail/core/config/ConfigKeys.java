@@ -21,6 +21,8 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
  */
 public class ConfigKeys {
 
+    private ConfigKeys(){}
+
     public static final String SITEMAP_SOURCES = "sitemap.sources";
     public static final String SERVER_PUSH_ENABLED = "server.pushEnabled";
 
