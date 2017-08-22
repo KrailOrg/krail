@@ -2,15 +2,20 @@
 
 ### Introduction
 
-This release is a major refactor to extract some elements which can actually stand alone from Krail itself - notably this includes I18N and Options - and also to improve separation of concerns.
+This release is a major refactor to extract some elements which can actually stand alone from Krail itself - I18N, Option and Application Configuration.  All have an API and an implementation project.
+EventBus and Service packages have their APIs extracted into separate projects, but the implementation is still in the Krail core until Eclipse Vert.x has been assessed.
 
-Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but there are some code changes
-were needed to achieve effective separation of concerns
+
+### Dependency updates
+
+All the major components have been updated to their latest version - Guice, Shiro and Vaadin 7.  Vaadin 8 will follow shortly, but a Vaadin 7 branch will be maintained for a while.
+
+## The changes
+Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but some code changes were needed to achieve effective separation of concerns
 
 ### Testing and Mocks
 
 A number of packages now contain Mocks and test support classes - this is to avoid recreating Mocks individually within a wide range of tests. This approach is still fairly ad-hoc, but it worth checking to see if there is a 'test' package before setting up mocks.
-
 
 
 ## Functional Code Changes
