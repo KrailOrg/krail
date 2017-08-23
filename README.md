@@ -14,14 +14,16 @@ Krail provides a framework for rapid Java web development by combining Vaadin, G
 
 ---
 
+Version 0.10.0.0 has just been released - this was a major refactoring.  See Release Notes.md.
+
  Development of Krail has been lacking for a good few months - but it has now reached the top of the TODO list again.
 
 It is currently undergoing a major refactoring, to split out some of the major parts from the core (the core being Vaadin, Shiro and Guice).  I18N, Option, Services are being factored out into their own projects, as they could actually be used outside of Krail.
 
 Work will then continue on other aspects.  This is the current plan:
 
-- Complete the refactoring
-- Update to latest Vaadin 7
+- Complete the refactoring - released 23rd Aug 2017 (0.10.0.0)
+- Update to latest Vaadin 7  - released 23rd Aug 2017 (0.10.0.0)
 - Upgrade to Vaadin 8 - It is hoped that this can be completed by around mid September 2017
 - Attempt a migration to [Eclipse Vert.x](http://vertx.io/) - that may or may not work! 
 
@@ -51,7 +53,8 @@ The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&st
 
 # Download
 <a href='https://bintray.com/dsowerby/maven/krail/view?source=watch' alt='Get automatic notifications about new "krail" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
-##Gradle
+
+## Gradle
 
 ```
 repositories {
@@ -60,9 +63,9 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail:0.9.9'
+'uk.q3c.krail:krail:0.10.0.0'
 ```
-##Maven
+## Maven
 
 ```
 <repository>
@@ -76,24 +79,24 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail</artifactId>
-	<version>0.9.9</version>
+	<version>0.10.0.0</version>
 </dependency>
 ```
 ## Direct
 
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
 
-#Limitations
+# Limitations
 
 Would not work in a [clustered environment](https://github.com/davidsowerby/krail/issues/425)
 
 # Status
 
-18th February 2016:
+23rd Aug 2017:
 
-* Vaadin 7.6.3 is integrated with:
-* Guice 4.0
-* Shiro 1.2.4,
+* Vaadin 7.7.10 is integrated with:
+* Guice 4.1.0
+* Shiro 1.4.0,
 * MBassador (Event Bus)
 * Apache Commons Configuration
 * Guava cache
@@ -110,10 +113,6 @@ There is a [functional test application](https://github.com/davidsowerby/krail-t
 # Project Build
 
 Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).
-
-The build is a multi-project gradle build with a [master](https://github.com/davidsowerby/krail-master)
-
-If you want to build from source run 'gradle eclipse' or 'gradle idea' to generate the IDE files
 
 # Acknowledgements
 
