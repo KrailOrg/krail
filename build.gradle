@@ -55,10 +55,6 @@ repositories {
 
 kaytee {
     baseVersion = "0.10.0.0"
-    release{
-        mergeToMaster=false
-        toBintray=false
-    }
 }
 
 version = '0.10.0.0'
