@@ -3,12 +3,17 @@
 ### Introduction
 
 This release is a major refactor to extract some elements which can actually stand alone from Krail itself - I18N, Option and Application Configuration.  All have an API and an implementation project.
-EventBus and Service packages have their APIs extracted into separate projects, but the implementation is still in the Krail core until Eclipse Vert.x has been assessed.
+EventBus and Service packages have their APIs extracted into separate projects, but the implementation is still in the Krail core.
+
+The aim is to prepare for upgrade to Vaadin 8, and then assess the possibility of moving to Eclipse Vert.x  
+
+Vaadin 8 will follow shortly, but a Vaadin 7 branch will be maintained for a while.
 
 
 ### Dependency updates
 
-All the major components have been updated to their latest version - Guice, Shiro and Vaadin 7.  Vaadin 8 will follow shortly, but a Vaadin 7 branch will be maintained for a while.
+All the major components have been updated to their latest version - Guice, Shiro and Vaadin 7, along with a number of smaller compile and tsestCompile dependencies.  
+
 
 ## The changes
 Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but some code changes were needed to achieve effective separation of concerns
@@ -122,7 +127,7 @@ All classes relating to the provision of In Memory "persistence", are within **o
 
 ### services
 
-- root package becomes `service` instead of `services`
+- root package becomes `service` instead of `services`, and most of the classes also become `Servicexxxx` instead of `Servicesxxxx`
 
 ### uk.q3c.util
 
@@ -166,3 +171,8 @@ The following moved into a new package `uk.q3c.util.test`, to make test helper c
 - `WeekendBlocker`  from `uk.q3c.util` - was in test folder, now in src
 
 - new `UtilModule` for Guice bindings
+
+
+## Tutorial
+
+The tutorial has yet to be updated

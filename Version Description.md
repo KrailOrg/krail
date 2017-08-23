@@ -1,1 +1,0 @@
-This version updates to Vaadin 7.6.3.  Changes concentrate on separating the build from the master project to prepare move to continuous delivery.  Some small fixes included, Tutorial updated
