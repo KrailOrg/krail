@@ -56,7 +56,7 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.28'
+version = '0.9.10.29'
 //version = versionFromFile(project.projectDir)
 
 repositories {
@@ -97,7 +97,7 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
 
     compile 'org.reflections:reflections:0.9.10'
-    compile 'net.jodah:typetools:0.4.3'
+//    compile 'net.jodah:typetools:0.4.3'
 
     //Validation
     compile 'org.apache.bval:bval-jsr303:0.5'
