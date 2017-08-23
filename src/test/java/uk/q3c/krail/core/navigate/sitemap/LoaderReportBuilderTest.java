@@ -29,6 +29,7 @@ import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,9 +55,10 @@ public class LoaderReportBuilderTest {
     private File tempDir;
 
     @Before
-    public void setup() {
+    public void setup() throws URISyntaxException {
         tempDir = temporaryFolder.getRoot();
-        templateFile = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap/LoadReportBuilderTest.template");
+
+        templateFile = TestResource.resource(this, "LoadReportBuilderTest.template");
         loaders = new ArrayList<>();
         loaders.add(new MockAnnotationLoader());
         loaders.add(new MockDirectLoader());

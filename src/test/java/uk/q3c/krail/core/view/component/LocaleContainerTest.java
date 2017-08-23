@@ -35,6 +35,7 @@ import uk.q3c.util.testutil.LogMonitor;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -65,10 +66,10 @@ public class LocaleContainerTest {
     private Set<Locale> supportedLocales;
 
     @Before
-    public void setup() {
+    public void setup() throws URISyntaxException {
         Locale.setDefault(Locale.UK);
-        File baseDir = TestResource.testJavaRootDir("krail");
-
+        File sampleFile = TestResource.resource(this, "basedir-marker.txt");
+        File baseDir = sampleFile.getParentFile();
         VaadinService.setCurrent(vaadinService);
         when(vaadinService.getBaseDirectory()).thenReturn(baseDir);
         supportedLocales = new HashSet<>();
@@ -104,7 +105,7 @@ public class LocaleContainerTest {
         FileResource flag = (FileResource) property.getValue();
         assertThat(flag.getFilename()).isEqualTo("de.png");
         assertThat(flag.getSourceFile()
-                       .exists()).isEqualTo(true);
+                .exists()).isEqualTo(true);
 
     }
 
@@ -150,7 +151,6 @@ public class LocaleContainerTest {
         property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
         assertThat(property.getValue()).isNull();
     }
-
 
 
 }

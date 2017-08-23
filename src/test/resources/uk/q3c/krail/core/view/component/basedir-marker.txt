@@ -1,0 +1,1 @@
+Marker to allow finding directory from class resource
