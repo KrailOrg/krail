@@ -11,7 +11,7 @@ This tutorial assumes that you have Gradle already installed.  The Vaadin Gradle
 
 It is also assumed that you will be using Git for version control, and have it installed.
 
-Earlier versions of this tutorial code allowed a download at every step, but regrettably that proved time consuming to maintain.
+Earlier versions of this tutorial code allowed a download at every step, but regrettably that proved time consuming to maintain - there are some useful checkpoints in the code, though, if you look through the Git log
   
 You can, however, download the code for the entire [Tutorial from GitHub](https://github.com/davidsowerby/krail-tutorial)
 
@@ -36,9 +36,10 @@ You will now have an empty build file open.  Cut and paste the following into th
         id "com.devsoap.plugin.vaadin" version "1.2.0"
         id 'eclipse-wtp'  
         id 'idea'
-    } 
-  
+    }
 
+    ext.vaadinVersion = '7.7.10'
+    
     sourceCompatibility = '1.8'  
 
     repositories {  
@@ -46,7 +47,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.10.0.1')
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.10.0.0')
     }
     
     configurations.all {
@@ -63,6 +64,7 @@ You will now have an empty build file open.  Cut and paste the following into th
 
 - The first entry is for a [Vaadin Gradle plugin](https://github.com/johndevs/gradle-vaadin-plugin), and provides some valuable Vaadin specific Gradle tasks
 - The 'eclipse' and 'idea' plugins are optional, but useful for generating IDE specific files.
+- We need to tell the vaadin-gradle plugin which version of Vaadin to use - this must match the version being used by the version of Krail selected 
 - Krail requires Java 8, hence the line "sourceCompatibility = '1.8'"
 - Of course, you cannot do without Krail ...
 - There are a lot of dependencies involved in building Krail - that is no surprise, when you consider how many things it integrates.  However, that also means that there can be version conflicts to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
@@ -110,16 +112,22 @@ gradle idea
 IDEA may prompt you to add the project VCS root - say yes if it does.
 
 
-- Delete the src/main/groovy and src/test/groovy folders completely - we will only be using Java for this Tutorial.  There are a couple of generated files in these folders, but they can be deleted.
+- Delete the pacakge *com.example.krailtutorial* completely - we will create our own shortly.  There are a couple of generated files in these folders, but they can be deleted.
 
 - To reduce what goes in to Git, let's just add a simple .gitignore file at the project root:
 
 ```
-bin
-build
-classes
-.gradle
+.classpath
 .idea
+.project
+build/*
+out
+classes
+.gradle/
+
+*.iml
+*.ipr
+*.iws
 ```
 
 - Right click on the project folder and select Git | Add to add all files to Git.
