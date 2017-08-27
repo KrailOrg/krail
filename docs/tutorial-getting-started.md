@@ -33,13 +33,20 @@ Create a directory for your project (called "**krail-tutorial**" in this case), 
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
     plugins {
-        id "com.devsoap.plugin.vaadin" version "1.2.0"
+        id "com.devsoap.plugin.vaadin" version "1.2.3"
         id 'eclipse-wtp'  
         id 'idea'
     }
-
-    ext.vaadinVersion = '7.7.10'
     
+    vaadin {
+        version = '7.7.10' // This version should match that used by the version of Krail you are using
+        logToConsole = true
+    }
+    
+    vaadinCompile {
+        widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
+    }
+
     sourceCompatibility = '1.8'  
 
     repositories {  
@@ -188,20 +195,21 @@ public class TutorialServlet extends BaseServlet {
 }
 ```
 
-and in the *build.gradle* file, add a vaadin closure to declare the widgetset.  (The plugin.logToConsole entry provides a little extra console output during a build.  It is useful, but not essential)
+In the *build.gradle* file, add a vaadin closure set logToConsole - it provides a little extra console output during a build.  It is useful, but not essential.
+
+
+    
+```groovy
+vaadin{
+    logToConsole = true
+    version = '7.7.10'
+}
+```
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Until issue #528 is resolved, the Vaadin version used by Krail has to be repeated here, and will need to be updated whenever the Krail version is updated, hence the comments</p>
 </div>
-    
-```groovy
-vaadin {
-    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    plugin.logToConsole = true
-}
-```
-
 
 
 #### Complete Build file
@@ -209,9 +217,18 @@ vaadin {
 The full *build.gradle* file should look like this:
 
 ```
-apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10.6'
-apply plugin: 'eclipse-wtp'
-apply plugin: 'idea'
+plugins {
+    id "com.devsoap.plugin.vaadin" version "1.2.3"
+    id 'eclipse-wtp'
+    id 'idea'
+}
+
+
+
+vaadin {
+    version = '7.7.10' // This version should match that used by the version of Krail you are using
+    logToConsole = true
+}
 
 sourceCompatibility = '1.8'
 
@@ -220,15 +237,7 @@ repositories {
 }
 
 dependencies {
-    // remember to update the Vaadin version below if this version is changed
-    compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.9')
-
-}
-
-vaadin {
-    version = '7.6.3' // see issue https://github.com/davidsowerby/krail/issues/528
-    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    plugin.logToConsole = true
+    compile 'uk.q3c.krail:krail:0.10.0.0'
 }
 
 configurations.all {
@@ -236,6 +245,10 @@ configurations.all {
         // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
         force 'javax.validation:validation-api:1.0.0.GA'
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
 }
 
 ```
@@ -373,6 +386,7 @@ So let's do that now.
 - extract the jar
 - locate the theme folders - you will find them in the VAADIN/themes folder
 - copy folders for the themes you want - for the Tutorial, just copy all of them - into src/main/webapp/VAADIN/themes.
+- delete the automatically created KrailTutorial theme
 
 For readers less familiar with Vaadin, "reindeer" is the default style, and "valo" is the most recent.
 
@@ -381,7 +395,7 @@ For readers less familiar with Vaadin, "reindeer" is the default style, and "val
 The one aspect of the build that tends to give problems is the widgetset compile - it seems very sensitive.  We therefore suggest compiling it first by executing:
 
 
->  gradle vaadinCompileWidgetset
+>  gradle vaadinCompile
 
 
 from either the command line or IDE.  You can see whether it has compiled by checking the src/main/webapp/VAADIN/widgetsets folder - it should have contents.  (A compile failure usually creates a widgetsets folder, but leaves it empty)
@@ -432,7 +446,7 @@ A couple of things have changed now you have logged in:
 - There is now an extra page in the navigation components, called 'Private' - this represents a restricted area of the site, where only authorised users can have access.  The other pages are all "public".
 - The login panel shows your user name, and now offers a "logout" button.
 
-This is achieved using two major components, the ```DefaultRealm``` (a very simple implementation of the Apache Shiro Realm) and the ```PageController```, which is a Krail component used to control the display of pages authorised by your Realm implementation.  We will come back to these when we look at [User Access Control](tutorial-uac.md).
+This is achieved using two major components, the ```DefaultRealm``` (a very simple implementation of the Apache Shiro Realm) and ```PageController```, a Krail component used to control the display of pages authorised by your Realm implementation.  We will come back to these when we look at [User Access Control](tutorial-uac.md).
 
 Now try this sequence:
 
@@ -452,7 +466,7 @@ You have created a basic application, and can have already seen:<br>
 
 # Download from GitHub
 
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step01**
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch krail_0.10.0.0 commit 99cf4608e98b7913f7d3b08825cf8a46d8473755
     
 
 

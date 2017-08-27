@@ -175,4 +175,5 @@ The following moved into a new package `uk.q3c.util.test`, to make test helper c
 
 ## Tutorial
 
-The tutorial has yet to be updated
+The 'Getting Started' section of the Tutorial has been amended, and the Tutorial itself is functional at this point.
+The remaining sections have still to be reviewed, but should be subject to very little, if any, change
