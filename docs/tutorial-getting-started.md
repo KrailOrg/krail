@@ -7,11 +7,13 @@ Krail encourages prototyping, by providing a lot of default functionality so tha
 # Creating a Krail application with Gradle
 
 ## Preparation
-This tutorial assumes that you have Gradle already installed.  The Vaadin Gradle plugin used here requires Gradle 2.5+
+This tutorial assumes that you have Gradle already installed.  The Vaadin Gradle plugin used here requires Gradle 4+
 
 It is also assumed that you will be using Git for version control, and have it installed.
 
-If you want to skip a step, or just re-create something later, this Tutorial is available on GitHub - at the end of every section you'll see a stage "Download from GitHub"
+Earlier versions of this tutorial code allowed a download at every step, but regrettably that proved time consuming to maintain.
+  
+You can, however, download the code for the entire [Tutorial from GitHub](https://github.com/davidsowerby/krail-tutorial)
 
 ## Create a build file
 
@@ -30,9 +32,12 @@ Create a directory for your project (called "**krail-tutorial**" in this case), 
 ```
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
-    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10.1'  
-    apply plugin: 'eclipse-wtp'  
-    apply plugin: 'idea'  
+    plugins {
+        id "com.devsoap.plugin.vaadin" version "1.2.0"
+        id 'eclipse-wtp'  
+        id 'idea'
+    } 
+  
 
     sourceCompatibility = '1.8'  
 
@@ -41,7 +46,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.6')
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.10.0.1')
     }
     
     configurations.all {
@@ -50,6 +55,10 @@ You will now have an empty build file open.  Cut and paste the following into th
             force 'javax.validation:validation-api:1.0.0.GA'
         }
     }
+    
+    task wrapper(type: Wrapper) {
+        gradleVersion = '4.1'
+    }
 ```  
 
 - The first entry is for a [Vaadin Gradle plugin](https://github.com/johndevs/gradle-vaadin-plugin), and provides some valuable Vaadin specific Gradle tasks
@@ -57,6 +66,7 @@ You will now have an empty build file open.  Cut and paste the following into th
 - Krail requires Java 8, hence the line "sourceCompatibility = '1.8'"
 - Of course, you cannot do without Krail ...
 - There are a lot of dependencies involved in building Krail - that is no surprise, when you consider how many things it integrates.  However, that also means that there can be version conflicts to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
+- finally, the gradle-vaadin plugin needs Gradle at version 4+, so we will create a [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) task 
 
 
 Now save the file and add it to Git
