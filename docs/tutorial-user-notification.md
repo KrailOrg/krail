@@ -75,4 +75,13 @@ If you wanted to provide your own methods of presenting user notifications, it i
 At first this seems an almost trivial topic, but we would strongly recommend using ```UserNotifier``` from the start.  This will give you consistency, and enable a very quick and simple change of notification method(s) later.  
 
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step04**
+To get to this point straight from GitHub:
+
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *User Notification Complete*
