@@ -98,7 +98,7 @@ You will have compile errors, but let's look at what these entries mean.
 - The first parameter is the URI segment, and we generally keep to all lowercase.  The second and third entries are subpages, so need a qualified path.
 - The second parameter is the class to use as a View - we haven't created them yet.
 - The third parameter is the page name, is locale-sensitive and therefore an ```I18NKey```
-- The fourth parameter determines what sort of access control is applied to the page.  We want "private" pages, so they are set to PERMISSION 
+- The fourth parameter determines what sort of access control is applied to the page.  We want controlled access to these pages, so this parameter is set to PERMISSION 
 
 We'll make it easier by extending the ```Grid3x3ViewBase```base class from the Krail core - this just gives us a 3x3 grid to place components in.
 
@@ -218,7 +218,7 @@ public enum LabelKey implements I18NKey {
         baseModules.add(new AnnotatedPagesModule());
     }
 ```
-- Run the application and log in again and you will see that "Purchasing" has been added to the Finance page.  
+- Run the application, log in and you will see that "Purchasing" has been added to the Finance page.  
 
 ##Choosing the Method
 You can mix Direct and Annotation sitemap entries however you wish, but that can get a bit confusing to manage.  Which method you choose is mostly a matter of preference, but there is one feature of the direct method you should be aware of.
@@ -451,7 +451,6 @@ The first two lines just create the buttons.  The second two lines add click lis
 - Press the "Accounts" button - and you a notification will appear to say that the page does not exist.  As mentioned earlier, the same notification is given whether you are not authorised or the page does not exist. 
 - Log in
 - Press the "Accounts" button again, and as you are now authorised, you will be at the "Accounts" page
-each of the buttons
 
 ##Navigating with Parameters
 A common requirement is to land on a page with parameters - a record id, for example, so the page know which data to load.  We are going to add a "Contact Detail" page to simulate this.
@@ -499,15 +498,22 @@ To set ```ContactDetailView``` up to receive parameters all we need to do is ove
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
 
 public class ContactDetailView extends Grid3x3ViewBase {
     private Label idLabel;
     private Label nameLabel;
+
+    @Inject
+    protected ContactDetailView(Translate translate) {
+        super(translate);
+    }
 
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
@@ -522,15 +528,15 @@ public class ContactDetailView extends Grid3x3ViewBase {
     @Override
     protected void loadData(AfterViewChangeBusMessage busMessage) {
         idLabel.setValue(busMessage.getToState()
-                                          .getParameterValue("id"));
+                .getParameterValue("id"));
         nameLabel.setValue(busMessage.getToState()
-                                     .getParameterValue("name"));
+                .getParameterValue("name"));
     }
 }
 ```
 The process in ```loadData()``` is straightforward.  The busMessage is just an event, and it carries a reference to the navigation state we are navigating from, and the state we are navigating to.  This is represented by ```NavigationState```, which also contains any parameters that have been passed with the URI.
 ###Sending parameters
-Sending parameters is simply a matter of constructing a ```NavigationState``` and specifying the parameters to go with it - then calling the ```Navigator.navigateTo(NavigationState)``` method
+To send parameters,  construct a ```NavigationState```, specifying the parameters to go with it and call ```Navigator.navigateTo(NavigationState)``` 
 
 - Update ```ContactUsView``` to add a button whose click listener builds the ```NavigationState```, adds parameters, then calls the ```Navigator```.
 ```java
@@ -576,5 +582,5 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
 - You have "attached" an existing set of pages to a part of the Sitemap different from its default location 
 
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step02**
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial), select branch krail_0.10.0.0 and revert current branch to commit 'Pages and Navigation complete'
 

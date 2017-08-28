@@ -456,6 +456,8 @@ Now try this sequence:
 - Press the browser 'back' button - and a notification will pop up saying that *"private/home is not a valid page"*.  Even though you know this is not the case, this message is deliberate, as it means that if a user tries to guess a url that they are not authorised for, they will not even get confirmation that the page exists. 
 - Look at the message bar and you will see that the same message has appeared there.  We will look at [user notifications](tutorial-user-notification.md) and how they are handled a bit later.
 
+It should be noted that although the Tutorial uses the idea of a 'private' set of pages, how you define and authorise access to pages is extremely flexible, and mostly a matter of how you want to do it.
+
 #Summary
 You have created a basic application, and can have already seen:<br>
 
@@ -466,7 +468,7 @@ You have created a basic application, and can have already seen:<br>
 
 # Download from GitHub
 
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch krail_0.10.0.0 commit 99cf4608e98b7913f7d3b08825cf8a46d8473755
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial), select branch krail_0.10.0.0 and revert current branch to commit 'Getting Started completed'
     
 
 
