@@ -91,12 +91,12 @@ At the moment these "news channels" will always appear.  Now we need to make the
 
 ##Setting up the options
 
-In order to use options a class must implement ```OptionContext```
+In order to use options a class must implement ```OptionContext``` - in this case we will use a sub-interface of it ```VaadinOptionContext```
 
-- Modify ```MyNews``` to implement ```OptionContext``` and implement the stubs of the methods.
+- Modify ```MyNews``` to implement ```VaadinOptionContext``` and implement the stubs of the methods.
 - create a constructor and inject ```Option``` into it
 - annotate the constructor with **@Inject**
-- return ```option``` from ```getOption()```
+- return ```option``` from ```optionInstance()```
 
 The result should look like this:
 
@@ -106,15 +106,13 @@ package com.example.tutorial.pages;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.option.Option;
 
-import javax.annotation.Nonnull;
-
-public class MyNews extends Grid3x3ViewBase implements OptionContext {
+public class MyNews extends Grid3x3ViewBase implements VaadinOptionContext {
 
     private final Option option;
 
@@ -138,9 +136,9 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         setMiddleRight(vacancies);
     }
 
-    
+
     @Override
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 
@@ -163,7 +161,7 @@ The real key - the one that is used in persistence - is made up of the context, 
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">An option value is just an object to Krail. Supported data types will be determined by your choice of persistence.  However, the core does provide <code>OptionElementConverter</code> to help with the process of translating to String for persistence</p>
+<p class="last">An option value is just an object to Krail. Supported data types will be determined by your choice of persistence.  However, the core uses a utility class provide <code>DataConverter</code> to help with the process of translating to String for persistence</p>
 </div>
 
 We will make use of these keys in the ```optionValueChanged``` method, to hide or show the news channels:
@@ -206,7 +204,7 @@ Now we have options but we do not have any way of changing them.  We will use ``
         this.optionPopup = optionPopup;
     }
 ```
-- Add a button to ```doBuild()``` to invoke the popup
+- Add a button in ```doBuild()``` to invoke the popup
 ```
     popupButton=new Button ("options");
     popupButton.addClickListener(event->optionPopup.popup(this,LabelKey.News_Options));
@@ -222,17 +220,15 @@ import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
-import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.core.option.OptionPopup;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionKey;
 
-import javax.annotation.Nonnull;
-
-public class MyNews extends Grid3x3ViewBase implements OptionContext {
+public class MyNews extends Grid3x3ViewBase implements VaadinOptionContext {
 
     public static final OptionKey<Boolean> ceoVisible = new OptionKey<>(true, MyNews.class, LabelKey.CEO_News_Channel);
     public static final OptionKey<Boolean> itemsForSaleVisible = new OptionKey<>(true, MyNews.class, LabelKey.Items_For_Sale_Channel);
@@ -265,16 +261,16 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         popupButton=new Button("options");
         popupButton.addClickListener(event->optionPopup.popup(this,LabelKey.News_Options));
         setBottomCentre(popupButton);
-        
+
         setMiddleLeft(itemsForSale);
         setCentreCell(ceoNews);
         setMiddleRight(vacancies);
         optionValueChanged(null);
     }
 
-    
+
     @Override
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 
@@ -303,7 +299,7 @@ The ```OptionPopup``` scans the ```OptionContext``` for ```OptionKey``` fields a
 
 We have demonstrated here that options are associated with users.  What we haven't seen is what happens if the system level option changes.  
 
-In fact, at the moment there is no system level, so if there is no user level value, then the default coded value is used.
+In fact, at the moment there are no system level values defined, so if there is no user level value, then the default coded value is used.
 
 - Still logged in as user "eq", open the options popup and click "Reset to Default" for the CEO channel.
 - The "CEO News Channel" checkbox becomes checked, and CEO channel re-appears
@@ -315,16 +311,16 @@ This is the expected behaviour - we coded a default value of "true" for the ```O
 - and of course we need to put the button on the page
 
 ```
-  systemOptionButton = new Button("system option");
-  systemOptionButton.addClickListener(event -> {
-        option.set(false, 1, ceoVisible);
+    systemOptionButton = new Button("system option");
+    systemOptionButton.addClickListener(event -> {
+        option.set(ceoVisible, 1, false);
         optionValueChanged(null);
-  });
-  setBottomRight(systemOptionButton);
+    });
+    setBottomRight(systemOptionButton);
 ```
 - Run the application and login as "eq"
 - Navigate to "My News" and you will see that the CEO channel is back - the default ```OptionStore``` is in-memory, so values are lost when we restart the application
-- Try pressing "system option".  You will be told that you do not have permission for that action.
+- Try pressing "system option".  You will be told that you do not have permission for that action. (There is a [bug](https://github.com/davidsowerby/krail/issues/624) which presents the stacktrace instead of a user notification )
 - Click on the splash message to clear it
 
 We will come to [User Access Control](tutorial-uac.md) in detail later, but for now it is enough to know that ```DefaultRealm``` - which provides the authorisation rules - allows users to set their own options, but only allows the 'admin' user to set system level options. 
@@ -351,14 +347,14 @@ The structure of these may be available from other systems - HR, Identity Manage
 
 #Option Data Types
 
-When using the default in memory store, Krail can use any data type for an option.  However, most persistence providers will want to confine Option values to a single table, and ```OptionElementConverter``` provides support for that, by translating ```Option``` values to ```String``` and back again.   
+When using the default in memory store, Krail can use any data type for an option.  However, most persistence providers will want to confine Option values to a single table, and ```DataConverter``` provides support for that, by translating ```Option``` values to ```String``` and back again.   
 
-This supports most primitive data types , ```Enum``` and ```I18NKey```.  Collections cannot be used directly, but are supported through ```OptionList```.
+This supports most primitive data types , ```Enum``` and ```I18NKey```.  Collections cannot be used directly, but are supported through ```uk.q3c.util.data.collection.DataList```.
 
 ```AnnotationOptionList``` enables the use of a list of ```Annotation``` classes.
  
  
-See ```DefaultOptionElementConverter``` for the complete list of supported types.
+See ```uk.q3c.util.DefaultDataConverter``` for the complete list of supported types.
  
  
 #Summary
@@ -372,4 +368,13 @@ We have:
 
  
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step05**
+To get to this point straight from GitHub:
+
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *Options and UserHierarchies Complete*
