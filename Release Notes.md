@@ -124,6 +124,12 @@ All classes relating to the provision of In Memory "persistence", are within **o
 - "InMemory" storage for both Option and I18N patterns are in the **krail-option** project
 - `TestPersistenceModule` becomes `TestPersistenceModuleVaadin`
 
+### config
+
+Moved to **krail-config-api** and **krail-config**
+
+Previous versions defaulted to looking for an optional 'krail.ini' file in WEB-INF. From version 0.10.0.0, that is no longer true, and all ini files must be specified
+
 
 ### services
 
