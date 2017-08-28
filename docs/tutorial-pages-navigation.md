@@ -582,5 +582,14 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
 - You have "attached" an existing set of pages to a part of the Sitemap different from its default location 
 
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial), select branch krail_0.10.0.0 and revert current branch to commit 'Pages and Navigation complete'
+To get to this point straight from GitHub:
+
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *Pages and Navigation Complete*
 

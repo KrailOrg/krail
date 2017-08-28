@@ -468,7 +468,16 @@ You have created a basic application, and can have already seen:<br>
 
 # Download from GitHub
 
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial), select branch krail_0.10.0.0 and revert current branch to commit 'Getting Started completed'
+To get to this point straight from GitHub:
+
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *Getting Started completed*
     
 
 
