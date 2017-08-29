@@ -18,13 +18,9 @@ A complete I18N "transaction" requires the following components:
 
 Open up ```MyNews``` and you will recall that we have used ```String``` literals in a number of places.  This is going to make life difficult if ever we want to translate this application - and even if we just want to use the same phrase in a number of different places.
  
-Let's replace the following literal with something more robust:
+Let's replace the following literal (in ``doBuild()```) with something more robust:
 
-```java
-popupButton = new Button("options");
-```
 
-- In ```doBuild()```, replace:
 ```java
 popupButton = new Button("options");
 ```
@@ -66,28 +62,33 @@ getGridLayout().addComponent(bannerLabel,0,0,1,0);
 
 So far, all the I18 patterns have been simple - they have had no parameters.  Now we want a more complex message with some dynamic elements to it.
 
-Krail core uses a convention which splits what could be a very long list of keys like this:
+At this stage, you may want to consider a convention for naming your keys.  In general we feel it is best to group them with a feature, and then perhaps consider splitting them further:
+
 
 - Labels : short, usually one or two words, no parameters, generally used as captions
 - Descriptions : longer, typically several words, no parameters, generally used in tooltips
 - Messages : contains parameter(s). 
 
-
 This is just a convention - which we will use in this Tutorial - but it is entirely your decision how you organise your keys.
+
+To stick to this convention, we will now rename the key classes we have already created:
+
+- Rename ```LabelKey``` to ```TutorialLabelKey```
+- Rename ```DescriptionKey``` to ```TutorialDescriptionKey```
 
 ###Creating a Key class
 
 Assuming you have followed this Tutorial from the start, you have already seen how to [create a key class](tutorial-pages-navigation.md#I18NIntro).  We are going to add another now:
 
-- in the 'com.example.tutorial.i18n' package, create an Enum class called 'MessageKey'.  It should implement the ```I18NKey``` interface
-- create a MessageKey constant **Banner**
+- in the 'com.example.tutorial.i18n' package, create an Enum class called 'TutorialMessageKey'.  It should implement the ```I18NKey``` interface
+- create a ```TutorialMessageKey``` constant **Banner**
 
 ```
 package com.example.tutorial.i18n;
 
 import uk.q3c.krail.i18n.I18NKey;
 
-public enum MessageKey implements I18NKey {
+public enum TutorialMessageKey implements I18NKey {
     Banner
 }
 
@@ -96,15 +97,14 @@ public enum MessageKey implements I18NKey {
 
 This is going to be a long message, and because it has parameters, the default translation cannot be taken from the key name.  We will use a class based method for defining the pattern: 
 
-- in the 'com.example.tutorial.i18n' package, create a class 'Messages'
+- in the 'com.example.tutorial.i18n' package, create a class 'TutorialMessages' (the naming convention is important here - in order to find values for keys, the default is to assume, for example, that 'LabelKey' will map to 'Labels' - although this can be changed by overriding ```I18NKey.bundleName()```
 - override the ```loadMap()``` method
 ```
 package com.example.tutorial.i18n;
 
 import uk.q3c.krail.i18n.EnumResourceBundle;
 
-public class Messages extends EnumResourceBundle<MessageKey> {
-    
+public class TutorialMessages extends EnumResourceBundle<TutorialMessageKey>{
     @Override
     protected void loadMap() {
         
@@ -112,7 +112,7 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 }
 ```
 
-Here you will see that we are extending ```EnumResourceBundle``` but for type safety, genericised with ```MessageKey```.  The ```loadMap()``` method enables entries to be put in a map. 
+Here you will see that we are extending ```EnumResourceBundle``` but for type safety, genericised with ```TutorialMessageKey```.  The ```loadMap()``` method enables entries to be put in a map. 
 
 - now associate the **Banner** key with an I18N pattern - using a static import makes it more readable:
 
@@ -121,9 +121,9 @@ package com.example.tutorial.i18n;
 
 import uk.q3c.krail.i18n.EnumResourceBundle;
 
-import static com.example.tutorial.i18n.MessageKey.*;
+import static com.example.tutorial.i18n.TutorialMessageKey.*;
 
-public class Messages extends EnumResourceBundle<MessageKey> {
+public class TutorialMessages extends EnumResourceBundle<TutorialMessageKey> {
 
     @Override
     protected void loadMap() {
@@ -136,21 +136,21 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 Each of the parameters - *{n}* - will take a value we supply as an argument.  The arguments:
  
 1. must be supplied in the order of the numbers in the *{n}*, not the order in which they appear in the pattern (because different languages may require parameters in a different order).
-1. must match the number of parameters.  If not, the whole translation is abandoned and the pattern string is returned unchanged. 
+1. must match the number of parameters.  If not, the whole translation is abandoned and the pattern string is returned unchanged. (**Note:**  This is the default behaviour of ````Translate````), but as of Krail 0.10.0.0 ```Translate``` offers different levels of "strictness" regarding the matching of parameters to arguments.  See the javadoc for detail.
 
-For detail, see the Krail ```MessageFormat``` class - and if you want to know why it is not the native Java ``MessageFormat`` class, see this [blog post](http://rndjava.blogspot.co.uk/2013/02/alternative-java-messageformat.html). 
+```Translate``` uses an implementation of ```MessageFormat2```  - and if you want to know why it is not the native Java ``MessageFormat`` class, see this [blog post](http://rndjava.blogspot.co.uk/2013/02/alternative-java-messageformat.html).  That post refers to an earlier implementation, but the reasons are still valid. 
 
-Now let's display the banner
+Now let's display the banner:
 
 - set up a random temperature
 - choose a key depending on whether the CEO News channel is selected
-- add two keys to ```LabelKey```, **is_selected** and **is_not_selected**
-- create a ```Label``` using the translated message with the two arguments (remember that 'temperature' is the second parameter, *{1}* in the pattern, even though it appears first).
+- add two keys to ```TutorialLabelKey```, **is_selected** and **is_not_selected**
+- create a ```Label``` using the translated message with the two arguments (remember that 'temperature' is the second parameter, *{1}* in the pattern, even though it appears first).  In the ```doBuild``` method of ```MyNews``` add:
 ```
     int temperature = (new Random().nextInt(40))-10;
-    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
+    TutorialLabelKey selection = (option.get(ceoVisible)) ? TutorialLabelKey.is_selected : TutorialLabelKey.is_not_selected;
     
-    Label bannerLabel = new Label(getTranslate().from(MessageKey.Banner,  selection, temperature));
+    Label bannerLabel = new Label(getTranslate().from(TutorialMessageKey.Banner,  selection, temperature));
     getGridLayout().addComponent(bannerLabel,0,0,2,0);
 ```
 
@@ -158,37 +158,75 @@ Parameters passed as ```I18NKey``` constants are also translated.  These are cur
 
 - Run the application, log in and and navigate to "MyNews" (login = 'eq', 'eq'), 
     - the banner has been expanded to include the variable values
-- click on "options" and change the value for CEO New Channel - but the label does not change.
+- click on "options" and change the value for CEO New Channel - but the label does not change, because the banner has no way of knowing the option value has changed.
 - To fix this
     - make ```bannerLabel``` a field
     - move the code to set the bannerLabel value to ```optionValueChanged```
+    - move 'optionValueChanged(null);' to the end of ```doBuild()```
     
     
-The code for this in the ```doBuild()``` method is now:
+The full code for ```doBuild()``` method is now:
 
 ```
-    int temperature = (new Random().nextInt(40)) - 10;
-    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
+    @Override
+    protected void doBuild(ViewChangeBusMessage busMessage) {
+        super.doBuild(busMessage);
+        ceoNews = new Label("CEO News");
+        itemsForSale = new Label("Items for Sale");
+        vacancies = new Label("Vacancies");
+        ceoNews.setSizeFull();
+        itemsForSale.setSizeFull();
+        vacancies.setSizeFull();
 
-    bannerLabel = new Label();
-    getGridLayout().addComponent(bannerLabel,0,0,2,0);
+        popupButton = new Button(getTranslate().from(TutorialLabelKey.Options));
+        popupButton.addClickListener(event -> optionPopup.popup(this, TutorialLabelKey.News_Options));
+        setBottomCentre(popupButton);
+
+        systemOptionButton = new Button("system option");
+        systemOptionButton.addClickListener(event -> {
+            option.set(ceoVisible, 1, false);
+            optionValueChanged(null);
+        });
+        setBottomRight(systemOptionButton);
+
+        setMiddleLeft(itemsForSale);
+        setCentreCell(ceoNews);
+        setMiddleRight(vacancies);
+
+
+        if (subjectProvider.get().isPermitted("option:edit:SimpleUserHierarchy:*:1:*:*")) {
+            systemOptionButton.setVisible(true);
+        } else {
+            systemOptionButton.setVisible(false);
+        }
+
+        payRiseButton = new Button("request a pay rise");
+        payRiseButton.addClickListener(event -> requestAPayRise());
+        setBottomLeft(payRiseButton);
+
+        bannerLabel = new Label();
+        getGridLayout().addComponent(bannerLabel,0,0,2,0);
+
+        optionValueChanged(null);
+
+    }
 ```
     
 ```optionValueChanged()``` is now:
     
 ```
-@Override
-public void optionValueChanged(Property.ValueChangeEvent event) {
-    ceoNews.setVisible(option.get(ceoVisible));
-    itemsForSale.setVisible(option.get(itemsForSaleVisible));
-    vacancies.setVisible(option.get(vacanciesVisible));
-    int temperature = (new Random().nextInt(40)) - 10;
-    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
-    bannerLabel.setValue(getTranslate().from(MessageKey.Banner, selection, temperature));
-}
+    @Override
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        ceoNews.setVisible(option.get(ceoVisible));
+        itemsForSale.setVisible(option.get(itemsForSaleVisible));
+        vacancies.setVisible(option.get(vacanciesVisible));
+        int temperature = (new Random().nextInt(40)) - 10;
+        TutorialLabelKey selection = (option.get(ceoVisible)) ? TutorialLabelKey.is_selected : TutorialLabelKey.is_not_selected;
+        bannerLabel.setValue(getTranslate().from(TutorialMessageKey.Banner, selection, temperature));
+    }
 ```
 
-- Rerun the application, login and select 'My News' page, and try changing the option to display the CEO new channel
+- Rerun the application, login and select 'My News' page, and try changing the option to display the CEO new channel.  The banner will update to demonstrate that she really is watching you ...
 
 
 #Translation from Annotations
@@ -197,7 +235,7 @@ When using Vaadin components, it is often more convenient to use an ```Annotatio
 
 To achieve this, we need an annotation that is specific to our ```I18NKey``` implementations (we cannot use annotations from Krail core, because of the limitations Java places on ```Annotation``` parameters)
 
-- in the package 'com.example.tutorial.i18n', create a new Annotation class called "Caption".  Note the ```@I18NAnnotation``` - this tells Krail's ```I18NAnnotationProcessor``` that this annotation is used for I18N. 
+- in the package 'com.example.tutorial.i18n', create a new Annotation class called "TutorialCaption".  Note the ```@I18NAnnotation``` - this tells Krail's ```I18NAnnotationProcessor``` that this annotation is used for I18N. 
 
 ```java
 package com.example.tutorial.i18n;
@@ -212,11 +250,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
 @I18NAnnotation
-public @interface Caption {
+public @interface TutorialCaption {
 
-    LabelKey caption();
+    TutorialLabelKey caption();
 
-    DescriptionKey description();
+    TutorialDescriptionKey description();
 
 }
 ```
@@ -236,19 +274,41 @@ popupButton = new Button();
 ```
 - replace it by annotating the ```popupButton``` field
 ```
-@Caption(caption = LabelKey.Options,description = DescriptionKey.Select_your_options)
+@TutorialCaption(caption = TutorialLabelKey.Options,description= TutorialDescriptionKey.Select_your_options)
 private Button popupButton;
 ```
-- create the constant for ```DescriptionKey```
+- create the constant for ```TutorialDescriptionKey```
+
+
+Before we run the app, let's also use update the name key for the View
+
+- update the constructor:
+
+```
+    @Inject
+    public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, Translate translate, UserNotifier userNotifier) {
+        super(translate);
+        nameKey = TutorialLabelKey.My_News;
+        this.option = option;
+        this.optionPopup = optionPopup;
+        this.subjectProvider = subjectProvider;
+        this.userNotifier = userNotifier;
+    }
+```
+
+The need to do this manually should be fixed by this [open issue](https://github.com/davidsowerby/krail/issues/625).
+
 
 - Run the application, log in and and navigate to "MyNews" (login = 'eq', 'eq')
     - The "Options" button will be the same as before, but of course the caption is generated by the annotation
     - The tooltip for the "Options" button will now say "Select your options"
+    - The tabe shold now say "Krail Tutorial My News" 
     
     
-##Limitation
+##Limitations
 
 Naturally, you cannot use variable values with an annotation - by its very nature, ```Annotation``` will only take static values. For I18N patterns which requires dynamic values, therefore, you will need to use a direct call to ```Translate```.
+
 
 
 #Multi-Language
@@ -271,17 +331,12 @@ It really does not matter which method you use.  We will use method 2 for this e
 ```java
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.krail.core.i18n.KrailI18NModule;
 
-public class TutorialI18NModule extends I18NModule {
-
-    @Override
-    protected void define() {
-    }
+public class TutorialI18NModule extends KrailI18NModule {
 }
 ```
-In this method we will define everything we need to.
-
+- override the ```define()``` method to define everything we need to.
 - set the default locale explicitly, and add another Locale that we want to support. (The default locale is automatically a supported locale)
 
 ```
@@ -292,7 +347,7 @@ In this method we will define everything we need to.
     }
 }
 ```
-- call the new class in ```BindingManager```
+- use the new class in ```BindingManager```
 ```
 @Override
 protected Module i18NModule() {
@@ -301,14 +356,14 @@ protected Module i18NModule() {
 ```
 
 
-- in the package 'com.example.tutorial.i18n', create an new class 'Messages_de' extended from ```Messages```
+- in the package 'com.example.tutorial.i18n', create an new class 'TutorialMessages_de' extended from ```TutorialMessages```
 
 ```
 package com.example.tutorial.i18n;
 
-import static com.example.tutorial.i18n.MessageKey.Banner;
+import static com.example.tutorial.i18n.TutorialMessageKey.Banner;
 
-public class Messages_de extends Messages {
+public class TutorialMessages_de extends TutorialMessages {
     @Override
     protected void loadMap() {
         put(Banner, "Die Temperatur ist heute {1}. Der CEO hat bemerkt, dass ihre Nachrichten-Kanal {0}");
@@ -316,9 +371,9 @@ public class Messages_de extends Messages {
 }
 
 ```
-To translate the keys used for parameter *{0}* we need to do the same for ```LabelKeys``` - but do not have a ```Labels``` class, as all translation defaulted to the key name.
+To translate the keys used for parameter *{0}* we need to do the same for ```TutorialLabelKeys``` - but do not have a ```TutorialLabels``` class - so far, all translation defaulted to the key name.
 
-- create a new class 'Labels', extended from ```EnumResourceBundle``` 
+- create a new class 'TutorialLabels', extended from ```EnumResourceBundle``` 
 - implement ```loadMap()```
 
 ```
@@ -326,7 +381,8 @@ package com.example.tutorial.i18n;
 
 import uk.q3c.krail.i18n.EnumResourceBundle;
 
-public class Labels extends EnumResourceBundle<LabelKey> {
+
+public class TutorialLabels extends EnumResourceBundle<TutorialLabelKey>{
     @Override
     protected void loadMap() {
 
@@ -334,14 +390,16 @@ public class Labels extends EnumResourceBundle<LabelKey> {
 }
 ```
 
-- create a new class 'Labels_de' extended from ```Labels```
+- create a new class 'TutorialLabels_de' extended from ```TutorialLabels```
 - put the translations into the map
 ```
 package com.example.tutorial.i18n;
 
-import static com.example.tutorial.i18n.LabelKey.*;
+import uk.q3c.krail.i18n.EnumResourceBundle;
 
-public class Labels_de extends Labels {
+import static com.example.tutorial.i18n.TutorialLabelKey.*;
+
+public class TutorialLabels_de extends EnumResourceBundle<TutorialLabelKey>{
     @Override
     protected void loadMap() {
         put(is_selected, "aktiviert ist");
@@ -364,8 +422,8 @@ Why is this happening?  Well, currently there is nothing to tell this view that 
 ```
 private void populateBanner() {
     int temperature = (new Random().nextInt(40)) - 10;
-    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
-    bannerLabel.setValue(getTranslate().from(MessageKey.Banner, selection, temperature));
+    TutorialLabelKey selection = (option.get(ceoVisible)) ? TutorialLabelKey.is_selected : TutorialLabelKey.is_not_selected;
+    bannerLabel.setValue(getTranslate().from(TutorialMessageKey.Banner, selection, temperature));
 }
 ```
 - ```optionValueChanged()``` should now look like this
@@ -383,7 +441,7 @@ public void optionValueChanged(Property.ValueChangeEvent event) {
 
 You have been using ```CurrentLocale``` without being aware of it - ```Translate``` refers to it when a call is made to ```Translate.from()```.  A little explanation is now needed.  
 
-```CurrentLocale``` holds the currently selected locale for a user.  It is first populated from a combination of things like Web Browser settings, and whatever you have defined in the ```I18NModule``` - the logic is in described in the ```DefaultCurrentLocale``` javadoc.
+```CurrentLocale``` holds the currently selected locale for a user.  It is first populated from a combination of things like Web Browser settings, and whatever you have defined in the ```KrailI18NModule``` - the logic is in described in the ```DefaultCurrentLocale``` javadoc.
   
 When a change is made to the current locale (in our case, using the ```LocaleSelector```), ```CurrentLocale``` publishes a ```LocaleChangeBusMessage``` via the session [Event Bus](tutorial-event-bus.md).  We need to intercept that message, and respond to it by updating the banner.
 
@@ -434,12 +492,13 @@ To prove this works, we need to put a value in to the in-memory store:
 
 - in 'MyNews' add ```PatternSource``` and a provider for ```PatternDao```.  Note the **@InMemory** annotation on ```PatternDao```. 
 
-We do not generally need to access the ```PatternDao``` directly, except putting values into store - the Krail core takes care of reading patterns from the sources you have defined in the ```I18NModule```
+We do not generally need to access the ```PatternDao``` directly, except putting values into store - the Krail core takes care of reading patterns from the sources you have defined in the ```KrailI18NModule```
 ```
 @Inject
 protected MyNews(Translate translate, Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, @InMemory
-                 Provider<PatternDao> patternDaoProvider, PatternSource patternSource) {
+        Provider<PatternDao> patternDaoProvider, PatternSource patternSource) {
     super(translate);
+    nameKey=TutorialLabelKey.My_News;
     this.option = option;
     this.optionPopup = optionPopup;
     this.subjectProvider = subjectProvider;
@@ -460,7 +519,7 @@ protected MyNews(Translate translate, Option option, OptionPopup optionPopup, Su
         i18NTextBox = new TextField();
         i18NTextBox.setCaption("enter a value for LabelKey.is_selected");
         submitButton = new Button("submit");
-        PatternCacheKey cacheKeyUK = new PatternCacheKey(LabelKey.is_selected, Locale.UK);
+        PatternCacheKey cacheKeyUK = new PatternCacheKey(TutorialLabelKey.is_selected, Locale.UK);
         submitButton.addClickListener(event -> {
             patternSource.clearCache();
             patternDaoProvider.get().write(cacheKeyUK, i18NTextBox.getValue());
@@ -481,11 +540,11 @@ This provides a ```TextField``` to capture some input, and a submit button to su
   
 - Run the application, login and navigate to 'MyNews'
 - Make sure that the CEO New Channel is selected (we defined an I18N value for this)
-- Enter some text, and press 'submit'
+- Enter some text in the "enter a value for LabelKey.is_selected", and press 'submit'
 - The banner will update immediately with the text you entered
 - change the Locale selector to "Deutsch" and note that the German translation is still used - we only set a value for Locale.UK
  
-You may recall that we defined the bundle sources like this, and noted that the declaration order is important:
+You may recall that we defined the bundle sources like this, and noted that the declaration order of sources is important:
 ```
 @Override
 protected void define() {
@@ -499,7 +558,7 @@ protected void define() {
 ```
 This means that the **@InMemory** source is checked first for a value - if there is one, it is used, and the **ClassPatternSource** is not queried.  We just created a value in the in-memory store, so that is the one that is used -this demonstrates is why the order of declaration is important.
  
-If you refer to the Javadoc for ```I18NModule``` you will see that there are methods which enable very specific settings for the order of sources.  We will not cover that in this Tutorial, but leave you to experiment.  
+If you refer to the Javadoc for ```I18NModule``` (which ```KrailI18NModule``` inherits) you will see that there are methods which enable very specific settings for the order of sources.  We will not cover that in this Tutorial, but leave you to experiment.  
 
 #Changing Krail Core values
 
@@ -507,7 +566,7 @@ We have just demonstrated changing the value for a specific key - exactly the sa
   
 #Methods of configuration revisited
 
-Earlier [in this section](tutorial-i18n-components-validation.md#config-methods) we elected to sub-class ```I18NModule``` as a way of configuring it, resulting in this ```define()``` method:
+Earlier [in this section](tutorial-i18n-components-validation.md#config-methods) we elected to sub-class ```KrailI18NModule``` as a way of configuring it, resulting in this ```define()``` method:
 
 ```
 @Override
@@ -526,11 +585,11 @@ protected Module i18NModule() {
 }   
 ```
 
-Because the I18NModule methods used are all fluent, we could achieve exactly the same by just changing the ```BindingManager``` like this:
+Because the ```KrailI18NModule``` methods used are all fluent, we could achieve exactly the same by just changing the ```BindingManager``` like this:
 ```
 @Override
 protected Module i18NModule() {
-    return new I18NModule().defaultLocale(Locale.UK)
+    return new KrailI18NModule().defaultLocale(Locale.UK)
                            .supportedLocales(Locale.GERMANY)
                            .source(InMemory.class)
                            .source(ClassPatternSource.class);
@@ -557,6 +616,15 @@ There is still more to cover under the "I18N" heading, so the next section will 
 #Download from GitHub
 To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08**
  
+To get to this point straight from GitHub:
 
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *I18N Complete*
 
 
