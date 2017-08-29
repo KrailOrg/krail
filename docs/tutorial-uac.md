@@ -38,9 +38,21 @@ To move the 'finance' pages:
 - In the ```PurchasingView``` change the uri parameter to be *finance/purchasing*
 
 ```
+package com.example.tutorial.pages;
+
+import com.google.inject.Inject;
+import uk.q3c.krail.core.navigate.sitemap.View;
+import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.Grid3x3ViewBase;
+import uk.q3c.krail.i18n.Translate;
+
 @View(uri = "finance/purchasing", pageAccessControl = PageAccessControl.PERMISSION, labelKeyName = "Purchasing")
 public class PurchasingView extends Grid3x3ViewBase {
 
+    @Inject
+    protected PurchasingView(Translate translate) {
+        super(translate);
+    }
 }
 ```
 - In ```NewsView.doBuild()``` change the button event to point to the new page location
@@ -301,9 +313,8 @@ So far this has all been done using page and option permissions.  The visibility
 
 #Control Access Through Code
 
-At the moment the "system option" button on "My News" can result in a "You do not have permission" message.  Let's prevent that by not showing the button unless the user has permission.
+At the moment the "system option" button on "My News" can result in a "You do not have permission" message.  It does not make much sense to make the button available to a user who is not allowed to use it, so let's hide the button unless the user has permission.
  
-- to get access to the current Shiro ```Subject```, we inject a ```SubjectProvider``` 
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -316,15 +327,17 @@ At the moment the "system option" button on "My News" can result in a "You do no
 <p class="last">The Shiro documentation tells you to use SecurityUtils.getSubject() to access the current Subject.  This will not work in Krail (or any Vaadin application).  In Krail, always use SubjectProvider.get()</p>
 </div>
 
-
+- to get access to the current Shiro ```Subject```, we inject a ```SubjectProvider``` 
+- modify ```MyNews``` to do so:
 
 ```
-@Inject
-public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider) {
-    this.option = option;
-    this.optionPopup = optionPopup;
-    this.subjectProvider = subjectProvider;
-}
+    @Inject
+    public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, Translate translate) {
+        super(translate);
+        this.option = option;
+        this.optionPopup = optionPopup;
+        this.subjectProvider = subjectProvider;
+    }
 ```
 
 
@@ -357,13 +370,14 @@ setBottomLeft(payRiseButton);
 - inject the ```UserNotifier```
 
 ```
-@Inject
-public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier) {
-    this.option = option;
-    this.optionPopup = optionPopup;
-    this.subjectProvider = subjectProvider;
-    this.userNotifier = userNotifier;
-}
+    @Inject
+    public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, Translate translate, UserNotifier userNotifier) {
+        super(translate);
+        this.option = option;
+        this.optionPopup = optionPopup;
+        this.subjectProvider = subjectProvider;
+        this.userNotifier = userNotifier;
+    }
 ```
 - create the ```requestAPayRise``` method
 - use ```userNotifier``` to give feedback
@@ -418,4 +432,14 @@ We have:
 - Demonstrated some uses of Shiro's Wildcard permissions<br>
 
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step07**
+
+To get to this point straight from GitHub:
+
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *User Access Control Complete*
