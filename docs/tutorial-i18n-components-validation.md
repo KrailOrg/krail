@@ -12,11 +12,11 @@ We will build a new page:
 
 - in ```MyOtherPages``` add a new page entry
 ```
-addEntry("i18n", I18NDemoView.class, LabelKey.I18N, PageAccessControl.PUBLIC);
+addEntry("i18n", I18NDemoView.class, TutorialLabelKey.I18N, PageAccessControl.PUBLIC);
 ```
 - in package 'com.example.tutorial.pages', create a new class 'I18NDemoView' extended from ```ViewBase```
 - implement the ```doBuild()``` method
-- create the enum constant *LabelKey.I18N*
+- create the enum constant *TutorialLabelKey.I18N*
 
 ```
 package com.example.tutorial.pages;
@@ -42,27 +42,27 @@ public class I18NDemoView extends ViewBase {
 
 ##Translations
 
-- add the following translations to ```Labels_de```, creating keys where necessary
+- add the following translations to ```TutorialLabels_de```, creating keys where necessary
 
 ```
 put(News, "Nachrichten");
 put(Last_Name, "Nachname");
 put(First_Name, "Vorname");
-put(LabelKey.No, "Nein");
-put(LabelKey.Yes, "Ja");
+put(No, "Nein");
+put(Yes, "Ja");
 
 
 ```
-- in the 'com.example.tutorial.i18n' package, create the 'Descriptions' class
+- in the 'com.example.tutorial.i18n' package, create the 'TutorialDescriptions' class
 
 ```
 package com.example.tutorial.i18n;
 
 import uk.q3c.krail.i18n.EnumResourceBundle;
 
-import static com.example.tutorial.i18n.DescriptionKey.*;
+import static com.example.tutorial.i18n.TutorialDescriptionKey.*;
 
-public class Descriptions extends EnumResourceBundle<DescriptionKey> {
+public class TutorialDescriptions extends EnumResourceBundle<TutorialDescriptionKey> {
     @Override
     protected void loadMap() {
         put(Interesting_Things, "Interesting things that have happened in the world.");
@@ -75,9 +75,9 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 ```
 package com.example.tutorial.i18n;
 
-import static com.example.tutorial.i18n.DescriptionKey.*;
+import static com.example.tutorial.i18n.TutorialDescriptionKey.*;
 
-public class Descriptions_de extends Descriptions {
+public class TutorialDescriptions_de extends TutorialDescriptions {
     @Override
     protected void loadMap() {
         put(Interesting_Things, "Interessante Dinge, die in der Welt haben geschehen");
@@ -97,60 +97,16 @@ The mix of components we will use should cover all the situations you will encou
 ```
 package com.example.tutorial.pages;
 
-import com.vaadin.ui.*;
-import uk.q3c.krail.core.view.ViewBase;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-
-public class I18NDemoView extends ViewBase {
-
-    private Grid grid;
-    private Label label;
-    private Table table;
-    private TextField textField;
-
-    @Override
-    protected void doBuild(ViewChangeBusMessage busMessage) {
-         textField = new TextField();
-        label = new Label();
-        table = new Table();
-        grid = new Grid();
-        VerticalLayout layout = new VerticalLayout(textField, label, table, grid);
-        Panel panel = new Panel();
-        panel.setContent(layout);
-        setRootComponent(panel);
-    }
-}
-```
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When you sub-class from ViewBase, make sure you set the root component in your doBuild() method</p>
-</div>
-
-- Add the same **@Caption** to each field:
-```
-@Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
-```
-- The result should be
-```
-package com.example.tutorial.pages;
-
-import com.example.tutorial.i18n.Caption;
-import com.example.tutorial.i18n.DescriptionKey;
-import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import com.vaadin.ui.*;
-import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
 
 public class I18NDemoView extends ViewBase {
-    @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
     private Grid grid;
-    @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
     private Label label;
-    @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
     private Table table;
-    @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
     private TextField textField;
 
     @Inject
@@ -170,6 +126,58 @@ public class I18NDemoView extends ViewBase {
         setRootComponent(panel);
     }
 }
+
+```
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When you sub-class from ViewBase, make sure you set the root component in your doBuild() method</p>
+</div>
+
+- Add the same **@TutorialCaption** to each field:
+```
+@TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
+```
+- The result should be
+```
+package com.example.tutorial.pages;
+
+import com.example.tutorial.i18n.TutorialCaption;
+import com.example.tutorial.i18n.TutorialDescriptionKey;
+import com.example.tutorial.i18n.TutorialLabelKey;
+import com.google.inject.Inject;
+import com.vaadin.ui.*;
+import uk.q3c.krail.core.view.ViewBase;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
+
+public class I18NDemoView extends ViewBase {
+    @TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
+    private Grid grid;
+    @TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
+    private Label label;
+    @TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
+    private Table table;
+    @TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
+    private TextField textField;
+
+    @Inject
+    protected I18NDemoView(Translate translate) {
+        super(translate);
+    }
+
+    @Override
+    protected void doBuild(ViewChangeBusMessage busMessage) {
+        textField = new TextField();
+        label = new Label();
+        table = new Table();
+        grid = new Grid();
+        VerticalLayout layout = new VerticalLayout(textField, label, table, grid);
+        Panel panel = new Panel();
+        panel.setContent(layout);
+        setRootComponent(panel);
+    }
+}
+
 
 ```
 
@@ -203,13 +211,13 @@ We could:
   
 
 ```java
-DescriptionKey value() default DescriptionKey.NULLKEY;
+TutorialDescriptionKey value() default TutorialDescriptionKey.NULLKEY;
 ```
 
-For the Tutorial, we will create a **@Value** annotation, which has only a ```value()``` method.
+For the Tutorial, we will create a **@TutorialValue** annotation, which has only a ```value()``` method.
 
 - in the 'com.example.tutorial.i18n' package create a new annotation 'Value'
-- we will use ```DescriptionKey``` for values, as they can be quite long
+- we will use ```TutorialDescriptionKey``` for values, as they can be quite long
 
 ```
 package com.example.tutorial.i18n;
@@ -224,16 +232,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
 @I18NAnnotation
-public @interface Value {
+public @interface TutorialValue {
     
-    DescriptionKey value();
+    TutorialDescriptionKey value();
 }
 ```
 
-- Add a @Value ```Annotation``` to the ```Label```
+- Add a @TutorialValue ```Annotation``` to the ```Label```
 ```
-@Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
-@Value(value = DescriptionKey.You_just_asked_for_a_pay_increase)
+@TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
+@TutorialValue(value = TutorialDescriptionKey.You_just_asked_for_a_pay_increase)
 private Label label;
     
 ```
@@ -250,8 +258,8 @@ A ```Table``` has column headers which may need translation. If a ```Table``` pr
 
 ```
 private void setupTable() {
-    table.addContainerProperty(LabelKey.First_Name, String.class, null);
-    table.addContainerProperty(LabelKey.Last_Name, String.class, null);
+    table.addContainerProperty(TutorialLabelKey.First_Name, String.class, null);
+    table.addContainerProperty(TutorialLabelKey.Last_Name, String.class, null);
     table.setHeight("100px");
     table.setWidth("200px");
 }
@@ -264,8 +272,8 @@ In a very similar way to Table, Grid may need column headings translated.  If a 
 
 ```
 private void setupGrid(){
-    grid.addColumn(LabelKey.First_Name, String.class);
-    grid.addColumn(LabelKey.Last_Name, Integer.class);
+    grid.addColumn(TutorialLabelKey.First_Name, String.class);
+    grid.addColumn(TutorialLabelKey.Last_Name, Integer.class);
 }
 ```
 - call these setup methods from ```doBuild()```
@@ -294,7 +302,7 @@ protected void doBuild(ViewChangeBusMessage busMessage) {
 
 There is another scenario that Krail's I18N processing supports. Assume you have a class which contains components with I18N annotations and you want to make it re-usable.  Let's see how that would work.
 
-- in the 'com.example.tutorial.i18n' package, create a new class 'ButtonBar', with **@Caption** on the buttons
+- in the 'com.example.tutorial.i18n' package, create a new class 'ButtonBar', with **@TutorialCaption** on the buttons
 - annotate the class with **@I18N** - this tells the ```I18NProcessor``` to drill down into this class to look for more I18N annotations.  This annotation can be applied to a field or a class, but for a re-usable component it makes more sense to put it on the class.
 
 ```
@@ -305,13 +313,13 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.I18N;
 
-@Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
+@TutorialCaption(caption = TutorialLabelKey.News, description = TutorialDescriptionKey.Interesting_Things)
 @I18N
 public class ButtonBar extends Panel {
 
-    @Caption(caption = LabelKey.Yes, description = DescriptionKey.Yes)
+    @TutorialCaption(caption = TutorialLabelKey.Yes, description = TutorialDescriptionKey.Yes)
     private Button yesButton;
-    @Caption(caption = LabelKey.No, description = DescriptionKey.No)
+    @TutorialCaption(caption = TutorialLabelKey.No, description = TutorialDescriptionKey.No)
     private Button noButton;
 
     public ButtonBar() {
@@ -323,19 +331,30 @@ public class ButtonBar extends Panel {
 }
 ```
 
-- add two instances of this class to our ```I18NDemoView.doBuild()```.  Note that the second still needs to be a field (and not a local variable) for the ```I18NProcessor``` to find the class annotations.
+- add two instances of this class to our ```I18NDemoView.doBuild()```.  Note that even when they are not directly nnotated, these still need to be fields (and not local variables) for the ```I18NProcessor``` to find the class annotations.
 - include them in the layout
 ```
-buttonBar1 = new ButtonBar();
-buttonBar2 = new ButtonBar();
-
-VerticalLayout layout= new VerticalLayout(buttonBar1, buttonBar2,textField, label, table, grid);
+@Override
+protected void doBuild(ViewChangeBusMessage busMessage) {
+    textField = new TextField();
+    label = new Label();
+    table = new Table();
+    grid = new Grid();
+    buttonBar1 = new ButtonBar();
+    buttonBar2 = new ButtonBar();
+    setupTable();
+    setupGrid();
+    VerticalLayout layout = new VerticalLayout(buttonBar1,buttonBar2, textField, label, table, grid);
+    Panel panel = new Panel();
+    panel.setContent(layout);
+    setRootComponent(panel);
+}
 
 ```
-- on the buttonBar1 field, annotate with a different **@Caption**
+- on the buttonBar1 field, annotate with a different **@TutorialCaption**
 
 ```
-@Caption(caption = LabelKey.CEO_News_Channel,description = DescriptionKey.Interesting_Things)
+@TutorialCaption(caption = TutorialLabelKey.CEO_News_Channel,description = TutorialDescriptionKey.Interesting_Things)
 private ButtonBar buttonBar1;
 ```
 - Run the application and the two button bars will be at the top of the page
@@ -421,18 +440,18 @@ public class Person implements KrailEntity<Long,Integer> {
 ```groovy
 dependencies {
     // remember to update the Vaadin version below if this version is changed
-    compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.9')
+    compile(group: 'uk.q3c.krail', name: 'krail', version: '0.10.0.0')
     compile 'javax.persistence:persistence-api:1.0.2'
 }
 ```
 
-- in package 'com.example.tutorial.form', create 'PersonForm'
+- in package 'com.example.tutorial.form', create 'PersonForm' and create the enum constatns as required
 
 ```
 package com.example.tutorial.form;
 
-import com.example.tutorial.i18n.Caption;
-import com.example.tutorial.i18n.DescriptionKey;
+import com.example.tutorial.i18n.TutorialCaption;
+import com.example.tutorial.i18n.TutorialDescriptionKey;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Property;
@@ -447,22 +466,22 @@ import uk.q3c.krail.option.Option;
 import uk.q3c.krail.core.ui.form.BeanFieldGroupBase;
 import uk.q3c.krail.core.validation.BeanValidator;
 
-import static com.example.tutorial.i18n.LabelKey.*;
+import static com.example.tutorial.i18n.TutorialLabelKey.*;
 
 
 @I18N
 public class PersonForm extends BeanFieldGroupBase<Person> {
-    @Caption(caption = Submit, description = DescriptionKey.Submit)
+    @TutorialCaption(caption = Submit, description = TutorialDescriptionKey.Submit)
     private final Button submitButton;
     private final Person person;
-    @Caption(caption = First_Name, description = DescriptionKey.Enter_your_first_name)
+    @TutorialCaption(caption = First_Name, description = TutorialDescriptionKey.Enter_your_first_name)
     private TextField firstName;
 
-    @Caption(caption = Last_Name, description = DescriptionKey.Enter_your_last_name)
+    @TutorialCaption(caption = Last_Name, description = TutorialDescriptionKey.Enter_your_last_name)
     private TextField lastName;
-    @Caption(caption = Age, description = DescriptionKey.Age_of_the_Person)
+    @TutorialCaption(caption = Age, description = TutorialDescriptionKey.Age_of_the_Person)
     private TextField age;
-    @Caption(caption = Person_Form, description = DescriptionKey.Person_Details_Form)
+    @TutorialCaption(caption = Person_Form, description = TutorialDescriptionKey.Person_Details_Form)
     private Panel layout;
 
 
@@ -509,7 +528,7 @@ public class PersonForm extends BeanFieldGroupBase<Person> {
 
 The class simply extends ```BeanFieldGroupBase``` , with the required entity type as a generic parameter - in this case, ```Person```.  Like its Vaadin counterpart, ```BeanFieldGroupBase``` does not concern itself with the presentation of data, or the layout of that presentation.  That is the part we must provide.
 
-You will recognise the fields and captions from the earlier part of this Tutorial section - they are just Vaadin components with **@Caption** annotations.  However, it should be noted that the names of the components must match the field names of the entity to enable automatic transfer of data between the presentation layer and data model.
+You will recognise the fields and captions from the earlier part of this Tutorial section - they are just Vaadin components with **@TutorialCaption** annotations.  However, it should be noted that the names of the components must match the field names of the entity to enable automatic transfer of data between the presentation layer and data model.
 
 The constructor simply extends ```BeanFieldGroupBase``` and your IDE will probably auto-complete the necessary parameters.  Don't forget the **@Inject** annotation though.
 
@@ -557,7 +576,17 @@ In this section we have:
 - created a form, with I18N integrated validation
 
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08a**
+
+To get to this point straight from GitHub:
+
+```bash
+git clone https://github.com/davidsowerby/krail-tutorial.git
+cd krail-tutorial
+git checkout --track origin/krail_0.10.0.0
+
+```
+
+Revert to commit *I18N Components and Validation Complete*
 
 
 
