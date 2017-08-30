@@ -11,18 +11,14 @@
  *
  */
 
-//apply plugin: 'war' // needed only for providedCompile
 
 buildscript {
-    ext.kotlin_version = '1.1.4-2'
-    ext.kaytee_plugin_version = "0.18.0.0"
+    ext.kaytee_plugin_version = "0.18.2.0"
     repositories {
         jcenter()
-        mavenLocal()
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
     }
 }
@@ -43,12 +39,8 @@ ext.versionDescription = 'No version description provided'
 group = 'uk.q3c.krail'
 
 apply plugin: 'uk.q3c.kaytee'
-apply plugin: "kotlin"
-
-//version = versionFromFile(project.projectDir)
 
 repositories {
-    mavenLocal()
     jcenter()
     mavenCentral()
 }
@@ -56,7 +48,7 @@ repositories {
 kaytee {
     generateChangeLog=false
     version {
-        number = "0.10.1.8"
+        number = "0.10.2.0"
     }
 }
 
@@ -96,7 +88,6 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
 
     compile 'org.reflections:reflections:0.9.10'
-//    compile 'net.jodah:typetools:0.4.3'
 
     //Validation
     compile 'org.apache.bval:bval-jsr303:0.5'
@@ -133,12 +124,12 @@ dependencies {
     testCompile 'org.mockito:mockito-all:1.10.19'
 
 
-    testCompile 'uk.q3c.util:q3c-testUtil:0.10.0.0.68d40b5'
+    testCompile 'uk.q3c.util:q3c-testutils:0.11.0.1'
 }
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0.1'
+    gradleVersion = '4.1'
 }
 
 

@@ -569,7 +569,7 @@ There is a more information about the Apache Bval validation integration in the 
 
 In this section we have:
 
-- used I18N **@Caption** and **@Value** annotations
+- created and used I18N **@TutorialCaption** and **@TutorialValue** annotations
 - seen how to manage ```Table``` and ```Grid``` column names for I18N
 - created a re-usable I18N enabled component
 - seen how to override a class I18N annotation 

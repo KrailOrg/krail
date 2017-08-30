@@ -27,11 +27,12 @@ A reasonable understanding of JPA is assumed.
 #Prepare build
 
 - include krail-jpa in the build, by adding it to *build.gradle* dependencies
-- replace both existing dependencies with *krail-jpa*.  (The existing dependencies are included in *krail-jpa*)
+- replace the existing javax dependency with *krail-jpa*.  (The existing javax.persistence api is included in *krail-jpa*)
 
 ```groovy
 dependencies {
-    compile 'uk.q3c.krail:krail-jpa:0.9.3'
+    compile 'uk.q3c.krail:krail:0.10.0.0'
+    compile 'uk.q3c.krail:krail-jpa:0.10.0.0'
 }
 ```
  
@@ -42,7 +43,7 @@ If you have followed the whole Tutorial, you will be an expert at this by now
 - add a public page to ```MyOtherPages```
 
 ```
-addEntry("jpa", JpaView.class, LabelKey.JPA, PageAccessControl.PUBLIC);
+addEntry("jpa", JpaView.class, TutorialLabelKey.JPA, PageAccessControl.PUBLIC);
 ```
 - create JpaView in package 'com.example.tutorial.pages', extended from ```ViewBase```
 
@@ -247,7 +248,7 @@ private Long id;
 
 #Prepare the user interface
 
-- set up the basic layout components
+- set up the basic layout components in ```JpaView```
 ```
 @Override
 protected void doBuild(ViewChangeBusMessage busMessage) {
@@ -267,10 +268,10 @@ import com.example.tutorial.jpa.DerbyJpa;
 import com.example.tutorial.jpa.HsqlJpa;
 import com.google.inject.Inject;
 import com.vaadin.ui.Panel;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.option.jpa.JpaContainerProvider;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
+import uk.q3c.krail.i18n.Translate;
 
 public class JpaView extends ViewBase {
 
@@ -291,23 +292,57 @@ public class JpaView extends ViewBase {
     }
 }
 ```
-- complete the layout so it looks like this
+- completing the layout so that the JPA data is presented in Vaadin Tables, via JPAContainers, ```JpaView``` should be like this:
 
 ```
-@Override
-protected void doBuild(ViewChangeBusMessage busMessage) {
-    derbyContainer=derbyContainerProvider.get(Person.class, ContainerType.CACHED);
-    hsqlContainer=hsqlContainerProvider.get( Person.class, ContainerType.CACHED);
-    derbyTable = new Table("",derbyContainer);
-    hsqlTable = new Table("",hsqlContainer);
+package com.example.tutorial.pages;
 
-    VerticalLayout derbyLayout = new VerticalLayout(derbyTable);
-    VerticalLayout hsqlLayout = new VerticalLayout(hsqlTable);
+import com.example.tutorial.form.Person;
+import com.example.tutorial.jpa.DerbyJpa;
+import com.example.tutorial.jpa.HsqlJpa;
+import com.google.inject.Inject;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
+import uk.q3c.krail.core.option.jpa.JpaContainerProvider;
+import uk.q3c.krail.core.view.ViewBase;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.persist.ContainerType;
 
-    HorizontalLayout horizontalLayout=new HorizontalLayout(derbyLayout,hsqlLayout);
-    Panel panel = new Panel();
-    panel.setContent(horizontalLayout);
-    setRootComponent(panel);
+public class JpaView extends ViewBase {
+
+    private JpaContainerProvider derbyContainerProvider;
+    private JpaContainerProvider hsqlContainerProvider;
+    private JPAContainer<Person> derbyContainer;
+    private JPAContainer<Person> hsqlContainer;
+    private Table derbyTable;
+    private Table hsqlTable;
+
+    @Inject
+    protected JpaView(Translate translate, @DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider) {
+        super(translate);
+        this.derbyContainerProvider = derbyContainerProvider;
+        this.hsqlContainerProvider = hsqlContainerProvider;
+    }
+
+    @Override
+    protected void doBuild(ViewChangeBusMessage busMessage) {
+        derbyContainer=derbyContainerProvider.get(Person.class, ContainerType.CACHED);
+        hsqlContainer=hsqlContainerProvider.get( Person.class, ContainerType.CACHED);
+        derbyTable = new Table("",derbyContainer);
+        hsqlTable = new Table("",hsqlContainer);
+
+        VerticalLayout derbyLayout = new VerticalLayout(derbyTable);
+        VerticalLayout hsqlLayout = new VerticalLayout(hsqlTable);
+
+        HorizontalLayout horizontalLayout=new HorizontalLayout(derbyLayout,hsqlLayout);
+        Panel panel = new Panel();
+        panel.setContent(horizontalLayout);
+        setRootComponent(panel);
+    }
 }
 ```
 
@@ -318,9 +353,9 @@ The Vaadin ```Table```s, are using containers from the ```JpaContainerProvider``
 
 
 ```
-@Caption(caption = LabelKey.Derby_Table, description = DescriptionKey.Table_connected_to_DerbyDb)
+@TutorialCaption(caption = TutorialLabelKey.Derby_Table, description = TutorialDescriptionKey.Table_connected_to_DerbyDb)
 private Table derbyTable;
-@Caption(caption = LabelKey.HSQL_Table, description = DescriptionKey.Table_connected_to_HsqlDb)
+@TutorialCaption(caption = TutorialLabelKey.HSQL_Table, description = TutorialDescriptionKey.Table_connected_to_HsqlDb)
 private Table hsqlTable;
 ```
 - run the application just to make sure you have everything correctly set up so far.  There is no data to display yet, so all you will see is two empty tables.
@@ -401,9 +436,9 @@ protected void doBuild(ViewChangeBusMessage busMessage) {
 - give the buttons captions and descriptions
 
 ```
-@Caption(caption = LabelKey.Add_with_entity_manager, description = DescriptionKey.Add_with_entity_manager)
+@TutorialCaption(caption = TutorialLabelKey.Add_with_entity_manager, description = TutorialDescriptionKey.Add_with_entity_manager)
 private Button derbyEntityMgrButton;
-@Caption(caption = LabelKey.Add_with_entity_manager, description = DescriptionKey.Add_with_entity_manager)
+@TutorialCaption(caption = TutorialLabelKey.Add_with_entity_manager, description = TutorialDescriptionKey.Add_with_entity_manager)
 private Button hsqlEntityMgrButton;
 ```
 - run the application and press the buttons
@@ -502,9 +537,9 @@ VerticalLayout hsqlLayout = new VerticalLayout(hsqlTable, hsqlEntityMgrButton, h
 - give them I18N captions and descriptions
 
 ```
-@Caption(caption = LabelKey.Add_with_DAO, description = DescriptionKey.Add_with_DAO)
+@TutorialCaption(caption = TutorialLabelKey.Add_with_DAO, description = TutorialDescriptionKey.Add_with_DAO)
 private Button derbyDaoButton;
-@Caption(caption = LabelKey.Add_with_DAO, description = DescriptionKey.Add_with_DAO)
+@TutorialCaption(caption = TutorialLabelKey.Add_with_DAO, description = TutorialDescriptionKey.Add_with_DAO)
 private Button hsqlDaoButton;
 ```
 - run the application, navigate to JPA
