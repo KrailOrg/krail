@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.persist.inmemory;
 
 import com.google.common.collect.ImmutableMap;
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.v7.data.util.BeanItemContainer;
 import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternStore;

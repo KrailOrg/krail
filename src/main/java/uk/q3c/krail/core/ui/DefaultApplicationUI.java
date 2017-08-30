@@ -14,8 +14,8 @@
 package uk.q3c.krail.core.ui;
 
 import com.google.inject.Inject;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

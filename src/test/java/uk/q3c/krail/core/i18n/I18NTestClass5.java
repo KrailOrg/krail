@@ -14,9 +14,9 @@
 package uk.q3c.krail.core.i18n;
 
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.v7.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.v7.ui.VerticalLayout;
 
 /**
  * Provides a byte-enhanced class using JPA @Transactional
