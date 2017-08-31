@@ -341,7 +341,6 @@ public class DefaultUserNavigationMenuTest {
         // when
         userNavigationMenu = newMenu();
         // then
-        assertThat(userNavigationMenu.isImmediate()).isTrue();
         assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(10);
 
     }

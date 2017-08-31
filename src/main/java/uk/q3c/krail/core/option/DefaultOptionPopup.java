@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.vaadin.v7.data.util.converter.Converter;
 import com.vaadin.v7.data.util.converter.DefaultConverterFactory;
 import com.vaadin.server.Sizeable;
+import com.vaadin.v7.ui.AbstractField;
 import com.vaadin.ui.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;

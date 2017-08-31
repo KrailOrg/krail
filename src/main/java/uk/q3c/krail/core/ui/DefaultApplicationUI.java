@@ -179,8 +179,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         if (option.get(optionMenuVisible)) {
             menu.build();
             menu.setVisible(true);
-            menu.getMenuBar()
-                .setImmediate(true);
+            menu.getMenuBar();
         } else {
             menu.setVisible(false);
         }

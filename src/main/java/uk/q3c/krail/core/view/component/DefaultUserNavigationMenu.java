@@ -49,7 +49,6 @@ public class DefaultUserNavigationMenu extends MenuBar implements VaadinOptionCo
         super();
         this.option = option;
         this.builder = builder;
-        setImmediate(true);
         builder.setUserNavigationMenu(this);
         setId(ID.getId(Optional.empty(), this));
 

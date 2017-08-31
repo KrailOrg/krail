@@ -78,7 +78,6 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         usernameLabel = new Label();
         login_logout_Button = new Button();
         login_logout_Button.addClickListener(this);
-        login_logout_Button.setImmediate(true);
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSpacing(true);
         hl.addComponent(usernameLabel);
