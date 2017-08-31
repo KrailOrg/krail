@@ -13,16 +13,21 @@
 
 
 buildscript {
-    ext.kaytee_plugin_version = "0.18.2.0"
+//    ext.kaytee_plugin_version = "0.18.2.0"
     repositories {
         jcenter()
     }
 
     dependencies {
-        classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
+//        classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
     }
 }
 
+plugins{
+    id 'java'
+    id 'groovy'
+    id 'idea'
+}
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
 ext.vaadinVersion = '7.7.10'
@@ -38,23 +43,23 @@ ext.versionDescription = 'No version description provided'
 
 group = 'uk.q3c.krail'
 
-apply plugin: 'uk.q3c.kaytee'
+//apply plugin: 'uk.q3c.kaytee'
 
 repositories {
     jcenter()
     mavenCentral()
 }
 
-kaytee {
-    generateChangeLog=false
-    version {
-        number = "0.10.2.0"
-    }
-}
-
-bintray {
-    user = 'dsowerby'
-}
+//kaytee {
+//    generateChangeLog=false
+//    version {
+//        number = "0.10.2.0"
+//    }
+//}
+//
+//bintray {
+//    user = 'dsowerby'
+//}
 
 dependencies {
     compile 'uk.q3c.krail:krail-option:0.10.0.0.9e825e2'
