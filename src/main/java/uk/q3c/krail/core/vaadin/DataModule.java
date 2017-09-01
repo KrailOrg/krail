@@ -12,8 +12,8 @@
 package uk.q3c.krail.core.vaadin;
 
 import com.google.inject.AbstractModule;
-import com.vaadin.data.util.converter.ConverterFactory;
-import com.vaadin.data.util.converter.DefaultConverterFactory;
+import com.vaadin.v7.data.util.converter.ConverterFactory;
+import com.vaadin.v7.data.util.converter.DefaultConverterFactory;
 
 /**
  * Provides data related configuration

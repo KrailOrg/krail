@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.vaadin;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
-import com.vaadin.ui.Tree;
+import com.vaadin.v7.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

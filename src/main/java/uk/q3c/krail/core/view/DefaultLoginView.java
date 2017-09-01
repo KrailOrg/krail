@@ -19,7 +19,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.ChameleonTheme;
+import com.vaadin.v7.ui.themes.ChameleonTheme;
 import com.vaadin.ui.themes.ValoTheme;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.commons.lang3.StringUtils;

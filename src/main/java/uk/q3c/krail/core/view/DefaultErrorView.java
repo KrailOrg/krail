@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
-import com.vaadin.ui.TextArea;
+import com.vaadin.v7.ui.TextArea;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

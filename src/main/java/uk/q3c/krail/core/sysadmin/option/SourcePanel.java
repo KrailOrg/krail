@@ -14,8 +14,9 @@
 package uk.q3c.krail.core.sysadmin.option;
 
 import com.google.inject.Inject;
-import com.vaadin.data.Container;
-import com.vaadin.data.Property;
+import com.vaadin.v7.data.Container;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.ui.TreeTable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import net.engio.mbassy.listener.Handler;

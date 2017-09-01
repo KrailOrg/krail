@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.ui;
 
-import com.vaadin.ui.AbstractField;
+import com.vaadin.v7.ui.AbstractField;
 
 /**
  * Maps data types to the UI components to use to display them

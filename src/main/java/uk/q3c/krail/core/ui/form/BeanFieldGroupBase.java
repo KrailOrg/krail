@@ -15,10 +15,10 @@ package uk.q3c.krail.core.ui.form;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.vaadin.data.Item;
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Field;
+import com.vaadin.v7.data.Item;
+import com.vaadin.v7.data.fieldgroup.FieldGroup;
+import com.vaadin.v7.data.util.BeanItem;
+import com.vaadin.v7.ui.Field;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.option.VaadinOptionContext;
@@ -29,7 +29,7 @@ import uk.q3c.krail.persist.KrailEntity;
 import java.util.HashMap;
 import java.util.Map;
 
-//import com.vaadin.data.validator.BeanValidator;
+//import com.vaadin.v7.data.validator.BeanValidator;
 
 /**
  *  * <p>

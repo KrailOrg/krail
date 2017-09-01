@@ -19,7 +19,7 @@ import com.google.inject.Provider;
 import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.data.Validator;
+import com.vaadin.v7.data.Validator;
 import com.vaadin.server.VaadinSession;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;

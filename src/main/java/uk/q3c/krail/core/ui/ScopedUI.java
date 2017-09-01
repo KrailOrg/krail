@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.ui;
 
 import com.vaadin.annotations.Push;
-import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.v7.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;

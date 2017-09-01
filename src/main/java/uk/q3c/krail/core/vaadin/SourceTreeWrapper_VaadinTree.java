@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.vaadin;
 
-import com.vaadin.ui.Tree;
+import com.vaadin.v7.ui.Tree;
 import uk.q3c.util.forest.SourceTreeWrapper;
 
 import java.util.ArrayList;

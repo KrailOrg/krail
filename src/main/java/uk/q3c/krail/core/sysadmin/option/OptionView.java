@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.sysadmin.option;
 
 import com.google.inject.Inject;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.v7.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;

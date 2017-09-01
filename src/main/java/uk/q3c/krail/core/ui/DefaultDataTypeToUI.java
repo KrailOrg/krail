@@ -13,10 +13,10 @@
 
 package uk.q3c.krail.core.ui;
 
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.TextField;
+import com.vaadin.v7.ui.AbstractField;
+import com.vaadin.v7.ui.CheckBox;
+import com.vaadin.v7.ui.DateField;
+import com.vaadin.v7.ui.TextField;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;

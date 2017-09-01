@@ -14,14 +14,14 @@ package uk.q3c.krail.core.ui;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.v7.data.util.converter.ConverterFactory;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.v7.ui.VerticalLayout;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.After;
 import org.junit.Before;

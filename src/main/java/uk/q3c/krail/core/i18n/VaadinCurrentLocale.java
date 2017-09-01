@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Inject;
-import com.vaadin.data.Property;
+import com.vaadin.v7.data.Property;
 import com.vaadin.server.WebBrowser;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;

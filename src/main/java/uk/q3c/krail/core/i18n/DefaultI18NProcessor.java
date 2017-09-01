@@ -14,10 +14,10 @@ package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.vaadin.data.Property;
+import com.vaadin.v7.data.Property;
 import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.Table;
+import com.vaadin.v7.ui.Grid;
+import com.vaadin.v7.ui.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
