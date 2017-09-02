@@ -26,6 +26,8 @@ import uk.q3c.krail.option.OptionContext
 import uk.q3c.krail.option.OptionKey
 import uk.q3c.krail.option.option.OptionKeyLocator
 import uk.q3c.krail.option.test.MockOption
+import com.vaadin.v7.ui.AbstractField
+import com.vaadin.v7.ui.TextField
 
 /**
  * Created by David Sowerby on 07 Feb 2016
