@@ -14,7 +14,16 @@
 package uk.q3c.krail.core.option
 
 import com.vaadin.v7.data.Property
-import com.vaadin.ui.*
+import com.vaadin.v7.ui.AbstractField;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Component;
+import com.vaadin.v7.ui.TextField;
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.ui.DataTypeToUI
