@@ -53,8 +53,9 @@ repositories {
 
 kaytee {
     version {
-        number = "0.11.1.0"
+        number = "0.11.0.0"
         qualifier = "v7compat"
+        buildMetaData ="1"
     }
 }
 
