@@ -8,28 +8,6 @@
 Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/master/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial))
 
 
----
-
-## Notice
-
----
-
-Version 0.10.0.0 has just been released - this was a major refactoring.  See Release Notes.md.
-
- Development of Krail has been lacking for a good few months - but it has now reached the top of the TODO list again.
-
-It is currently undergoing a major refactoring, to split out some of the major parts from the core (the core being Vaadin, Shiro and Guice).  I18N, Option, Services are being factored out into their own projects, as they could actually be used outside of Krail.
-
-Work will then continue on other aspects.  This is the current plan:
-
-- Complete the refactoring - released 23rd Aug 2017 (0.10.0.0)
-- Update to latest Vaadin 7  - released 23rd Aug 2017 (0.10.0.0)
-- Upgrade to Vaadin 8 - It is hoped that this can be completed by around mid September 2017
-- Attempt a migration to [Eclipse Vert.x](http://vertx.io/) - that may or may not work! 
-
----
-
-
 This core library provides:
 
 * Site navigation, using a sitemap configured by annotation or Guice
@@ -49,6 +27,35 @@ Additional libraries, integrated and configured through Guice, provide:
 
 
 The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [Tutorial](http://krail.readthedocs.org/en/master/) provide more information.
+
+
+---
+
+## Notice
+
+---
+
+Version 0.10.0.0 of Krail was a major refactoring.  See Release Notes.md for that release for details.  That was the last significant development that will be done under Vaadin 7.
+
+This library, and some of its associated libraries, are undergoing a transition to Vaadin 8. The upgrade to Vaadin 8 affects [krail](https://github.com/davidsowerby/krail) and [krail-jpa](https://github.com/davidsowerby/krail-jpa), and for functional testing [krail-bench](https://github.com/davidsowerby/krail-bench) and [krail-testapp](https://github.com/davidsowerby/krail-testapp)
+
+Normally the versions of these are independent, but to simplify the transition to Vaadin 8, are being brought temporarily into line:
+
+| Krail version  |   Vaadin    | 
+|---------|------------|
+|0.12.x.x | version 7  |
+|0.13.x.x-v7compat | version 8, running version 7 compatibility  |
+|0.14.x.x | pure Vaadin 8
+
+
+This is the current plan:
+
+- Complete the refactoring - released 23rd Aug 2017 (0.10.0.0)
+- Update to latest Vaadin 7  - released 23rd Aug 2017 (0.10.0.0)
+- Upgrade to Vaadin 8 - It is hoped that this can be completed by around late September 2017
+- Attempt a migration to [Eclipse Vert.x](http://vertx.io/) - that may or may not work! 
+
+---
 
 
 # Download

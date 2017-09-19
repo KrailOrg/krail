@@ -13,13 +13,13 @@
 
 
 buildscript {
-//    ext.kaytee_plugin_version = "0.18.2.0"
+    ext.kaytee_plugin_version = "0.18.8.0"
     repositories {
         jcenter()
     }
 
     dependencies {
-//        classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
+        classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
     }
 }
 
@@ -43,23 +43,22 @@ ext.versionDescription = 'No version description provided'
 
 group = 'uk.q3c.krail'
 
-//apply plugin: 'uk.q3c.kaytee'
+apply plugin: 'uk.q3c.kaytee'
 
 repositories {
     jcenter()
     mavenCentral()
 }
 
-//kaytee {
-//    generateChangeLog=false
-//    version {
-//        number = "0.10.2.0"
-//    }
-//}
-//
-//bintray {
-//    user = 'dsowerby'
-//}
+kaytee {
+    version {
+        number = "0.12.0.0"
+    }
+}
+
+bintray {
+    user = 'dsowerby'
+}
 
 dependencies {
     compile 'uk.q3c.krail:krail-option:0.10.0.0.9e825e2'
