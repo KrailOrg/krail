@@ -32,7 +32,7 @@ import javax.validation.ConstraintViolationException
 import javax.validation.MessageInterpolator
 import javax.validation.ValidationException
 
-import static com.vaadin.v7.data.Validator.*
+import static com.vaadin.data.Validator.*
 
 /**
  * Integration test for Apache BVal validation

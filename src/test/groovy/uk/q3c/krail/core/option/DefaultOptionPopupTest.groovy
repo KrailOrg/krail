@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.option
 
-import com.vaadin.v7.data.Property
+import com.vaadin.data.Property
 import com.vaadin.ui.*
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
@@ -26,8 +26,6 @@ import uk.q3c.krail.option.OptionContext
 import uk.q3c.krail.option.OptionKey
 import uk.q3c.krail.option.option.OptionKeyLocator
 import uk.q3c.krail.option.test.MockOption
-import com.vaadin.v7.ui.AbstractField
-import com.vaadin.v7.ui.TextField
 
 /**
  * Created by David Sowerby on 07 Feb 2016

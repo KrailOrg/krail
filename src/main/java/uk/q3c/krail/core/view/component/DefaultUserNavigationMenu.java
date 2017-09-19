@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
+import com.vaadin.data.Property;
 import com.vaadin.ui.MenuBar;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -49,6 +49,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements VaadinOptionCo
         super();
         this.option = option;
         this.builder = builder;
+        setImmediate(true);
         builder.setUserNavigationMenu(this);
         setId(ID.getId(Optional.empty(), this));
 

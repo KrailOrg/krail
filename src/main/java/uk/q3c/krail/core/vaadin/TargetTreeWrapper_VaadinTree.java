@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.vaadin;
 
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import uk.q3c.util.forest.DefaultNodeModifier;
 import uk.q3c.util.forest.TargetTreeWrapperBase;
 import uk.q3c.util.forest.TreeCopyException;

@@ -15,9 +15,9 @@ package uk.q3c.krail.core.sysadmin;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
-import com.vaadin.v7.ui.Label;
-import com.vaadin.v7.ui.TextArea;
-import com.vaadin.v7.ui.VerticalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;

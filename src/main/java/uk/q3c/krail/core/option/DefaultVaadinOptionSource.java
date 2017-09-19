@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import com.vaadin.v7.data.Container;
+import com.vaadin.data.Container;
 import uk.q3c.krail.option.persist.ActiveOptionSourceDefault;
 import uk.q3c.krail.option.persist.OptionContainerProvider;
 import uk.q3c.krail.option.persist.OptionDaoProviders;

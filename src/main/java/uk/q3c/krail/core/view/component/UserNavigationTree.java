@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.vaadin.ui.Component;
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.option.Option;

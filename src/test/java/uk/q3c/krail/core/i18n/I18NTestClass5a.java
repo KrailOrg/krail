@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.i18n;
 
-import com.vaadin.v7.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalLayout;
 
 /**
  * Inherits from 5

@@ -16,9 +16,9 @@ package uk.q3c.krail.core.ui;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.v7.ui.CheckBox;
-import com.vaadin.v7.ui.DateField;
-import com.vaadin.v7.ui.TextField;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.TextField;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

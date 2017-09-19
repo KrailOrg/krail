@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
+import com.vaadin.data.Property;
 import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

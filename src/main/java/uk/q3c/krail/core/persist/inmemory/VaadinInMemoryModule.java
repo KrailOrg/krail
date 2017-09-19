@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.persist.inmemory;
 
 import com.google.inject.TypeLiteral;
-import com.vaadin.v7.data.util.BeanItemContainer;
+import com.vaadin.data.util.BeanItemContainer;
 import uk.q3c.krail.core.option.inmemory.InMemoryOptionContainerProvider;
 import uk.q3c.krail.core.option.inmemory.container.DefaultInMemoryOptionContainerProvider;
 import uk.q3c.krail.option.persist.OptionContainerProvider;

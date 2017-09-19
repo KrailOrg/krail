@@ -13,7 +13,7 @@
 
 package uk.q3c.util
 
-import com.vaadin.v7.ui.Tree
+import com.vaadin.ui.Tree
 import spock.lang.Specification
 import uk.q3c.krail.core.vaadin.TargetTreeWrapper_VaadinTree
 import uk.q3c.util.forest.*

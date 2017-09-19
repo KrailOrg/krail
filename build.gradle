@@ -13,7 +13,7 @@
 
 
 buildscript {
-    ext.kaytee_plugin_version = "0.18.4.1"
+    ext.kaytee_plugin_version = "0.18.9.0"
     repositories {
         jcenter()
     }
@@ -30,7 +30,7 @@ plugins{
 }
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
-ext.vaadinVersion = '8.1.3'
+ext.vaadinVersion = '7.7.10'
 ext.assertjVersion = '3.8.0'
 ext.commonsLangVersion = '3.3.2'
 ext.groovyVersion = '2.4.1'
@@ -42,7 +42,6 @@ ext.versionDescription = 'No version description provided'
 
 
 group = 'uk.q3c.krail'
-
 
 apply plugin: 'uk.q3c.kaytee'
 
@@ -109,8 +108,7 @@ dependencies {
     //The core server part of Vaadin -->
     compile 'com.vaadin:vaadin-server:' + vaadinVersion
     compile 'com.vaadin:vaadin-push:' + vaadinVersion
-    compile 'com.vaadin:vaadin-compatibility-server:' + vaadinVersion
-    
+
     // used by OptionDaoTestBase, needed externally
     compile 'org.spockframework:spock-core:1.1-groovy-2.4'
     compile 'org.spockframework:spock-guice:1.1-groovy-2.4'
