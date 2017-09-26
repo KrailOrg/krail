@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.view;
 
-import com.vaadin.v7.ui.Label;
+import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 import uk.q3c.krail.core.i18n.DescriptionKey;

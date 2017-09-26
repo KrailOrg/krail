@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.option.inmemory.container;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Container;
+import com.vaadin.data.Container;
 import uk.q3c.krail.core.option.inmemory.InMemoryOptionContainerProvider;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 

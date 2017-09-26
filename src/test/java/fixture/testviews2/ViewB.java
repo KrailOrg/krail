@@ -14,7 +14,7 @@ package fixture.testviews2;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
-import com.vaadin.v7.ui.Label;
+import com.vaadin.ui.Label;
 import uk.q3c.krail.core.navigate.DefaultNavigatorTest;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;

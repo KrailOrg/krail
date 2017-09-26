@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.ui
 
-import com.vaadin.v7.data.util.converter.ConverterFactory
+import com.vaadin.data.util.converter.ConverterFactory
 import com.vaadin.server.ErrorHandler
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.I18NProcessor

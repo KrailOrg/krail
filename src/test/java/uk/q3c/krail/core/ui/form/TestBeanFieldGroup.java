@@ -13,8 +13,8 @@
 package uk.q3c.krail.core.ui.form;
 
 import com.google.inject.Provider;
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.ui.TextField;
+import com.vaadin.data.Property;
+import com.vaadin.ui.TextField;
 import uk.q3c.krail.core.data.TestEntity;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;

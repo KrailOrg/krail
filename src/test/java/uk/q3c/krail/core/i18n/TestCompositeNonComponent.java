@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.i18n;
 
-import com.vaadin.v7.ui.Label;
+import com.vaadin.ui.Label;
 
 public class TestCompositeNonComponent {
     @Value(value = LabelKey.Cancel)

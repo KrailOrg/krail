@@ -1,6 +1,6 @@
 package uk.q3c.krail.core.option;
 
-import com.vaadin.v7.data.Container;
+import com.vaadin.data.Container;
 import uk.q3c.krail.option.persist.OptionSource;
 
 import java.lang.annotation.Annotation;

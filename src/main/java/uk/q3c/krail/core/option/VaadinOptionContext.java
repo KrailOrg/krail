@@ -1,6 +1,6 @@
 package uk.q3c.krail.core.option;
 
-import com.vaadin.v7.data.Property;
+import com.vaadin.data.Property;
 import uk.q3c.krail.option.OptionContext;
 
 /**
