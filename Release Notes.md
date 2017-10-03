@@ -1,6 +1,8 @@
-## Release Notes for krail 0.10.0.0
+## Release Notes for krail 0.12.0.0
 
 ### Introduction
+
+Version 0.12.0.0 is functionally the same as 0.10.0.0, but version numbers were realigned for krail, krail-jpa, krail-bench and krail-testapp to simpligy the move to Vaadin 8
 
 This release is a major refactor to extract some elements which can actually stand alone from Krail itself - I18N, Option and Application Configuration.  All have an API and an implementation project.
 EventBus and Service packages have their APIs extracted into separate projects, but the implementation is still in the Krail core.
