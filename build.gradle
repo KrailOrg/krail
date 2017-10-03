@@ -57,6 +57,10 @@ kaytee {
         qualifier = "v7compat"
         buildMetaData ="1"
     }
+
+    release{
+        mergeToMaster = false
+    }
 }
 
 bintray {
