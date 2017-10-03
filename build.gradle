@@ -13,7 +13,7 @@
 
 
 buildscript {
-    ext.kaytee_plugin_version = "0.18.4.1"
+    ext.kaytee_plugin_version = "0.18.10.0"
     repositories {
         jcenter()
     }
