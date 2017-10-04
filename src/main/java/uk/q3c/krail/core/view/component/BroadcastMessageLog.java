@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.ui.TextArea;
+import com.vaadin.ui.TextArea;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -38,7 +38,6 @@ public class BroadcastMessageLog extends TextArea {
     protected BroadcastMessageLog(Translate translate) {
         super();
         setCaption(translate.from(LabelKey.Broadcast_Messages));
-        setImmediate(true);
     }
 
     @Handler

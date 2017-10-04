@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.sysadmin.option;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
@@ -25,7 +25,9 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.util.Experimental;
 
-import static uk.q3c.krail.core.i18n.DescriptionKey.*;
+import static uk.q3c.krail.core.i18n.DescriptionKey.Select_an_option_source_for_display;
+import static uk.q3c.krail.core.i18n.DescriptionKey.The_Option_Source_currently_in_use;
+import static uk.q3c.krail.core.i18n.DescriptionKey.The_Option_Source_selected_for_display;
 
 /**
  * A view to manage {@link Option} sources and values

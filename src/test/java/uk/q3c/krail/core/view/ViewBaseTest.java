@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.view;
 
-import com.vaadin.v7.ui.Label;
+import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 import uk.q3c.krail.core.i18n.DescriptionKey;
@@ -22,7 +22,7 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.MockTranslate;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ViewBaseTest {
 

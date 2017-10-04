@@ -26,6 +26,7 @@ class SitemapReportViewTest extends ViewTest {
 
     def setup() {
         thisView = new SitemapReportView(masterSitemap, translate)
+        masterSitemap.getReport() >> "wiggly report"
         view = thisView
     }
 
