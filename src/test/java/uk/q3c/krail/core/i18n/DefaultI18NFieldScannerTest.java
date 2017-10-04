@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.AbstractComponent;
-import com.vaadin.v7.ui.Label;
+import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class,

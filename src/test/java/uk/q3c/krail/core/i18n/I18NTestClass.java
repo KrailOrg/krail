@@ -13,8 +13,9 @@
 package uk.q3c.krail.core.i18n;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.v7.ui.Grid;
-import com.vaadin.v7.ui.Label;
 import com.vaadin.v7.ui.Table;
 
 public class I18NTestClass {
@@ -38,10 +39,10 @@ public class I18NTestClass {
     @Caption(caption = LabelKey.Yes, locale = "de-DE", description = DescriptionKey.Field)
     private final Button specificLocale;
     @Value(value = LabelKey.Guest)
-    private final Label value;
+    private final TextField value;
     @Value(value = LabelKey.Yes, locale = "de-DE")
     @Description(description = DescriptionKey.Account_Already_In_Use)
-    private final Label valueLocale;
+    private final TextField valueLocale;
     private final Button buttonWithoutAnnotation;
     private final Integer integer;
     private double dubble;
@@ -67,8 +68,8 @@ public class I18NTestClass {
         ccs = new TestCompositeComponent();
         ccc = new TestCompositeComponent();
         specificLocale = new Button();
-        value = new Label();
-        valueLocale = new Label();
+        value = new TextField();
+        valueLocale = new TextField();
         grid = new Grid();
     }
 
@@ -127,12 +128,12 @@ public class I18NTestClass {
     }
 
 
-    public Label getValue() {
+    public TextField getValue() {
         return value;
     }
 
 
-    public Label getValueLocale() {
+    public TextField getValueLocale() {
         return valueLocale;
     }
 

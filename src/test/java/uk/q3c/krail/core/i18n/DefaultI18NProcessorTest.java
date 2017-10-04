@@ -18,7 +18,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Button;
-import com.vaadin.v7.ui.Label;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestKrailI18NModule.class, UtilModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class,})
@@ -73,44 +74,44 @@ public class DefaultI18NProcessorTest {
         processor.translate(testObject);
         // then
         assertThat(testObject.getNewButton()
-                             .getCaption()).isEqualTo("Authentication");
+                .getCaption()).isEqualTo("Authentication");
 
         // no guarantee is made to which is returned when there are multiple overlapping annotations
         assertThat(testObject.getNewButton()
-                             .getDescription()).isIn("Please log in", "This account is already in use.  You must log out of that session before you can log " +
+                .getDescription()).isIn("Please log in", "This account is already in use.  You must log out of that session before you can log " +
                 "in again.");
         assertThat(testObject.getNewButton()
-                             .getLocale()).isEqualTo(Locale.UK);
+                .getLocale()).isEqualTo(Locale.UK);
 
 
         assertThat(testObject.getButtonWithAnnotation()
-                             .getCaption()).isEqualTo("Ok");
+                .getCaption()).isEqualTo("Ok");
         assertThat(testObject.getButtonWithAnnotation()
-                             .getDescription()).isEqualTo("Confirm this Value is Ok");
+                .getDescription()).isEqualTo("Confirm this Value is Ok");
         assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.UK);
+                .getLocale()).isEqualTo(Locale.UK);
 
         assertThat(testObject.getLabel()
-                             .getCaption()).isEqualTo("Ok");
+                .getCaption()).isEqualTo("Ok");
         assertThat(testObject.getLabel()
-                             .getDescription()).isEqualTo("Confirm this Value is Ok");
+                .getDescription()).isEqualTo("Confirm this Value is Ok");
         // assertThat(testObject.getLabel().getValue()).isEqualTo("Ok");
         assertThat(testObject.getLabel()
-                             .getLocale()).isEqualTo(Locale.UK);
+                .getLocale()).isEqualTo(Locale.UK);
 
         assertThat(testObject.getTable()
-                             .getCaption()).isEqualTo("Ok");
+                .getCaption()).isEqualTo("Ok");
         assertThat(testObject.getTable()
-                             .getDescription()).isEqualTo("Confirm this Value is Ok");
+                .getDescription()).isEqualTo("Confirm this Value is Ok");
         assertThat(testObject.getTable()
-                             .getLocale()).isEqualTo(Locale.UK);
+                .getLocale()).isEqualTo(Locale.UK);
 
         Object[] columns = testObject.getTable()
-                                     .getVisibleColumns();
+                .getVisibleColumns();
         assertThat(columns.length).isEqualTo(3);
 
         String[] headers = testObject.getTable()
-                                     .getColumnHeaders();
+                .getColumnHeaders();
         assertThat(headers).isEqualTo(new String[]{"Small", "Cancel", "not i18N"});
 
         // class annotation overruled by field annotation
@@ -143,13 +144,21 @@ public class DefaultI18NProcessorTest {
         Button specificLocale = testObject.getSpecificLocale();
         assertThat(specificLocale.getCaption()).isEqualTo("Ja");
 
+    }
+
+    @Test
+    public void interpret_Value() {
+        // when
+        processor.translate(testObject);
+        // then
+
 
         // value
-        Label value = testObject.getValue();
+        TextField value = testObject.getValue();
         assertThat(value.getValue()).isEqualTo("Guest");
 
         // valueLocale
-        Label valueLocale = testObject.getValueLocale();
+        TextField valueLocale = testObject.getValueLocale();
         assertThat(valueLocale.getValue()).isEqualTo("Ja");
 
     }

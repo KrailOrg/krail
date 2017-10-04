@@ -14,6 +14,7 @@ package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.vaadin.data.HasValue;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.v7.data.Property;
@@ -277,8 +278,13 @@ public class DefaultI18NProcessor implements I18NProcessor {
             if (component instanceof Property) {
                 //noinspection unchecked
                 ((Property) component).setValue(translate.from(annotationValues.valueKey.get(), locale));
+                return;
+            }
+            if (component instanceof HasValue) {
+                ((HasValue) component).setValue(translate.from(annotationValues.valueKey.get(), locale));
+                return;
             } else {
-                log.warn("Field {} has a value annotation but does not implement Property.  Annotation ignored", annotationInfo.getField()
+                log.warn("Field {} has a value annotation but does not implement Property or HasValue.  Annotation ignored", annotationInfo.getField()
                         .getName());
             }
         }
