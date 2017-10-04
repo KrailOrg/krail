@@ -14,20 +14,28 @@ package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.vaadin.v7.data.Property;
 import com.vaadin.ui.AbstractComponent;
-import com.vaadin.v7.ui.Grid;
+import com.vaadin.ui.Grid;
+import com.vaadin.v7.data.Property;
 import com.vaadin.v7.ui.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.I18NException;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKeyConverter;
+import uk.q3c.krail.i18n.Translate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Utility class to manipulate Vaadin component settings to reflect locale changes. Class or field annotations can be used to specify the keys to use, and
@@ -65,8 +73,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * <p>
      * Drill down into a component (to look for nested components with I18N annotations) will occur only when a field or class is annotated with @I18N
      *
-     * @param target
-     *         the object to process for I18N annotation.  If null, is just ignored
+     * @param target the object to process for I18N annotation.  If null, is just ignored
      */
     @Override
     public void translate(Object target) {
@@ -85,10 +92,8 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * <p>
      * Nulls are entirely valid if a Field has not been constructed, and are therefore just ignored.
      *
-     * @param processedFields
-     *         the fields already processed
-     * @param target
-     *         the field to be evaluated now
+     * @param processedFields the fields already processed
+     * @param target          the field to be evaluated now
      */
     protected void translate(List<Object> processedFields, Object target) {
         if (target == null) {
@@ -113,7 +118,10 @@ public class DefaultI18NProcessor implements I18NProcessor {
             AnnotationValues annotationValues = annotationValues(annotationInfo.getAnnotations());
             if (component instanceof Table) {
                 processTable((Table) component, annotationValues, annotationInfo);
+            } else if (component instanceof com.vaadin.v7.ui.Grid) {
+                processV7Grid((com.vaadin.v7.ui.Grid) component, annotationValues, annotationInfo);
             } else if (component instanceof Grid) {
+
                 processGrid((Grid) component, annotationValues, annotationInfo);
             } else {
                 applyAnnotationValues(component, annotationValues, annotationInfo);
@@ -126,9 +134,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * Returns a set of values from a list of annotations.  There is no guarantee of evaluation order, so if a field has, for example, two annotations with a
      * caption() value, it is uncertain which will be selected
      *
-     * @param annotations
-     *         a list of annotations to evaluate
-     *
+     * @param annotations a list of annotations to evaluate
      * @return a set of values from a list of annotations
      */
     private AnnotationValues annotationValues(List<Annotation> annotations) {
@@ -159,21 +165,18 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * Returns an I18NKey value for the {@code annotationMethod} or Optional.empty() if none is found (which could be
      * either the method not being present or present but not returning a value.
      *
-     * @param i18NAnnotation
-     *         the annotation to assess
-     * @param annotationMethod
-     *         the method name to look for
-     *
+     * @param i18NAnnotation   the annotation to assess
+     * @param annotationMethod the method name to look for
      * @return an I18NKey value for the {@code annotationMethod} or Optional.empty() if none is found
      */
     protected Optional<I18NKey> retrieveKey(Annotation i18NAnnotation, String annotationMethod) {
         checkNotNull(i18NAnnotation);
         checkNotNull(annotationMethod);
         Method[] methods = i18NAnnotation.annotationType()
-                                         .getDeclaredMethods();
+                .getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName()
-                      .equals(annotationMethod)) {
+                    .equals(annotationMethod)) {
                 try {
                     Object result = method.invoke(i18NAnnotation);
                     if (result != null) {
@@ -194,9 +197,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
     /**
      * returns a locale from  {@code i18NAnnotation} if it has one, or Optional.empty() if it has not
      *
-     * @param i18NAnnotation
-     *         the annotation to assess
-     *
+     * @param i18NAnnotation the annotation to assess
      * @return a locale from  {@code i18NAnnotation} if it has one, or Optional.empty() if it has not
      */
     protected Optional<Locale> retrieveLocale(Annotation i18NAnnotation) {
@@ -205,7 +206,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
         //if there is not locale method, simply return empty()
         try {
             Method method = i18NAnnotation.annotationType()
-                                          .getDeclaredMethod("locale");
+                    .getDeclaredMethod("locale");
             String tag = (String) method.invoke(i18NAnnotation);
             if ((tag == null) || (tag.isEmpty())) {
                 return Optional.empty();
@@ -226,12 +227,9 @@ public class DefaultI18NProcessor implements I18NProcessor {
     /**
      * Sets the I18N values for the Table itself, and also iterates the visible columns for column ids which are I18NKeys, and translates those as well
      *
-     * @param table
-     *         the table to process
-     * @param annotationValues
-     *         the values to apply
-     * @param annotationInfo
-     *         used primarily for the Field name
+     * @param table            the table to process
+     * @param annotationValues the values to apply
+     * @param annotationInfo   used primarily for the Field name
      */
     protected void processTable(Table table, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
         // Table columns need special treatment
@@ -259,12 +257,9 @@ public class DefaultI18NProcessor implements I18NProcessor {
     /**
      * Applies annotation values to {@code component}
      *
-     * @param component
-     *         the component to be updated
-     * @param annotationValues
-     *         the annotation values to apply
-     * @param annotationInfo
-     *         used primarily to identify the Field, and therefore its name
+     * @param component        the component to be updated
+     * @param annotationValues the annotation values to apply
+     * @param annotationInfo   used primarily to identify the Field, and therefore its name
      */
     private void applyAnnotationValues(AbstractComponent component, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
         // set locale first
@@ -284,7 +279,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
                 ((Property) component).setValue(translate.from(annotationValues.valueKey.get(), locale));
             } else {
                 log.warn("Field {} has a value annotation but does not implement Property.  Annotation ignored", annotationInfo.getField()
-                                                                                                                               .getName());
+                        .getName());
             }
         }
 
@@ -293,13 +288,31 @@ public class DefaultI18NProcessor implements I18NProcessor {
     /**
      * Sets the I18N values for the Grid itself, and also iterates the columns for column ids which are I18NKeys, and translates those as well
      *
-     * @param grid
-     *         the Grid to process
-     * @param annotationValues
-     *         the annotation values to apply
-     * @param annotationInfo
-     *         used primarily to identify the Field, and therefore its name
+     * @param grid             the Grid to process
+     * @param annotationValues the annotation values to apply
+     * @param annotationInfo   used primarily to identify the Field, and therefore its name
      */
+    protected void processV7Grid(com.vaadin.v7.ui.Grid grid, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
+
+        // do the grid itself
+        applyAnnotationValues(grid, annotationValues, annotationInfo);
+
+        // now do the column headers
+        Locale locale = annotationValues.locale.isPresent() ? annotationValues.locale.get() : currentLocale.getLocale();
+        final List<com.vaadin.v7.ui.Grid.Column> columns = grid.getColumns();
+
+        for (com.vaadin.v7.ui.Grid.Column column : columns) {
+            if (column.getPropertyId() instanceof I18NKey) {
+                I18NKey columnKey = (I18NKey) column.getPropertyId();
+                String header = translate.from(columnKey, locale);
+                column.setHeaderCaption(header);
+            } else {
+                column.setHeaderCaption(column.getPropertyId()
+                        .toString());
+            }
+        }
+    }
+
     protected void processGrid(Grid grid, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
 
         // do the grid itself
@@ -308,15 +321,15 @@ public class DefaultI18NProcessor implements I18NProcessor {
         // now do the column headers
         Locale locale = annotationValues.locale.isPresent() ? annotationValues.locale.get() : currentLocale.getLocale();
         final List<Grid.Column> columns = grid.getColumns();
+        I18NKeyConverter converter = new I18NKeyConverter();
 
         for (Grid.Column column : columns) {
-            if (column.getPropertyId() instanceof I18NKey) {
-                I18NKey columnKey = (I18NKey) column.getPropertyId();
+            try {
+                I18NKey columnKey = converter.convertToModel(column.getId());
                 String header = translate.from(columnKey, locale);
-                column.setHeaderCaption(header);
-            } else {
-                column.setHeaderCaption(column.getPropertyId()
-                                              .toString());
+                column.setCaption(header);
+            } catch (Exception e) {
+                log.debug("Column id {} is not an I18NKey", column.getId());
             }
         }
     }
