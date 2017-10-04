@@ -38,7 +38,6 @@ class DefaultMessageBarTest extends Specification {
         expect:
         bar.getDisplay() != null
         bar.getDisplay().getValue().equals('Message Bar')
-        bar.getDisplay().isImmediate()
         bar.getContent() instanceof HorizontalLayout
         ((HorizontalLayout) bar.getContent()).contains(bar.getDisplay())
     }

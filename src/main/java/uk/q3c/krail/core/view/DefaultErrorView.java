@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.ui.TextArea;
+import com.vaadin.ui.TextArea;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         textArea = new TextArea();
         textArea.setSizeFull();
         textArea.setReadOnly(false);
-        textArea.setWordwrap(false);
+        textArea.setWordWrap(false);
         if (error != null) {
             String s = ExceptionUtils.getStackTrace(error) + ("\n\n");
             //add a couple of blank lines at the bottom to ensure visibility of the last line
