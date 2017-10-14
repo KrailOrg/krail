@@ -19,7 +19,6 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.v7.data.util.converter.ConverterFactory;
 import com.vaadin.v7.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,8 +66,7 @@ public class DefaultApplicationUITest {
     private Breadcrumb breadcrumb;
     @Mock
     private DefaultBroadcaster broadcaster;
-    @Mock
-    private ConverterFactory converterFactory;
+
     @Mock
     private CurrentLocale currentLocale;
     @Mock
@@ -107,7 +105,7 @@ public class DefaultApplicationUITest {
         when(localeSelector.getComponent()).thenReturn(new Label());
         when(navTree.getTree()).thenReturn(tree);
         when(menu.getMenuBar()).thenReturn(menuBar);
-        ui = new DefaultApplicationUI(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
+        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
     }
 
     @Test

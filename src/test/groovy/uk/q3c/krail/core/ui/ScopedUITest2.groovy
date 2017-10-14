@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.core.ui
 
-import com.vaadin.v7.data.util.converter.ConverterFactory
 import com.vaadin.server.ErrorHandler
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.I18NProcessor
@@ -27,7 +26,6 @@ import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.krail.option.Option
 import uk.q3c.util.testutil.LogMonitor
-
 /**
  * Created by David Sowerby on 09 Feb 2016
  */
@@ -36,7 +34,6 @@ class ScopedUITest2 extends Specification {
     ScopedUI ui
     Navigator navigator = Mock()
     ErrorHandler errorHandler = Mock()
-    ConverterFactory converterFactory = Mock()
     Broadcaster broadcaster = Mock()
     PushMessageRouter pushMessageRouter = Mock()
     ApplicationTitle applicationTitle = Mock()
@@ -50,7 +47,7 @@ class ScopedUITest2 extends Specification {
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(ScopedUI)
         applicationTitle.getTitleKey() >> LabelKey.Krail
-        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
+        ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
                 option)
     }
 

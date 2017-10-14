@@ -13,13 +13,14 @@
 
 package uk.q3c.krail.core.ui;
 
-import com.vaadin.v7.ui.AbstractField;
-import com.vaadin.v7.ui.CheckBox;
-import com.vaadin.v7.ui.DateField;
-import com.vaadin.v7.ui.TextField;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.TextField;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by David Sowerby on 28/05/15.
@@ -28,12 +29,13 @@ public class DefaultDataTypeToUI implements DataTypeToUI {
 
     @Override
     public AbstractField componentFor(Object dataObject) {
-        return componentFor(dataObject.getClass());
+        Class modelClass = dataObject.getClass();
+        return componentFor(modelClass);
     }
 
     @Override
     public AbstractField componentFor(Class<?> dataType) {
-        if (dataType.equals(Date.class)) {
+        if (dataType.equals(LocalDate.class)) {
             return new DateField();
         }
         if (dataType.equals(boolean.class) || dataType.equals(Boolean.class)) {
@@ -46,8 +48,8 @@ public class DefaultDataTypeToUI implements DataTypeToUI {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T zeroValue(Class<T> dataType) {
-        if (dataType.equals(Date.class)) {
-            return (T) new Date();
+        if (dataType.equals(LocalDate.class)) {
+            return (T) LocalDate.now();
         }
         if (dataType.equals(boolean.class) || dataType.equals(Boolean.class)) {
             return (T) Boolean.FALSE;
@@ -55,6 +57,9 @@ public class DefaultDataTypeToUI implements DataTypeToUI {
         if (dataType.equals(Integer.class) || dataType.equals(int.class)) {
             return (T) Integer.valueOf(0);
         }
-        return null;
+        if (dataType.equals(LocalDateTime.class)) {
+            return (T) LocalDateTime.now();
+        }
+        throw new UnsupportedOperationException("data type not supported: " + dataType);
     }
 }

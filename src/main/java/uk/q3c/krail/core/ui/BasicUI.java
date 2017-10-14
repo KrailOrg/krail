@@ -18,7 +18,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.v7.data.util.converter.ConverterFactory;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
@@ -32,9 +31,9 @@ import uk.q3c.krail.option.Option;
 public class BasicUI extends ScopedUI {
 
     @Inject
-    protected BasicUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
+    protected BasicUI(Navigator navigator, ErrorHandler errorHandler,
                       Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, Option option) {
-        super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
 
     }
 

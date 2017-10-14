@@ -14,17 +14,24 @@
 package uk.q3c.krail.core.option;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.util.converter.Converter;
-import com.vaadin.v7.data.util.converter.DefaultConverterFactory;
+import com.vaadin.data.Converter;
 import com.vaadin.server.Sizeable;
-import com.vaadin.v7.ui.AbstractField;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Window;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.ui.DataTypeToUI;
+import uk.q3c.krail.core.vaadin.DefaultOptionBinder;
 import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.krail.core.vaadin.OptionBinder;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
@@ -45,24 +52,23 @@ public class DefaultOptionPopup implements OptionPopup {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionPopup.class);
     private OptionContext activeContext;
     private Map<OptionKey, Class<?>> contextKeys;
-    private DataTypeToUI dataTypeToUI;
     private Translate translate;
     private OptionKeyLocator optionKeyLocator;
+    private OptionBinder optionBinder;
+    private DataTypeToUI dataTypeToUI;
     private Window window;
-    private DefaultConverterFactory converterFactory;
 
     @Inject
-    public DefaultOptionPopup(DataTypeToUI dataTypeToUI, Translate translate, OptionKeyLocator optionKeyLocator) {
-        this.dataTypeToUI = dataTypeToUI;
+    public DefaultOptionPopup(Translate translate, OptionKeyLocator optionKeyLocator, OptionBinder optionBinder, DataTypeToUI dataTypeToUI) {
         this.translate = translate;
         this.optionKeyLocator = optionKeyLocator;
-        converterFactory = new DefaultConverterFactory();
+        this.optionBinder = optionBinder;
+        this.dataTypeToUI = dataTypeToUI;
     }
 
     /**
      * The context is scanned for {@link OptionKey} instances.  If none are found a message is displayed saying there are no options.  A context is loaded
-     * only once - the {@link OptionKey} instances are cached. {@link #dataTypeToUI} is used to identify the user interface component to use for the option
-     * data type. The {@link #converterFactory} provides converters to enable conversion to and from the type needed for presentation (usually String).  <p>
+     * only once - the {@link OptionKey} instances are cached. The {@link DefaultOptionBinder} binds a UI Field with an {@link Option} value, combined with a {@link Converter} instance to enable conversion to and from the type needed for presentation (usually String).  <p>
      * Options are displayed in a grid of 2 columns, the first column containing a Vaadin component to display the option value and the second a button to
      * reset the value to default. The component and button are each wrapped in a FormLayout to position the caption to the left of the value<p>
      * A value change listener is attached to the Vaadin component to change the option value in response to the user changing the value ion the component.
@@ -98,31 +104,21 @@ public class DefaultOptionPopup implements OptionPopup {
         } else {
             calculateWindowSize(window);
             int row = 0;
-            for (OptionKey key : contextKeys.keySet()) {
-                Object value = option.get(key);
-                AbstractField uiField = dataTypeToUI.componentFor(value);
-                uiField.setCaption(translate.from(key.getKey()));
-                uiField.setDescription(translate.from(key.getDescriptionKey()));
-                Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
-                uiField.setId(ID.getId(optionKeyName, this, uiField));
-                log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
-                setFieldValue(uiField, value);
-                uiField.addValueChangeListener(event -> {
-                    option.set(key, uiField.getValue());
-                    context.optionValueChanged(event);
-                });
-
+            for (OptionKey<?> key : contextKeys.keySet()) {
+                AbstractField<?> field = fieldForKey(key);
+                optionBinder.bindOption(key, field);
+                setFieldMetaData(key, field);
+                log.debug("option field {} value is at {}", field.getCaption(), field.getValue());
                 Button defaultsButton = new Button(translate.from(LabelKey.Reset_to_Default));
+                Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
                 defaultsButton.setId(ID.getId(optionKeyName, this, defaultsButton));
                 defaultsButton.addClickListener((event -> {
+                    // reset to previous level by removing entry for user
                     option.delete(key, 0);
-                    //we create an event to represent the field which whose value will be affected by this change
-                    AbstractField.ValueChangeEvent changeEvent = new AbstractField.ValueChangeEvent(uiField);
-                    context.optionValueChanged(changeEvent);
-                    //update the value of the field - it may have changed
-                    setFieldValue(uiField, option.get(key));
+                    // reset the binding - the option value may be different
+                    optionBinder.bindOption(key, field);
                 }));
-                baseLayout.addComponent(new FormLayout(uiField), 0, row);
+                baseLayout.addComponent(new FormLayout(field), 0, row);
                 baseLayout.addComponent(new FormLayout(defaultsButton), 1, row);
                 row++;
             }
@@ -133,29 +129,21 @@ public class DefaultOptionPopup implements OptionPopup {
         window.setContent(new Panel(baseLayout));
         window.center();
         UI.getCurrent()
-          .addWindow(window);
+                .addWindow(window);
         this.activeContext = context;
     }
 
-    /**
-     * Checks to see whether data type conversion is needed - if so, converter is created and assigned to the field. If not, the value is assigned directly
-     * to the uiField
-     *
-     * @param uiField the field to display the value
-     * @param value   the value
-     */
-    @SuppressWarnings("unchecked")
-    protected void setFieldValue(AbstractField uiField, Object value) {
-        if (uiField.getType()
-                   .isAssignableFrom(value.getClass())) {
-            uiField.setValue(value);
-        } else {
-            //needs conversion
-            Converter<String, ?> converter = converterFactory.createConverter(String.class, value.getClass());
-            //noinspection unchecked
-            uiField.setConverter(converter);
-            uiField.setConvertedValue(value);
-        }
+    private <M> AbstractField<M> fieldForKey(OptionKey<M> key) {
+        return dataTypeToUI.componentFor(key.getDefaultValue());
+    }
+
+
+    private void setFieldMetaData(OptionKey<?> key, AbstractField<?> uiField) {
+        uiField.setCaption(translate.from(key.getKey()));
+        uiField.setDescription(translate.from(key.getDescriptionKey()));
+        Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
+        uiField.setId(ID.getId(optionKeyName, this, uiField));
+        log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
     }
 
     private void calculateWindowSize(Sizeable window) {

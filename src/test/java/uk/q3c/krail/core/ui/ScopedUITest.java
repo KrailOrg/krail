@@ -111,7 +111,7 @@ public class ScopedUITest {
         logMonitor = new LogMonitor();
         logMonitor.addClassFilter(ScopedUI.class);
         uiKey = new UIKey(33);
-        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
+        ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
                 option);
         ui.setInstanceKey(uiKey);
     }
@@ -194,7 +194,6 @@ public class ScopedUITest {
         // when
         ui.init(request);
         // then
-        verify(session).setConverterFactory(converterFactory);
         InOrder inOrder = inOrder(currentLocale, navigator, translator, navigator);
         //        inOrder.verify(currentLocale)
         //               .setLocale(Locale.FRANCE, false);
@@ -209,7 +208,7 @@ public class ScopedUITest {
     @Test(expected = ConfigurationException.class)
     public void init_with_viewDisplayPanel_parent_null() {
         // given
-        ui = new DuffUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        ui = new DuffUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         prepAttach();
         // when
         ui.init(request);
@@ -261,9 +260,9 @@ public class ScopedUITest {
 
 
     class DuffUI extends ScopedUI {
-        protected DuffUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, Broadcaster broadcaster, PushMessageRouter
+        protected DuffUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
                 pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
-            super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+            super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         }
 
         @Override

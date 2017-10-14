@@ -16,13 +16,16 @@ package uk.q3c.krail.core.ui;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.v7.ui.CheckBox;
-import com.vaadin.v7.ui.DateField;
-import com.vaadin.v7.ui.TextField;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.TextField;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +43,7 @@ public class DefaultDataTypeToUITest {
         //when
 
         //then
-        assertThat(dataTypeToUI.componentFor(Date.class)).isInstanceOf(DateField.class);
+        assertThat(dataTypeToUI.componentFor(LocalDate.class)).isInstanceOf(DateField.class);
         assertThat(dataTypeToUI.componentFor(Integer.class)).isInstanceOf(TextField.class);
         assertThat(dataTypeToUI.componentFor(int.class)).isInstanceOf(TextField.class);
         assertThat(dataTypeToUI.componentFor(Boolean.class)).isInstanceOf(CheckBox.class);
@@ -55,7 +58,7 @@ public class DefaultDataTypeToUITest {
         //when
 
         //then
-        assertThat(dataTypeToUI.componentFor(new Date())).isInstanceOf(DateField.class);
+        assertThat(dataTypeToUI.componentFor(LocalDate.now())).isInstanceOf(DateField.class);
         assertThat(dataTypeToUI.componentFor(new Integer(5))).isInstanceOf(TextField.class);
         assertThat(dataTypeToUI.componentFor(5)).isInstanceOf(TextField.class);
         assertThat(dataTypeToUI.componentFor(new Boolean(true))).isInstanceOf(CheckBox.class);
@@ -67,7 +70,7 @@ public class DefaultDataTypeToUITest {
     public void zeroValue() throws Exception {
         assertThat(dataTypeToUI.zeroValue(Integer.class)).isEqualTo(0);
         assertThat(dataTypeToUI.zeroValue(Boolean.class)).isFalse();
-        assertThat(dataTypeToUI.zeroValue(Date.class)).isCloseTo(new Date(), 100);
+        assertThat(Duration.between(dataTypeToUI.zeroValue(LocalDateTime.class), LocalDateTime.now())).isLessThan(Duration.of(10L, ChronoUnit.MILLIS));
 
 
     }

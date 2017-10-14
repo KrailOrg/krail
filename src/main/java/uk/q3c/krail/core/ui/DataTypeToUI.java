@@ -11,10 +11,11 @@
 
 package uk.q3c.krail.core.ui;
 
-import com.vaadin.v7.ui.AbstractField;
+import com.vaadin.ui.AbstractField;
 
 /**
- * Maps data types to the UI components to use to display them
+ * Maps data types to the UI components to use to display them.  Note that the {@link #componentFor} methods are untyped.
+ * This is because converters are used between the data type and the presentation type of the Field
  * <p>
  * Created by David Sowerby on 28/05/15.
  */

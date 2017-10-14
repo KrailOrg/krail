@@ -14,10 +14,13 @@
 package uk.q3c.krail.core.ui;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.v7.data.Property;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
@@ -27,7 +30,15 @@ import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
-import uk.q3c.krail.core.view.component.*;
+import uk.q3c.krail.core.view.component.ApplicationHeader;
+import uk.q3c.krail.core.view.component.ApplicationLogo;
+import uk.q3c.krail.core.view.component.Breadcrumb;
+import uk.q3c.krail.core.view.component.LocaleSelector;
+import uk.q3c.krail.core.view.component.MessageBar;
+import uk.q3c.krail.core.view.component.SubPagePanel;
+import uk.q3c.krail.core.view.component.UserNavigationMenu;
+import uk.q3c.krail.core.view.component.UserNavigationTree;
+import uk.q3c.krail.core.view.component.UserStatusPanel;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
@@ -76,9 +87,9 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
 
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
-    protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader
+    protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ApplicationLogo logo, ApplicationHeader
             header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
-        super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
         this.userStatus = userStatusPanel;
