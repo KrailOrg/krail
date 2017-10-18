@@ -41,7 +41,7 @@ import uk.q3c.krail.core.view.component.UserStatusPanel;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;

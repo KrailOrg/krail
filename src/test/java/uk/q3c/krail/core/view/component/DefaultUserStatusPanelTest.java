@@ -37,14 +37,15 @@ import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.MockCurrentLocale;
 import uk.q3c.krail.i18n.test.TestI18NModule;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({UIScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinSessionScopeModule.class, EventBusModule
         .class, UtilModule.class})

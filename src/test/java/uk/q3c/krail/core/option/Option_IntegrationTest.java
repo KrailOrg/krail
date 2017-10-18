@@ -20,6 +20,7 @@ import com.google.inject.TypeLiteral;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,19 +32,26 @@ import uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.option.OptionPermissionVerifier;
 import uk.q3c.krail.option.RankOption;
 import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.option.option.DefaultOption;
-import uk.q3c.krail.option.persist.*;
+import uk.q3c.krail.option.persist.ActiveOptionSourceDefault;
+import uk.q3c.krail.option.persist.OptionCacheKey;
+import uk.q3c.krail.option.persist.OptionDao;
+import uk.q3c.krail.option.persist.OptionDaoDelegate;
+import uk.q3c.krail.option.persist.OptionDaoProviders;
+import uk.q3c.krail.option.persist.OptionSource;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCacheProvider;
 import uk.q3c.krail.option.persist.source.DefaultOptionSource;
-import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
@@ -57,9 +65,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Running this test through the debugger sometimes causes random failures - running normally doesn't
@@ -105,8 +113,14 @@ public class Option_IntegrationTest {
     @Mock
     private SubjectIdentifier subjectIdentifier;
 
+    @Mock
+    PubSubSupport<BusMessage> globalBus;
+    @Mock
+    private GlobalBusProvider globalBusProvider;
+
     @Before
     public void setup() {
+        when(globalBusProvider.get()).thenReturn(globalBus);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
         when(subjectProvider.get()).thenReturn(subject1);
         permissionVerifier = new KrailOptionPermissionVerifier(subjectProvider, subjectIdentifier);
@@ -117,7 +131,7 @@ public class Option_IntegrationTest {
 
         cacheLoader = new DefaultOptionCacheLoader(optionDao);
         optionCache = new DefaultOptionCache(optionDao, cacheProvider);
-        option = new DefaultOption(optionCache, hierarchy, permissionVerifier);
+        option = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBusProvider);
     }
 
 
@@ -193,7 +207,7 @@ public class Option_IntegrationTest {
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, permissionVerifier);
+        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBusProvider);
         //when
         option2.set(key1, 3);
         Integer actual = option2.get(key1);

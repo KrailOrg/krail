@@ -13,7 +13,6 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
 import com.vaadin.ui.MenuBar;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -26,14 +25,16 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.krail.eventbus.GlobalBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
 import java.util.Optional;
 
 @Listener
-@SubscribeTo(SessionBus.class)
+@SubscribeTo({SessionBus.class, GlobalBus.class})
 public class DefaultUserNavigationMenu extends MenuBar implements VaadinOptionContext, UserNavigationMenu {
 
     protected static final OptionKey<Integer> optionKeyMaximumDepth = new OptionKey<>(10, DefaultUserNavigationMenu.class, LabelKey.Maxiumum_Depth,
@@ -63,6 +64,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements VaadinOptionCo
     public int getOptionMaxDepth() {
         return option.get(optionKeyMaximumDepth);
     }
+
     @Override
     public void setOptionMaxDepth(int depth) {
         option.set(optionKeyMaximumDepth, depth);
@@ -110,9 +112,11 @@ public class DefaultUserNavigationMenu extends MenuBar implements VaadinOptionCo
         return option;
     }
 
-    @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
-        build();
+    @Handler
+    public void optionValueChanged(OptionChangeMessage<?> event) {
+        if (event.getOptionKey().getContext().equals(DefaultUserNavigationMenu.class)) {
+            build();
+        }
     }
 
 

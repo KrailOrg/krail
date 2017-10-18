@@ -26,21 +26,27 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.navigate.sitemap.*;
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.eventbus.GlobalBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A navigation tree for users to find their way around the site. Uses {@link UserSitemap} to provide the structure
@@ -53,7 +59,7 @@ import static com.google.common.base.Preconditions.*;
  * @modified David Sowerby 29 May 2015
  */
 @Listener
-@SubscribeTo({UIBus.class, SessionBus.class})
+@SubscribeTo({UIBus.class, SessionBus.class, GlobalBus.class})
 public class DefaultUserNavigationTree extends Tree implements VaadinOptionContext, UserNavigationTree {
 
     public static final OptionKey<SortType> optionKeySortType = new OptionKey<>(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,
@@ -282,11 +288,12 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
         return option;
     }
 
-    @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
-        rebuildRequired = true;
-        build();
+    @Handler
+    public void optionValueChanged(OptionChangeMessage<?> message) {
+        if (message.getOptionKey().getContext().equals(DefaultUserNavigationTree.class)) {
+            rebuildRequired = true;
+            build();
+        }
     }
-
 
 }

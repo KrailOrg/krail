@@ -31,7 +31,7 @@ import uk.q3c.krail.i18n.bind.I18NModule
 import uk.q3c.krail.i18n.persist.*
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
-import uk.q3c.krail.option.test.TestOptionModule
+import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.persist.InMemory
 import uk.q3c.krail.persist.inmemory.InMemoryPatternDao
 import uk.q3c.util.UtilModule

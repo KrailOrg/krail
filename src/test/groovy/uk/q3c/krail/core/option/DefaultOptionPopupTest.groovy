@@ -15,7 +15,6 @@ package uk.q3c.krail.core.option
 
 import com.google.common.collect.ImmutableSet
 import com.vaadin.ui.*
-import com.vaadin.v7.data.Property
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.ui.DataTypeToUI
@@ -29,9 +28,8 @@ import uk.q3c.krail.i18n.test.TestLabelKey
 import uk.q3c.krail.option.Option
 import uk.q3c.krail.option.OptionContext
 import uk.q3c.krail.option.OptionKey
+import uk.q3c.krail.option.mock.MockOption
 import uk.q3c.krail.option.option.OptionKeyLocator
-import uk.q3c.krail.option.test.MockOption
-
 /**
  * Created by David Sowerby on 07 Feb 2016
  */
@@ -202,10 +200,7 @@ class DefaultOptionPopupTest extends Specification {
             return option
         }
 
-        @Override
-        void optionValueChanged(Property.ValueChangeEvent event) {
 
-        }
     }
 
     static class MockContext2 implements VaadinOptionContext {
@@ -224,10 +219,7 @@ class DefaultOptionPopupTest extends Specification {
             return option
         }
 
-        @Override
-        void optionValueChanged(Property.ValueChangeEvent event) {
 
-        }
     }
 
     static class MockContext0 implements VaadinOptionContext {
@@ -240,9 +232,6 @@ class DefaultOptionPopupTest extends Specification {
             return option
         }
 
-        @Override
-        void optionValueChanged(Property.ValueChangeEvent event) {
 
-        }
     }
 }

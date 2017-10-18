@@ -40,7 +40,15 @@ import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;
-import uk.q3c.krail.core.navigate.sitemap.*;
+import uk.q3c.krail.core.navigate.sitemap.DefaultMasterSitemap;
+import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
+import uk.q3c.krail.core.navigate.sitemap.SitemapService;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilder;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
@@ -51,25 +59,34 @@ import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
-import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
+import uk.q3c.krail.core.view.DefaultErrorView;
+import uk.q3c.krail.core.view.DefaultViewFactory;
+import uk.q3c.krail.core.view.ErrorView;
+import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.test.TestI18NModule;
-import uk.q3c.krail.option.test.MockOption;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.MockOption;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestPersistenceModuleVaadin.class, TestOptionModule.class, EventBusModule.class,

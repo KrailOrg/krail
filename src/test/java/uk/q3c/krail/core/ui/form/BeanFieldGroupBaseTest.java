@@ -19,8 +19,8 @@ import com.google.inject.Provider;
 import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.v7.data.Validator;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.v7.data.Validator;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,15 +33,15 @@ import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
-import uk.q3c.krail.option.test.MockOption;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.MockOption;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext()
 public class BeanFieldGroupBaseTest {

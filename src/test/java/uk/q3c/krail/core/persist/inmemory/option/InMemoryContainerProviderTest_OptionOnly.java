@@ -24,14 +24,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.inmemory.OptionEntity;
 import uk.q3c.util.UtilModule;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class, UtilModule.class})

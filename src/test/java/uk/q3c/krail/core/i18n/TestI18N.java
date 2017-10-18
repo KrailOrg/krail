@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.i18n;
 
-import com.vaadin.v7.data.Property;
+import com.vaadin.data.HasValue;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 
@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * Annotation used for marking a Vaadin UI component in the demo app as needing I18N translation. The parameters
  * provide
  * the keys for I18N lookup. All parameters are optional, but the value parameter is relevant only for those components
- * which implement {@link Property}. Its value would be ignored otherwise
+ * which implement {@link HasValue}. Its value would be ignored otherwise
  *
  * @author David Sowerby 9 Feb 2013
  * @see https://sites.google.com/site/q3cjava/internationalisation-entity
@@ -38,7 +38,7 @@ public @interface TestI18N {
     TestLabelKey description() default TestLabelKey.Large;
 
     /**
-     * Usually only used with Vaadin Labels
+     * Rarely used under Vaadin 8, was needed in Vaadin 7 for Labels
      *
      * @return
      */

@@ -20,7 +20,7 @@ import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.i18n.test.TestI18NModule
-import uk.q3c.krail.option.test.TestOptionModule
+import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.service.bind.ServicesModule
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin
 import uk.q3c.util.UtilModule

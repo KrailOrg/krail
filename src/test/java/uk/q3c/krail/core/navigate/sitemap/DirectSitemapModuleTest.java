@@ -37,7 +37,7 @@ import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.bind.I18NModule;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
@@ -45,7 +45,7 @@ import uk.q3c.util.UtilModule;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ServicesModule.class, TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule

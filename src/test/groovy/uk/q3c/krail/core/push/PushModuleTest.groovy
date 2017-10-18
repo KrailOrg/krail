@@ -19,7 +19,7 @@ import spock.lang.Specification
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
 import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule
 import uk.q3c.krail.i18n.test.TestI18NModule
-import uk.q3c.krail.option.test.TestOptionModule
+import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.service.bind.ServicesModule
 import uk.q3c.krail.testutil.eventbus.TestEventBusModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule

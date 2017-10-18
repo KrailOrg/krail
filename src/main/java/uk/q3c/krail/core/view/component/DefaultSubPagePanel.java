@@ -13,10 +13,11 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
 import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -28,22 +29,27 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.option.VaadinOptionContext;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @I18N
+@Listener
+@SubscribeTo({GlobalBus.class, SessionBus.class})
 public class DefaultSubPagePanel extends NavigationButtonPanel implements VaadinOptionContext, SubPagePanel {
     public static final OptionKey<SortType> optionSortType = new OptionKey<>(SortType.ALPHA, DefaultSubPagePanel.class, LabelKey.Sort_Type, DescriptionKey
             .Sort_Type);
     public static final OptionKey<Boolean> optionSortAscending = new OptionKey<>(Boolean.TRUE, DefaultSubPagePanel.class, LabelKey.Sort_Ascending,
             DescriptionKey
-            .Sort_Ascending);
+                    .Sort_Ascending);
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
     private final UserSitemap userSitemap;
     private final Option option;
@@ -146,11 +152,12 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Vaadin
         return option;
     }
 
-    @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
-        rebuildRequired = true;
-        build();
+    @Handler
+    public void optionValueChanged(OptionChangeMessage<?> optionChangeMessage) {
+        if (optionChangeMessage.getOptionKey().getContext() == DefaultSubPagePanel.class) {
+            rebuildRequired = true;
+            build();
+        }
     }
-
 
 }

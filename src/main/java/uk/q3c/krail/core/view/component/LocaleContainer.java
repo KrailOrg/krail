@@ -13,18 +13,22 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Item;
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.data.util.IndexedContainer;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
+import com.vaadin.v7.data.Item;
+import com.vaadin.v7.data.util.IndexedContainer;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.VaadinOptionContext;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.util.ResourceUtils;
 
@@ -32,6 +36,8 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
+@Listener
+@SubscribeTo(GlobalBus.class)
 public class LocaleContainer extends IndexedContainer implements VaadinOptionContext {
 
 
@@ -80,17 +86,17 @@ public class LocaleContainer extends IndexedContainer implements VaadinOptionCon
             log.debug("Added supported locale with id: '{}'", id);
             Item item = addItem(id);
             item.getItemProperty(PropertyName.NAME)
-                .setValue(supportedLocale.getDisplayName(supportedLocale));
+                    .setValue(supportedLocale.getDisplayName(supportedLocale));
 
             // if the directory is missing don't bother with file
             if (flagSizedDir.exists()) {
                 String filename = supportedLocale.getCountry()
-                                                 .toLowerCase() + ".png";
+                        .toLowerCase() + ".png";
                 File file = new File(flagSizedDir, filename);
                 if (file.exists()) {
                     FileResource resource = new FileResource(file);
                     item.getItemProperty(PropertyName.FLAG)
-                        .setValue(resource);
+                            .setValue(resource);
                 } else {
                     log.warn("File {} for locale flag does not exist.", file.getAbsolutePath());
                 }
@@ -113,10 +119,12 @@ public class LocaleContainer extends IndexedContainer implements VaadinOptionCon
         return option;
     }
 
-    @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
-        this.removeAllItems();
-        fillContainer();
+    @Handler
+    public void optionValueChanged(OptionChangeMessage<?> msg) {
+        if (msg.getOptionKey() == optionKeyFlagSize) {
+            this.removeAllItems();
+            fillContainer();
+        }
     }
 
 

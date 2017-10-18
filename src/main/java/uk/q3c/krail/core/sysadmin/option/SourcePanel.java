@@ -14,11 +14,14 @@
 package uk.q3c.krail.core.sysadmin.option;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Container;
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.ui.TreeTable;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Container;
+import com.vaadin.v7.ui.TreeTable;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import uk.q3c.krail.core.eventbus.SessionBus;
@@ -29,11 +32,13 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.option.VaadinOptionSource;
+import uk.q3c.krail.eventbus.GlobalBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.krail.util.Experimental;
@@ -48,7 +53,7 @@ import java.lang.annotation.Annotation;
 @Experimental
 @I18N
 @Listener
-@SubscribeTo(SessionBus.class)
+@SubscribeTo({SessionBus.class, GlobalBus.class})
 public abstract class SourcePanel extends Panel implements VaadinOptionContext {
 
 
@@ -221,14 +226,15 @@ public abstract class SourcePanel extends Panel implements VaadinOptionContext {
     /**
      * {@inheritDoc}
      *
-     * @param event
-     *         the event representing the change
+     * @param optionChangeMessage
+     *         the message representing the change
      */
-
-    @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
-        styles();
-        refreshData();
+    @Handler
+    public void optionValueChanged(OptionChangeMessage<?> optionChangeMessage) {
+        if (optionChangeMessage.getOptionKey().getContext() == SourcePanel.class) {
+            styles();
+            refreshData();
+        }
     }
 
     protected void refreshData() {

@@ -13,10 +13,10 @@
 package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
 import com.vaadin.server.WebBrowser;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
@@ -27,9 +27,16 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
+import uk.q3c.krail.i18n.LocaleDefault;
+import uk.q3c.krail.i18n.SupportedLocales;
+import uk.q3c.krail.i18n.UnsupportedLocaleException;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
 import java.util.Locale;
@@ -64,6 +71,8 @@ import java.util.Set;
  * @date 5 May 2014
  */
 
+@Listener
+@SubscribeTo(GlobalBus.class)
 public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
 
     public static final OptionKey<Locale> optionPreferredLocale = new OptionKey<>(Locale.UK, VaadinCurrentLocale.class, LabelKey.Preferred_Locale,
@@ -206,9 +215,11 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
         return option;
     }
 
-    @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
-        setLocaleFromOption(true);
+    @Handler
+    public void optionValueChanged(OptionChangeMessage<?> msg) {
+        if (msg.getOptionKey().getContext().equals(VaadinCurrentLocale.class)) {
+            setLocaleFromOption(true);
+        }
     }
 
 

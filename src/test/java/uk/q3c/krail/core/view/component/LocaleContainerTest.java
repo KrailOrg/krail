@@ -15,17 +15,17 @@ package uk.q3c.krail.core.view.component;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.v7.data.Item;
-import com.vaadin.v7.data.Property;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.v7.data.Item;
+import com.vaadin.v7.data.Property;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.ResourceUtils;
@@ -40,8 +40,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(MycilaJunitRunner.class)

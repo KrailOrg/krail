@@ -42,7 +42,7 @@ import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.service.Service;
 import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.service.ServiceStatus;
@@ -57,8 +57,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * This test uses all standard implementations to inject into {@link DefaultSitemapService}.

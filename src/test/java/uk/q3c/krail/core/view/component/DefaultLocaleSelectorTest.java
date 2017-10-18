@@ -28,8 +28,8 @@ import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.test.TestI18NModule;
-import uk.q3c.krail.option.test.MockOption;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.MockOption;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
@@ -39,7 +39,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class, UIScopeModule.class, TestI18NModule

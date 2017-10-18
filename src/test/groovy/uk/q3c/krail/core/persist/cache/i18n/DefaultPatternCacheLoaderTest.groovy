@@ -174,10 +174,6 @@ class DefaultPatternCacheLoaderTest extends Specification {
         loader.optionInstance() == option
     }
 
-    def "optionValueChanged does nothing, call for coverage"() {
-        expect:
-        loader.optionValueChanged(null)
-    }
 
 
     @SuppressWarnings("GroovyAssignabilityCheck")

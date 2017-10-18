@@ -201,10 +201,6 @@ class DefaultClassPatternDaoTest extends Specification {
         dao.getValue(patternCacheKey).equals(Optional.of("{0} ist keine gültige Seite"))
     }
 
-    def "optionValueChanged not used but called to complete coverage"() {
-        expect:
-        dao.optionValueChanged(null)
-    }
 
     def "getOption()"() {
         expect:

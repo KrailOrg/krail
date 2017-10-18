@@ -36,7 +36,7 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
@@ -45,8 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(MycilaJunitRunner.class)
