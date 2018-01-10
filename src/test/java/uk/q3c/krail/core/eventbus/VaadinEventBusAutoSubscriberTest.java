@@ -27,21 +27,40 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.EventBus;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.eventbus.mbassador.MBassadorEventBusAutoSubscriber;
 
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultEventBusAutoSubscriberTest {
+public class VaadinEventBusAutoSubscriberTest {
 
-    DefaultEventBusAutoSubscriber listener;
+    VaadinEventBusAutoSubscriber listener;
     @Mock
-    private PubSubSupport<BusMessage> globalBus;
+    private MessageBus messageBus;
+
+
     @Mock
-    private Provider<PubSubSupport<BusMessage>> globalBusProvider;
+    private Provider<EventBus> eventBusProvider;
+    @Mock
+    private EventBus eventBus;
+
+    @Mock
+    private Provider<MessageBus> messageBusProvider;
+
+    @Mock
+    private Provider<Provider<MessageBus>> messageBusProviderProvider;
+
+    @Mock
+    private Provider<Provider<EventBus>> eventBusProviderProvider;
+
     @Mock
     private PubSubSupport<BusMessage> sessionBus;
     @Mock
@@ -50,13 +69,18 @@ public class DefaultEventBusAutoSubscriberTest {
     private PubSubSupport<BusMessage> uiBus;
     @Mock
     private Provider<PubSubSupport<BusMessage>> uiBusProvider;
+    private MBassadorEventBusAutoSubscriber listener2;
 
     @Before
     public void setup() {
         when(uiBusProvider.get()).thenReturn(uiBus);
         when(sessionBusProvider.get()).thenReturn(sessionBus);
-        when(globalBusProvider.get()).thenReturn(globalBus);
-        listener = new DefaultEventBusAutoSubscriber(uiBusProvider, sessionBusProvider, globalBusProvider);
+        when(eventBusProvider.get()).thenReturn(eventBus);
+        when(messageBusProvider.get()).thenReturn(messageBus);
+        when(eventBusProviderProvider.get()).thenReturn(eventBusProvider);
+        when(messageBusProviderProvider.get()).thenReturn(messageBusProvider);
+        listener = new VaadinEventBusAutoSubscriber(uiBusProvider, sessionBusProvider);
+        listener2 = new MBassadorEventBusAutoSubscriber(messageBusProviderProvider, eventBusProviderProvider);
     }
 
     @Test
@@ -65,11 +89,29 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestWithNoSubscribeTo());
+        listener2.afterInjection(new TestWithNoSubscribeTo());
         //then
         verify(uiBus, times(0)).subscribe(anyObject());
-        verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, never()).subscribe(anyObject());
+        verify(sessionBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(1)).subscribe(anyObject());
     }
+
+    /**
+     * Should not subscribe to anything
+     */
+    @Test
+    public void subscribeTo_empty() {
+        //given
+
+        //when
+        listener.afterInjection(new TestSubscribeTo_Empty_Annotation());
+        listener2.afterInjection(new TestSubscribeTo_Empty_Annotation());
+        //then
+        verify(uiBus, times(0)).subscribe(anyObject());
+        verify(sessionBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
+    }
+
 
     @Test
     public void no_subscribeTo_uiScope() {
@@ -77,10 +119,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestWithNoSubscribeTo_UIScope());
+        listener2.afterInjection(new TestWithNoSubscribeTo_UIScope());
         //then
         verify(uiBus, times(0)).subscribe(anyObject());
-        verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, never()).subscribe(anyObject());
+        verify(sessionBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(1)).subscribe(anyObject());
     }
 
     @Test
@@ -89,10 +132,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestWithNoSubscribeTo_SessionScope());
+        listener2.afterInjection(new TestWithNoSubscribeTo_SessionScope());
         //then
         verify(uiBus, never()).subscribe(anyObject());
-        verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, never()).subscribe(anyObject());
+        verify(sessionBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(1)).subscribe(anyObject());
     }
 
     @Test
@@ -101,10 +145,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestWithNoSubscribeTo_SingletonScope());
+        listener2.afterInjection(new TestWithNoSubscribeTo_SingletonScope());
         //then
         verify(uiBus, never()).subscribe(anyObject());
         verify(sessionBus, never()).subscribe(anyObject());
-        verify(globalBus, times(1)).subscribe(anyObject());
+        verify(messageBus, times(1)).subscribe(anyObject());
     }
 
     @Test
@@ -113,10 +158,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestSubscribeTo_One());
+        listener2.afterInjection(new TestSubscribeTo_One());
         //then
         verify(uiBus, times(1)).subscribe(anyObject());
         verify(sessionBus, times(0)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
     }
 
     @Test
@@ -125,10 +171,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestSubscribeTo_Two());
+        listener2.afterInjection(new TestSubscribeTo_Two());
         //then
         verify(uiBus, times(1)).subscribe(anyObject());
         verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
     }
 
     @Test
@@ -137,22 +184,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestSubscribeTo_With_Singleton());
+        listener2.afterInjection(new TestSubscribeTo_With_Singleton());
         //then
         verify(uiBus, times(1)).subscribe(anyObject());
         verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
-    }
-
-    @Test
-    public void subscribeTo3() {
-        //given
-
-        //when
-        listener.afterInjection(new TestSubscribeTo_Three());
-        //then
-        verify(uiBus, times(1)).subscribe(anyObject());
-        verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, times(1)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
     }
 
     /**
@@ -164,26 +200,13 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new TestSubscribeTo_With_Invalid_Annotation());
+        listener2.afterInjection(new TestSubscribeTo_With_Invalid_Annotation());
         //then
         verify(uiBus, times(0)).subscribe(anyObject());
         verify(sessionBus, times(0)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
     }
 
-    /**
-     * Should not subscribe to anything
-     */
-    @Test
-    public void subscribeTo_empty() {
-        //given
-
-        //when
-        listener.afterInjection(new TestSubscribeTo_With_Invalid_Annotation());
-        //then
-        verify(uiBus, times(0)).subscribe(anyObject());
-        verify(sessionBus, times(0)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
-    }
 
     @Test
     public void inherited_subscribeTo_override() {
@@ -191,10 +214,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new Child());
+        listener2.afterInjection(new Child());
         //then
         verify(uiBus, times(0)).subscribe(anyObject());
         verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
     }
 
     @Test
@@ -203,10 +227,11 @@ public class DefaultEventBusAutoSubscriberTest {
 
         //when
         listener.afterInjection(new OtherChild());
+        listener2.afterInjection(new OtherChild());
         //then
         verify(uiBus, times(1)).subscribe(anyObject());
         verify(sessionBus, times(1)).subscribe(anyObject());
-        verify(globalBus, times(0)).subscribe(anyObject());
+        verify(messageBus, times(0)).subscribe(anyObject());
     }
 
     @Listener
@@ -238,10 +263,6 @@ public class DefaultEventBusAutoSubscriberTest {
     private class TestSubscribeTo_Two {
     }
 
-    @Listener
-    @SubscribeTo({UIBus.class, SessionBus.class, GlobalBus.class})
-    private class TestSubscribeTo_Three {
-    }
 
     @Listener
     @Singleton
@@ -258,7 +279,7 @@ public class DefaultEventBusAutoSubscriberTest {
     @Listener
     @Singleton
     @SubscribeTo()
-    private class TestSubscribeTo_With_No_Annotation {
+    private class TestSubscribeTo_Empty_Annotation {
     }
 
     @Listener

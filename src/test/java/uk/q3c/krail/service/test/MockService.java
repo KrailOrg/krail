@@ -14,7 +14,7 @@
 package uk.q3c.krail.service.test;
 
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.service.AbstractService;
 import uk.q3c.krail.service.RelatedServiceExecutor;
@@ -31,7 +31,7 @@ public class MockService extends AbstractService {
     private int startDelay;
     private int stopDelay;
 
-    protected MockService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
+    protected MockService(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor);
         setNameKey(LabelKey.Yes);
     }

@@ -17,14 +17,13 @@ import com.google.inject.Provider
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.eventbus.BusMessage
-import uk.q3c.krail.eventbus.GlobalBusProvider
+import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
 import uk.q3c.krail.service.test.*
 
 import static org.assertj.core.api.Assertions.*
 import static uk.q3c.krail.i18n.test.TestLabelKey.*
-
 /**
  *
  * Created by david on 27/10/15.
@@ -56,7 +55,7 @@ class DefaultServiceModelTest extends Specification {
 
 
     Map<ServiceKey, Provider<Service>> registeredServices
-    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
+    MessageBus globalBusProvider = Mock(MessageBus)
     RelatedServiceExecutor servicesExecutor
     PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)
 

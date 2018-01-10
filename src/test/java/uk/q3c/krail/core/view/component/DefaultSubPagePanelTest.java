@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.Navigator;
@@ -52,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinSessionScopeModule.class, EventBusModule.class,
+@GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class,
         TestUIScopeModule.class, UtilModule.class})
 public class DefaultSubPagePanelTest {
 

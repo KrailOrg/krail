@@ -13,12 +13,8 @@
 
 package uk.q3c.krail.service.monitor
 
-import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
-import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.eventbus.BusMessage
-import uk.q3c.krail.eventbus.GlobalBusProvider
-import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
 
@@ -28,9 +24,8 @@ import static uk.q3c.krail.service.Service.State.*
 
 class DefaultServiceMonitorTest extends Specification {
 
-    PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)
-    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
-    ServiceModel servicesModel = Mock(ServiceModel)
+    MessageBus globalBus = Mock(MessageBus)
+    MessageBus globalBusProvider = Mock(MessageBus)
     Translate translate = Mock(Translate)
     RelatedServiceExecutor servicesExecutor = Mock(RelatedServiceExecutor)
     Service serviceA
@@ -82,25 +77,5 @@ class DefaultServiceMonitorTest extends Specification {
         monitor.getMonitoredServices().isEmpty()
     }
 
-    class TestService extends AbstractService {
 
-        protected TestService(Translate translate, ServiceModel servicesModel, GlobalBusProvider globalBusProvider) {
-            super(translate, servicesModel, globalBusProvider)
-        }
-
-        @Override
-        protected void doStop() throws Exception {
-
-        }
-
-        @Override
-        protected void doStart() throws Exception {
-
-        }
-
-        @Override
-        I18NKey getNameKey() {
-            return LabelKey.Active_Source
-        }
-    }
 }

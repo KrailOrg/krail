@@ -7,7 +7,7 @@ Krail integrates the event bus provided by [MBassador](https://github.com/bennid
 There is no point duplicating MBassador's documentation here, but in brief, MBassador enables the use of synchronous or asynchronous event (message) buses.  MBassador is a sophisticated, high performance event bus, and it is strongly recommended that you read its documentation to get the best from it.<br><br>
 There is a logical correlation between an event bus and a Guice scope, and that is what Krail provides - an event bus for Singleton, VaadinSession and UI scopes as described in the [Guice Scopes](tutorial-guice-scopes.md) chapter.  These can be accessed by:
 
-- annotation (**@UiBus**, **@SessionBus**, **@GlobalBus**)
+- annotation (**@UiBus**, **@SessionBus**, **@GlobalMessageBus**)
 - provider (```UIBusProvider```, ```SessionBusProvider```, ```GlobalBusProvider```)
 
 #The Tutorial task
@@ -256,7 +256,7 @@ The Refresh button appears to do nothing, but that will become clear later.
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Buses can be injected using annotations (@GlobalBus etc) or providers (GlobalBusProvider etc).  Either will achieve the same result.  However, it is worth remembering that an annotated method parameter can be overridden in a sub-class using a different annotation</p>
+<p class="last">Buses can be injected using annotations (@GlobalMessageBus etc) or providers (GlobalBusProvider etc).  Either will achieve the same result.  However, it is worth remembering that an annotated method parameter can be overridden in a sub-class using a different annotation</p>
 </div>
 
 A ```MessageReceiver``` is injected for each bus (remember these need to be instantiated by Guice) 

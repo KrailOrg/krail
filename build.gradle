@@ -65,11 +65,18 @@ bintray {
     user = 'dsowerby'
 }
 
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
 dependencies {
-    compile 'uk.q3c.krail:krail-option:0.11.2.0'
+    compile 'uk.q3c.krail:krail-option:0.13.0.0'
+    compile 'uk.q3c.krail:eventbus-mbassador:0.5.0.0'
 
 
-    compile 'uk.q3c.krail:krail-config:0.9.1.0'
+    compile 'uk.q3c.krail:krail-config:0.10.5.0'
 
 
     compile 'commons-beanutils:commons-beanutils:1.9.3'

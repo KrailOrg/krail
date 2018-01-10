@@ -19,6 +19,7 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
@@ -27,7 +28,6 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.eventbus.GlobalBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
@@ -72,7 +72,7 @@ import java.util.Set;
  */
 
 @Listener
-@SubscribeTo(GlobalBus.class)
+@SubscribeTo(SessionBus.class)
 public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
 
     public static final OptionKey<Locale> optionPreferredLocale = new OptionKey<>(Locale.UK, VaadinCurrentLocale.class, LabelKey.Preferred_Locale,

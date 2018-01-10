@@ -2,10 +2,9 @@ package uk.q3c.krail.service
 
 import com.google.inject.Inject
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.eventbus.GlobalBusProvider
+import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
-
 /**
  * Created by David Sowerby on 18 Aug 2017
  */
@@ -16,7 +15,7 @@ class TestService0 extends AbstractService implements Service {
     boolean throwResetException = false
 
     @Inject
-    protected TestService0(Translate translate, GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
+    protected TestService0(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor)
     }
 

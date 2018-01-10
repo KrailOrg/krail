@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.core.navigate.sitemap.set
 
-import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.config.ApplicationConfiguration
 import uk.q3c.krail.config.config.ConfigKeys
@@ -21,14 +20,12 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode
 import uk.q3c.krail.core.navigate.sitemap.Sitemap
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException
-import uk.q3c.krail.eventbus.BusMessage
-import uk.q3c.krail.eventbus.GlobalBusProvider
+import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.util.testutil.LogMonitor
 
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.concurrent.*
-
 /**
  * Created by David Sowerby on 05 Jan 2016
  */
@@ -38,8 +35,7 @@ class DefaultSitemapQueueTest extends Specification {
     MasterSitemap sitemap1 = Mock(MasterSitemap)
     MasterSitemap sitemap2 = Mock(MasterSitemap)
 
-    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
-    PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)
+    MessageBus globalBus = Mock(MessageBus)
 
     ApplicationConfiguration applicationConfiguration = Mock(ApplicationConfiguration)
 
@@ -48,8 +44,7 @@ class DefaultSitemapQueueTest extends Specification {
     LogMonitor logMonitor
 
     def setup() {
-        globalBusProvider.get() >> globalBus
-        queue = new DefaultSitemapQueue<>(globalBusProvider, applicationConfiguration)
+        queue = new DefaultSitemapQueue<>(globalBus, applicationConfiguration)
 
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(DefaultSitemapQueue)
@@ -142,7 +137,7 @@ class DefaultSitemapQueueTest extends Specification {
         result
         queue.getCurrentModel() == sitemap2
         logMonitor.infoLogs().contains("New Master Sitemap published")
-        1 * globalBus.publish(_ as SitemapChangedMessage)
+        1 * globalBus.publishSync(_ as SitemapChangedMessage)
 
     }
 

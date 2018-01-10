@@ -23,9 +23,10 @@ import com.vaadin.ui.TextField;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.mock.MockOption;
@@ -40,7 +41,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule.class, UtilModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class,})
+@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, UtilModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class,})
 public class DefaultI18NProcessorTest {
 
     I18NTestClass testObject;

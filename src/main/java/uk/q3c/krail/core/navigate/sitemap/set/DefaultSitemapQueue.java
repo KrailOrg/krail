@@ -14,38 +14,36 @@
 package uk.q3c.krail.core.navigate.sitemap.set;
 
 import com.google.inject.Inject;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.slf4j.Logger;
 import uk.q3c.krail.config.ApplicationConfiguration;
 import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException;
-import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.eventbus.BusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import static com.google.common.base.Preconditions.*;
-import static org.slf4j.LoggerFactory.*;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by David Sowerby on 05 Jan 2016
  */
 public class DefaultSitemapQueue<T extends Sitemap> implements SitemapQueue<T> {
     private static Logger log = getLogger(DefaultSitemapQueue.class);
-    private final PubSubSupport<BusMessage> eventBus;
+    private final MessageBus messageBus;
     private final ApplicationConfiguration applicationConfiguration;
 
     private BlockingQueue<T> queue;
 
     @Inject
-    protected DefaultSitemapQueue(BusProvider busProvider, ApplicationConfiguration applicationConfiguration) {
+    protected DefaultSitemapQueue(MessageBus messageBus, ApplicationConfiguration applicationConfiguration) {
         this.applicationConfiguration = applicationConfiguration;
         queue = new ArrayBlockingQueue<>(10, true);
-        eventBus = busProvider.get();
+        this.messageBus = messageBus;
     }
 
     /**
@@ -102,7 +100,7 @@ public class DefaultSitemapQueue<T extends Sitemap> implements SitemapQueue<T> {
         }
         //by removing the head, the next model is 'published'
         queue.remove();
-        eventBus.publish(new SitemapChangedMessage());
+        messageBus.publishSync(new SitemapChangedMessage());
         log.info("New Master Sitemap published");
         return true;
     }

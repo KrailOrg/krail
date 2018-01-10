@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DescriptionKey;
@@ -41,6 +41,7 @@ import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.service.Service;
@@ -68,10 +69,10 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServicesModule.class,
+@GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, VaadinEventBusModule.class, ServicesModule.class,
         ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, DefaultShiroModule.class,
         DefaultComponentModule.class, TestPersistenceModuleVaadin.class, StandardPagesModule.class, VaadinSessionScopeModule.class,
-        NavigationModule.class, UtilsModule.class, UtilModule.class, DefaultUIModule.class, TestOptionModule.class})
+        NavigationModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class, DefaultUIModule.class, TestOptionModule.class})
 public class DefaultSitemapServiceTest {
 
     static VaadinService vaadinService;

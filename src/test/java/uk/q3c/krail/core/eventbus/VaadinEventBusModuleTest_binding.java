@@ -21,10 +21,9 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
-import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.SyncMessageBus;
-import net.engio.mbassy.bus.common.Properties;
 import net.engio.mbassy.bus.common.PubSubSupport;
+import net.engio.mbassy.bus.config.IBusConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,15 +33,18 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
 import uk.q3c.krail.core.ui.BasicUI;
 import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.MessageBus;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
+import uk.q3c.krail.eventbus.mbassador.MBassadorMessageBus;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, UIScopeModule.class, TestVaadinSessionScopeModule.class})
-public class EventBusModuleTest_binding {
+@GuiceContext({VaadinEventBusModule.class, UIScopeModule.class, EventBusModule.class, TestVaadinSessionScopeModule.class})
+public class VaadinEventBusModuleTest_binding {
 
 
     PubSubSupport<BusMessage> uiBus;
@@ -53,15 +55,12 @@ public class EventBusModuleTest_binding {
     Provider<PubSubSupport<BusMessage>> uiBusProvider;
 
 
-
     @Inject
     @SessionBus
     PubSubSupport<BusMessage> sessionBus;
 
     @Inject
-    @GlobalBus
-    PubSubSupport<BusMessage> globalBus;
-
+    MessageBus messageBus;
 
 
     @Inject
@@ -69,8 +68,7 @@ public class EventBusModuleTest_binding {
     PubSubSupport<BusMessage> sessionBus2;
 
     @Inject
-    @GlobalBus
-    PubSubSupport<BusMessage> globalBus2;
+    MessageBus messageBus2;
 
 
     @Before
@@ -103,7 +101,7 @@ public class EventBusModuleTest_binding {
         //then
         assertThat(uiBus).isInstanceOf(SyncMessageBus.class);
         assertThat(sessionBus).isInstanceOf(SyncMessageBus.class);
-        assertThat(globalBus).isInstanceOf(MBassador.class);
+        assertThat(messageBus).isInstanceOf(MBassadorMessageBus.class);
     }
 
     @Test
@@ -113,15 +111,11 @@ public class EventBusModuleTest_binding {
         //when
 
         //then
-        assertThat((String) globalBus.getRuntime()
-                                     .get(Properties.Common.Id)).isNotEqualTo(uiBus.getRuntime()
-                                                                                   .get(Properties.Common.Id));
-        assertThat((String) globalBus.getRuntime()
-                                     .get(Properties.Common.Id)).isNotEqualTo(sessionBus.getRuntime()
-                                                                                        .get(Properties.Common.Id));
+        assertThat(messageBus.busId()).isNotEqualTo(uiBus.getRuntime().get(IBusConfiguration.Properties.BusId));
+        assertThat(messageBus.busId()).isNotEqualTo(sessionBus.getRuntime().get(IBusConfiguration.Properties.BusId));
         assertThat((String) sessionBus.getRuntime()
-                                      .get(Properties.Common.Id)).isNotEqualTo(uiBus.getRuntime()
-                                                                                    .get(Properties.Common.Id));
+                .get(IBusConfiguration.Properties.BusId)).isNotEqualTo(uiBus.getRuntime()
+                .get(IBusConfiguration.Properties.BusId));
 
     }
 
@@ -134,7 +128,7 @@ public class EventBusModuleTest_binding {
         //then
         assertThat(uiBus).isEqualTo(uiBus2);
         assertThat(sessionBus).isEqualTo(sessionBus2);
-        assertThat(globalBus).isEqualTo(globalBus2);
+        assertThat(messageBus).isEqualTo(messageBus2);
 
     }
 
@@ -147,7 +141,7 @@ public class EventBusModuleTest_binding {
         ImmutableList<UIKey> keys = scope.scopeKeys();
         boolean uiInScope = scope.containsInstance(keys.get(0), uiBus);
         boolean sessionInScope = scope.containsInstance(keys.get(0), sessionBus);
-        boolean globalInScope = scope.containsInstance(keys.get(0), globalBus);
+        boolean globalInScope = scope.containsInstance(keys.get(0), messageBus);
 
         //then
         assertThat(uiInScope).isTrue();
@@ -164,7 +158,7 @@ public class EventBusModuleTest_binding {
         ImmutableList<VaadinSession> keys = scope.scopeKeys();
         boolean uiInScope = scope.containsInstance(keys.get(0), uiBus);
         boolean sessionInScope = scope.containsInstance(keys.get(0), sessionBus);
-        boolean globalInScope = scope.containsInstance(keys.get(0), globalBus);
+        boolean globalInScope = scope.containsInstance(keys.get(0), messageBus);
 
         //then
         assertThat(uiInScope).isFalse();
@@ -178,13 +172,13 @@ public class EventBusModuleTest_binding {
 
         //when
         Object busScope1 = uiBus.getRuntime()
-                                .get(EventBusModule.BUS_SCOPE);
+                .get(VaadinEventBusModule.BUS_SCOPE);
         Object busScope2 = uiBus2.getRuntime()
-                                 .get(EventBusModule.BUS_SCOPE);
+                .get(VaadinEventBusModule.BUS_SCOPE);
         int busIndex1 = uiBus.getRuntime()
-                             .get(EventBusModule.BUS_INDEX);
+                .get(VaadinEventBusModule.BUS_INDEX);
         int busIndex2 = uiBus2.getRuntime()
-                              .get(EventBusModule.BUS_INDEX);
+                .get(VaadinEventBusModule.BUS_INDEX);
         //then
 
         assertThat(busScope1).isEqualTo("ui");
@@ -198,13 +192,13 @@ public class EventBusModuleTest_binding {
         uiBus2 = uiBusProvider.get();
 
         busScope1 = uiBus.getRuntime()
-                         .get(EventBusModule.BUS_SCOPE);
+                .get(VaadinEventBusModule.BUS_SCOPE);
         busScope2 = uiBus2.getRuntime()
-                          .get(EventBusModule.BUS_SCOPE);
+                .get(VaadinEventBusModule.BUS_SCOPE);
         busIndex1 = uiBus.getRuntime()
-                         .get(EventBusModule.BUS_INDEX);
+                .get(VaadinEventBusModule.BUS_INDEX);
         busIndex2 = uiBus2.getRuntime()
-                          .get(EventBusModule.BUS_INDEX);
+                .get(VaadinEventBusModule.BUS_INDEX);
 
 
         //then
@@ -222,13 +216,13 @@ public class EventBusModuleTest_binding {
 
         //when
         Object busScope1 = sessionBus.getRuntime()
-                                     .get(EventBusModule.BUS_SCOPE);
+                .get(VaadinEventBusModule.BUS_SCOPE);
         Object busScope2 = sessionBus2.getRuntime()
-                                      .get(EventBusModule.BUS_SCOPE);
+                .get(VaadinEventBusModule.BUS_SCOPE);
         int busIndex1 = sessionBus.getRuntime()
-                                  .get(EventBusModule.BUS_INDEX);
+                .get(VaadinEventBusModule.BUS_INDEX);
         int busIndex2 = sessionBus2.getRuntime()
-                                   .get(EventBusModule.BUS_INDEX);
+                .get(VaadinEventBusModule.BUS_INDEX);
         //then
 
         assertThat(busScope1).isEqualTo("session");
@@ -244,18 +238,14 @@ public class EventBusModuleTest_binding {
         //given
 
         //when
-        Object busScope1 = globalBus.getRuntime()
-                                    .get(EventBusModule.BUS_SCOPE);
-        Object busScope2 = globalBus2.getRuntime()
-                                     .get(EventBusModule.BUS_SCOPE);
-        int busIndex1 = globalBus.getRuntime()
-                                 .get(EventBusModule.BUS_INDEX);
-        int busIndex2 = globalBus2.getRuntime()
-                                  .get(EventBusModule.BUS_INDEX);
+        Object busScope1 = messageBus.scope();
+        Object busScope2 = messageBus2.scope();
+        int busIndex1 = messageBus.index();
+        int busIndex2 = messageBus2.index();
         //then
 
-        assertThat(busScope1).isEqualTo("global");
-        assertThat(busScope2).isEqualTo("global");
+        assertThat(busScope1).isEqualTo("Singleton");
+        assertThat(busScope2).isEqualTo("Singleton");
         assertThat(busIndex1).isEqualTo(1);
         assertThat(busIndex2).isEqualTo(1);
 

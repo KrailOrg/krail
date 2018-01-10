@@ -19,29 +19,29 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
-import net.engio.mbassy.bus.common.Properties;
 import net.engio.mbassy.bus.common.PubSubSupport;
+import net.engio.mbassy.bus.config.IBusConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.MessageBus;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, VaadinSessionScopeModule.class, TestUIScopeModule.class})
-public class EventBusModuleTest_BusScopeAndNames {
+@GuiceContext({VaadinEventBusModule.class, VaadinSessionScopeModule.class, TestUIScopeModule.class, EventBusModule.class})
+public class VaadinEventBusModuleTest_BusScopeAndNames {
 
     @Inject
-    @GlobalBus
-    Provider<PubSubSupport<BusMessage>> globalBusProvider;
+    MessageBus messageBus;
 
 
     @Inject
@@ -61,6 +61,7 @@ public class EventBusModuleTest_BusScopeAndNames {
     @Before
     public void setup() {
         // we have to inject providers so that the log monitor can be set up first
+        logMonitor.addClassFilter(VaadinEventBusModule.class);
         logMonitor.addClassFilter(EventBusModule.class);
         VaadinSession.setCurrent(new VaadinSession(vaadinService)); //stops pollution of tests with scope holding keys between tests
     }
@@ -70,9 +71,8 @@ public class EventBusModuleTest_BusScopeAndNames {
         //given
         String uiBusId = null;
         String sessionBusId = null;
-        String globalBusId = null;
+        String globalBusId = "Global Message Bus";
         //when
-        PubSubSupport<BusMessage> globalBus = globalBusProvider.get();
         PubSubSupport<BusMessage> sessionBus = sessionBusProvider.get();
         PubSubSupport<BusMessage> uiBus = uiBusProvider.get();
 
@@ -90,12 +90,11 @@ public class EventBusModuleTest_BusScopeAndNames {
         }
 
         //then
-        assertThat((String) globalBus.getRuntime()
-                                     .get(Properties.Common.Id)).isEqualTo(globalBusId);
+        assertThat(messageBus.busId()).isEqualTo(globalBusId);
         assertThat((String) sessionBus.getRuntime()
-                                      .get(Properties.Common.Id)).isEqualTo(sessionBusId);
+                .get(IBusConfiguration.Properties.BusId)).isEqualTo(sessionBusId);
         assertThat((String) uiBus.getRuntime()
-                                 .get(Properties.Common.Id)).isEqualTo(uiBusId);
+                .get(IBusConfiguration.Properties.BusId)).isEqualTo(uiBusId);
 
 
     }

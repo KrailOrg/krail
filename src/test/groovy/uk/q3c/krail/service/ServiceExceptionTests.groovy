@@ -20,8 +20,7 @@ import spock.lang.Specification
  *
  * Created by David Sowerby on 14/11/15.
  */
-class ServiceExceptionTests
-        extends Specification {
+class ServiceExceptionTests extends Specification {
 
 
     def "construction and return of message"() {

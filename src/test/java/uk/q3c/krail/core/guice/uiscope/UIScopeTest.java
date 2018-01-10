@@ -13,8 +13,17 @@
 
 package uk.q3c.krail.core.guice.uiscope;
 
-import com.google.inject.*;
-import com.vaadin.server.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.vaadin.server.ClientConnector;
+import com.vaadin.server.UICreateEvent;
+import com.vaadin.server.UIProvider;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
@@ -27,7 +36,7 @@ import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.NavigationModule;
@@ -35,13 +44,22 @@ import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapService;
 import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
-import uk.q3c.krail.core.shiro.*;
-import uk.q3c.krail.core.ui.*;
+import uk.q3c.krail.core.shiro.DefaultShiroModule;
+import uk.q3c.krail.core.shiro.DefaultVaadinSessionProvider;
+import uk.q3c.krail.core.shiro.KrailSecurityManager;
+import uk.q3c.krail.core.shiro.ShiroVaadinModule;
+import uk.q3c.krail.core.shiro.VaadinSessionProvider;
+import uk.q3c.krail.core.ui.BasicUI;
+import uk.q3c.krail.core.ui.BasicUIProvider;
+import uk.q3c.krail.core.ui.DataTypeModule;
+import uk.q3c.krail.core.ui.ScopedUI;
+import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
@@ -60,10 +78,11 @@ import uk.q3c.util.UtilModule;
 import java.util.Locale;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UIScopeTest {
     static Optional<CacheManager> cacheManagerOpt = Optional.empty();
@@ -116,7 +135,7 @@ public class UIScopeTest {
         injector = Guice.createInjector(new PushModule(), new TestModule(), new KrailApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(),
                 new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
                 new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(),
-                new TestPersistenceModuleVaadin(), new NavigationModule(), new EventBusModule(), new UtilModule(), new DataModule(),
+                new TestPersistenceModuleVaadin(), new NavigationModule(), new VaadinEventBusModule(), new EventBusModule(), new UtilModule(), new DataModule(),
                 new DataTypeModule(), new UtilsModule(), new VaadinInMemoryModule().provideOptionDao());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
@@ -165,7 +184,7 @@ public class UIScopeTest {
     static class MockSitemapService extends AbstractService implements SitemapService {
 
         @Inject
-        protected MockSitemapService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServiceExecutor
+        protected MockSitemapService(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor
                 servicesExecutor) {
             super(translate, globalBusProvider, servicesExecutor);
         }

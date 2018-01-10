@@ -18,14 +18,13 @@ import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.eventbus.BusMessage
-import uk.q3c.krail.eventbus.GlobalBusProvider
+import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
 import uk.q3c.krail.service.test.MockService
 
 import static uk.q3c.krail.service.RelatedServiceExecutor.Action.*
 import static uk.q3c.krail.service.Service.*
-
 /**
  * Created by David Sowerby on 11 Jan 2016
  */
@@ -36,7 +35,7 @@ class DefaultRelatedServiceExecutorTest extends Specification {
     Translate translate = Mock(Translate)
     ServiceClassGraph classGraph = Mock(ServiceClassGraph)
     ServiceInstanceGraph instanceGraph = Mock(ServiceInstanceGraph)
-    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
+    MessageBus globalBusProvider = Mock(MessageBus)
     PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)
     MockService service
     MockService serviceA

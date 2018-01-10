@@ -32,7 +32,7 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.option.VaadinOptionSource;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
@@ -53,7 +53,7 @@ import java.lang.annotation.Annotation;
 @Experimental
 @I18N
 @Listener
-@SubscribeTo({SessionBus.class, GlobalBus.class})
+@SubscribeTo({SessionBus.class, GlobalMessageBus.class})
 public abstract class SourcePanel extends Panel implements VaadinOptionContext {
 
 

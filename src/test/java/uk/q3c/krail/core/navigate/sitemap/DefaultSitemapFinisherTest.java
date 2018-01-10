@@ -21,12 +21,13 @@ import fixture.testviews2.ViewA;
 import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.mock.TestOptionModule;
@@ -36,8 +37,8 @@ import uk.q3c.util.UtilModule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, TestI18NModule.class, TestOptionModule.class, EventBusModule
-        .class, UIScopeModule.class, UtilModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, TestI18NModule.class, TestOptionModule.class, VaadinEventBusModule
+        .class, UIScopeModule.class, EventBusModule.class, UtilModule.class})
 public class DefaultSitemapFinisherTest {
 
 

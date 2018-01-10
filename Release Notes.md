@@ -1,8 +1,17 @@
-## Release Notes for krail 0.13.0.0-v7compat+1
+## Release Notes for krail 0.14.0.0
 
-There is a jump in release number from version 0.10.0.0 in order to synchronise the versions of krail, krail-jpa, krail-bench and krail-testapp during the transition fomr Vaadin 7 to Vaadin 8
-See README.md for details
+The main purpose of this release is to move to Vaadin 8.  There have been some other changes as well.
 
-This version simply runs with Vaadin 8 in compatibility mode - all components are still actually at Vaadin 7.
+### Vaadin
 
-It is not expected that this version will ever be developed further, it is simply a transition point to Vaadin 8
+All components at version 8
+
+### Event bus
+The bus is now provided from two sources.  In anticipation of moving to a Vert.x environment it is intended to use a single bus, with handlers responsible for filtering, rather than using different buses with varied scopes.
+
+As a step towards that, the *eventbus-api* and *eventbus-mbassador* library now provide "global" bus instances (Singleton in a standard environment).
+
+#### @SubscribeTo
+The behaviour of this annotation changes.  It no longer uses the scope of the target to determine which bus to subscribe to.  Instead, if there is a **@Listener**, but no **@SubscribeTo**, the target will be subscribed to the global MessageBus.
+
+If there is a **@Listener**, but an empty **@SubscribeTo()**, the target will not be subscribed to anyhting - this can be used to remove subscription from an inherited class. 

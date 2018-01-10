@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import uk.q3c.krail.config.ApplicationConfiguration;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 
 /**
  * Created by David Sowerby on 05 Jan 2016
@@ -26,7 +26,7 @@ import uk.q3c.krail.eventbus.GlobalBusProvider;
 public class DefaultMasterSitemapQueue extends DefaultSitemapQueue<MasterSitemap> implements MasterSitemapQueue {
 
     @Inject
-    protected DefaultMasterSitemapQueue(GlobalBusProvider globalBusProvider, ApplicationConfiguration applicationConfiguration) {
+    protected DefaultMasterSitemapQueue(MessageBus globalBusProvider, ApplicationConfiguration applicationConfiguration) {
         super(globalBusProvider, applicationConfiguration);
     }
 }

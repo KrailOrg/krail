@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -33,6 +33,7 @@ import uk.q3c.krail.core.shiro.VaadinSessionProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
@@ -46,8 +47,8 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class,
-        UIScopeModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class, UtilModule.class, KrailApplicationConfigurationModule.class})
+@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class,
+        UIScopeModule.class, EventBusModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class, UtilModule.class, KrailApplicationConfigurationModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 
     @Mock

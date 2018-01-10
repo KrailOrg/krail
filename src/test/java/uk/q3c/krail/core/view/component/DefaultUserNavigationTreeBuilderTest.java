@@ -24,13 +24,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.test.MockCurrentLocale;
 import uk.q3c.krail.i18n.test.TestI18NModule;
@@ -43,7 +44,7 @@ import uk.q3c.util.UtilModule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class,
+@GuiceContext({VaadinSessionScopeModule.class, EventBusModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class,
         TestUIScopeModule.class, UtilModule.class})
 public class DefaultUserNavigationTreeBuilderTest {
     CurrentLocale currentLocale = new MockCurrentLocale();

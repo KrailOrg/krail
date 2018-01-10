@@ -13,14 +13,18 @@
 
 package uk.q3c.krail.core.eventbus;
 
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
+import com.google.inject.Key;
+import com.google.inject.Provider;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import net.engio.mbassy.bus.AbstractPubSubSupport;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.SyncMessageBus;
-import net.engio.mbassy.bus.common.Properties;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.bus.config.BusConfiguration;
 import net.engio.mbassy.bus.config.ConfigurationErrorHandler;
@@ -32,29 +36,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.eventbus.*;
+import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.service.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 /**
  * Configures Event bus implementations for, UIScope, VaadinSessionScope and Singleton scope.  All classes annotated
- * with {@link Listener} are subscribed to a bus, using logic provided by {@link DefaultEventBusAutoSubscriber}, but can
- * be changed by providing an alternative implementation in {@link EventBusModule.BusTypeListener}:
+ * with {@link Listener} are subscribed to a bus, using logic provided by {@link VaadinEventBusAutoSubscriber}, but can
+ * be changed by providing an alternative implementation in {@link VaadinEventBusModule.BusTypeListener}:
  * <p>
  * If there is also a {@link SubscribeTo} annotation, the values of that annotation are used to subscribe to one or more
  * buses.
  * <p>
  * If there is no {@link SubscribeTo} annotation, a {@link Singleton} scoped object will be subscribed to the {@link
- * GlobalBus}, all other objects with a {@link Listener} annotation is subscribed to a {@link SessionBus}
+ * GlobalMessageBus}, all other objects with a {@link Listener} annotation is subscribed to a {@link SessionBus}
  * <p>
  * <p>
  * Created by David Sowerby on 08/03/15.
  */
-public class EventBusModule extends AbstractModule {
+public class VaadinEventBusModule extends AbstractModule {
     public final static String BUS_SCOPE = "bus_id";
     public final static String BUS_INDEX = "bus_index";
-    private static Logger log = LoggerFactory.getLogger(EventBusModule.class);
+    private static Logger log = LoggerFactory.getLogger(VaadinEventBusModule.class);
     private AtomicInteger globalBusIndex = new AtomicInteger(1);
     private AtomicInteger sessionBusIndex = new AtomicInteger(1);
     private AtomicInteger uiBusIndex = new AtomicInteger(1);
@@ -73,11 +81,7 @@ public class EventBusModule extends AbstractModule {
         Key<PubSubSupport<BusMessage>> sessionBusKey = Key.get(eventBusLiteral, SessionBus.class);
         final Provider<PubSubSupport<BusMessage>> sessionBusProvider = this.getProvider(sessionBusKey);
 
-        Key<PubSubSupport<BusMessage>> globalBusKey = Key.get(eventBusLiteral, GlobalBus.class);
-        final Provider<PubSubSupport<BusMessage>> globalBusProvider = this.getProvider(globalBusKey);
-
-
-        bindListener(new ListenerAnnotationMatcher(), new BusTypeListener(uiBusProvider, sessionBusProvider, globalBusProvider));
+        bindListener(new ListenerAnnotationMatcher(), new BusTypeListener(uiBusProvider, sessionBusProvider));
         bindConfigurationErrorHandlers();
         bindPublicationErrorHandlers();
         bindBusProviders();
@@ -88,7 +92,6 @@ public class EventBusModule extends AbstractModule {
      * constructor parameter in a super-class being ignored / overridden in a sub-class
      */
     protected void bindBusProviders() {
-        bind(GlobalBusProvider.class).to(DefaultGlobalBusProvider.class);
         bind(SessionBusProvider.class).to(DefaultSessionBusProvider.class);
         bind(UIBusProvider.class).to(DefaultUIBusProvider.class);
     }
@@ -102,8 +105,6 @@ public class EventBusModule extends AbstractModule {
                                              .to(DefaultEventBusConfigurationErrorHandler.class);
         bind(ConfigurationErrorHandler.class).annotatedWith(SessionBus.class)
                                              .to(DefaultEventBusConfigurationErrorHandler.class);
-        bind(ConfigurationErrorHandler.class).annotatedWith(GlobalBus.class)
-                                             .to(DefaultEventBusConfigurationErrorHandler.class);
     }
 
     /**
@@ -114,15 +115,13 @@ public class EventBusModule extends AbstractModule {
                                               .to(DefaultEventBusErrorHandler.class);
         bind((IPublicationErrorHandler.class)).annotatedWith(SessionBus.class)
                                               .to(DefaultEventBusErrorHandler.class);
-        bind((IPublicationErrorHandler.class)).annotatedWith(GlobalBus.class)
-                                              .to(DefaultEventBusErrorHandler.class);
     }
 
 
     @Provides
     protected EventBusAutoSubscriber autoSubscriber(@UIBus Provider<PubSubSupport<BusMessage>> uiBus, @SessionBus Provider<PubSubSupport<BusMessage>>
-            sessionBus, @GlobalBus Provider<PubSubSupport<BusMessage>> globalBus) {
-        return new DefaultEventBusAutoSubscriber(uiBus, sessionBus, globalBus);
+            sessionBus) {
+        return new VaadinEventBusAutoSubscriber(uiBus, sessionBus);
     }
 
     /**
@@ -155,20 +154,7 @@ public class EventBusModule extends AbstractModule {
 
     }
 
-    /**
-     * Refer to the MBassador documentation at https://github.com/bennidi/mbassador/wiki/Configuration for more
-     * information about the configuration itself.
-     *
-     * @return configuration for the GlobalBus
-     */
-    @Provides
-    @GlobalBus
-    protected IBusConfiguration globalBusConfig() {
-        return new BusConfiguration().addFeature(Feature.SyncPubSub.Default())
-                                     .addFeature(Feature.AsynchronousHandlerInvocation.Default())
-                                     .addFeature(Feature.AsynchronousMessageDispatch.Default());
 
-    }
 
 
     @Provides
@@ -185,13 +171,10 @@ public class EventBusModule extends AbstractModule {
 
     private PubSubSupport<BusMessage> createBus(IBusConfiguration config, IPublicationErrorHandler publicationErrorHandler, ConfigurationErrorHandler
             configurationErrorHandler, String name, boolean useAsync) {
-        config.setProperty(Properties.Handler.PublicationError, publicationErrorHandler);
-        config.addConfigurationErrorHandler(configurationErrorHandler);
+        config.addPublicationErrorHandler(publicationErrorHandler);
         PubSubSupport<BusMessage> eventBus;
         eventBus = (useAsync) ? new MBassador<>(config) : new SyncMessageBus<>(config);
-        ((AbstractPubSubSupport) eventBus).addErrorHandler(publicationErrorHandler);
-        log.debug("instantiated a {} Bus with id {}", name, eventBus.getRuntime()
-                                                                    .get(Properties.Common.Id));
+        log.debug("instantiated a {} Bus with id {}", name, eventBus.getRuntime().get(IBusConfiguration.Properties.BusId));
         return eventBus;
     }
 
@@ -207,17 +190,7 @@ public class EventBusModule extends AbstractModule {
         return bus;
     }
 
-    @Provides
-    @GlobalBus
-    @Singleton
-    protected PubSubSupport<BusMessage> providesGlobalBus(@GlobalBus IBusConfiguration config, @GlobalBus IPublicationErrorHandler publicationErrorHandler,
-                                                          @GlobalBus ConfigurationErrorHandler configurationErrorHandler) {
-        PubSubSupport<BusMessage> bus = createBus(config, publicationErrorHandler, configurationErrorHandler, "Global", true);
-        bus.getRuntime()
-           .add(BUS_SCOPE, "global")
-           .add(BUS_INDEX, globalBusIndex.getAndIncrement());
-        return bus;
-    }
+
 
     /**
      * Matches classes implementing {@link Service}
@@ -231,15 +204,12 @@ public class EventBusModule extends AbstractModule {
     }
 
     private static class BusTypeListener implements TypeListener {
-        private Provider<PubSubSupport<BusMessage>> globalBusProvider;
         private Provider<PubSubSupport<BusMessage>> sessionBusProvider;
         private Provider<PubSubSupport<BusMessage>> uiBusProvider;
 
-        public BusTypeListener(Provider<PubSubSupport<BusMessage>> uiBusProvider, Provider<PubSubSupport<BusMessage>> sessionBusProvider,
-                               Provider<PubSubSupport<BusMessage>> globalBusProvider) {
+        public BusTypeListener(Provider<PubSubSupport<BusMessage>> uiBusProvider, Provider<PubSubSupport<BusMessage>> sessionBusProvider) {
             this.uiBusProvider = uiBusProvider;
             this.sessionBusProvider = sessionBusProvider;
-            this.globalBusProvider = globalBusProvider;
         }
 
         /**
@@ -251,7 +221,7 @@ public class EventBusModule extends AbstractModule {
          * @param <I>
          */
         public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
-            encounter.register(new DefaultEventBusAutoSubscriber(uiBusProvider, sessionBusProvider, globalBusProvider));
+            encounter.register(new VaadinEventBusAutoSubscriber(uiBusProvider, sessionBusProvider));
         }
     }
 }

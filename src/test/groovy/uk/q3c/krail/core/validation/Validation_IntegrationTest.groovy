@@ -21,6 +21,7 @@ import spock.lang.Specification
 import uk.q3c.krail.core.data.TestEntity2
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule
+import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.testutil.eventbus.TestEventBusModule
@@ -51,7 +52,7 @@ class Validation_IntegrationTest extends Specification {
     BeanValidator beanValidator
 
     def setup() {
-        injector = Guice.createInjector(new VaadinSessionScopeModule(), new UtilModule(), new TestUIScopeModule(), new TestOptionModule(), new TestEventBusModule(), new VaadinInMemoryModule(), new TestI18NModule(), Modules.override(new ValidationModule()).with(new KrailValidationModule()))
+        injector = Guice.createInjector(new VaadinSessionScopeModule(), new UtilModule(), new EventBusModule(), new TestUIScopeModule(), new TestOptionModule(), new TestEventBusModule(), new VaadinInMemoryModule(), new TestI18NModule(), Modules.override(new ValidationModule()).with(new KrailValidationModule()))
         interpolator = injector.getInstance(MessageInterpolator.class)
         te1 = new TestEntity2()
         beanValidator = injector.getInstance(BeanValidator.class)

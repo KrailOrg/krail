@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.guice;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -29,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -51,6 +52,7 @@ import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
@@ -156,7 +158,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(optionModule());
 
-        coreModules.add(eventBusModule());
+        coreModules.addAll(eventBusModules());
 
         coreModules.add(navigationModule());
 
@@ -216,12 +218,12 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     }
 
     /**
-     * Override this if you have provided your own {@link EventBusModule} implementation
+     * Override this if you have provided your own {@link VaadinEventBusModule} implementation
      *
-     * @return a new {@link EventBusModule} instance
+     * @return a new {@link VaadinEventBusModule} instance
      */
-    protected Module eventBusModule() {
-        return new EventBusModule();
+    protected List<Module> eventBusModules() {
+        return ImmutableList.of(new VaadinEventBusModule(), new EventBusModule());
     }
 
     /**

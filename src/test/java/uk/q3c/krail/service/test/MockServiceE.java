@@ -15,7 +15,7 @@ package uk.q3c.krail.service.test;
 
 
 import com.google.inject.Inject;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.service.RelatedServiceExecutor;
@@ -23,7 +23,7 @@ import uk.q3c.krail.service.RelatedServiceExecutor;
 public class MockServiceE extends MockService {
 
     @Inject
-    protected MockServiceE(Translate translate, GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
+    protected MockServiceE(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor);
         setNameKey(TestLabelKey.ServiceE);
     }

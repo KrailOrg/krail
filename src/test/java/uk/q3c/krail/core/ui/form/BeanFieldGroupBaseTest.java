@@ -26,11 +26,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.mock.MockOption;
@@ -66,7 +67,7 @@ public class BeanFieldGroupBaseTest {
     @Before
     public void setup() {
         VaadinSession.setCurrent(null);
-        injector = Guice.createInjector(new TestKrailI18NModule(), new TestUIScopeModule(), new TestPersistenceModuleVaadin(), new UtilModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
+        injector = Guice.createInjector(new TestKrailI18NModule(), new EventBusModule(), new TestUIScopeModule(), new TestPersistenceModuleVaadin(), new UtilModule(), new VaadinSessionScopeModule(), new VaadinEventBusModule(), new
 
                 TestOptionModule(), Modules.override(new
                 ValidationModule())

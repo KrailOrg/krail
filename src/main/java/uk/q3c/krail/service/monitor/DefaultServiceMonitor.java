@@ -20,7 +20,7 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.service.Service;
 import uk.q3c.krail.service.ServiceBusMessage;
 import uk.q3c.krail.service.ServiceMonitor;
@@ -43,11 +43,10 @@ public class DefaultServiceMonitor implements ServiceMonitor {
     private final Map<Service, ServiceStatusRecord> services;
 
     @Inject
-    public DefaultServiceMonitor(GlobalBusProvider globalBusProvider) {
+    public DefaultServiceMonitor(MessageBus globalBusProvider) {
         this.services = new MapMaker().weakKeys()
-                                      .makeMap();
-        globalBusProvider.get()
-                         .subscribe(this);
+                .makeMap();
+        globalBusProvider.subscribe(this);
     }
 
     @Handler

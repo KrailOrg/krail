@@ -21,10 +21,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.test.TestI18NModule;
@@ -42,7 +43,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class, UIScopeModule.class, TestI18NModule
+@GuiceContext({VaadinSessionScopeModule.class, EventBusModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class, UIScopeModule.class, TestI18NModule
         .class, UtilModule.class, UtilsModule.class})
 public class DefaultLocaleSelectorTest {
 

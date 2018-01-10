@@ -29,7 +29,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.option.VaadinOptionContext;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
@@ -43,7 +43,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @I18N
 @Listener
-@SubscribeTo({GlobalBus.class, SessionBus.class})
+@SubscribeTo({GlobalMessageBus.class, SessionBus.class})
 public class DefaultSubPagePanel extends NavigationButtonPanel implements VaadinOptionContext, SubPagePanel {
     public static final OptionKey<SortType> optionSortType = new OptionKey<>(SortType.ALPHA, DefaultSubPagePanel.class, LabelKey.Sort_Type, DescriptionKey
             .Sort_Type);

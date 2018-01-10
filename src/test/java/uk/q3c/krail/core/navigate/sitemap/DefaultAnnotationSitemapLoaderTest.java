@@ -22,7 +22,7 @@ import fixture.testviews2.TestAnnotatedView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
@@ -36,6 +36,7 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
@@ -54,7 +55,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestPersistenceModuleVaadin.class, TestKrailI18NModule.class, VaadinSessionScopeModule.class,
-        EventBusModule.class, UIScopeModule.class, UtilModule.class, TestOptionModule.class})
+        VaadinEventBusModule.class, EventBusModule.class, UIScopeModule.class, UtilModule.class, TestOptionModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject

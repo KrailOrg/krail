@@ -18,10 +18,12 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
@@ -29,7 +31,7 @@ import uk.q3c.krail.i18n.Translate;
 import java.text.Collator;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The {@link MasterSitemap} provides the overall structure of the site, and is Singleton scoped. This class refines
@@ -46,6 +48,7 @@ import static com.google.common.base.Preconditions.*;
  */
 @VaadinSessionScoped
 @Listener
+@SubscribeTo(SessionBus.class)
 public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> implements UserSitemap {
     private static Logger log = LoggerFactory.getLogger(DefaultUserSitemap.class);
 

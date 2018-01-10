@@ -18,14 +18,13 @@ import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.config.i18n.ConfigurationLabelKey
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.eventbus.GlobalBusProvider
+import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.i18n.PatternLabelKey
 import uk.q3c.krail.service.model.DefaultServiceDependencyScanner
 import uk.q3c.util.UtilModule
 import uk.q3c.util.clazz.ClassNameUtils
 import uk.q3c.util.testutil.LogMonitor
-
 /**
  *
  * Created by David Sowerby on 11/11/15.
@@ -43,7 +42,7 @@ class DefaultServiceDependencyScannerTest extends Specification {
 
     def model = Mock(ServiceModel)
     def translate = Mock(Translate)
-    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
+    MessageBus globalBusProvider = Mock(MessageBus)
     LogMonitor logMonitor
     RelatedServiceExecutor servicesExecutor = Mock(RelatedServiceExecutor)
 

@@ -24,11 +24,14 @@ import net.engio.mbassy.listener.Listener;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
+import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.mock.TestOptionModule;
@@ -41,9 +44,10 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule2.class, VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class,
-        TestUIScopeModule.class, TestOptionModule.class, UtilModule.class, DefaultShiroModule.class})
+@GuiceContext({TestKrailI18NModule2.class, VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class,
+        TestUIScopeModule.class, TestOptionModule.class, EventBusModule.class, UtilModule.class, DefaultShiroModule.class})
 @Listener
+@SubscribeTo(SessionBus.class)
 public class DefaultUserSitemapTest {
 
     @Inject
@@ -86,13 +90,14 @@ public class DefaultUserSitemapTest {
      * change events
      */
     @Test
-    public void setLoaded() {
+    public void setLoaded() throws InterruptedException {
 
         // given
         currentLocale.setLocale(Locale.UK);
         userSitemap.populate();
         // when
         userSitemap.setLoaded(true);
+        Thread.sleep(100);
         // then
         assertThat(structureChanged).isTrue();
     }

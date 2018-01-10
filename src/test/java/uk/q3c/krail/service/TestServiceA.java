@@ -15,7 +15,7 @@ package uk.q3c.krail.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
@@ -28,7 +28,7 @@ public class TestServiceA extends AbstractService {
 
     @Inject
     protected TestServiceA(Translate translate,
-                           GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
+                           MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor);
     }
 

@@ -40,7 +40,7 @@ import uk.q3c.krail.core.view.component.SubPagePanel;
 import uk.q3c.krail.core.view.component.UserNavigationMenu;
 import uk.q3c.krail.core.view.component.UserNavigationTree;
 import uk.q3c.krail.core.view.component.UserStatusPanel;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -54,7 +54,7 @@ import uk.q3c.krail.option.OptionKey;
  * @author David Sowerby
  */
 @Listener
-@SubscribeTo(GlobalBus.class)
+@SubscribeTo(GlobalMessageBus.class)
 public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContext {
 
     protected static final OptionKey<Boolean> optionBreadcrumbVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey

@@ -18,11 +18,12 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.testviews2.ViewA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestI18NModule;
@@ -36,8 +37,8 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class, UIScopeModule
-        .class, UtilModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class, UIScopeModule
+        .class, EventBusModule.class, UtilModule.class})
 public class UserSitemapNodeTest {
 
     @Inject

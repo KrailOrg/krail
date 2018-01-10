@@ -14,17 +14,17 @@
 package uk.q3c.krail.testutil.eventbus;
 
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
-import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.UIBus;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
 
 /**
  * Overrides the error handlers to just log the errors, rather than rethrow exceptions
  * <p>
  * Created by David Sowerby on 13/04/15.
  */
-public class TestEventBusModule extends EventBusModule {
+public class TestEventBusModule extends VaadinEventBusModule {
 
     /**
      * All buses use the default error handler by default.  Override this method to provide alternative bindings.
@@ -35,7 +35,7 @@ public class TestEventBusModule extends EventBusModule {
                                               .to(TestEventBusErrorHandler.class);
         bind((IPublicationErrorHandler.class)).annotatedWith(SessionBus.class)
                                               .to(TestEventBusErrorHandler.class);
-        bind((IPublicationErrorHandler.class)).annotatedWith(GlobalBus.class)
+        bind((IPublicationErrorHandler.class)).annotatedWith(GlobalMessageBus.class)
                                               .to(TestEventBusErrorHandler.class);
     }
 }

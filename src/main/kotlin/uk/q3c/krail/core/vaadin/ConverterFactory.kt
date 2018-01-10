@@ -52,6 +52,7 @@ class BaseConverterSet : ConverterSet {
                 throw UnsupportedOperationException("Conversion between $converterPair is not supported")
             }
         }
+        @Suppress("UNCHECKED_CAST")
         return converter as Converter<Any, Any>
     }
 }
@@ -67,6 +68,7 @@ data class ConverterPair(val presentation: Class<out Any>, val model: Class<out 
 
 class DefaultConverterFactory @Inject constructor(val converters: MutableSet<ConverterSet>) : ConverterFactory {
     override fun <P : Any, M : Any> get(presentationClass: Class<out P>, modelClass: Class<out M>): Converter<P, M> {
+        @Suppress("UNCHECKED_CAST")
         return get(ConverterPair(presentationClass, modelClass)) as Converter<P, M>
     }
 

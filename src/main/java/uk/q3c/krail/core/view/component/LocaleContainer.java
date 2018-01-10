@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.VaadinOptionContext;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.krail.option.Option;
@@ -37,7 +37,7 @@ import java.util.Locale;
 import java.util.Set;
 
 @Listener
-@SubscribeTo(GlobalBus.class)
+@SubscribeTo(GlobalMessageBus.class)
 public class LocaleContainer extends IndexedContainer implements VaadinOptionContext {
 
 

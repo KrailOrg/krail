@@ -36,7 +36,7 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
@@ -59,7 +59,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @modified David Sowerby 29 May 2015
  */
 @Listener
-@SubscribeTo({UIBus.class, SessionBus.class, GlobalBus.class})
+@SubscribeTo({UIBus.class, SessionBus.class, GlobalMessageBus.class})
 public class DefaultUserNavigationTree extends Tree implements VaadinOptionContext, UserNavigationTree {
 
     public static final OptionKey<SortType> optionKeySortType = new OptionKey<>(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,

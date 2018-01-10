@@ -19,9 +19,10 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
@@ -35,7 +36,7 @@ import uk.q3c.util.UtilModule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule
+@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule
         .class, UtilModule.class})
 public class I18NValueTest {
 
