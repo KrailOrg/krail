@@ -13,7 +13,7 @@
 
 
 buildscript {
-    ext.kotlin_version = '1.1.4-3'
+    ext.kotlin_version = '1.2.10'
     ext.kaytee_plugin_version = "0.18.10.0"
     repositories {
         jcenter()
@@ -72,11 +72,15 @@ compileKotlin {
 }
 
 dependencies {
+    // Kotlin (can be removed when q3c util catches up with Kotlin version)
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    //Krail
     compile 'uk.q3c.krail:krail-option:0.15.0.0'
     compile 'uk.q3c.krail:eventbus-mbassador:0.5.0.0'
-
-
     compile 'uk.q3c.krail:krail-config:0.10.5.0'
+
 
 
     compile 'commons-beanutils:commons-beanutils:1.9.3'
