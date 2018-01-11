@@ -49,8 +49,8 @@ class SystemAdminPagesTest extends Specification {
 
         then:
         map != null
-        map.size() == 4
-        map.keySet().containsAll("system-admin", "system-admin/sitemap-build-report", "system-admin/option", "system-admin/entity")
+        map.size() == 3
+        map.keySet().containsAll("system-admin", "system-admin/sitemap-build-report", "system-admin/entity")
     }
 
 

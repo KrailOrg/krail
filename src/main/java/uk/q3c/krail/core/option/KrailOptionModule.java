@@ -35,7 +35,6 @@ public class KrailOptionModule extends OptionModule {
     @Override
     protected void configure() {
         super.configure();
-        bindVaadinOptionSource();
         bindOptionPopup();
         bindOptionBinder();
     }
@@ -48,10 +47,6 @@ public class KrailOptionModule extends OptionModule {
     protected void bindPermissionVerifier() {
         bind(OptionPermissionVerifier.class).to(KrailOptionPermissionVerifier.class);
 
-    }
-
-    protected void bindVaadinOptionSource() {
-        bind(VaadinOptionSource.class).to(DefaultVaadinOptionSource.class);
     }
 
 
