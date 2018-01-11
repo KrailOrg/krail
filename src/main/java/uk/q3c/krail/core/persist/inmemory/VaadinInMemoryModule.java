@@ -15,9 +15,6 @@ package uk.q3c.krail.core.persist.inmemory;
 
 import com.google.inject.TypeLiteral;
 import com.vaadin.v7.data.util.BeanItemContainer;
-import uk.q3c.krail.core.option.inmemory.InMemoryOptionContainerProvider;
-import uk.q3c.krail.core.option.inmemory.container.DefaultInMemoryOptionContainerProvider;
-import uk.q3c.krail.option.persist.OptionContainerProvider;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
@@ -44,9 +41,6 @@ public class VaadinInMemoryModule extends InMemoryModule {
 
     protected void bindOptionContainerProvider() {
         if (isProvideOptionDao() || isProvidePatternDao()) {
-            bind(InMemoryOptionContainerProvider.class).to(DefaultInMemoryOptionContainerProvider.class);
-            bind(OptionContainerProvider.class).annotatedWith(InMemory.class)
-                    .to(InMemoryOptionContainerProvider.class);
             bindContainerProvider();
         }
     }
