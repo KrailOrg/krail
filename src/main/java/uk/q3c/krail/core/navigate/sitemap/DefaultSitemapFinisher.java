@@ -19,16 +19,16 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.util.MessageFormat;
 import uk.q3c.util.dag.CycleDetectedException;
 import uk.q3c.util.dag.DynamicDAG;
+import uk.q3c.util.text.MessageFormat2;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Checks the Sitemap for inconsistencies after it has been loaded. The following are considered:
@@ -49,6 +49,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
     private final Set<String> missingLabelKeys;
     private final Set<String> missingPageAccessControl;
     private final Set<String> redirectLoops;
+    private final MessageFormat2 messageFormat;
     private Set<String> annotationSources;
     private I18NKey defaultKey;
     private Class<? extends KrailView> defaultView;
@@ -56,8 +57,9 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
     private Set<String> sourceModuleNames;
 
     @Inject
-    protected DefaultSitemapFinisher(CurrentLocale currentLocale) {
+    protected DefaultSitemapFinisher(CurrentLocale currentLocale, MessageFormat2 messageFormat) {
         super();
+        this.messageFormat = messageFormat;
         missingViewClasses = new HashSet<>();
         missingLabelKeys = new HashSet<>();
         missingPageAccessControl = new HashSet<>();
@@ -208,7 +210,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             try {
                 dag.addChild(entry.getKey(), entry.getValue());
             } catch (CycleDetectedException cde) {
-                String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(), entry.getValue());
+                String msg = messageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(), entry.getValue());
                 redirectLoops.add(msg);
                 // throw new CycleDetectedException(msg);
             }

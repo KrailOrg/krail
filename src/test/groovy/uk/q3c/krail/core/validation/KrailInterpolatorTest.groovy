@@ -18,6 +18,7 @@ import spock.lang.Specification
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.util.text.DefaultMessageFormat
 
 import javax.validation.constraints.Min
 import javax.validation.metadata.ConstraintDescriptor
@@ -44,7 +45,7 @@ class KrailInterpolatorTest extends Specification {
 
     def setup() {
 
-        interpolator = new KrailInterpolator(currentLocale, translate, javaxValidationSubstitutes)
+        interpolator = new KrailInterpolator(currentLocale, translate, javaxValidationSubstitutes, new DefaultMessageFormat())
         context.getConstraintDescriptor() >> constraintDescriptor
         constraintDescriptor.getAnnotation() >> annotation
     }

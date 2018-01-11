@@ -813,7 +813,7 @@ public class DefaultNavigatorTest {
         //given
         navigator = createNavigator();
         NavigationState navState = new NavigationState();
-        navState.setVirtualPage(userSitemap.aURI);
+        navState.virtualPage(userSitemap.aURI);
         //when
         navigator.navigateTo(navState);
         //then

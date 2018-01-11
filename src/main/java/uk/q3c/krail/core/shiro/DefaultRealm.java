@@ -14,14 +14,16 @@
 package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.realm.activedirectory.ActiveDirectoryRealm;
-import org.apache.shiro.realm.jdbc.JdbcRealm;
-import org.apache.shiro.realm.ldap.JndiLdapRealm;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,9 +90,7 @@ public class DefaultRealm extends AuthorizingRealmBase {
      * long as they have a password of 'password'! <br>
      * <br>
      * This method would normally retrieve user permissions and /or roles from an underlying datastore of some form.
-     * There are various implementations already provided by Shiro, including {@link ActiveDirectoryRealm},
-     * {@link JdbcRealm} and {@link JndiLdapRealm}<br>
-     * <br>
+     * There are various implementations already provided by Shiro - see subclasses of {@link AuthorizingRealm}
      * You can provide your own Realm implementation by overriding {@link DefaultShiroModule#bindRealms()}<br>
      * <br>
      * This implementation authorises<ol>

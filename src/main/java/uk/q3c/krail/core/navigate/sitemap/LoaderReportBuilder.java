@@ -12,8 +12,8 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.util.MessageFormat;
 import uk.q3c.util.clazz.ClassNameUtils;
+import uk.q3c.util.text.DefaultMessageFormat;
 
 import java.util.List;
 import java.util.Map;
@@ -90,7 +90,7 @@ public class LoaderReportBuilder {
                 report.append('\n');
 
                 for (SitemapLoader.LogEntry lee : source.getValue()) {
-                    String msg = MessageFormat.format(lee.msgPattern, lee.msgParams);
+                    String msg = new DefaultMessageFormat().format(lee.msgPattern, lee.msgParams);
                     report.append('\t');
                     report.append(msg);
                     report.append('\n');

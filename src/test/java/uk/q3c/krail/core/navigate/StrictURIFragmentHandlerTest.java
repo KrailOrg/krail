@@ -286,8 +286,8 @@ public class StrictURIFragmentHandlerTest {
 
         // given
         NavigationState navigationState = uriHandler.navigationState("home/perfect/wiggly");
-        navigationState.addParameter("age", "15");
-        navigationState.setVirtualPage("home/only");
+        navigationState.parameter("age", "15");
+        navigationState.virtualPage("home/only");
         // when
         uriHandler.updateFragment(navigationState);
         // then
