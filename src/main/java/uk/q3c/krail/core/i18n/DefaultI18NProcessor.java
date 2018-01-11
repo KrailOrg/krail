@@ -17,7 +17,6 @@ import com.google.inject.Provider;
 import com.vaadin.data.HasValue;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Grid;
-import com.vaadin.v7.ui.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
@@ -116,9 +115,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
             AbstractComponent component = entry.getKey();
             AnnotationInfo annotationInfo = entry.getValue();
             AnnotationValues annotationValues = annotationValues(annotationInfo.getAnnotations());
-            if (component instanceof Table) {
-                processTable((Table) component, annotationValues, annotationInfo);
-            } else if (component instanceof Grid) {
+            if (component instanceof Grid) {
 
                 processGrid((Grid) component, annotationValues, annotationInfo);
             } else {
@@ -221,35 +218,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
 
     }
 
-    /**
-     * Sets the I18N values for the Table itself, and also iterates the visible columns for column ids which are I18NKeys, and translates those as well
-     *
-     * @param table            the table to process
-     * @param annotationValues the values to apply
-     * @param annotationInfo   used primarily for the Field name
-     */
-    protected void processTable(Table table, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
-        // Table columns need special treatment
-        applyAnnotationValues(table, annotationValues, annotationInfo);
 
-        // do the column headers
-        Object[] columns = table.getVisibleColumns();
-        Locale locale = annotationValues.locale.isPresent() ? annotationValues.locale.get() : currentLocale.getLocale();
-
-        List<String> headers = new ArrayList<>();
-        for (Object column : columns) {
-            if (column instanceof I18NKey) {
-                I18NKey columnKey = (I18NKey) column;
-                String header = translate.from(columnKey, locale);
-                headers.add(header);
-            } else {
-                headers.add(column.toString());
-            }
-        }
-        String headerArray[] = headers.toArray(new String[headers.size()]);
-        table.setColumnHeaders(headerArray);
-
-    }
 
     /**
      * Applies annotation values to {@code component}
@@ -275,7 +244,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
                 ((HasValue) component).setValue(translate.from(annotationValues.valueKey.get(), locale));
                 return;
             } else {
-                log.warn("Field {} has a value annotation but does not implement Property or HasValue.  Annotation ignored", annotationInfo.getField()
+                log.warn("Field {} has a value annotation but does not implement HasValue.  Annotation ignored", annotationInfo.getField()
                         .getName());
             }
         }

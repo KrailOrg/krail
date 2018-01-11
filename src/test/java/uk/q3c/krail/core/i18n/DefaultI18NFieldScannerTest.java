@@ -79,7 +79,7 @@ public class DefaultI18NFieldScannerTest {
         //when
         scanner.scan(new I18NTestClass());
         //then
-        assertThat(scanner.annotatedComponents()).hasSize(17);
+        assertThat(scanner.annotatedComponents()).hasSize(16);
 
         for (AbstractComponent abstractComponent : scanner.annotatedComponents()
                                                           .keySet()) {
@@ -105,7 +105,7 @@ public class DefaultI18NFieldScannerTest {
             }
         }
 
-        assertThat(fieldNames(scanner.annotatedComponents())).containsOnly("table", "ccs", "labelInsideTcc", "label", "ccn", "grid", "specificLocale",
+        assertThat(fieldNames(scanner.annotatedComponents())).containsOnly("ccs", "labelInsideTcc", "label", "ccn", "grid", "specificLocale",
                 "newButton", "labelInsideTcc", "value", "ccs", "label", "demoLabel", "ccc", "valueLocale", "labelInsideTcc", "buttonWithAnnotation");
     }
 

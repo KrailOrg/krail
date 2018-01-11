@@ -100,20 +100,7 @@ public class DefaultI18NProcessorTest {
         assertThat(testObject.getLabel()
                 .getLocale()).isEqualTo(Locale.UK);
 
-        assertThat(testObject.getTable()
-                .getCaption()).isEqualTo("Ok");
-        assertThat(testObject.getTable()
-                .getDescription()).isEqualTo("Confirm this Value is Ok");
-        assertThat(testObject.getTable()
-                .getLocale()).isEqualTo(Locale.UK);
 
-        Object[] columns = testObject.getTable()
-                .getVisibleColumns();
-        assertThat(columns.length).isEqualTo(3);
-
-        String[] headers = testObject.getTable()
-                .getColumnHeaders();
-        assertThat(headers).isEqualTo(new String[]{"Small", "Cancel", "not i18N"});
 
         // class annotation overruled by field annotation
         TestCompositeComponent ccs = testObject.getCcs();
@@ -191,20 +178,6 @@ public class DefaultI18NProcessorTest {
         assertThat(testObject.getButtonWithAnnotation()
                              .getLocale()).isEqualTo(Locale.GERMANY);
 
-        assertThat(testObject.getTable()
-                             .getCaption()).isEqualTo("OK");
-        assertThat(testObject.getTable()
-                             .getDescription()).isEqualTo(confirmValueOk);
-        assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.GERMANY);
-
-        Object[] columns = testObject.getTable()
-                                     .getVisibleColumns();
-        assertThat(columns.length).isEqualTo(3);
-
-        String[] headers = testObject.getTable()
-                                     .getColumnHeaders();
-        assertThat(headers).isEqualTo(new String[]{"Klein", "Stornieren", "not i18N"});
 
     }
 

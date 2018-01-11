@@ -16,15 +16,12 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import com.vaadin.v7.ui.Table;
 
 public class I18NTestClass {
     @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
     private final Button buttonWithAnnotation;
     @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
     private final Label label;
-    @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
-    private final Table table;
     @Caption(caption = LabelKey.Yes, description = DescriptionKey.Please_log_in, locale = "de-DE")
     private final Label demoLabel;
     @Caption(caption = LabelKey.Field, description = DescriptionKey.Field)
@@ -60,8 +57,6 @@ public class I18NTestClass {
         label = new Label();
         demoLabel = new Label();
         integer = new Integer(5);
-        table = new Table();
-        setupTableColumns();
 
         cnc = new TestCompositeNonComponent();
         ccn = new TestCompositeComponentNested();
@@ -73,11 +68,6 @@ public class I18NTestClass {
         grid = new Grid();
     }
 
-    private void setupTableColumns() {
-        table.addContainerProperty(LabelKey.Small, String.class, "numpty");
-        table.addContainerProperty(LabelKey.Cancel, String.class, "numpty");
-        table.addContainerProperty("not i18N", String.class, "numpty");
-    }
 
     public Button getButtonWithAnnotation() {
         return buttonWithAnnotation;
@@ -97,10 +87,6 @@ public class I18NTestClass {
 
     public Label getLabel() {
         return label;
-    }
-
-    public Table getTable() {
-        return table;
     }
 
     public TestCompositeNonComponent getCnc() {
