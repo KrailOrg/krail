@@ -24,7 +24,6 @@ import uk.q3c.krail.config.ConfigurationException;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.util.MessageFormat;
 import uk.q3c.util.text.MessageFormat2;
 
 import javax.validation.MessageInterpolator;
@@ -42,7 +41,7 @@ import java.util.Optional;
  * brackets, for example '{com.example.entity.LabelKey.Misty}' - this will find the appropriate key (assuming it exists of course) and use that with the Krail
  * I18N translation process</li>
  * <li>A custom pattern, a String without curly brackets, which is used as it is - arguments can be placed within it using the format defined by {@link
- * MessageFormat}, but no translation takes place</li>
+ * MessageFormat2}, but no translation takes place</li>
  * <li>A custom annotation, which should use an I18NKey</li>
  * <p>
  * </ol>
