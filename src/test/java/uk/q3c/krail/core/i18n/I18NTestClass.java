@@ -13,9 +13,9 @@
 package uk.q3c.krail.core.i18n;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import com.vaadin.v7.ui.Grid;
 import com.vaadin.v7.ui.Table;
 
 public class I18NTestClass {

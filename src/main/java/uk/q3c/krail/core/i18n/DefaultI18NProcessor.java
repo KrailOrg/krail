@@ -118,15 +118,12 @@ public class DefaultI18NProcessor implements I18NProcessor {
             AnnotationValues annotationValues = annotationValues(annotationInfo.getAnnotations());
             if (component instanceof Table) {
                 processTable((Table) component, annotationValues, annotationInfo);
-            } else if (component instanceof com.vaadin.v7.ui.Grid) {
-                processV7Grid((com.vaadin.v7.ui.Grid) component, annotationValues, annotationInfo);
             } else if (component instanceof Grid) {
 
                 processGrid((Grid) component, annotationValues, annotationInfo);
             } else {
                 applyAnnotationValues(component, annotationValues, annotationInfo);
             }
-
         }
     }
 
@@ -285,6 +282,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
 
     }
 
+
     /**
      * Sets the I18N values for the Grid itself, and also iterates the columns for column ids which are I18NKeys, and translates those as well
      *
@@ -292,26 +290,6 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * @param annotationValues the annotation values to apply
      * @param annotationInfo   used primarily to identify the Field, and therefore its name
      */
-    protected void processV7Grid(com.vaadin.v7.ui.Grid grid, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
-
-        // do the grid itself
-        applyAnnotationValues(grid, annotationValues, annotationInfo);
-
-        // now do the column headers
-        Locale locale = annotationValues.locale.isPresent() ? annotationValues.locale.get() : currentLocale.getLocale();
-        final List<com.vaadin.v7.ui.Grid.Column> columns = grid.getColumns();
-
-        for (com.vaadin.v7.ui.Grid.Column column : columns) {
-            if (column.getPropertyId() instanceof I18NKey) {
-                I18NKey columnKey = (I18NKey) column.getPropertyId();
-                String header = translate.from(columnKey, locale);
-                column.setHeaderCaption(header);
-            } else {
-                column.setHeaderCaption(column.getPropertyId()
-                        .toString());
-            }
-        }
-    }
 
     protected void processGrid(Grid grid, AnnotationValues annotationValues, AnnotationInfo annotationInfo) {
 
