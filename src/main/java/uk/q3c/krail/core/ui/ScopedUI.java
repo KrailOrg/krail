@@ -170,7 +170,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
         // page isn't available during injected construction, so we have to do this here
         Page page = getPage();
-        page.addUriFragmentChangedListener(navigator);
+        page.addPopStateListener(navigator);
 
 
         setErrorHandler(errorHandler);

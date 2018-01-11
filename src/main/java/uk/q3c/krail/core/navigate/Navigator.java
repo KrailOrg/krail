@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.navigate;
 
-import com.vaadin.server.Page.UriFragmentChangedListener;
+import com.vaadin.server.Page;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author David Sowerby 20 Jan 2013
  */
-public interface Navigator extends UriFragmentChangedListener {
+public interface Navigator extends Page.PopStateListener {
 
     void navigateTo(String navigationState);
 

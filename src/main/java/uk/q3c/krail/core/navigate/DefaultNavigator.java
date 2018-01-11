@@ -15,7 +15,6 @@ package uk.q3c.krail.core.navigate;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.server.Page;
-import com.vaadin.server.Page.UriFragmentChangedEvent;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
@@ -27,7 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
-import uk.q3c.krail.core.navigate.sitemap.*;
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
+import uk.q3c.krail.core.navigate.sitemap.Sitemap;
+import uk.q3c.krail.core.navigate.sitemap.SitemapException;
+import uk.q3c.krail.core.navigate.sitemap.SitemapService;
+import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilder;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
@@ -46,7 +52,7 @@ import uk.q3c.krail.eventbus.BusMessage;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The navigator is at the heart of navigation process, and provides navigation for a number of data types (for
@@ -133,8 +139,8 @@ public class DefaultNavigator implements Navigator {
 
 
     @Override
-    public void uriFragmentChanged(UriFragmentChangedEvent event) {
-        navigateTo(event.getUriFragment());
+    public void uriChanged(Page.PopStateEvent event) {
+        navigateTo(event.getUri());
     }
 
     /**
