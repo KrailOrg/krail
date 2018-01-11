@@ -17,13 +17,12 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
-import com.vaadin.v7.data.Item;
-import com.vaadin.v7.data.Property;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
@@ -48,6 +47,8 @@ import static org.mockito.Mockito.when;
 @GuiceContext({TestOptionModule.class, TestPersistenceModuleVaadin.class, UtilsModule.class, UtilModule.class, TestVaadinSessionScopeModule.class})
 public class LocaleContainerTest {
 
+    @Mock
+    CurrentLocale currentLocale;
 
     @Mock
     VaadinService vaadinService;
@@ -63,6 +64,7 @@ public class LocaleContainerTest {
 
     LocaleContainer container;
 
+
     private Set<Locale> supportedLocales;
 
     @Before
@@ -73,7 +75,8 @@ public class LocaleContainerTest {
         VaadinService.setCurrent(vaadinService);
         when(vaadinService.getBaseDirectory()).thenReturn(baseDir);
         supportedLocales = new HashSet<>();
-        container = new LocaleContainer(supportedLocales, option, resourceUtils);
+        container = new LocaleContainer(supportedLocales, option, resourceUtils, currentLocale);
+        when(currentLocale.getLocale()).thenReturn(Locale.UK);
 
     }
 
@@ -88,29 +91,30 @@ public class LocaleContainerTest {
         supportedLocales.add(Locale.GERMANY);
         option.set(container.getOptionKeyFlagSize(), 48);
         // when
-        container = new LocaleContainer(supportedLocales, option, resourceUtils);
+        container = new LocaleContainer(supportedLocales, option, resourceUtils, currentLocale);
         // then
-        assertThat(container.getItemIds()).hasSameSizeAs(supportedLocales);
+        assertThat(container.getData()).hasSameSizeAs(supportedLocales);
 
-        Item item = itemFor(Locale.GERMANY);
+        LocaleInfo item = itemFor(Locale.GERMANY);
         assertThat(item).isNotNull();
 
-        Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
-        assertThat(property).isNotNull();
-        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
+        assertThat(item.displayName()).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
 
-        property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
-        assertThat(property).isNotNull();
-        assertThat(property.getValue()).isInstanceOf(FileResource.class);
-        FileResource flag = (FileResource) property.getValue();
+        assertThat(item.getFlag()).isInstanceOf(FileResource.class);
+        FileResource flag = item.getFlag();
         assertThat(flag.getFilename()).isEqualTo("de.png");
         assertThat(flag.getSourceFile()
                 .exists()).isEqualTo(true);
 
     }
 
-    private Item itemFor(Locale locale) {
-        Item item = container.getItem(locale.toLanguageTag());
+    private LocaleInfo itemFor(Locale locale) {
+        LocaleInfo item = null;
+        for (LocaleInfo info : container.getData()) {
+            if (locale.equals(info.getLocale())) {
+                item = info;
+            }
+        }
         return item;
     }
 
@@ -119,18 +123,16 @@ public class LocaleContainerTest {
         supportedLocales.add(Locale.GERMANY);
         option.set(container.getOptionKeyFlagSize(), 47);
         // when
-        container = new LocaleContainer(supportedLocales, option, resourceUtils);
+        container = new LocaleContainer(supportedLocales, option, resourceUtils, currentLocale);
 
         // then
-        Item item = itemFor(Locale.GERMANY);
+        LocaleInfo item = itemFor(Locale.GERMANY);
         assertThat(item).isNotNull();
 
-        Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
-        assertThat(property).isNotNull();
-        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
+        assertThat(item).isNotNull();
+        assertThat(item.displayName()).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
 
-        property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
-        assertThat(property.getValue()).isNull();
+        assertThat(item.getFlag()).isNull();
     }
 
     @Test
@@ -138,18 +140,15 @@ public class LocaleContainerTest {
         supportedLocales.add(Locale.CANADA);
         option.set(container.getOptionKeyFlagSize(), 48);
         // when
-        container = new LocaleContainer(supportedLocales, option, resourceUtils);
+        container = new LocaleContainer(supportedLocales, option, resourceUtils, currentLocale);
 
         // then
-        Item item = itemFor(Locale.CANADA);
+        LocaleInfo item = itemFor(Locale.CANADA);
         assertThat(item).isNotNull();
 
-        Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
-        assertThat(property).isNotNull();
-        assertThat(property.getValue()).isEqualTo(Locale.CANADA.getDisplayName());
 
-        property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
-        assertThat(property.getValue()).isNull();
+        assertThat(item.displayName()).isEqualTo(Locale.CANADA.getDisplayName());
+        assertThat(item.getFlag()).isNull();
     }
 
 

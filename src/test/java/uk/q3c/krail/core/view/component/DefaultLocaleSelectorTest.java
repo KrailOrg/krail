@@ -74,7 +74,7 @@ public class DefaultLocaleSelectorTest {
         supportedLocales.add(Locale.UK);
         supportedLocales.add(Locale.GERMANY);
 
-        LocaleContainer container = new LocaleContainer(supportedLocales, option, resourceUtils);
+        LocaleContainer container = new LocaleContainer(supportedLocales, option, resourceUtils, currentLocale);
         selector = new DefaultLocaleSelector(currentLocale, container, userNotifier);
     }
 

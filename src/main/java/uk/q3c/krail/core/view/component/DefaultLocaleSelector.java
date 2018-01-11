@@ -13,10 +13,8 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property.ValueChangeEvent;
-import com.vaadin.v7.data.Property.ValueChangeListener;
-import com.vaadin.v7.ui.AbstractSelect.ItemCaptionMode;
-import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.data.HasValue;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -36,13 +34,13 @@ import java.util.Optional;
 
 @I18N
 @Listener
-public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListener {
+public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChangeListener<LocaleInfo> {
     private static Logger log = LoggerFactory.getLogger(DefaultLocaleSelector.class);
     private final LocaleContainer container;
     private final CurrentLocale currentLocale;
     private final UserNotifier userNotifier;
     @Description(description = DescriptionKey.Select_from_available_languages)
-    private ComboBox combo;
+    private ComboBox<LocaleInfo> combo;
     private boolean fireListeners;
     private boolean inhibitMessage;
 
@@ -56,23 +54,17 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     }
 
     private void buildUI() {
-        combo = new ComboBox(null, container);
-        combo.setImmediate(true);
-        combo.setNullSelectionAllowed(false);
-
+        combo = new ComboBox<>();
+        combo.setItemCaptionGenerator(LocaleInfo::displayName);
+        combo.setItemIconGenerator(LocaleInfo::getFlag);
+        combo.setEmptySelectionAllowed(false);
+        combo.setDataProvider(container.getDataProvider());
         combo.setWidth(200 + "px");
 
         combo.setId(ID.getId(Optional.empty(), this, combo));
-        combo.setContainerDataSource(container);
 
-        // Sets the combobox to show a certain property as the item caption
-        combo.setItemCaptionPropertyId(LocaleContainer.PropertyName.NAME);
-        combo.setItemCaptionMode(ItemCaptionMode.PROPERTY);
 
-        // Sets the icon to use with the items
-        combo.setItemIconPropertyId(LocaleContainer.PropertyName.FLAG);
-        combo.setValue(currentLocale.getLocale()
-                                    .toLanguageTag());
+        combo.setValue(container.getCurrentLocaleInfo());
         combo.addValueChangeListener(this);
 
     }
@@ -83,10 +75,9 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
             log.debug("response to locale change is disabled");
         } else {
             log.debug("responding in change to new locale of {}", busMessage.getNewLocale()
-                                                                            .getDisplayName());
+                    .getDisplayName());
             inhibitMessage = true;
-            combo.setValue(busMessage.getNewLocale()
-                                     .toLanguageTag());
+            combo.setValue(container.constructInfo(busMessage.getNewLocale()));
             inhibitMessage = false;
 
         }
@@ -97,11 +88,18 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
         return combo;
     }
 
+
     /**
      * Sets {@link CurrentLocale#setLocale(Locale)} to new value.
      */
     @Override
-    public void valueChange(ValueChangeEvent event) {
+    public Locale selectedLocale() {
+        return combo.getValue().getLocale();
+    }
+
+
+    @Override
+    public void valueChange(HasValue.ValueChangeEvent<LocaleInfo> event) {
         if (!fireListeners) {
             Locale newLocale = selectedLocale();
             // only process change if locale has really changed
@@ -116,12 +114,4 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
             log.debug("Initialising, combo value change ignored");
         }
     }
-
-    @Override
-    public Locale selectedLocale() {
-        String selectedId = (String) combo.getValue();
-        return Locale.forLanguageTag(selectedId);
-    }
-
-
 }

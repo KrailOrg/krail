@@ -12,11 +12,10 @@
  */
 package uk.q3c.krail.core.view.component;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.FileResource;
-import com.vaadin.server.Resource;
-import com.vaadin.v7.data.Item;
-import com.vaadin.v7.data.util.IndexedContainer;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -26,6 +25,7 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
@@ -33,17 +33,15 @@ import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.util.ResourceUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 @Listener
 @SubscribeTo(GlobalMessageBus.class)
-public class LocaleContainer extends IndexedContainer implements VaadinOptionContext {
+public class LocaleContainer implements VaadinOptionContext {
 
-
-    public enum PropertyName {
-        NAME, FLAG
-    }
 
     public static final OptionKey<Integer> optionKeyFlagSize = new OptionKey<>(32, LocaleContainer.class, LabelKey.Locale_Flag_Size, DescriptionKey
             .Locale_Flag_Size);
@@ -51,19 +49,28 @@ public class LocaleContainer extends IndexedContainer implements VaadinOptionCon
     private final Set<Locale> supportedLocales;
     private final Option option;
     private ResourceUtils resourceUtils;
+    private CurrentLocale currentLocale;
 
+
+    private List<LocaleInfo> data;
+    private File flagSizedDir;
 
     @Inject
-    protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, Option option, ResourceUtils resourceUtils) {
+    protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, Option option, ResourceUtils resourceUtils, CurrentLocale currentLocale) {
         super();
         this.supportedLocales = supportedLocales;
         this.option = option;
         this.resourceUtils = resourceUtils;
+        this.currentLocale = currentLocale;
         fillContainer();
     }
 
+    public LocaleInfo getCurrentLocaleInfo() {
+        return constructInfo(currentLocale.getLocale());
+    }
+
     /**
-     * Loads the container with text from {@link Locale#getDisplayName(Locale)}, and an icon for the country flag if
+     * Loads {@link #data} with text from {@link Locale#getDisplayName(Locale)}, and an icon for the country flag if
      * there is one. If there is no image flag, the flag property is left as null.  The result is that the combo
      * contains an entry for a country in the language of that country (for example Germany is always Deutsch
      * (Deutschland), regardless of the current locale).  This means the user looking for a language will see it in its
@@ -72,47 +79,41 @@ public class LocaleContainer extends IndexedContainer implements VaadinOptionCon
     @SuppressWarnings("unchecked")
     private void fillContainer() {
 
-        addContainerProperty(PropertyName.NAME, String.class, null);
-        addContainerProperty(PropertyName.FLAG, Resource.class, null);
 
         File webInfDir = resourceUtils.configurationDirectory();
         File iconsDir = new File(webInfDir, "icons");
         File flagsDir = new File(iconsDir, "flags_iso");
-
-        File flagSizedDir = new File(flagsDir, getOptionFlagSize().toString());
-
+        data = new ArrayList<>();
+        flagSizedDir = new File(flagsDir, getOptionFlagSize().toString());
         for (Locale supportedLocale : supportedLocales) {
-            String id = supportedLocale.toLanguageTag();
-            log.debug("Added supported locale with id: '{}'", id);
-            Item item = addItem(id);
-            item.getItemProperty(PropertyName.NAME)
-                    .setValue(supportedLocale.getDisplayName(supportedLocale));
+            data.add(constructInfo(supportedLocale));
 
-            // if the directory is missing don't bother with file
-            if (flagSizedDir.exists()) {
-                String filename = supportedLocale.getCountry()
-                        .toLowerCase() + ".png";
-                File file = new File(flagSizedDir, filename);
-                if (file.exists()) {
-                    FileResource resource = new FileResource(file);
-                    item.getItemProperty(PropertyName.FLAG)
-                            .setValue(resource);
-                } else {
-                    log.warn("File {} for locale flag does not exist.", file.getAbsolutePath());
-                }
-
-            } else {
-                log.warn("{} directory for flags does not exist.", flagSizedDir.getAbsolutePath());
-            }
+            log.debug("Added supported locale for: '{}'", supportedLocale.toLanguageTag());
         }
+    }
 
-        sort(new Object[]{PropertyName.NAME}, new boolean[]{true});
+    public LocaleInfo constructInfo(Locale locale) {
+        FileResource flag = null;
+        // if the directory is missing don't bother with file
+        if (flagSizedDir.exists()) {
+            String filename = locale.getCountry()
+                    .toLowerCase() + ".png";
+            File file = new File(flagSizedDir, filename);
+            if (file.exists()) {
+                flag = new FileResource(file);
+            } else {
+                log.warn("File {} for locale flag does not exist.", file.getAbsolutePath());
+            }
+
+        } else {
+            log.warn("{} directory for flags does not exist.", flagSizedDir.getAbsolutePath());
+        }
+        return new LocaleInfo(locale, flag);
     }
 
     public Integer getOptionFlagSize() {
         return option.get(optionKeyFlagSize);
     }
-
 
     @Override
     public Option optionInstance() {
@@ -122,13 +123,21 @@ public class LocaleContainer extends IndexedContainer implements VaadinOptionCon
     @Handler
     public void optionValueChanged(OptionChangeMessage<?> msg) {
         if (msg.getOptionKey() == optionKeyFlagSize) {
-            this.removeAllItems();
+            data.clear();
             fillContainer();
         }
     }
 
-
     public OptionKey<Integer> getOptionKeyFlagSize() {
         return optionKeyFlagSize;
     }
+
+    public ListDataProvider<LocaleInfo> getDataProvider() {
+        return new ListDataProvider<>(data);
+    }
+
+    public List<LocaleInfo> getData() {
+        return ImmutableList.copyOf(data);
+    }
+
 }
