@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.i18n;
 
-import com.vaadin.v7.data.Property;
+import com.vaadin.data.HasValue;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NAnnotation;
 
@@ -25,7 +25,7 @@ import java.util.Locale;
 /**
  * Annotation used for marking a Vaadin UI component as needing I18N translation. The parameters provide the keys for
  * I18N lookup. All parameters are optional, but the value parameter is relevant only for those components which
- * implement {@link Property}. Its value would be ignored otherwise.
+ * implement {@link HasValue}. Its value would be ignored otherwise.
  * <p>
  * See https://sites.google .com/site/q3cjava/internationalisation-entity
  *
