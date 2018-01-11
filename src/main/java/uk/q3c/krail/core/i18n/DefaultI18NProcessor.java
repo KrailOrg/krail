@@ -17,7 +17,6 @@ import com.google.inject.Provider;
 import com.vaadin.data.HasValue;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Grid;
-import com.vaadin.v7.data.Property;
 import com.vaadin.v7.ui.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -275,11 +274,6 @@ public class DefaultI18NProcessor implements I18NProcessor {
             component.setDescription(translate.from(annotationValues.descriptionKey.get(), locale));
         }
         if (annotationValues.valueKey.isPresent()) {
-            if (component instanceof Property) {
-                //noinspection unchecked
-                ((Property) component).setValue(translate.from(annotationValues.valueKey.get(), locale));
-                return;
-            }
             if (component instanceof HasValue) {
                 ((HasValue) component).setValue(translate.from(annotationValues.valueKey.get(), locale));
                 return;
