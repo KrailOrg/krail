@@ -51,7 +51,7 @@ class DefaultVaadinNotificationTest extends Specification {
         notification.errorMessage(message)
 
         then:
-        1 * page.showNotification(_)
+        1 * ui.addExtension(_)
         logMonitor.debugCount() == 1
     }
 
@@ -63,7 +63,7 @@ class DefaultVaadinNotificationTest extends Specification {
         notification.warningMessage(message)
 
         then:
-        1 * page.showNotification(_)
+        1 * ui.addExtension(_)
         logMonitor.debugCount() == 1
     }
 
@@ -75,7 +75,7 @@ class DefaultVaadinNotificationTest extends Specification {
         notification.informationMessage(message)
 
         then:
-        1 * page.showNotification(_)
+        1 * ui.addExtension(_)
         logMonitor.debugCount() == 1
     }
 }
