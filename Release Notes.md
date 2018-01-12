@@ -14,4 +14,9 @@ As a step towards that, the *eventbus-api* and *eventbus-mbassador* library now 
 #### @SubscribeTo
 The behaviour of this annotation changes.  It no longer uses the scope of the target to determine which bus to subscribe to.  Instead, if there is a **@Listener**, but no **@SubscribeTo**, the target will be subscribed to the global MessageBus.
 
-If there is a **@Listener**, but an empty **@SubscribeTo()**, the target will not be subscribed to anyhting - this can be used to remove subscription from an inherited class. 
+If there is a **@Listener**, but an empty **@SubscribeTo()**, the target will not be subscribed to anything - this can be used to remove subscription from an inherited class.
+
+### BeanFieldGroup
+
+`BeanFieldGroup` and its associated classes have been removed completely.  This attempt at support for Forms has been dropped from this release, so that dependencies on Vaadin 7 can be completely removed. Forms support will be redeveloped and re-instated as a priority - possibly using Vaadin addons [EasyBinder](https://vaadin.com/directory/component/easybinder) and/or [Viritin](https://vaadin.com/directory/component/viritin), though that has yet to be decided.
+ 
