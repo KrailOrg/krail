@@ -23,7 +23,19 @@ import org.apache.bval.guice.ValidationModule;
 import uk.q3c.krail.i18n.I18NKey;
 
 import javax.validation.MessageInterpolator;
-import javax.validation.constraints.*;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 
 /**
@@ -53,7 +65,7 @@ public class KrailValidationModule extends AbstractModule {
 
 
         bindMessageInterpolator();
-        bindBeanValidator();
+//        bindBeanValidator();
         substituteJavaxMessagesWithKrailKeys();
         define();
     }
@@ -99,9 +111,9 @@ public class KrailValidationModule extends AbstractModule {
 
     }
 
-    private void bindBeanValidator() {
-        bind(BeanValidator.class).to(DefaultBeanValidator.class);
-    }
+//    private void bindBeanValidator() {
+//        bind(BeanValidator.class).to(DefaultBeanValidator.class);
+//    }
 
     private void bindMessageInterpolator() {
         bind(MessageInterpolator.class).to(KrailInterpolator.class);

@@ -17,6 +17,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.util.Modules
 import org.apache.bval.guice.ValidationModule
+import spock.lang.Ignore
 import spock.lang.Specification
 import uk.q3c.krail.core.data.TestEntity2
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
@@ -40,7 +41,7 @@ import static com.vaadin.v7.data.Validator.*
  *
  * Created by David Sowerby on 19/07/15.
  */
-
+@Ignore("Reinstate when validation is re-introduced")
 class Validation_IntegrationTest extends Specification {
 
     Injector injector
@@ -49,13 +50,13 @@ class Validation_IntegrationTest extends Specification {
 
     TestEntity2 te1
 
-    BeanValidator beanValidator
+//    BeanValidator beanValidator
 
     def setup() {
         injector = Guice.createInjector(new VaadinSessionScopeModule(), new UtilModule(), new EventBusModule(), new TestUIScopeModule(), new TestOptionModule(), new TestEventBusModule(), new VaadinInMemoryModule(), new TestI18NModule(), Modules.override(new ValidationModule()).with(new KrailValidationModule()))
         interpolator = injector.getInstance(MessageInterpolator.class)
         te1 = new TestEntity2()
-        beanValidator = injector.getInstance(BeanValidator.class)
+//        beanValidator = injector.getInstance(BeanValidator.class)
     }
 
     def "validation fails, javax annotation with no custom message"() {
