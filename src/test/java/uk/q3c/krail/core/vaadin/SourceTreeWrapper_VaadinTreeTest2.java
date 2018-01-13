@@ -13,17 +13,17 @@
 
 package uk.q3c.krail.core.vaadin;
 
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SourceTreeWrapper_VaadinTreeTest2 {
 
-    SourceTreeWrapper_VaadinTree<SourceTestNode> wrapper;
+    private SourceTreeWrapper_VaadinTree<SourceTestNode> wrapper;
 
-    Tree tree;
+    private Tree<SourceTestNode> tree;
     private SourceTestNode nodeA;
     private SourceTestNode nodeB;
     private SourceTestNode nodeC;
@@ -31,7 +31,7 @@ public class SourceTreeWrapper_VaadinTreeTest2 {
 
     @Before
     public void setup() {
-        tree = new Tree();
+        tree = new Tree<>();
         wrapper = new SourceTreeWrapper_VaadinTree<>(tree);
         nodeA = new SourceTestNode("a");
         nodeB = new SourceTestNode("b");
@@ -43,8 +43,8 @@ public class SourceTreeWrapper_VaadinTreeTest2 {
     public void getRoots() {
 
         // given
-        tree.addItem(nodeA);
-        tree.addItem(nodeB);
+        tree.getTreeData().addItem(null, nodeA);
+        tree.getTreeData().addItem(null, nodeB);
         // when
 
         // then
@@ -55,19 +55,19 @@ public class SourceTreeWrapper_VaadinTreeTest2 {
     public void getChildren() {
 
         // given
-        tree.addItem(nodeA);
+        tree.getTreeData().addItem(null, nodeA);
         // when
 
         // then
         assertThat(wrapper.getChildren(nodeA)).isEmpty();
 
         // given
-        tree.addItem(nodeB);
-        tree.addItem(nodeC);
-        tree.addItem(nodeD);
-        tree.setParent(nodeB, nodeA);
-        tree.setParent(nodeC, nodeA);
-        tree.setParent(nodeD, nodeA);
+        tree.getTreeData().addItem(null, nodeB);
+        tree.getTreeData().addItem(null, nodeC);
+        tree.getTreeData().addItem(null, nodeD);
+        tree.getTreeData().setParent(nodeB, nodeA);
+        tree.getTreeData().setParent(nodeC, nodeA);
+        tree.getTreeData().setParent(nodeD, nodeA);
         // when
 
         // then

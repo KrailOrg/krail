@@ -12,19 +12,16 @@
  */
 package uk.q3c.krail.core.vaadin;
 
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import uk.q3c.util.forest.SourceTreeWrapper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 public class SourceTreeWrapper_VaadinTree<S> implements SourceTreeWrapper<S> {
 
-    private final Tree tree;
+    private final Tree<S> tree;
 
-    public SourceTreeWrapper_VaadinTree(Tree tree) {
+    public SourceTreeWrapper_VaadinTree(Tree<S> tree) {
         super();
         this.tree = tree;
     }
@@ -32,27 +29,13 @@ public class SourceTreeWrapper_VaadinTree<S> implements SourceTreeWrapper<S> {
     @SuppressWarnings("unchecked")
     @Override
     public List<S> getRoots() {
-        List<S> roots = new ArrayList<>();
-        for (Object node : tree.getItemIds()) {
-            if (tree.getParent(node) == null) {
-                roots.add((S) node);
-            }
-        }
-        return roots;
+        return tree.getTreeData().getRootItems();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<S> getChildren(S parentNode) {
-        LinkedList<S> children = new LinkedList<>();
-        // have to copy, cannot cast the collection
-        Collection<?> nodes = tree.getChildren(parentNode);
-        if (nodes != null) {
-            for (Object node : nodes) {
-                children.add((S) node);
-            }
-        }
-        return children;
+        return tree.getTreeData().getChildren(parentNode);
     }
 
 }
