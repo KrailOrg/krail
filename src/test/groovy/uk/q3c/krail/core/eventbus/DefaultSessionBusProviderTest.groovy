@@ -32,6 +32,5 @@ class DefaultSessionBusProviderTest extends Specification {
     def "get and getSessionBus"() {
         expect:
         provider.get() == sessionBus
-        provider.getSessionBus() == sessionBus
     }
 }

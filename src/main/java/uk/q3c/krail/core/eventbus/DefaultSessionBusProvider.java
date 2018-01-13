@@ -28,11 +28,6 @@ public class DefaultSessionBusProvider implements SessionBusProvider {
     }
 
     @Override
-    public PubSubSupport<BusMessage> getSessionBus() {
-        return sessionBus;
-    }
-
-    @Override
     public PubSubSupport<BusMessage> get() {
         return sessionBus;
     }

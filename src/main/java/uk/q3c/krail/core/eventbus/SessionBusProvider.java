@@ -13,9 +13,6 @@
 
 package uk.q3c.krail.core.eventbus;
 
-import net.engio.mbassy.bus.common.PubSubSupport;
-import uk.q3c.krail.eventbus.BusMessage;
-
 /**
  * Equivalent to injecting PubSubSupport with @SessionBus annotation.  Used to prevent accidental overloading with wrong
  * bus.
@@ -24,9 +21,5 @@ import uk.q3c.krail.eventbus.BusMessage;
  */
 public interface SessionBusProvider extends BusProvider {
 
-    /**
-     * Use {@link #get()} instead
-     */
-    @Deprecated
-    PubSubSupport<BusMessage> getSessionBus();
+
 }

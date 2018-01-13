@@ -32,6 +32,5 @@ class DefaultUIBusProviderTest extends Specification {
     def "get and getUIBus"() {
         expect:
         provider.get() == uiBus
-        provider.getUIBus() == uiBus
     }
 }

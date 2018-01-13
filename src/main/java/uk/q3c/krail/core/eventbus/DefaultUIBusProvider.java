@@ -27,10 +27,6 @@ public class DefaultUIBusProvider implements UIBusProvider {
         this.uiBus = uiBus;
     }
 
-    @Override
-    public PubSubSupport<BusMessage> getUIBus() {
-        return uiBus;
-    }
 
     @Override
     public PubSubSupport<BusMessage> get() {
