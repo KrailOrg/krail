@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import org.jetbrains.annotations.NotNull;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
@@ -33,7 +34,7 @@ import java.util.Locale;
  * navigation
  * components, depending on some characteristic of the user.
  */
-public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode> {
+public class UserSitemapNode implements SitemapNode, NodeVisitable, Comparable<UserSitemapNode> {
 
     private final MasterSitemapNode masterNode;
     private CollationKey collationKey;
@@ -142,5 +143,10 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
     @Override
     public int hashCode() {
         return masterNode != null ? masterNode.hashCode() : 0;
+    }
+
+    @Override
+    public void accept(@NotNull NodeVisitor visitor) {
+        visitor.visit(this);
     }
 }

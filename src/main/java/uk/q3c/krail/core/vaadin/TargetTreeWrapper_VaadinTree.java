@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.vaadin;
 
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import uk.q3c.util.forest.DefaultNodeModifier;
 import uk.q3c.util.forest.TargetTreeWrapperBase;
 import uk.q3c.util.forest.TreeCopyException;
@@ -21,21 +21,13 @@ import java.util.Comparator;
 
 public class TargetTreeWrapper_VaadinTree<S, T> extends TargetTreeWrapperBase<S, T> {
 
-    private final Tree tree;
+    private final Tree<T> tree;
 
-    public TargetTreeWrapper_VaadinTree(Tree tree) {
+    public TargetTreeWrapper_VaadinTree(Tree<T> tree) {
         super();
         this.tree = tree;
         nodeModifier = new DefaultNodeModifier<S, T>();
     }
-
-    @Override
-    public T createNode(T parentNode, S sourceChildNode) {
-        T newTargetNode = super.createNode(parentNode, sourceChildNode);
-        tree.setItemCaption(newTargetNode, getCaptionReader().getCaption(sourceChildNode));
-        return newTargetNode;
-    }
-
     /**
      * Not supported in this implementation
      */
@@ -47,14 +39,7 @@ public class TargetTreeWrapper_VaadinTree<S, T> extends TargetTreeWrapperBase<S,
 
     @Override
     public void addChild(T parentNode, T childNode) {
-        tree.addItem(childNode);
-        if (parentNode != null) {
-            if (tree.getItem(parentNode) == null) {
-                tree.addItem(parentNode);
-            }
-        }
-        tree.setParent(childNode, parentNode);
-
+        tree.getTreeData().addItem(parentNode, childNode);
     }
 
 }

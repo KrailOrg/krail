@@ -13,13 +13,13 @@
 
 package uk.q3c.krail.core.vaadin;
 
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import uk.q3c.util.forest.CaptionReader;
 import uk.q3c.util.forest.TreeCopyException;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TargetTreeWrapper_VaadinTreeTest {
 
@@ -32,12 +32,12 @@ public class TargetTreeWrapper_VaadinTreeTest {
     private SourceTestNode sourceNodeC;
     // private SourceTestNode sourceNodeD;
     private TargetTestNode targetNodeA;
-    private Tree tree;
+    private Tree<SourceTestNode> tree;
     private TargetTreeWrapper_VaadinTree<SourceTestNode, SourceTestNode> wrapper;
 
     @Before
     public void setup() {
-        tree = new Tree();
+        tree = new Tree<>();
         sourceNodeA = new SourceTestNode("sa");
         sourceNodeB = new SourceTestNode("sb");
         sourceNodeC = new SourceTestNode("sc");
@@ -52,21 +52,13 @@ public class TargetTreeWrapper_VaadinTreeTest {
     public void createNode_nullChild() {
 
         // given
-        wrapper = new TargetTreeWrapper_VaadinTree<>(tree);
+        wrapper = new TargetTreeWrapper_VaadinTree<SourceTestNode, SourceTestNode>(tree);
         // when
         wrapper.createNode(sourceNodeA, null);
         // then
     }
 
-    @Test(expected = TreeCopyException.class)
-    public void createNode_noCaptionReader() {
 
-        // given
-        wrapper = new TargetTreeWrapper_VaadinTree<>(tree);
-        // when
-        wrapper.createNode(null, sourceNodeA);
-        // then
-    }
 
     @Test
     public void createNode__defaultNodeModifier() {
@@ -80,7 +72,6 @@ public class TargetTreeWrapper_VaadinTreeTest {
         // then
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(sourceNodeA);
-        assertThat(tree.getItemCaption(sourceNodeA)).isEqualTo(sourceNodeA.name);
     }
 
     @Test(expected = TreeCopyException.class)
@@ -99,9 +90,10 @@ public class TargetTreeWrapper_VaadinTreeTest {
         // given
         wrapper = new TargetTreeWrapper_VaadinTree<>(tree);
         // when
+        wrapper.addChild(null, sourceNodeA);
         wrapper.addChild(sourceNodeA, sourceNodeB);
         // then
-        assertThat(tree.getParent(sourceNodeB)).isEqualTo(sourceNodeA);
+        assertThat(tree.getTreeData().getParent(sourceNodeB)).isEqualTo(sourceNodeA);
     }
 
     static class TargetTestNode {

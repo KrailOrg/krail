@@ -184,8 +184,6 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         if (option.get(optionNavTreeVisible)) {
             navTree.build();
             navTree.setVisible(true);
-            navTree.getTree()
-                    .setImmediate(true);
         } else {
             navTree.setVisible(false);
         }

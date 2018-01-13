@@ -19,7 +19,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

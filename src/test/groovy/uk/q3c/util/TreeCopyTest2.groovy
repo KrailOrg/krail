@@ -13,7 +13,7 @@
 
 package uk.q3c.util
 
-import com.vaadin.v7.ui.Tree
+import com.vaadin.ui.Tree
 import spock.lang.Specification
 import uk.q3c.krail.core.vaadin.TargetTreeWrapper_VaadinTree
 import uk.q3c.util.forest.*
@@ -27,7 +27,7 @@ class TreeCopyTest2 extends Specification {
     private BasicForest<NodeTypeA> forest
     private SourceTreeWrapper<NodeTypeA> source
     private TargetTreeWrapper<NodeTypeA, NodeTypeA> target
-    private Tree vaadinTree
+    private Tree<NodeTypeA> vaadinTree
     private NodeTypeA nodeA
     private NodeTypeA nodeA1
     private NodeTypeA nodeA11
@@ -43,7 +43,7 @@ class TreeCopyTest2 extends Specification {
         forest = new BasicForest<>()
         source = new SourceTreeWrapper_BasicForest<>(forest)
 
-        vaadinTree = new Tree()
+        vaadinTree = new Tree<>()
         target = new TargetTreeWrapper_VaadinTree<>(vaadinTree)
         copy = new TreeCopy<>(source, target)
     }

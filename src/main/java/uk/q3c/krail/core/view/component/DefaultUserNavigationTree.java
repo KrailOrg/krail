@@ -13,8 +13,11 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
-import com.vaadin.v7.data.Property;
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.data.TreeData;
+import com.vaadin.event.selection.SelectionEvent;
+import com.vaadin.event.selection.SelectionListener;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Tree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -42,7 +45,6 @@ import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -60,7 +62,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Listener
 @SubscribeTo({UIBus.class, SessionBus.class, GlobalMessageBus.class})
-public class DefaultUserNavigationTree extends Tree implements VaadinOptionContext, UserNavigationTree {
+public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements VaadinOptionContext, UserNavigationTree, SelectionListener<UserSitemapNode> {
 
     public static final OptionKey<SortType> optionKeySortType = new OptionKey<>(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,
             DescriptionKey.Sort_Type);
@@ -90,11 +92,13 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
         this.sorters = sorters;
 
         builder.setUserNavigationTree(this);
-        setImmediate(true);
-        setItemCaptionMode(ItemCaptionMode.EXPLICIT);
-        addValueChangeListener(this);
+        // set selection mode before addSelectionListener - the listener is actually added to the SelectionModel, which
+        // is different for each selection mode
+        setSelectionMode(Grid.SelectionMode.SINGLE);
+        addSelectionListener(this);
         setId(ID.getId(Optional.empty(), this));
         sorters.setOptionSortAscending(getOptionSortAscending());
+
 
 
     }
@@ -129,24 +133,26 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
             clear();
             builder.build();
             rebuildRequired = false;
-            if (log.isDebugEnabled()) {
-                Collection<?> t = this.getItemIds();
-                StringBuilder buf = new StringBuilder();
-                for (Object o : t) {
-                    String itemCaption = getItemCaption(o);
-                    buf.append(itemCaption);
-                    buf.append(',');
-                }
-                log.debug(buf.toString());
-            }
+//            if (log.isDebugEnabled()) {
+//                Collection<?> t = this.getItemIds();
+//                StringBuilder buf = new StringBuilder();
+//                for (Object o : t) {
+//                    String itemCaption = getItemCaption(o);
+//                    buf.append(itemCaption);
+//                    buf.append(',');
+//                }
+//                log.debug(buf.toString());
+//            }
         } else {
             log.debug("rebuild of user navigation tree is not required");
         }
+        TreeData<String> td;
     }
 
     @Override
     public void clear() {
-        removeAllItems();
+        this.getTreeData().clear();
+        this.getDataProvider().refreshAll();
     }
 
     public SortType getOptionSortType() {
@@ -181,7 +187,11 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
      * @return
      */
     public boolean isLeaf(UserSitemapNode node) {
-        return !areChildrenAllowed(node);
+        return getTreeData().getChildren(node).isEmpty();
+    }
+
+    public boolean areChildrenAllowed(UserSitemapNode node) {
+        return !isLeaf(node);
     }
 
     @Override
@@ -210,15 +220,6 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
         }
     }
 
-    @Override
-    public void valueChange(Property.ValueChangeEvent event) {
-        if (!suppressValueChangeEvents) {
-            if (getValue() != null) {
-                String url = userSitemap.uri((UserSitemapNode) getValue());
-                navigator.navigateTo(url);
-            }
-        }
-    }
 
 
     /**
@@ -230,13 +231,11 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
     public void afterViewChange(AfterViewChangeBusMessage busMessage) {
         // TODO could this use the message instead - the order of change then will not matter??
         UserSitemapNode selectedNode = navigator.getCurrentNode();
-        UserSitemapNode childNode = selectedNode;
-
-        UserSitemapNode parentNode = (UserSitemapNode) getParent(childNode);
+        UserSitemapNode parentNode = getTreeData().getParent(selectedNode);
 
         while (parentNode != null) {
-            expandItem(parentNode);
-            parentNode = (UserSitemapNode) getParent(parentNode);
+            this.expand(parentNode);
+            parentNode = getTreeData().getParent(parentNode);
         }
         suppressValueChangeEvents = true;
         log.debug("selecting node for uri '{}'", userSitemap.uri(selectedNode));
@@ -246,7 +245,7 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
     }
 
     @Override
-    public Tree getTree() {
+    public Tree<UserSitemapNode> getTree() {
         return this;
     }
 
@@ -296,4 +295,13 @@ public class DefaultUserNavigationTree extends Tree implements VaadinOptionConte
         }
     }
 
+    @Override
+    public void selectionChange(SelectionEvent<UserSitemapNode> event) {
+        if (!suppressValueChangeEvents) {
+            if (event.getFirstSelectedItem().isPresent()) {
+                String url = userSitemap.uri(event.getFirstSelectedItem().get());
+                navigator.navigateTo(url);
+            }
+        }
+    }
 }

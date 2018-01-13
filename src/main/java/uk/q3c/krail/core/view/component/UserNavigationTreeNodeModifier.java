@@ -17,7 +17,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.forest.DefaultNodeModifier;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UserNavigationTreeNodeModifier extends DefaultNodeModifier<UserSitemapNode, UserSitemapNode> {
 
@@ -43,7 +43,7 @@ public class UserNavigationTreeNodeModifier extends DefaultNodeModifier<UserSite
     }
 
     private void doSetLeaf(UserSitemapNode targetNode, boolean isLeaf) {
-        tree.getTree()
-            .setChildrenAllowed(targetNode, !isLeaf);
+//        tree.getTree()
+//            .setChildrenAllowed(targetNode, !isLeaf);
     }
 }

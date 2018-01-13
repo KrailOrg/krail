@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.vaadin.ui.Component;
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.option.Option;
@@ -35,7 +35,7 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
      * Set the maximum level or depth of the tree you want to be visible. A value of <=0 is ignored. This value is
      * stored in {@link Option}, and the tree is rebuilt.
      *
-     * @param level
+     * @param maxDepth
      */
     void setOptionMaxDepth(int maxDepth);
 

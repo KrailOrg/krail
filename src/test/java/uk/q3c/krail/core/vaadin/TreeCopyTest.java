@@ -13,19 +13,36 @@
 package uk.q3c.krail.core.vaadin;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
-import com.vaadin.v7.ui.Tree;
+import com.vaadin.ui.Tree;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.util.forest.*;
+import uk.q3c.krail.core.navigate.sitemap.CountNodeVisitor;
+import uk.q3c.krail.core.navigate.sitemap.ListNodeVisitor;
+import uk.q3c.krail.core.navigate.sitemap.NodeVisitable;
+import uk.q3c.krail.core.navigate.sitemap.NodeVisitor;
+import uk.q3c.krail.core.navigate.sitemap.TreeDataWalker;
+import uk.q3c.util.forest.BasicForest;
+import uk.q3c.util.forest.CaptionReader;
+import uk.q3c.util.forest.DefaultNodeModifier;
+import uk.q3c.util.forest.NodeFilter;
+import uk.q3c.util.forest.SourceTreeWrapper;
+import uk.q3c.util.forest.SourceTreeWrapper_BasicForest;
+import uk.q3c.util.forest.TargetTreeWrapper;
+import uk.q3c.util.forest.TreeCopy;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 public class TreeCopyTest {
@@ -42,7 +59,7 @@ public class TreeCopyTest {
     private NodeTypeA nodeB11;
     private SourceTreeWrapper<NodeTypeA> source;
     private TargetTreeWrapper<NodeTypeA, NodeTypeA> target;
-    private Tree vaadinTree;
+    private Tree<NodeTypeA> vaadinTree;
 
     @Mock
     private TargetTreeWrapper<NodeTypeA, NodeTypeA> mockTarget;
@@ -52,7 +69,7 @@ public class TreeCopyTest {
         forest = new BasicForest<>();
         source = new SourceTreeWrapper_BasicForest<>(forest);
 
-        vaadinTree = new Tree();
+        vaadinTree = new Tree<>();
         target = new TargetTreeWrapper_VaadinTree<>(vaadinTree);
         copy = new TreeCopy<>(source, target);
         copy.setTargetSortComparator(new NodeTypeAComparator());
@@ -68,7 +85,7 @@ public class TreeCopyTest {
         // when
         copy.copy();
         // then
-        assertThat(vaadinTree.getItemIds()).isEmpty();
+        assertThat(vaadinTree.getTreeData().getRootItems()).isEmpty();
     }
 
     @Test
@@ -78,12 +95,12 @@ public class TreeCopyTest {
         // when
         copy.copy();
         // then
-        assertThat(vaadinTree.getItemIds()).isNotEmpty();
-        assertThat(vaadinTree.getItemIds()).hasSize(6);
-        assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
-        assertThat(vaadinTree.getParent(nodeA11)).isEqualTo(nodeA1);
-        assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
-        assertThat(vaadinTree.getParent(nodeB11)).isEqualTo(nodeB1);
+        assertThat(vaadinTree.getTreeData().getRootItems()).isNotEmpty();
+        assertThat(countNodes(vaadinTree)).isEqualTo(6);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA1)).isEqualTo(nodeA);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA11)).isEqualTo(nodeA1);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB1)).isEqualTo(nodeB);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB11)).isEqualTo(nodeB1);
 
     }
 
@@ -110,23 +127,23 @@ public class TreeCopyTest {
         // when
         copy.copy();
         // then
-        assertThat(vaadinTree.getItemIds()).isNotEmpty();
-        @SuppressWarnings("unchecked") List<NodeTypeA> result = (List<NodeTypeA>) vaadinTree.getItemIds();
+        assertThat(vaadinTree.getTreeData().getRootItems()).isNotEmpty();
+        List<NodeTypeA> result = listNodes(vaadinTree);
         assertThat(result).containsOnly(nodeA, nodeA1, nodeB, nodeB1);
-        assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
-        assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA1)).isEqualTo(nodeA);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB1)).isEqualTo(nodeB);
 
         // given
-        vaadinTree.removeAllItems();
+        vaadinTree.getTreeData().clear();
         copy.setLimitedDepth(false);
         // when
         copy.copy();
         // then
-        assertThat(vaadinTree.getItemIds()).hasSize(6);
-        assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
-        assertThat(vaadinTree.getParent(nodeA11)).isEqualTo(nodeA1);
-        assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
-        assertThat(vaadinTree.getParent(nodeB11)).isEqualTo(nodeB1);
+        assertThat(countNodes(vaadinTree)).isEqualTo(6);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA1)).isEqualTo(nodeA);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA11)).isEqualTo(nodeA1);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB1)).isEqualTo(nodeB);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB11)).isEqualTo(nodeB1);
     }
 
     @Test
@@ -138,8 +155,7 @@ public class TreeCopyTest {
         // when
         copy.copy();
         // then
-        @SuppressWarnings("unchecked") Collection<NodeTypeA> nodes = (Collection<NodeTypeA>) vaadinTree.getChildren
-                (nodeA);
+        Collection<NodeTypeA> nodes = vaadinTree.getTreeData().getChildren(nodeA);
         assertThat(nodes).containsExactly(nodeA1, nodeA3, nodeA2);
     }
 
@@ -206,24 +222,24 @@ public class TreeCopyTest {
         // when
         copy.copy();
         // then
-        @SuppressWarnings("unchecked") List<NodeTypeA> nodes = (List<NodeTypeA>) vaadinTree.getItemIds();
+        List<NodeTypeA> nodes = listNodes(vaadinTree);
         assertThat(nodes).isNotEmpty();
         assertThat(nodes).containsOnly(nodeA, nodeA1, nodeB, nodeB1);
-        assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
-        assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA1)).isEqualTo(nodeA);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB1)).isEqualTo(nodeB);
 
         // given
-        vaadinTree.removeAllItems();
+        vaadinTree.getTreeData().clear();
         copy.setLimitedDepth(false);
         // when
         copy.copy();
         // then
-        @SuppressWarnings("unchecked") List<NodeTypeA> nodes2 = (List<NodeTypeA>) vaadinTree.getItemIds();
+        List<NodeTypeA> nodes2 = listNodes(vaadinTree);
         assertThat(nodes2).hasSize(6);
-        assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
-        assertThat(vaadinTree.getParent(nodeA11)).isEqualTo(nodeA1);
-        assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
-        assertThat(vaadinTree.getParent(nodeB11)).isEqualTo(nodeB1);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA1)).isEqualTo(nodeA);
+        assertThat(vaadinTree.getTreeData().getParent(nodeA11)).isEqualTo(nodeA1);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB1)).isEqualTo(nodeB);
+        assertThat(vaadinTree.getTreeData().getParent(nodeB11)).isEqualTo(nodeB1);
     }
 
     @Test
@@ -234,9 +250,24 @@ public class TreeCopyTest {
         // when
         copy.copy();
         // then
-        @SuppressWarnings("unchecked") List<NodeTypeA> result = (List<NodeTypeA>) vaadinTree.getItemIds();
+        @SuppressWarnings("unchecked") List<NodeTypeA> result = listNodes(vaadinTree);
         assertThat(result).containsOnly(nodeA, nodeA1, nodeA11, nodeB, nodeB1);
     }
+
+    private int countNodes(Tree<NodeTypeA> tree) {
+        TreeDataWalker<NodeTypeA> walker = new TreeDataWalker<>(tree.getTreeData());
+        CountNodeVisitor visitor = new CountNodeVisitor();
+        walker.walk(visitor);
+        return visitor.getCount();
+    }
+
+    private List<NodeTypeA> listNodes(Tree<NodeTypeA> tree) {
+        TreeDataWalker<NodeTypeA> walker = new TreeDataWalker<>(tree.getTreeData());
+        ListNodeVisitor<NodeTypeA> visitor = new ListNodeVisitor<>();
+        walker.walk(visitor);
+        return visitor.getList();
+    }
+
 
     class NodeTypeAComparator implements Comparator<NodeTypeA> {
 
@@ -256,7 +287,7 @@ public class TreeCopyTest {
 
     }
 
-    class NodeTypeA {
+    class NodeTypeA implements NodeVisitable {
         String ref;
 
         protected NodeTypeA(String ref) {
@@ -269,6 +300,10 @@ public class TreeCopyTest {
             return "NodeTypeA [ref=" + ref + "]";
         }
 
+        @Override
+        public void accept(@NotNull NodeVisitor visitor) {
+            visitor.visit(this);
+        }
     }
 
     class Sorter implements Comparator<NodeTypeA> {
