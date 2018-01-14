@@ -128,8 +128,7 @@ dependencies {
     //The core server part of Vaadin -->
     compile 'com.vaadin:vaadin-server:' + vaadinVersion
     compile 'com.vaadin:vaadin-push:' + vaadinVersion
-    compile 'com.vaadin:vaadin-compatibility-server:' + vaadinVersion
-    
+
     // used by OptionDaoTestBase, needed externally
     compile 'org.spockframework:spock-core:1.1-groovy-2.4'
     compile 'org.spockframework:spock-guice:1.1-groovy-2.4'

@@ -21,7 +21,6 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.v7.data.util.converter.ConverterFactory;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.After;
 import org.junit.Before;
@@ -68,8 +67,7 @@ public class ScopedUITest {
     Navigator navigator;
     @Mock
     ErrorHandler errorHandler;
-    @Mock
-    ConverterFactory converterFactory;
+
     @Mock
     Broadcaster broadcaster;
     PushMessageRouter pushMessageRouter;

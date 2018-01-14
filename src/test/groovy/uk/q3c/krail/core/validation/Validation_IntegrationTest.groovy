@@ -16,6 +16,7 @@ package uk.q3c.krail.core.validation
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.util.Modules
+import com.oracle.jrockit.jfr.InvalidValueException
 import org.apache.bval.guice.ValidationModule
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -34,7 +35,6 @@ import javax.validation.ConstraintViolationException
 import javax.validation.MessageInterpolator
 import javax.validation.ValidationException
 
-import static com.vaadin.v7.data.Validator.*
 /**
  * Integration test for Apache BVal validation
  *
