@@ -80,6 +80,8 @@ dependencies {
     compile 'uk.q3c.krail:krail-option:0.15.0.0'
     compile 'uk.q3c.krail:eventbus-mbassador:0.5.0.0'
     compile 'uk.q3c.krail:krail-config:0.10.5.0'
+    compile 'uk.q3c.krail:krail-persist-api:0.14.0.0'
+
 
 
 
@@ -152,7 +154,7 @@ dependencies {
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4.1'
 }
 
 

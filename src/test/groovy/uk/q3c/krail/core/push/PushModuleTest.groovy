@@ -17,10 +17,10 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
-import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule
+import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.service.bind.ServicesModule
 import uk.q3c.krail.testutil.eventbus.TestEventBusModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
@@ -35,7 +35,7 @@ class PushModuleTest extends Specification {
 
     def "bindings"() {
         when:
-        Injector injector = Guice.createInjector(new PushModule(), new EventBusModule(), new KrailApplicationConfigurationModule(), new TestUIScopeModule(), new UtilsModule(), new UtilModule(), new TestI18NModule(), new TestEventBusModule(), new TestVaadinSessionScopeModule(), new TestOptionModule(), new ServicesModule(), new VaadinInMemoryModule())
+        Injector injector = Guice.createInjector(new PushModule(), new EventBusModule(), new KrailApplicationConfigurationModule(), new TestUIScopeModule(), new UtilsModule(), new UtilModule(), new TestI18NModule(), new TestEventBusModule(), new TestVaadinSessionScopeModule(), new TestOptionModule(), new ServicesModule(), new InMemoryModule())
 
 
         then:

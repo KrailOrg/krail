@@ -35,9 +35,9 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, TestPersistenceModuleVaadin.class, UIScopeModule.class,})
+@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, InMemoryModule.class, UIScopeModule.class,})
 public class DefaultMasterSitemapTest {
 
     @Mock

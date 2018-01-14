@@ -25,8 +25,8 @@ import org.mockito.Mock;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, TestPersistenceModuleVaadin.class, UtilsModule.class, UtilModule.class, TestVaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, InMemoryModule.class, UtilsModule.class, UtilModule.class, TestVaadinSessionScopeModule.class})
 public class LocaleContainerTest {
 
     @Mock

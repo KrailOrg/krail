@@ -39,8 +39,8 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import java.text.Collator;
@@ -51,7 +51,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class,
+@GuiceContext({TestOptionModule.class, InMemoryModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class,
         TestUIScopeModule.class, UtilModule.class, TestKrailI18NModule2.class, DefaultShiroModule.class})
 public class BreadcrumbTest {
 

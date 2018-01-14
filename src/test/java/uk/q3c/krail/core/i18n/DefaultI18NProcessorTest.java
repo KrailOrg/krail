@@ -31,9 +31,9 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.mock.MockOption;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
@@ -41,7 +41,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, UtilModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class,})
+@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, UtilModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class,})
 public class DefaultI18NProcessorTest {
 
     I18NTestClass testObject;

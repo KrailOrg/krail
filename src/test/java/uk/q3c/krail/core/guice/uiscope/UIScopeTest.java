@@ -42,7 +42,6 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapService;
-import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.DefaultVaadinSessionProvider;
@@ -65,10 +64,10 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.AbstractService;
 import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.service.bind.ServicesModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.DefaultResourceUtils;
 import uk.q3c.krail.util.ResourceUtils;
@@ -135,8 +134,8 @@ public class UIScopeTest {
         injector = Guice.createInjector(new PushModule(), new TestModule(), new KrailApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(),
                 new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
                 new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(),
-                new TestPersistenceModuleVaadin(), new NavigationModule(), new VaadinEventBusModule(), new EventBusModule(), new UtilModule(), new DataModule(),
-                new DataTypeModule(), new UtilsModule(), new VaadinInMemoryModule().provideOptionDao());
+                new NavigationModule(), new VaadinEventBusModule(), new EventBusModule(), new UtilModule(), new DataModule(),
+                new DataTypeModule(), new UtilsModule(), new InMemoryModule().provideOptionDao());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         TestObject to1 = injector.getInstance(TestObject.class);

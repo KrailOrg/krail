@@ -13,12 +13,12 @@
 
 package uk.q3c.krail.persist.inmemory.entity;
 
-import uk.q3c.krail.core.persist.inmemory.InMemoryContainer;
 import uk.q3c.krail.i18n.persist.PatternCacheKey;
+import uk.q3c.krail.persist.InMemory;
 import uk.q3c.util.data.EnumConverter;
 
 /**
- * An entity for I18N pattern for use with the {@link InMemoryContainer}
+ * An entity for I18N pattern for use with the {@link InMemory}
  * Created by David Sowerby on 30/06/15.
  */
 public class PatternEntity {

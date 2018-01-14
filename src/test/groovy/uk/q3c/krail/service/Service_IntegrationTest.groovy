@@ -22,12 +22,11 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule
+import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.service.bind.ServicesModule
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin
 import uk.q3c.util.UtilModule
 
 import static uk.q3c.krail.i18n.test.TestLabelKey.*
-
 /**
  *
  *
@@ -185,7 +184,7 @@ class Service_IntegrationTest extends Specification {
     }
 
     private Injector createInjector() {
-        return Guice.createInjector([new UtilModule(), new EventBusModule(), new TestServiceModule(), new ServicesModule(), new TestI18NModule(), new TestOptionModule(), new TestPersistenceModuleVaadin(), new VaadinEventBusModule(), new VaadinSessionScopeModule(), new UIScopeModule()])
+        return Guice.createInjector([new UtilModule(), new EventBusModule(), new TestServiceModule(), new ServicesModule(), new TestI18NModule(), new TestOptionModule(), new InMemoryModule(), new VaadinEventBusModule(), new VaadinSessionScopeModule(), new UIScopeModule()])
     }
 
 }

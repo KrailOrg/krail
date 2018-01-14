@@ -31,7 +31,7 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, EventBusModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, UIScopeModule
+@GuiceContext({TestI18NModule.class, EventBusModule.class, TestOptionModule.class, InMemoryModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, UIScopeModule
         .class, UtilModule.class})
 public class DefaultSubjectIdentifierTest {
 

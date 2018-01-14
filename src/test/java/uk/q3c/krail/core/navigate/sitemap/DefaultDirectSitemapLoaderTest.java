@@ -40,8 +40,8 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.bind.ServicesModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
@@ -51,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ServicesModule.class, TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
-        ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, TestPersistenceModuleVaadin.class, TestOptionModule.class,
+        ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, InMemoryModule.class, TestOptionModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class,
         VaadinEventBusModule.class, EventBusModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class})
 public class DefaultDirectSitemapLoaderTest {

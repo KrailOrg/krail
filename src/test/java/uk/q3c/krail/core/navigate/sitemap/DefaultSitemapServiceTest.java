@@ -44,11 +44,11 @@ import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.Service;
 import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.service.ServiceStatus;
 import uk.q3c.krail.service.bind.ServicesModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.DefaultResourceUtils;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
@@ -71,7 +71,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, VaadinEventBusModule.class, ServicesModule.class,
         ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, DefaultShiroModule.class,
-        DefaultComponentModule.class, TestPersistenceModuleVaadin.class, StandardPagesModule.class, VaadinSessionScopeModule.class,
+        DefaultComponentModule.class, InMemoryModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class,
         NavigationModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class, DefaultUIModule.class, TestOptionModule.class})
 public class DefaultSitemapServiceTest {
 

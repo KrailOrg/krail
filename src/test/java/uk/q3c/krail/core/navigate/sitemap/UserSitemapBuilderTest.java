@@ -37,8 +37,8 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.bind.ServicesModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
@@ -47,7 +47,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class,
+@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class,
         UIScopeModule.class, EventBusModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class, UtilModule.class, KrailApplicationConfigurationModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 

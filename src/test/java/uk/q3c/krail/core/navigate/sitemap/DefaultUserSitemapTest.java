@@ -35,8 +35,8 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.util.TestKrailI18NModule2;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
@@ -44,7 +44,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule2.class, VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, VaadinEventBusModule.class,
+@GuiceContext({TestKrailI18NModule2.class, VaadinSessionScopeModule.class, InMemoryModule.class, VaadinEventBusModule.class,
         TestUIScopeModule.class, TestOptionModule.class, EventBusModule.class, UtilModule.class, DefaultShiroModule.class})
 @Listener
 @SubscribeTo(SessionBus.class)

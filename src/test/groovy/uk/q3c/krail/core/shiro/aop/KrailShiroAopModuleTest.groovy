@@ -26,17 +26,16 @@ import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
 import uk.q3c.krail.core.i18n.Caption
-import uk.q3c.krail.core.persist.inmemory.VaadinInMemoryModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
 import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule
+import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.util.UtilModule
-
 /**
  *
  *  Tests are limited to ensuring that the interceptors are called - not whether they do the right thing.  (The latter takes a lot of setting up of the Subject and is nothing to do with the module under test)
@@ -331,7 +330,7 @@ class KrailShiroAopModuleTest extends Specification {
 
 
     private void createInjector(Module module) {
-        injector = Guice.createInjector(module, new EventBusModule(), new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new VaadinEventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new VaadinInMemoryModule())
+        injector = Guice.createInjector(module, new EventBusModule(), new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new VaadinEventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new InMemoryModule())
         VaadinSession.setCurrent(vaadinSession)
     }
 }

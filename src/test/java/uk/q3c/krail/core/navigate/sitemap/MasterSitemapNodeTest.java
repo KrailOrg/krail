@@ -26,13 +26,13 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.mock.TestOptionModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.util.UtilModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestPersistenceModuleVaadin.class, TestOptionModule.class, VaadinEventBusModule
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule
         .class, UIScopeModule.class, EventBusModule.class, UtilModule.class})
 public class MasterSitemapNodeTest {
 

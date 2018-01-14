@@ -72,9 +72,9 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.MockOption;
 import uk.q3c.krail.option.mock.TestOptionModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.persist.TestPersistenceModuleVaadin;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
@@ -90,7 +90,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestPersistenceModuleVaadin.class, TestOptionModule.class, VaadinEventBusModule.class,
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule.class,
         TestUIScopeModule.class, EventBusModule.class, SitemapModule.class, ServicesModule.class, UtilModule.class, UtilsModule.class, KrailApplicationConfigurationModule.class})
 public class DefaultNavigatorTest {
 
