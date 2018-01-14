@@ -20,7 +20,7 @@ import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.eventbus.BusMessage;
 
-import static org.slf4j.LoggerFactory.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @UIScoped
 public class DefaultPushMessageRouter implements PushMessageRouter {
@@ -31,12 +31,6 @@ public class DefaultPushMessageRouter implements PushMessageRouter {
     @Inject
     public DefaultPushMessageRouter(UIBusProvider uiBusProvider) {
         this.uiBus = uiBusProvider.get();
-    }
-
-    @Override
-    public void messageIn(String group, String message) {
-        log.debug("publishing message");
-        uiBus.publish(new PushMessage(group, message));
     }
 
     @Override

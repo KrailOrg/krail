@@ -23,7 +23,9 @@ import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.eventbus.BusMessage;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -41,14 +43,6 @@ public class DefaultPushMessageRouterTest {
         pmr = new DefaultPushMessageRouter(uiBusProvider);
     }
 
-    @Test
-    public void messageIn_simple() {
-        // given
-        // when
-        pmr.messageIn("a", "a1");
-        // then
-        verify(uiBus).publish(any(PushMessage.class));
-    }
 
     @Test
     public void messageIn_simple_with_identifiers() {
