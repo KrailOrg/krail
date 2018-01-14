@@ -144,7 +144,7 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
             if (Strings.isNullOrEmpty(value)) {
                 return;
             }
-            navigationState.addParameter(key, value);
+            navigationState.parameter(key, value);
         }
     }
 
