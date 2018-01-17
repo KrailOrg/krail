@@ -31,6 +31,8 @@ import uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.core.view.component.LocaleContainerKt;
+import uk.q3c.krail.core.view.component.LocaleIconGenerator;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper;
@@ -99,8 +101,8 @@ public class Option_IntegrationTest {
     Subject subject2;
     @Mock
     Translate translate;
-    OptionKey<Integer> key1 = LocaleContainer.optionKeyFlagSize;
-    OptionKey<Integer> key3 = new OptionKey<>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending);
+    OptionKey<Integer> key1 = LocaleContainerKt.getOptionKeyFlagSize();
+    OptionKey<Integer> key3 = new OptionKey<>(133, LocaleIconGenerator.class, LabelKey.Alphabetic_Ascending);
     @Mock
     PersistenceInfo persistenceInfo;
     OptionPermissionVerifier permissionVerifier;

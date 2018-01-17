@@ -26,13 +26,13 @@ import uk.q3c.krail.core.option.OptionPermission;
 import uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.core.view.component.LocaleIconGenerator;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.OptionEditAction;
 import uk.q3c.krail.option.OptionKey;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -59,27 +59,27 @@ public class OptionPermissionTest {
     @Test
     public void withoutQualifiers() {
         //given
-        OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleContainer.class, LabelKey.Error);
+        OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleIconGenerator.class, LabelKey.Error);
         //when
         String permissionString = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "ds").getPermissionString();
         //then
-        assertThat(permissionString).isEqualTo("option:edit:SimpleUserHierarchy:ds:0:LocaleContainer:Error");
+        assertThat(permissionString).isEqualTo("option:edit:SimpleUserHierarchy:ds:0:LocaleIconGenerator:Error");
     }
 
     @Test
     public void withQualifiers() {
         //given
-        OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleContainer.class, LabelKey.Error, "q1", "q2");
+        OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleIconGenerator.class, LabelKey.Error, "q1", "q2");
         //when
         String permissionString = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "ds").getPermissionString();
         //then
-        assertThat(permissionString).isEqualTo("option:edit:SimpleUserHierarchy:ds:0:LocaleContainer:Error:q1:q2");
+        assertThat(permissionString).isEqualTo("option:edit:SimpleUserHierarchy:ds:0:LocaleIconGenerator:Error:q1:q2");
     }
 
     @Test
     public void userLevelOnly() {
         //given
-        OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleContainer.class, LabelKey.Error);
+        OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleIconGenerator.class, LabelKey.Error);
         //when
         OptionPermission permissionToVerifyDs = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "ds");
         OptionPermission permissionToVerifyDa = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "da");

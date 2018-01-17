@@ -20,12 +20,16 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.i18n.Description;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.MessageKey;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.krail.eventbus.GlobalMessageBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 
@@ -34,15 +38,26 @@ import java.util.Optional;
 
 @I18N
 @Listener
-public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChangeListener<LocaleInfo> {
+@SubscribeTo({UIBus.class, SessionBus.class, GlobalMessageBus.class})
+public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChangeListener<Locale> {
     private static Logger log = LoggerFactory.getLogger(DefaultLocaleSelector.class);
     private final LocaleContainer container;
     private final CurrentLocale currentLocale;
     private final UserNotifier userNotifier;
     @Description(description = DescriptionKey.Select_from_available_languages)
-    private ComboBox<LocaleInfo> combo;
+    private ComboBox<Locale> combo;
+    private boolean loaded = false;
+
     private boolean fireListeners;
     private boolean inhibitMessage;
+
+    public ComboBox<Locale> getCombo() {
+        return combo;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
 
     @Inject
     protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier) {
@@ -55,18 +70,27 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
 
     private void buildUI() {
         combo = new ComboBox<>();
-        combo.setItemCaptionGenerator(LocaleInfo::displayName);
-        combo.setItemIconGenerator(LocaleInfo::getFlag);
         combo.setEmptySelectionAllowed(false);
-        combo.setDataProvider(container.getDataProvider());
         combo.setWidth(200 + "px");
-
         combo.setId(ID.getId(Optional.empty(), this, combo));
+    }
 
-
-        combo.setValue(container.getCurrentLocaleInfo());
+    /**
+     * We cannot set up the combox with data until the UI has finished building
+     *
+     * @param message not used
+     */
+    @Handler
+    public void afterViewChange(AfterViewChangeBusMessage message) {
+        log.debug("Received AfterViewChangeBusMessage, completing set up for Combo");
+        combo.setItemCaptionGenerator(container);
+        combo.setItemIconGenerator(container.getIconGenerator());
+        combo.setDataProvider(container.getDataProvider());
+        log.debug("Setting Locale selector to {}", currentLocale.getLocale());
+        combo.setValue(currentLocale.getLocale());
         combo.addValueChangeListener(this);
-
+        loaded = true;
+        log.debug("Combo set up complete");
     }
 
     @Handler
@@ -74,10 +98,9 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
         if (busMessage.getChangeSource() == this) {
             log.debug("response to locale change is disabled");
         } else {
-            log.debug("responding in change to new locale of {}", busMessage.getNewLocale()
-                    .getDisplayName());
+            log.debug("responding in change to new locale of {}", busMessage.getNewLocale().getDisplayName());
             inhibitMessage = true;
-            combo.setValue(container.constructInfo(busMessage.getNewLocale()));
+            combo.setValue(busMessage.getNewLocale());
             inhibitMessage = false;
 
         }
@@ -94,12 +117,12 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
      */
     @Override
     public Locale selectedLocale() {
-        return combo.getValue().getLocale();
+        return combo.getValue();
     }
 
 
     @Override
-    public void valueChange(HasValue.ValueChangeEvent<LocaleInfo> event) {
+    public void valueChange(HasValue.ValueChangeEvent<Locale> event) {
         if (!fireListeners) {
             Locale newLocale = selectedLocale();
             // only process change if locale has really changed

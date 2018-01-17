@@ -20,7 +20,7 @@ import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters
-import uk.q3c.krail.core.view.component.LocaleContainer
+import uk.q3c.krail.core.view.component.DefaultSubPagePanel
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
 import uk.q3c.krail.option.OptionKey
 import uk.q3c.krail.option.OptionKeyException
@@ -34,7 +34,6 @@ import uk.q3c.util.data.collection.AnnotationList
 import uk.q3c.util.data.collection.DataList
 
 import static uk.q3c.krail.option.RankOption.*
-
 /**
  * Created by David Sowerby on 27 Jan 2016
  */
@@ -57,26 +56,26 @@ abstract class OptionDaoTestBase extends Specification {
 
     OptionSource optionSource = Mock()
 
-    OptionKey<String> optionKeyString = new OptionKey<>("a", LocaleContainer.class, LabelKey.Yes, "a")
-    OptionKey<Integer> optionKeyInteger = new OptionKey<>(21, LocaleContainer.class, LabelKey.Yes, "b")
-    OptionKey<Boolean> optionKeyBoolean = new OptionKey<>(true, LocaleContainer.class, LabelKey.Yes, "c")
-    OptionKey<Long> optionKeyLong = new OptionKey<>(121L, LocaleContainer.class, LabelKey.Yes, "d")
-    OptionKey<BigDecimal> optionKeyBigDecimal = new OptionKey<>(new BigDecimal(23.3), LocaleContainer.class, LabelKey.Yes, "e")
-    OptionKey<DefaultUserSitemapSorters.SortType> optionKeyEnum = new OptionKey<>(DefaultUserSitemapSorters.SortType.INSERTION, LocaleContainer.class, LabelKey.Yes, "f")
-    OptionKey<Locale> optionKeyLocale = new OptionKey<>(Locale.CHINA, LocaleContainer.class, LabelKey.Yes, "g")
+    OptionKey<String> optionKeyString = new OptionKey<>("a", DefaultSubPagePanel.class, LabelKey.Yes, "a")
+    OptionKey<Integer> optionKeyInteger = new OptionKey<>(21, DefaultSubPagePanel.class, LabelKey.Yes, "b")
+    OptionKey<Boolean> optionKeyBoolean = new OptionKey<>(true, DefaultSubPagePanel.class, LabelKey.Yes, "c")
+    OptionKey<Long> optionKeyLong = new OptionKey<>(121L, DefaultSubPagePanel.class, LabelKey.Yes, "d")
+    OptionKey<BigDecimal> optionKeyBigDecimal = new OptionKey<>(new BigDecimal(23.3), DefaultSubPagePanel.class, LabelKey.Yes, "e")
+    OptionKey<DefaultUserSitemapSorters.SortType> optionKeyEnum = new OptionKey<>(DefaultUserSitemapSorters.SortType.INSERTION, DefaultSubPagePanel.class, LabelKey.Yes, "f")
+    OptionKey<Locale> optionKeyLocale = new OptionKey<>(Locale.CHINA, DefaultSubPagePanel.class, LabelKey.Yes, "g")
 
-    OptionKey<DataList<String>> optionKeyStringImmutableSet = new OptionKey<>(new DataList<String>(String.class, ImmutableList.of()), LocaleContainer.class, LabelKey.Yes, "h")
-    OptionKey<AnnotationList> optionKeyAnnotationList = new OptionKey<>(new AnnotationList(Inject.class, Singleton.class), LocaleContainer.class, LabelKey.Yes, "i")
+    OptionKey<DataList<String>> optionKeyStringImmutableSet = new OptionKey<>(new DataList<String>(String.class, ImmutableList.of()), DefaultSubPagePanel.class, LabelKey.Yes, "h")
+    OptionKey<AnnotationList> optionKeyAnnotationList = new OptionKey<>(new AnnotationList(Inject.class, Singleton.class), DefaultSubPagePanel.class, LabelKey.Yes, "i")
 
 
     def setup() {
 
 
-        optionKey1.getContext() >> LocaleContainer.class
+        optionKey1.getContext() >> DefaultSubPagePanel.class
         optionKey1.getDefaultValue() >> 99
         optionKey1.getKey() >> LabelKey.Yes
         optionKey1.compositeKey() >> 'composite key 1'
-        optionKey2.getContext() >> LocaleContainer.class
+        optionKey2.getContext() >> DefaultSubPagePanel.class
         optionKey2.getDefaultValue() >> 109
         optionKey2.getKey() >> LabelKey.No
         optionKey2.compositeKey() >> 'composite key 2'
@@ -293,7 +292,7 @@ abstract class OptionDaoTestBase extends Specification {
     def "DataList conversion round trip"() {
         given:
         DataList<Integer> list = new DataList<>(Integer.class, ImmutableList.of(3, 5, 7))
-        OptionKey<DataList<Integer>> listKey = new OptionKey(list, LocaleContainer.class, LabelKey.Yes)
+        OptionKey<DataList<Integer>> listKey = new OptionKey(list, DefaultSubPagePanel.class, LabelKey.Yes)
         OptionCacheKey<DataList<Integer>> cacheKey = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 0, listKey)
 
 
@@ -307,7 +306,7 @@ abstract class OptionDaoTestBase extends Specification {
 
     def "AnnotationList conversion round trip"() {
         given:
-        OptionKey<AnnotationList> listKey = new OptionKey(new AnnotationList(), LocaleContainer.class, LabelKey.Yes)
+        OptionKey<AnnotationList> listKey = new OptionKey(new AnnotationList(), DefaultSubPagePanel.class, LabelKey.Yes)
         OptionCacheKey<AnnotationList> cacheKey = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 0, listKey)
         AnnotationList list = new AnnotationList(InMemory, Inject)
 

@@ -14,6 +14,7 @@ package uk.q3c.krail.core.i18n;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -79,6 +80,8 @@ public class VaadinCurrentLocaleTest {
     @Mock
     private BrowserProvider browserProvider;
     private Set<Locale> supportedLocales;
+    @Mock
+    Provider<Set<Locale>> supportedLocalesProvider;
 
 
     @Before
@@ -88,6 +91,7 @@ public class VaadinCurrentLocaleTest {
 
         when(browserProvider.get()).thenReturn(browser);
         when(subjectProvider.get()).thenReturn(subject);
+        when(supportedLocalesProvider.get()).thenReturn(supportedLocales);
         listenerFired = false;
         supportedLocales = new HashSet<>();
         supportedLocales.add(Locale.UK);

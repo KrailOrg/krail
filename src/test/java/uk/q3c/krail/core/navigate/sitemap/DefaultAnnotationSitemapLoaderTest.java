@@ -28,6 +28,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule1;
@@ -39,9 +40,9 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.clazz.ClassNameUtils;
 
@@ -55,7 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, InMemoryModule.class, TestKrailI18NModule.class, VaadinSessionScopeModule.class,
-        VaadinEventBusModule.class, EventBusModule.class, UIScopeModule.class, UtilModule.class, TestOptionModule.class})
+        VaadinEventBusModule.class, EventBusModule.class, UIScopeModule.class, UtilsModule.class, UtilModule.class, TestOptionModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject

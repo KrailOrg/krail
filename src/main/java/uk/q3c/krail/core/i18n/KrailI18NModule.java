@@ -12,8 +12,13 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import com.google.inject.Singleton;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.view.component.DefaultLocaleContainer;
+import uk.q3c.krail.core.view.component.DefaultLocaleIconGenerator;
+import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.core.view.component.LocaleIconGenerator;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.EnumResourceBundle;
 import uk.q3c.krail.i18n.bind.I18NModule;
@@ -42,6 +47,22 @@ public class KrailI18NModule extends I18NModule {
         bindFieldScanner();
         bindProcessor();
         bindPatternUtility();
+        bindLocaleContainer();
+        bindLocaleIconGenerator();
+    }
+
+    /**
+     * Provides captions and icons for supported locales
+     */
+    protected void bindLocaleContainer() {
+        bind(LocaleContainer.class).to(DefaultLocaleContainer.class).in(Singleton.class);
+    }
+
+    /**
+     * The LocaleIconGenerator provides country flags.  Override this method to provide your own implementation
+     */
+    protected void bindLocaleIconGenerator() {
+        bind(LocaleIconGenerator.class).to(DefaultLocaleIconGenerator.class).in(Singleton.class);
     }
 
     @Override

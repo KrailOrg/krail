@@ -26,6 +26,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -33,11 +34,11 @@ import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.i18n.util.TestKrailI18NModule;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
+import uk.q3c.krail.util.UtilsModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule.class, EventBusModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, InMemoryModule.class, UIScopeModule.class,})
+@GuiceContext({TestKrailI18NModule.class, UtilsModule.class, EventBusModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, InMemoryModule.class, UIScopeModule.class,})
 public class DefaultMasterSitemapTest {
 
     @Mock

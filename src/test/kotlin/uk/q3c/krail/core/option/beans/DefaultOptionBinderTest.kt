@@ -16,9 +16,10 @@ import org.junit.Test
 import uk.q3c.krail.core.ui.DataTypeToUI
 import uk.q3c.krail.core.vaadin.ConverterFactory
 import uk.q3c.krail.core.vaadin.DefaultOptionBinder
-import uk.q3c.krail.core.view.component.LocaleContainer
+import uk.q3c.krail.core.view.component.optionKeyFlagSize
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.option.Option
+import uk.q3c.krail.util.ResourceUtils
 import java.util.*
 
 /**
@@ -31,16 +32,18 @@ class DefaultOptionBinderTest {
     val converterFactory: ConverterFactory = mock()
     val currentLocale: CurrentLocale = mock()
     var option: Option = mock()
+    val resourceUtils: ResourceUtils = mock()
 
     @Before
     fun setUp() {
         optionBinder = DefaultOptionBinder(option, converterFactory)
     }
 
+
     @Test
     fun textFieldValueSet() {
         // given
-        var key1 = LocaleContainer.optionKeyFlagSize
+        var key1 = optionKeyFlagSize
         val textField = TextField()
         whenever(dataTypeToUI.componentFor(3)).thenReturn(textField)
         whenever(currentLocale.locale).thenReturn(Locale.GERMANY)

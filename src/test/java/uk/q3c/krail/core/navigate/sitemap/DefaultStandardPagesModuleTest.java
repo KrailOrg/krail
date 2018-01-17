@@ -23,6 +23,7 @@ import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -33,7 +34,6 @@ import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
-import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.bind.ServicesModule;
@@ -47,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ServicesModule.class, StandardPagesModule.class, UIScopeModule.class, VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class,
-        TestI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, InMemoryModule.class, TestOptionModule
+        TestKrailI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, InMemoryModule.class, TestOptionModule
         .class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule.class,
         DataTypeModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
 public class DefaultStandardPagesModuleTest {
