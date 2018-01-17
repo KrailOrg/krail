@@ -24,6 +24,7 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
@@ -48,6 +49,7 @@ import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.SubscribeTo;
 
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +74,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @UIScoped
 @Listener
+@SubscribeTo(SessionBus.class)
 public class DefaultNavigator implements Navigator {
     private static Logger log = LoggerFactory.getLogger(DefaultNavigator.class);
 

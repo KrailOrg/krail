@@ -17,9 +17,11 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.util.forest.SourceTreeWrapper_BasicForest;
 import uk.q3c.util.forest.TargetTreeWrapper_BasicForest;
 import uk.q3c.util.forest.TreeCopy;
@@ -29,6 +31,7 @@ import java.io.Serializable;
 
 @VaadinSessionScoped
 @Listener
+@SubscribeTo(SessionBus.class)
 @ThreadSafe
 public class UserSitemapBuilder implements Serializable {
     private static Logger log = LoggerFactory.getLogger(UserSitemapBuilder.class);
