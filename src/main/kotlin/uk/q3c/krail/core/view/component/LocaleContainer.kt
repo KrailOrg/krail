@@ -17,6 +17,7 @@ import com.google.inject.Inject
 import com.vaadin.data.provider.ListDataProvider
 import com.vaadin.server.FileResource
 import com.vaadin.server.Resource
+import com.vaadin.server.ThemeResource
 import com.vaadin.ui.IconGenerator
 import com.vaadin.ui.ItemCaptionGenerator
 import net.engio.mbassy.listener.Handler
@@ -32,7 +33,6 @@ import uk.q3c.krail.option.Option
 import uk.q3c.krail.option.OptionChangeMessage
 import uk.q3c.krail.option.OptionKey
 import uk.q3c.krail.util.ResourceUtils
-import java.io.File
 import java.util.*
 
 interface LocaleContainer : ItemCaptionGenerator<Locale> {
@@ -61,6 +61,7 @@ class DefaultLocaleContainer @Inject constructor(
 
     override val dataProvider: ListDataProvider<Locale>
         get() {
+            log.debug("Retrieving data provider, this will cause LocaleContainer to load")
             load()
             return ListDataProvider(data)
         }
@@ -83,6 +84,7 @@ class DefaultLocaleContainer @Inject constructor(
      */
     private fun load() {
         if (!loaded) {
+            log.debug("Loading LocaleContainer")
             data = mutableListOf()
 
             for (supportedLocale in supportedLocales) {
@@ -93,6 +95,8 @@ class DefaultLocaleContainer @Inject constructor(
 
             iconGenerator.load()
             loaded = true
+        } else {
+            log.debug("LocaleContainer.load() called, but 'loaded' is already true, so call ignored")
         }
     }
 
@@ -108,17 +112,19 @@ class LocaleException(locale: Locale) : RuntimeException("Unrecognised Locale: $
 
 interface LocaleIconGenerator : IconGenerator<Locale>, VaadinOptionContext {
     var flagSize: Int
+    /**
+     * We add the locale here, but do not attempt to find the resource yet - do that by calling [load]
+     */
     fun addLocale(locale: Locale)
     fun load()
 }
 
 class DefaultLocaleIconGenerator @Inject constructor(private val resourceUtils: ResourceUtils, private val option: Option) : LocaleIconGenerator {
     override var flagSize: Int = 0
+    val flagsDir = "icons/flags_iso"
     private val log = LoggerFactory.getLogger(this.javaClass.name)
 
     private val lookup: MutableMap<Locale, Resource?> = mutableMapOf()
-    private var flagsDir = File(".")
-    private var flagSizedDir = File(".")
     var loaded = false
 
 
@@ -131,47 +137,36 @@ class DefaultLocaleIconGenerator @Inject constructor(private val resourceUtils: 
      * This method can be invoked directly to load the icons, but note that it will only load if [loaded] is false
      */
     override fun load() {
+        log.debug("Loading supported locales into LocaleContainer")
         if (!loaded) {
             updateFlagSizeFromOption()
-            val webInfDir = resourceUtils.configurationDirectory()
-            val iconsDir = File(webInfDir, "icons")
-            flagsDir = File(iconsDir, "flags_iso")
-            flagSizedDir = File(flagsDir, flagSize.toString())
             reloadIcons()
         }
     }
 
+
     override fun addLocale(locale: Locale) {
-        val resource = findResource(locale)
-        lookup.put(locale, resource)
+        lookup.put(locale, null)
     }
 
     override fun apply(item: Locale): Resource? {
         if (lookup.containsKey(item)) {
             val r = lookup[item]
-            log.debug("returning icon {} for Locale: {}", r, item)
+            if (r is FileResource) {
+                log.debug("returning icon {} for Locale: {}", r.sourceFile, item)
+            } else {
+                log.debug("returning icon {} for Locale: {}", r, item)
+            }
             return lookup[item]
         }
         throw LocaleException(item)
     }
 
-    private fun findResource(locale: Locale): FileResource? {
+    private fun findResource(locale: Locale): ThemeResource {
 
-        var flag: FileResource? = null
-        // if the directory is missing don't bother with file
-        if (flagSizedDir.exists()) {
-            val filename = locale.country.toLowerCase() + ".png"
-            val file = File(flagSizedDir, filename)
-            if (file.exists()) {
-                flag = FileResource(file)
-            } else {
-                log.warn("File {} for locale flag does not exist.", file.absolutePath)
-            }
-
-        } else {
-            log.warn("{} directory for flags does not exist.", flagSizedDir.absolutePath)
-        }
-        return flag
+        val iconPath = "$flagsDir/$flagSize/${locale.country.toLowerCase()}.png"
+        log.debug("Looking for flag icon at {} for Locale {}", iconPath, locale)
+        return ThemeResource(iconPath)
     }
 
     override fun optionInstance(): Option {
@@ -182,20 +177,15 @@ class DefaultLocaleIconGenerator @Inject constructor(private val resourceUtils: 
     fun optionValueChanged(msg: OptionChangeMessage<*>) {
         if (msg.optionKey === optionKeyFlagSize) {
             updateFlagSizeFromOption()
-            flagSizedDir = File(flagsDir, flagSize.toString())
             reloadIcons()
         }
     }
 
     private fun reloadIcons() {
+        log.debug("Loading icons")
         for ((k) in lookup) {
             val r = findResource(k)
             lookup.put(k, r)
-            if (r != null) {
-                log.debug("Icon Resource {} added for Locale: {}", r.sourceFile, k)
-            } else {
-                log.debug("No resource icon for {}", k)
-            }
         }
 
     }

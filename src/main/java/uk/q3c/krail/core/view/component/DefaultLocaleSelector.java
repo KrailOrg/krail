@@ -71,7 +71,7 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
     private void buildUI() {
         combo = new ComboBox<>();
         combo.setEmptySelectionAllowed(false);
-        combo.setWidth(200 + "px");
+        combo.setWidth(250 + "px");
         combo.setId(ID.getId(Optional.empty(), this, combo));
     }
 

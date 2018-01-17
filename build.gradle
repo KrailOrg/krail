@@ -127,6 +127,7 @@ dependencies {
 
     //The core server part of Vaadin -->
     compile 'com.vaadin:vaadin-server:' + vaadinVersion
+    compile 'com.vaadin:vaadin-themes:' + vaadinVersion
     compile 'com.vaadin:vaadin-push:' + vaadinVersion
 
     // used by OptionDaoTestBase, needed externally
