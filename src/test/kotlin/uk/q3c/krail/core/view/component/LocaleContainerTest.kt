@@ -57,10 +57,10 @@ class LocaleContainerTest {
         supportedLocales.add(Locale.CHINA)
         container.forceReload()
 
-        // then Canada has no icon, return null
+        // then China has no icon, but still return ThemeResource
         container.dataProvider.items.size.shouldEqualTo(3)
         container.iconGenerator.apply(Locale.UK).shouldNotBeNull()
-        container.iconGenerator.apply(Locale.CHINA).shouldBeNull()
+        container.iconGenerator.apply(Locale.CHINA).shouldNotBeNull()
 
         // then returns the correct instance
         container.iconGenerator.optionInstance().shouldBe(option)
