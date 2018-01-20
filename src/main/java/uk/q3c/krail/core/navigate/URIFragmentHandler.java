@@ -13,8 +13,10 @@
 
 package uk.q3c.krail.core.navigate;
 
+import java.net.URI;
+
 /**
- * Handles the decoding and encoding of a URI Fragment.
+ * Handles the decoding and encoding of a URI Fragment (as defined by the Java class {@link URI#getFragment()}.
  *
  * @author david
  */
@@ -40,6 +42,8 @@ public interface URIFragmentHandler {
      */
 
     NavigationState navigationState(String fragment);
+
+    NavigationState navigationState(URI uri);
 
     /**
      * Returns a URI fragment encoded from the {@code navigationState}

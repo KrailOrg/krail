@@ -354,7 +354,7 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setOptionKeySortType(SortType.INSERTION);
         // then
         roots = userNavigationTree.getTreeData().getRootItems();
-        assertThat(roots).containsExactly(userSitemap.nodeFor(userSitemap.privateURI), userSitemap.nodeFor(userSitemap.publicURI));
+        assertThat(roots).containsExactly(userSitemap.nodeFor(userSitemap.privateFragment), userSitemap.nodeFor(userSitemap.publicFragment));
         children = userNavigationTree.getTreeData().getChildren(userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionAscending());
 

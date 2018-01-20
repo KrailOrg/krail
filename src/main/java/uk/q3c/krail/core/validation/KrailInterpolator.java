@@ -45,8 +45,7 @@ import java.util.Optional;
  * <li>A custom annotation, which should use an I18NKey</li>
  * <p>
  * </ol>
- * see also: http://krail.readthedocs.org/en/latest/tutorial14/ and <br>
- * http://krail.readthedocs.org/en/latest/devguide14/
+ * see also: http://krail.readthedocs.org/en/latest/devguide-validation/
  * <p>
  * <p>
  * <p>

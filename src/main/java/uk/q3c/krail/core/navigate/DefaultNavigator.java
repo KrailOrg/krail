@@ -51,6 +51,7 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,10 +141,17 @@ public class DefaultNavigator implements Navigator {
         }
     }
 
-
+    /**
+     * Replaces uriFragmentChanged. This was required by Vaadin 8, as the {@link Page.PopStateEvent} returns the full uri as a String, whereas its predecessor returned only the fragment
+     *
+     * @param event
+     */
     @Override
     public void uriChanged(Page.PopStateEvent event) {
-        navigateTo(event.getUri());
+        log.debug("URI change received from Vaadin Page, with event.uri = {}", event.getUri());
+        URI uri = URI.create(event.getUri());
+        NavigationState navigationState = uriHandler.navigationState(uri);
+        navigateTo(navigationState);
     }
 
     /**
@@ -185,6 +193,7 @@ public class DefaultNavigator implements Navigator {
         }
         //makes sure the navigation state is up to date, removes the need to do this externally
         uriHandler.updateFragment(navigationState);
+        log.debug("Navigating to navigation state: {}", navigationState.getFragment());
 
         redirectIfNeeded(navigationState);
 
@@ -198,7 +207,7 @@ public class DefaultNavigator implements Navigator {
 
         // https://sites.google.com/site/q3cjava/sitemap#emptyURI
         if (navigationState.getVirtualPage()
-                           .isEmpty()) {
+                .isEmpty()) {
             navigationState.virtualPage(userSitemap.standardPageURI(StandardPageKey.Public_Home));
             uriHandler.updateFragment(navigationState);
         }
@@ -235,7 +244,7 @@ public class DefaultNavigator implements Navigator {
             Page page = ui.getPage();
             String fragment = navigationState.getFragment();
             if (!fragment
-                                .equals(page.getUriFragment())) {
+                    .equals(page.getUriFragment())) {
                 page.setUriFragment(fragment, false);
             }
             // now change the view
@@ -264,21 +273,21 @@ public class DefaultNavigator implements Navigator {
         // if no redirect found, do nothing
         if (!redirection.equals(page)) {
             navigationState.virtualPage(redirection)
-                           .update(uriHandler);
+                    .update(uriHandler);
         }
     }
 
     protected void changeView(KrailView view, ViewChangeBusMessage busMessage) {
         ScopedUI ui = uiProvider.get();
         log.debug("calling view.beforeBuild(event) for {}", view.getClass()
-                                                                .getName());
+                .getName());
         view.beforeBuild(busMessage);
         log.debug("calling view.buildView(event) {}", view.getClass()
-                                                          .getName());
+                .getName());
         view.buildView(busMessage);
         ui.changeView(view);
         log.debug("calling view.afterBuild(event) {}", view.getClass()
-                                                           .getName());
+                .getName());
         view.afterBuild(new AfterViewChangeBusMessage(busMessage));
         currentView = view;
     }
@@ -346,7 +355,7 @@ public class DefaultNavigator implements Navigator {
     @Override
     public void error(Throwable error) {
         log.debug("A {} Error has been thrown, reporting via the Error View", error.getClass()
-                                                                                   .getName());
+                .getName());
         NavigationState navigationState = uriHandler.navigationState("error");
         ViewChangeBusMessage viewChangeBusMessage = new ViewChangeBusMessage(previousNavigationState, navigationState);
         ErrorView view = viewFactory.get(ErrorView.class);

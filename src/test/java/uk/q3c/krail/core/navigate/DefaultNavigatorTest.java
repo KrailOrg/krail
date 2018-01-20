@@ -86,6 +86,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -208,7 +209,7 @@ public class DefaultNavigatorTest {
         // given
         navigator = createNavigator();
         // when
-        navigator.navigateTo(userSitemap.loginURI);
+        navigator.navigateTo(userSitemap.loginFragment);
         // then
         assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.loginViewClass);
         verify(scopedUI).changeView(any(LoginView.class));
@@ -248,12 +249,12 @@ public class DefaultNavigatorTest {
         // given
         navigator = createNavigator();
         // when
-        navigator.navigateTo(userSitemap.a11URI);
+        navigator.navigateTo(userSitemap.a11Fragment);
         // then
         assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
         assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.a11Node());
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a11URI);
+                .getFragment()).isEqualTo(userSitemap.a11Fragment);
     }
 
     @Test
@@ -273,6 +274,22 @@ public class DefaultNavigatorTest {
     }
 
     @Test
+    public void navigateFromPageEvent() {
+
+        // given
+        Page page = mock(Page.class);
+        Page.PopStateEvent event = new Page.PopStateEvent(page, "https://localhost:8080/krailapp/#" + userSitemap.a11Fragment);
+        navigator = createNavigator();
+
+        // when
+        navigator.uriChanged(event);
+        // then
+        assertThat(navigator.getCurrentNavigationState()
+                .getFragment()).isEqualTo(userSitemap.a11Fragment);
+
+    }
+
+    @Test
     public void navigateTo_invalidURI() {
 
         // given
@@ -286,6 +303,7 @@ public class DefaultNavigatorTest {
                             .getVirtualPage()).isEqualTo("public/home");
 
     }
+
 
     @Test
     public void navigate_to_invalid_URI() {
@@ -306,10 +324,10 @@ public class DefaultNavigatorTest {
         // given
         navigator = createNavigator();
         // when
-        navigator.navigateTo(userSitemap.a1URI);
+        navigator.navigateTo(userSitemap.a1Fragment);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a1URI);
+                .getFragment()).isEqualTo(userSitemap.a1Fragment);
 
     }
 
@@ -318,7 +336,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page1 = userSitemap.a1URI;
+        String page1 = userSitemap.a1Fragment;
         String fragment1 = page1 + "/id=2/age=5";
         // when
         navigator.navigateTo(fragment1);
@@ -336,7 +354,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(userSitemap.a11Node());
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a11URI);
+                .getFragment()).isEqualTo(userSitemap.a11Fragment);
 
     }
 
@@ -345,10 +363,10 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page1 = userSitemap.a1URI;
+        String page1 = userSitemap.a1Fragment;
         String fragment1 = page1 + "/id=1";
 
-        String page2 = userSitemap.a11URI;
+        String page2 = userSitemap.a11Fragment;
         String fragment2 = page2 + "/id=2";
 
         // when
@@ -400,7 +418,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a11URI;
+        String page = userSitemap.a11Fragment;
 
         // when
         NavigationState startState = navigator.getCurrentNavigationState();
@@ -415,7 +433,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a11URI;
+        String page = userSitemap.a11Fragment;
         listener4.cancelBefore = true;
 
         // when
@@ -433,7 +451,7 @@ public class DefaultNavigatorTest {
         // given
         navigator = createNavigator();
         String page = "wiggly";
-        String page2 = userSitemap.a1URI;
+        String page2 = userSitemap.a1Fragment;
 
         userSitemap.addRedirect(page, page2);
         // when
@@ -448,7 +466,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
         NavigationState navigationState = uriHandler.navigationState(page);
 
         // when
@@ -474,12 +492,12 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
         // when
         navigator.navigateTo(page);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a1URI);
+                .getFragment()).isEqualTo(userSitemap.a1Fragment);
     }
 
     /**
@@ -490,7 +508,7 @@ public class DefaultNavigatorTest {
 
         // given authenticated
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -501,10 +519,10 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(page);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a1URI);
+                .getFragment()).isEqualTo(userSitemap.a1Fragment);
 
         // given remembered
-        page = userSitemap.a11URI;
+        page = userSitemap.a11Fragment;
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(true);
         userSitemap.a11Node()
@@ -514,7 +532,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(page);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a11URI);
+                .getFragment()).isEqualTo(userSitemap.a11Fragment);
 
     }
 
@@ -522,7 +540,7 @@ public class DefaultNavigatorTest {
     public void UAC_User_fail() {
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(false);
@@ -554,7 +572,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(false);
@@ -565,7 +583,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(page);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a1URI);
+                .getFragment()).isEqualTo(userSitemap.a1Fragment);
 
     }
 
@@ -574,7 +592,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(true);
@@ -589,7 +607,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -604,7 +622,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -615,7 +633,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(page);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a1URI);
+                .getFragment()).isEqualTo(userSitemap.a1Fragment);
 
     }
 
@@ -623,7 +641,7 @@ public class DefaultNavigatorTest {
     public void UAC_Authenticate_Fail() {
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(false);
@@ -638,7 +656,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -650,7 +668,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(page);
         // then
         assertThat(navigator.getCurrentNavigationState()
-                            .getFragment()).isEqualTo(userSitemap.a1URI);
+                .getFragment()).isEqualTo(userSitemap.a1Fragment);
 
     }
 
@@ -659,7 +677,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -676,7 +694,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -718,7 +736,7 @@ public class DefaultNavigatorTest {
 
         // given
         navigator = createNavigator();
-        String page = userSitemap.a1URI;
+        String page = userSitemap.a1Fragment;
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -740,7 +758,7 @@ public class DefaultNavigatorTest {
     public void callOrder() {
         //given
         navigator = createNavigator();
-        String page = userSitemap.bURI;
+        String page = userSitemap.bFragment;
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
         when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
@@ -757,7 +775,7 @@ public class DefaultNavigatorTest {
     @Test
     public void eventContent() {
         navigator = createNavigator();
-        String page = userSitemap.bURI;
+        String page = userSitemap.bFragment;
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
         when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
@@ -768,16 +786,16 @@ public class DefaultNavigatorTest {
         ViewChangeBusMessage event = getEvent("beforeViewChange");
         assertThat(event.getFromState()).isNull();
         assertThat(event.getToState()
-                        .getFragment()).isEqualTo(userSitemap.bURI);
+                .getFragment()).isEqualTo(userSitemap.bFragment);
 
         event = getEvent("afterViewChange");
         assertThat(event.getFromState()).isNull();
         assertThat(event.getToState()
-                        .getFragment()).isEqualTo(userSitemap.bURI);
+                .getFragment()).isEqualTo(userSitemap.bFragment);
 
 
         //given
-        String page2 = userSitemap.b1URI;
+        String page2 = userSitemap.b1Fragment;
         changeListener.clear();
         //when
 
@@ -786,17 +804,17 @@ public class DefaultNavigatorTest {
 
         event = getEvent("beforeViewChange");
         assertThat(event.getFromState()
-                        .getFragment()).isEqualTo(userSitemap.bURI);
+                .getFragment()).isEqualTo(userSitemap.bFragment);
 
         assertThat(event.getToState()
-                        .getFragment()).isEqualTo(userSitemap.b1URI);
+                .getFragment()).isEqualTo(userSitemap.b1Fragment);
 
         event = getEvent("afterViewChange");
         assertThat(event.getFromState()
-                        .getFragment()).isEqualTo(userSitemap.bURI);
+                .getFragment()).isEqualTo(userSitemap.bFragment);
 
         assertThat(event.getToState()
-                        .getFragment()).isEqualTo(userSitemap.b1URI);
+                .getFragment()).isEqualTo(userSitemap.b1Fragment);
 
 
     }
@@ -813,7 +831,7 @@ public class DefaultNavigatorTest {
         //given
         navigator = createNavigator();
         NavigationState navState = new NavigationState();
-        navState.virtualPage(userSitemap.aURI);
+        navState.virtualPage(userSitemap.aFragment);
         //when
         navigator.navigateTo(navState);
         //then

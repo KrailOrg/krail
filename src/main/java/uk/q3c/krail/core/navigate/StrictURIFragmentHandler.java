@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -73,20 +74,26 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
     }
 
     /**
-     * Creates and returns a {@link NavigationState} with elements of the {@code uri} decoded. The "virtual page" is
+     * Creates and returns a {@link NavigationState} with elements of the {@code fragment} decoded. The "virtual page" is
      * assumed to finish as soon as a paired parameter is found. No attempt is made to validate the actual structure of
      * the path, so for example something like <code>view//subview/a=b</code> will result in a virtual page of
-     * <code>view//subview</code>. If <code>uri</code> is null or empty, the uri is consider to be an empty String. If
+     * <code>view//subview</code>. If <code>uri</code> is null or empty, the {@code fragment} is considered to be an empty String. If
      * <code>navigationState</code> contains only paired parameters, the virtual page is set to an empty string.
      */
     @Override
-    public NavigationState navigationState(String uri) {
+    public NavigationState navigationState(String fragment) {
         NavigationState navigationState = new NavigationState();
-        String fragment = StringUtils.isEmpty(uri) ? "" : stripBangAndTrailingSlash(uri);
-        navigationState.fragment(fragment);
+        String updatedFragment = StringUtils.isEmpty(fragment) ? "" : stripBangAndTrailingSlash(fragment);
+        navigationState.fragment(updatedFragment);
         updateParts(navigationState);
         return navigationState;
     }
+
+    @Override
+    public NavigationState navigationState(URI uri) {
+        return navigationState(uri.getFragment());
+    }
+
 
     @Override
     public void updateParts(NavigationState navigationState) {

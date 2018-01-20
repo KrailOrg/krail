@@ -54,13 +54,13 @@ class LocaleContainerTest {
         supportedLocales.clear()
         supportedLocales.add(Locale.GERMANY)
         supportedLocales.add(Locale.UK)
-        supportedLocales.add(Locale.CANADA)
+        supportedLocales.add(Locale.CHINA)
         container.forceReload()
 
         // then Canada has no icon, return null
         container.dataProvider.items.size.shouldEqualTo(3)
         container.iconGenerator.apply(Locale.UK).shouldNotBeNull()
-        container.iconGenerator.apply(Locale.CANADA).shouldBeNull()
+        container.iconGenerator.apply(Locale.CHINA).shouldBeNull()
 
         // then returns the correct instance
         container.iconGenerator.optionInstance().shouldBe(option)

@@ -15,7 +15,20 @@ package fixture;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import fixture.testviews2.*;
+import fixture.testviews2.TestLoginView;
+import fixture.testviews2.TestLogoutView;
+import fixture.testviews2.TestPrivateHomeView;
+import fixture.testviews2.TestPublicHomeView;
+import fixture.testviews2.ViewA;
+import fixture.testviews2.ViewA1;
+import fixture.testviews2.ViewA11;
+import fixture.testviews2.ViewA111;
+import fixture.testviews2.ViewB;
+import fixture.testviews2.ViewB1;
+import fixture.testviews2.ViewB11;
+import fixture.testviews2.ViewB12;
+import fixture.testviews2.ViewB121;
+import fixture.testviews2.ViewB122;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -66,37 +79,37 @@ import java.util.Map;
 @SuppressWarnings("ALL")
 public class ReferenceUserSitemap extends DefaultUserSitemap {
 
-    public String aURI = "public/a";
+    public String aFragment = "public/a";
     public Class<? extends KrailView> aViewClass = ViewA.class;
-    public String a1URI = "public/a/a1";
+    public String a1Fragment = "public/a/a1";
     public Class<? extends KrailView> a1ViewClass = ViewA1.class;
-    public String a11URI = "public/a/a1/a11";
+    public String a11Fragment = "public/a/a1/a11";
     public Class<? extends KrailView> a11ViewClass = ViewA11.class;
-    public String a111URI = "public/a/a1/a11/a111";
+    public String a111Fragment = "public/a/a1/a11/a111";
     public Class<? extends KrailView> a111ViewClass = ViewA111.class; // excluded
 
-    public String bURI = "private/b";
+    public String bFragment = "private/b";
     public Class<? extends KrailView> bViewClass = ViewB.class;
-    public String b1URI = "private/b/b1";
+    public String b1Fragment = "private/b/b1";
     public Class<? extends KrailView> b1ViewClass = ViewB1.class;
-    public String b11URI = "private/b/b1/b11";
+    public String b11Fragment = "private/b/b1/b11";
     public Class<? extends KrailView> b11ViewClass = ViewB11.class; // excluded
-    public String b12URI = "private/b/b1/b12";
+    public String b12Fragment = "private/b/b1/b12";
     public Class<? extends KrailView> b12ViewClass = ViewB12.class;
 
 
-    public String b121URI = "private/b/b1/b12/b121";
+    public String b121Fragment = "private/b/b1/b12/b121";
     public Class<? extends KrailView> b121ViewClass = ViewB121.class;
-    public String b122URI = "private/b/b1/b12/b122";
+    public String b122Fragment = "private/b/b1/b12/b122";
     public Class<? extends KrailView> b122ViewClass = ViewB122.class; // excluded
 
 
-    public String loginURI = "public/login";
-    public String logoutURI = "public/logout";
-    public String privateURI = "private";
-    public String publicURI = "public";
-    public String privateHomeURI = "private/home";
-    public String publicHomeURI = "public/home";
+    public String loginFragment = "public/login";
+    public String logoutFragment = "public/logout";
+    public String privateFragment = "private";
+    public String publicFragment = "public";
+    public String privateHomeFragment = "private/home";
+    public String publicHomeFragment = "public/home";
     public Class<? extends KrailView> loginViewClass = TestLoginView.class;
     public Class<? extends KrailView> logoutViewClass = TestLogoutView.class;
     public Class<? extends KrailView> privateHomeViewClass = TestPrivateHomeView.class;
@@ -136,55 +149,55 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         positionIndexes = new HashMap<>();
 
 
-        insertionOrder.add(privateURI);
-        positionIndexes.put(privateURI, 4);
+        insertionOrder.add(privateFragment);
+        positionIndexes.put(privateFragment, 4);
 
-        insertionOrder.add(publicURI);
-        positionIndexes.put(publicURI, 2);
+        insertionOrder.add(publicFragment);
+        positionIndexes.put(publicFragment, 2);
 
-        insertionOrder.add(loginURI);
-        positionIndexes.put(loginURI, 8);
+        insertionOrder.add(loginFragment);
+        positionIndexes.put(loginFragment, 8);
 
-        insertionOrder.add(logoutURI);
-        positionIndexes.put(logoutURI, 7);
+        insertionOrder.add(logoutFragment);
+        positionIndexes.put(logoutFragment, 7);
 
-        insertionOrder.add(publicHomeURI);
-        positionIndexes.put(publicHomeURI, 6);
+        insertionOrder.add(publicHomeFragment);
+        positionIndexes.put(publicHomeFragment, 6);
 
-        insertionOrder.add(bURI);
-        positionIndexes.put(bURI, 3);
-
-
-        insertionOrder.add(b1URI);
-        positionIndexes.put(b1URI, 3);
-
-        insertionOrder.add(b11URI);
-        positionIndexes.put(b11URI, -1); //This one should not be in nav components
-
-        insertionOrder.add(b12URI);
-        positionIndexes.put(b12URI, 2);
-
-        insertionOrder.add(b121URI);
-        positionIndexes.put(b121URI, 1);
-
-        insertionOrder.add(b122URI);
-        positionIndexes.put(b122URI, -1);//This one should not be in nav components
+        insertionOrder.add(bFragment);
+        positionIndexes.put(bFragment, 3);
 
 
-        insertionOrder.add(aURI);
-        positionIndexes.put(aURI, 5);
+        insertionOrder.add(b1Fragment);
+        positionIndexes.put(b1Fragment, 3);
 
-        insertionOrder.add(a1URI);
-        positionIndexes.put(a1URI, 5);
+        insertionOrder.add(b11Fragment);
+        positionIndexes.put(b11Fragment, -1); //This one should not be in nav components
 
-        insertionOrder.add(a11URI);
-        positionIndexes.put(a11URI, 5);
+        insertionOrder.add(b12Fragment);
+        positionIndexes.put(b12Fragment, 2);
 
-        insertionOrder.add(a111URI);
-        positionIndexes.put(a111URI, -1);//This one should not be in nav components
+        insertionOrder.add(b121Fragment);
+        positionIndexes.put(b121Fragment, 1);
 
-        insertionOrder.add(privateHomeURI);
-        positionIndexes.put(privateHomeURI, 13);
+        insertionOrder.add(b122Fragment);
+        positionIndexes.put(b122Fragment, -1);//This one should not be in nav components
+
+
+        insertionOrder.add(aFragment);
+        positionIndexes.put(aFragment, 5);
+
+        insertionOrder.add(a1Fragment);
+        positionIndexes.put(a1Fragment, 5);
+
+        insertionOrder.add(a11Fragment);
+        positionIndexes.put(a11Fragment, 5);
+
+        insertionOrder.add(a111Fragment);
+        positionIndexes.put(a111Fragment, -1);//This one should not be in nav components
+
+        insertionOrder.add(privateHomeFragment);
+        positionIndexes.put(privateHomeFragment, 13);
 
 
     }
@@ -198,13 +211,13 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
      * Creates the nodes and pages for standard pages, including intermediate (public and private) pages.
      */
     private void createStandardPages() {
-        loginNode = createNode(loginURI, "login", loginViewClass, StandardPageKey.Log_In, PageAccessControl.PUBLIC);
-        logoutNode = createNode(logoutURI, "logout", logoutViewClass, StandardPageKey.Log_Out, PageAccessControl.PUBLIC);
-        privateHomeNode = createNode(privateHomeURI, "home", privateHomeViewClass, StandardPageKey.Private_Home, PageAccessControl.PUBLIC);
-        publicHomeNode = createNode(publicHomeURI, "home", publicHomeViewClass, StandardPageKey.Public_Home, PageAccessControl.PUBLIC);
+        loginNode = createNode(loginFragment, "login", loginViewClass, StandardPageKey.Log_In, PageAccessControl.PUBLIC);
+        logoutNode = createNode(logoutFragment, "logout", logoutViewClass, StandardPageKey.Log_Out, PageAccessControl.PUBLIC);
+        privateHomeNode = createNode(privateHomeFragment, "home", privateHomeViewClass, StandardPageKey.Private_Home, PageAccessControl.PUBLIC);
+        publicHomeNode = createNode(publicHomeFragment, "home", publicHomeViewClass, StandardPageKey.Public_Home, PageAccessControl.PUBLIC);
 
-        publicNode = createNode(publicURI, "public", null, LabelKey.Public, PageAccessControl.PUBLIC);
-        privateNode = createNode(privateURI, "private", null, LabelKey.Private, PageAccessControl.PERMISSION);
+        publicNode = createNode(publicFragment, "public", null, LabelKey.Public, PageAccessControl.PUBLIC);
+        privateNode = createNode(privateFragment, "private", null, LabelKey.Private, PageAccessControl.PERMISSION);
 
         addChild(publicNode, publicHomeNode);
         addChild(publicNode, loginNode);
@@ -239,22 +252,22 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     }
 
     private void createPages() {
-        aNode = createNode(aURI, "a", aViewClass, TestLabelKey.ViewA, PageAccessControl.PUBLIC);
-        a1Node = createNode(a1URI, "a1", a1ViewClass, TestLabelKey.ViewA1, PageAccessControl.PUBLIC);
-        a11Node = createNode(a11URI, "a11", a11ViewClass, TestLabelKey.ViewA11, PageAccessControl.PUBLIC);
-        a111Node = createNode(a111URI, "a111", a11ViewClass, TestLabelKey.ViewA111, PageAccessControl.PUBLIC);
+        aNode = createNode(aFragment, "a", aViewClass, TestLabelKey.ViewA, PageAccessControl.PUBLIC);
+        a1Node = createNode(a1Fragment, "a1", a1ViewClass, TestLabelKey.ViewA1, PageAccessControl.PUBLIC);
+        a11Node = createNode(a11Fragment, "a11", a11ViewClass, TestLabelKey.ViewA11, PageAccessControl.PUBLIC);
+        a111Node = createNode(a111Fragment, "a111", a11ViewClass, TestLabelKey.ViewA111, PageAccessControl.PUBLIC);
 
         addChild(publicNode, aNode);
         addChild(aNode, a1Node);
         addChild(a1Node, a11Node);
         addChild(a11Node, a111Node);
 
-        bNode = createNode(bURI, "b", bViewClass, TestLabelKey.ViewB, PageAccessControl.PERMISSION);
-        b1Node = createNode(b1URI, "b1", b1ViewClass, TestLabelKey.ViewB1, PageAccessControl.PERMISSION);
-        b11Node = createNode(b11URI, "b11", b1ViewClass, TestLabelKey.ViewB11, PageAccessControl.PERMISSION);
-        b12Node = createNode(b12URI, "b12", b12ViewClass, TestLabelKey.ViewB12, PageAccessControl.PERMISSION);
-        b121Node = createNode(b121URI, "b121", b121ViewClass, TestLabelKey.ViewB121, PageAccessControl.PERMISSION);
-        b122Node = createNode(b122URI, "b122", b122ViewClass, TestLabelKey.ViewB122, PageAccessControl.PERMISSION);
+        bNode = createNode(bFragment, "b", bViewClass, TestLabelKey.ViewB, PageAccessControl.PERMISSION);
+        b1Node = createNode(b1Fragment, "b1", b1ViewClass, TestLabelKey.ViewB1, PageAccessControl.PERMISSION);
+        b11Node = createNode(b11Fragment, "b11", b1ViewClass, TestLabelKey.ViewB11, PageAccessControl.PERMISSION);
+        b12Node = createNode(b12Fragment, "b12", b12ViewClass, TestLabelKey.ViewB12, PageAccessControl.PERMISSION);
+        b121Node = createNode(b121Fragment, "b121", b121ViewClass, TestLabelKey.ViewB121, PageAccessControl.PERMISSION);
+        b122Node = createNode(b122Fragment, "b122", b122ViewClass, TestLabelKey.ViewB122, PageAccessControl.PERMISSION);
 
         addChild(privateNode, bNode);
         addChild(bNode, b1Node);
@@ -274,15 +287,15 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     }
 
     public UserSitemapNode loginNode() {
-        return nodeFor(loginURI);
+        return nodeFor(loginFragment);
     }
 
     public UserSitemapNode publicHomeNode() {
-        return nodeFor(publicHomeURI);
+        return nodeFor(publicHomeFragment);
     }
 
     public UserSitemapNode aNode() {
-        return nodeFor(aURI);
+        return nodeFor(aFragment);
     }
 
     public List<UserSitemapNode> publicSortedAlphaDescending() {
@@ -326,51 +339,51 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     }
 
     public UserSitemapNode logoutNode() {
-        return nodeFor(logoutURI);
+        return nodeFor(logoutFragment);
     }
 
     public UserSitemapNode privateHomeNode() {
-        return nodeFor(privateHomeURI);
+        return nodeFor(privateHomeFragment);
     }
 
     public UserSitemapNode publicNode() {
-        return nodeFor(publicURI);
+        return nodeFor(publicFragment);
     }
 
     public UserSitemapNode privateNode() {
-        return nodeFor(privateURI);
+        return nodeFor(privateFragment);
     }
 
     public UserSitemapNode a1Node() {
-        return nodeFor(a1URI);
+        return nodeFor(a1Fragment);
     }
 
     public UserSitemapNode a11Node() {
-        return nodeFor(a11URI);
+        return nodeFor(a11Fragment);
     }
 
     public UserSitemapNode bNode() {
-        return nodeFor(bURI);
+        return nodeFor(bFragment);
     }
 
     public UserSitemapNode b1Node() {
-        return nodeFor(b1URI);
+        return nodeFor(b1Fragment);
     }
 
     public UserSitemapNode b11Node() {
-        return nodeFor(b11URI);
+        return nodeFor(b11Fragment);
     }
 
     public UserSitemapNode b121Node() {
-        return nodeFor(b121URI);
+        return nodeFor(b121Fragment);
     }
 
     public UserSitemapNode b122Node() {
-        return nodeFor(b122URI);
+        return nodeFor(b122Fragment);
     }
 
     public UserSitemapNode a111Node() {
-        return nodeFor(a111URI);
+        return nodeFor(a111Fragment);
     }
 
     public void setA1Node(UserSitemapNode a1Node) {
@@ -378,6 +391,6 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     }
 
     public UserSitemapNode b12Node() {
-        return nodeFor(b12URI);
+        return nodeFor(b12Fragment);
     }
 }

@@ -162,6 +162,9 @@ class DefaultLocaleIconGenerator @Inject constructor(private val resourceUtils: 
         throw LocaleException(item)
     }
 
+    /**
+     * Note that this returns a ThemeResource even if the file is not present
+     */
     private fun findResource(locale: Locale): ThemeResource {
 
         val iconPath = "$flagsDir/$flagSize/${locale.country.toLowerCase()}.png"
