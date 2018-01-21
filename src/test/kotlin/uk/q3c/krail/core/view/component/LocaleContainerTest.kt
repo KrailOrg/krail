@@ -70,7 +70,7 @@ class LocaleContainerTest {
         (container.iconGenerator as DefaultLocaleIconGenerator).optionValueChanged(OptionChangeMessage(optionKeyFlagSize, null, 1, 48, 32))
 
         // then
-        container.iconGenerator.apply(Locale.UK).shouldBeNull()
+        container.iconGenerator.apply(Locale.UK).shouldNotBeNull()
 
 
     }

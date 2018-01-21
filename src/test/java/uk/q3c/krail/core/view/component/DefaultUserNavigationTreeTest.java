@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule2;
+import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -129,6 +130,27 @@ public class DefaultUserNavigationTreeTest {
         assertThat(userNavigationTree.isLeaf(userSitemap.b12Node())).isFalse();
     }
 
+    @Test
+    public void uriChangeSelectsCorrectNodeExpandedIfNecessary() {
+        // given
+        System.out.println(userSitemap.toString());
+        userNavigationTree = newTree();
+        userNavigationTree.build();
+        NavigationState fromState = new NavigationState().fragment("home");
+        NavigationState toState = new NavigationState().fragment(userSitemap.a11Fragment);
+        URIFragmentHandler uriFragmentHandler = new StrictURIFragmentHandler();
+        fromState.update(uriFragmentHandler);
+        toState.update(uriFragmentHandler);
+
+        AfterViewChangeBusMessage viewChangeMsg = new AfterViewChangeBusMessage(fromState, toState);
+        // when
+
+        userNavigationTree.afterViewChange(viewChangeMsg);
+        // then
+        assertThat(userNavigationTree.getTree().isExpanded(userSitemap.a1Node()));
+        assertThat(userNavigationTree.getTree().isExpanded(userSitemap.aNode()));
+
+    }
 
     private DefaultUserNavigationTree newTree() {
         DefaultUserNavigationTree tree = new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);

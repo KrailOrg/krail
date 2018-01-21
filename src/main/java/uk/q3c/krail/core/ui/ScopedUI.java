@@ -45,7 +45,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
- * messages in {@link #processBroadcastMessage(String, String)} and passing them to the {@link PushMessageRouter}. For
+ * messages in {@link #processBroadcastMessage(String, String, UIKey, int)} and passing them to the {@link PushMessageRouter}. For
  * a
  * full description of the Krail server push implementation see: https://sites.google.com/site/q3cjava/server-push
  *

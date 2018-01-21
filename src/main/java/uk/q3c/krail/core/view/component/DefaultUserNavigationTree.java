@@ -229,8 +229,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
      */
     @Handler
     public void afterViewChange(AfterViewChangeBusMessage busMessage) {
-        // TODO could this use the message instead - the order of change then will not matter??
-        UserSitemapNode selectedNode = navigator.getCurrentNode();
+        UserSitemapNode selectedNode = userSitemap.nodeFor(busMessage.getToState());
         UserSitemapNode parentNode = getTreeData().getParent(selectedNode);
 
         while (parentNode != null) {
