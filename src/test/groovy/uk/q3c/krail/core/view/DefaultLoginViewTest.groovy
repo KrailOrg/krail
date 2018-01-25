@@ -56,10 +56,10 @@ class DefaultLoginViewTest extends ViewTest {
         thisView.setStatusMessage(LabelKey.Active_Source)
 
         expect:
-        thisView.getPasswordBox().getValue().equals('a')
-        thisView.getUsernameBox().getValue().equals('b')
+        thisView.getPassword().getValue().equals('a')
+        thisView.getUsername().getValue().equals('b')
         thisView.getStatusMessage().equals('Active Source')
-        thisView.getSubmitButton() != null
+        thisView.getSubmit() != null
 
 
         when:
@@ -229,7 +229,7 @@ class DefaultLoginViewTest extends ViewTest {
         thisView.setPassword('password')
 
         when:
-        thisView.getSubmitButton().click()
+        thisView.getSubmit().click()
 
         then:
         1 * eventBus.publish(_)

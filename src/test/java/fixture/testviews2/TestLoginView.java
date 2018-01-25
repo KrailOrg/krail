@@ -15,6 +15,8 @@ package fixture.testviews2;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -48,7 +50,7 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public Button getSubmitButton() {
+    public Button getSubmit() {
         return null;
     }
 
@@ -60,6 +62,16 @@ public class TestLoginView implements LoginView {
     @Override
     public void setStatusMessage(String invalidLogin) {
 
+    }
+
+    @Override
+    public TextField getUsername() {
+        return null;
+    }
+
+    @Override
+    public PasswordField getPassword() {
+        return null;
     }
 
     @Override

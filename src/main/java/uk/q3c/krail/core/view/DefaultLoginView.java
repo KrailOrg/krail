@@ -183,8 +183,14 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         passwordBox.setValue(password);
     }
 
-    @Override
+    @Deprecated // use getSubmit()
     public Button getSubmitButton() {
+        return submitButton;
+    }
+
+    @Override
+    @Deprecated // use getSubmit()
+    public Button getSubmit() {
         return submitButton;
     }
 
@@ -203,10 +209,22 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         statusMsgLabel.setValue(msg);
     }
 
+    @Override
+    public TextField getUsername() {
+        return usernameBox;
+    }
+
+    @Override
+    public PasswordField getPassword() {
+        return passwordBox;
+    }
+
+    @Deprecated // use getUsername
     public TextField getUsernameBox() {
         return usernameBox;
     }
 
+    @Deprecated // user getPassword
     public PasswordField getPasswordBox() {
         return passwordBox;
     }
