@@ -48,11 +48,11 @@ public class SitemapModule extends AbstractServiceModule {
         addDependency(LabelKey.Sitemap_Service, ConfigurationLabelKey.Application_Configuration_Service, Dependency.Type.REQUIRED_ONLY_AT_START);
     }
 
-    private void bindMasterSitemap() {
+    protected void bindMasterSitemap() {
         bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
     }
 
-    private void bindUserSitemap() {
+    protected void bindUserSitemap() {
         bind(UserSitemap.class).to(DefaultUserSitemap.class);
         bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
     }
