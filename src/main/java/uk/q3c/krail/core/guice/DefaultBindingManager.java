@@ -134,13 +134,13 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         coreModules.add(uiModule());
         coreModules.add(i18NModule());
         coreModules.add(applicationConfigurationModule());
-        coreModules.add(new SitemapModule());
+        coreModules.add(sitemapModule());
 
         coreModules.add(new ThreadScopeModule());
         coreModules.add(new UIScopeModule());
         coreModules.add(new VaadinSessionScopeModule());
 
-        coreModules.add(new ServicesModule());
+        coreModules.add(servicesModule());
 
         coreModules.add(shiroModule());
         coreModules.add(shiroVaadinModule());
@@ -173,6 +173,14 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         addSitemapModules(coreModules);
         addPersistenceModules(coreModules);
         return coreModules;
+    }
+
+    protected Module servicesModule() {
+        return new ServicesModule();
+    }
+
+    protected Module sitemapModule() {
+        return new SitemapModule();
     }
 
     protected void addUtilModules(List<Module> coreModules){
