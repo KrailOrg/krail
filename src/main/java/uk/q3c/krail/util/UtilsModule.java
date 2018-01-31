@@ -14,6 +14,8 @@
 package uk.q3c.krail.util;
 
 import com.google.inject.AbstractModule;
+import uk.q3c.krail.core.view.component.ComponentIdGenerator;
+import uk.q3c.krail.core.view.component.DefaultComponentIdGenerator;
 
 /**
  * Bindings fo utility classes
@@ -25,9 +27,13 @@ public class UtilsModule extends AbstractModule {
     @Override
     protected void configure() {
         bindResourceUtils();
+        bindIdGenerator();
 
     }
 
+    protected void bindIdGenerator() {
+        bind(ComponentIdGenerator.class).to(DefaultComponentIdGenerator.class);
+    }
     /**
      * Override this method to provide your own {@link ResourceUtils} binding
      */

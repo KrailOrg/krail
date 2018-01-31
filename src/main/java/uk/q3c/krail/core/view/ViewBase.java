@@ -20,8 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.navigate.DefaultNavigator;
 import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -29,7 +31,7 @@ import uk.q3c.krail.i18n.Translate;
 import java.io.Serializable;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Provides default View behaviour suitable for most view implementations.  Override methods as necessary for your needs.  This is the default sequence:
@@ -53,6 +55,7 @@ public abstract class ViewBase implements KrailView, Serializable {
     protected I18NKey descriptionKey = DescriptionKey.No_description_provided;
     private boolean componentsConstructed;
     private boolean dirty;
+    @Deprecated
     private boolean idsAssigned;
     private Component rootComponent;
 
@@ -82,14 +85,13 @@ public abstract class ViewBase implements KrailView, Serializable {
      * {@inheritDoc}
      */
     public void init() {
-
+        log.debug("====> View.init called");
     }
 
-    /**
-     * If {@link #idsAssigned} is false, {@link #setIds()} - the view components have already been constructed in {@link #buildView}
-     */
+
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
+        log.debug("====> View.afterBuild called");
         if (!idsAssigned) {
             setIds();
             idsAssigned = true;
@@ -98,9 +100,18 @@ public abstract class ViewBase implements KrailView, Serializable {
     }
 
     /**
+     * As of 0.14.0.0 ids are assigned by automatically by the {@link DefaultNavigator}, which invokes {@link ComponentIdGenerator}.
+     * <p>
+     * You can still use this method if you wish, and any ids set through this method will override those set automatically
+     * <p>
+     * This method is only invoked if {@link #idsAssigned} is false
+     * <p>
      * You only need to override / implement this method if you are using TestBench, or another testing tool which looks for debug ids. If you do override it
      * to add your own subclass ids, make sure you call super
+     *
+     * @deprecated use the {@link ComponentIdGenerator} implementation to create and apply the Ids consistently
      */
+    @Deprecated
     protected void setIds() {
         getRootComponent().setId(ID.getId(Optional.empty(), this, getRootComponent()));
     }
@@ -127,7 +138,7 @@ public abstract class ViewBase implements KrailView, Serializable {
      */
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     protected void loadData(AfterViewChangeBusMessage busMessage) {
-
+        log.debug("====> View.loadData called");
     }
 
     /**
@@ -136,7 +147,7 @@ public abstract class ViewBase implements KrailView, Serializable {
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     @Override
     public void beforeBuild(ViewChangeBusMessage busMessage) {
-
+        log.debug("====> View.beforeBuild called");
     }
 
     /**
@@ -154,8 +165,7 @@ public abstract class ViewBase implements KrailView, Serializable {
      * Implement this method to construct your components.  You must also set {@link #rootComponent} (this is the component which will be placed in the parent
      * {@link UI}, and is usually a layout
      *
-     * @param busMessage
-     *         a message sent by the Event Bus to signify a chnage of View
+     * @param busMessage a message sent by the Event Bus to signify a chnage of View
      */
     protected abstract void doBuild(ViewChangeBusMessage busMessage);
 

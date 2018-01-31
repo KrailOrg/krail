@@ -65,6 +65,7 @@ import uk.q3c.krail.core.view.DefaultViewFactory;
 import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
@@ -163,6 +164,9 @@ public class DefaultNavigatorTest {
     @Inject
     private DefaultViewFactory viewFactory;
 
+    @Inject
+    private ComponentIdGenerator componentIdGenerator;
+
     @Before
     public void setup() {
 
@@ -185,7 +189,7 @@ public class DefaultNavigatorTest {
     }
 
     @Test
-    public void init() throws Exception {
+    public void init() {
 
         // given
 
@@ -198,7 +202,7 @@ public class DefaultNavigatorTest {
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, masterSitemapQueue);
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, masterSitemapQueue, componentIdGenerator);
         navigator.init();
         return navigator;
     }

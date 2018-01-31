@@ -1,4 +1,4 @@
-#Welcome
+# Welcome
 
 Welcome to the Krail Tutorial.  It is definitely better to work through the Tutorial in sequence, but if you want to skip a step, you will find a link at the end of each chapter so that you can clone each stage from a GitHub repository.
  

@@ -184,8 +184,8 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     }
 
     protected void addUtilModules(List<Module> coreModules){
-        coreModules.add(new UtilsModule());
         coreModules.add(new UtilModule());
+        coreModules.add(new UtilsModule());
     }
 
     protected Module shiroAopModule() {

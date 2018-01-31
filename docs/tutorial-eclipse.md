@@ -1,10 +1,10 @@
 # Eclipse Set up as Vaadin-Project
 
-##Acknowledgement
+## Acknowledgement
 
 Thanks to [Dirk Lietz](https://github.com/Odhrean) for contributing this chapter.  If you have any questions regarding this chapter please refer them to the contributor
  
-##Introduction
+## Introduction
 A short how-to set up krail as a library in a new Vaadin-Project in Eclipse
 
 ## Install Vaadin-Plugin

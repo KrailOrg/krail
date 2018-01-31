@@ -1,13 +1,13 @@
-#Introduction
+# Introduction
 
 
-#Managing the Lifecycle
+# Managing the Lifecycle
 
-##<a name="state-changes-and-causes"></a>State Changes and Causes
+## <a name="state-changes-and-causes"></a>State Changes and Causes
 
 The following table summarises the changes of state and cause, depending on the old state and the call made.  If any call is made that does not appear in these tables, or listed under **Ignored Calls**, an exception is thrown.
  
-###No errors during call
+### No errors during call
  
 This table assumes no errors occur during the call
  
@@ -21,7 +21,7 @@ This table assumes no errors occur during the call
 | STOPPED   | start(STARTED)           |start()          | RUNNING, STARTED           |
 | FAILED    |                          |reset()          | INITIAL, RESET             |
 
-###Error occurs during call
+### Error occurs during call
 
 This table assumes that an error occurs during the call
 
@@ -41,14 +41,14 @@ This table assumes that an error occurs during the call
  \* Error in the Service that was called<br>
 ** Error in a dependency of the Service that was called
 
-###Ignored Calls
+### Ignored Calls
 
 A call to start() when the state is STARTING or RUNNING is ignored
 A call to stop(), fail(), dependencyStop(), dependencyFail() when the state is INITIAL, RESETTING, STOPPED or FAILED is ignored
 A call to reset() when the state is INITIAL or RESETTING is ignored
  
  
-#Service Instantiation
+# Service Instantiation
 
 When a Service is instantiated through Guice, AOP in the ServicesModule calls ServicesModel.addService, which also creates all its dependencies from the 'template' provided by the ServicesModel.classGraph
  

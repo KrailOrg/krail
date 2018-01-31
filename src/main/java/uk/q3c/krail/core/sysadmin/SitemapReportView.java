@@ -19,13 +19,10 @@ import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.Experimental;
-
-import java.util.Optional;
 
 /**
  * Created by David Sowerby on 24/05/15.
@@ -55,12 +52,6 @@ public class SitemapReportView extends Grid3x3ViewBase {
         setColumnWidths(1f, 4f, 1f);
         setRowHeights(1f, 10f, 1f);
 
-    }
-
-    @Override
-    protected void setIds() {
-        super.setIds();
-        reportArea.setId(ID.getId(Optional.empty(), this, reportArea));
     }
 
     public TextArea getReportArea() {

@@ -15,8 +15,10 @@ package uk.q3c.krail.core.view;
 
 import com.vaadin.ui.Component;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import uk.q3c.krail.core.navigate.DefaultNavigator;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.NamedAndDescribed;
 
@@ -53,6 +55,8 @@ public interface KrailView extends NamedAndDescribed {
      * need to check whether components have already been constructed, as this method may be called when the View is
      * selected again after initial construction.
      *
+     * <b>Note:</b> Just after this method is called, the {@link DefaultNavigator} invokes the {@link ComponentIdGenerator} to provide ids to components
+     *
      * @param busMessage contains information about the change to this View
      */
     void buildView(ViewChangeBusMessage busMessage);
@@ -67,14 +71,14 @@ public interface KrailView extends NamedAndDescribed {
     Component getRootComponent();
 
     /**
-     * Called by the {@link ViewFactory} after the construction of a view, and intended for initialisation which does
-     * not depend on navigation state.
+     * Called by the {@link ViewFactory} after the instantiation of a view, but before components are constructed by {@Link #buildView}
+     * Intended for initialisation which does not depend on navigation state.
      */
     void init();
 
     /**
-     * Called immediately after the construction of the Views components (see {@link #buildView(ViewChangeBusMessage)}) to enable setting up
-     * the view from URL parameters.  A typical use is to set ids for components if these are being used.
+     * Called immediately after the construction of the View's components (see {@link #buildView(ViewChangeBusMessage)}) to enable setting up
+     * the view from URL parameters.
      *
      * @param busMessage
      */

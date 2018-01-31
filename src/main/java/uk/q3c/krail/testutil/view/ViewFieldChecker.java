@@ -64,21 +64,10 @@ public class ViewFieldChecker {
                 if (component == null) {
                     System.out.println(field.getName() + "has not been constructed");
                     fieldsNotConstructed.add(field.getName());
-                } else {
-                    if (component.getId() == null) {
-                        idMissing(field);
-                    }
                 }
             }
         }
         return fieldsMissingAnnotation.isEmpty() && fieldsMissingId.isEmpty() && fieldsNotConstructed.isEmpty();
-    }
-
-    private void idMissing(Field field) {
-        if (!fieldsWithoutId.contains(field.getName())) {
-            System.out.println("Field does not have an ID: " + field.getName());
-            fieldsMissingId.add(field.getName());
-        }
     }
 
     private void annotationMissing(Field field) {

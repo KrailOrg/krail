@@ -15,11 +15,8 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
-
-import java.util.Optional;
 
 public abstract class StandardPageViewBase extends ViewBase {
 
@@ -53,14 +50,6 @@ public abstract class StandardPageViewBase extends ViewBase {
 
         setRootComponent(grid);
     }
-
-    @Override
-    public void setIds() {
-        super.setIds();
-        grid.setId(ID.getId(Optional.empty(), this, grid));
-        label.setId(ID.getId(Optional.empty(), this, label));
-    }
-
 
     public Label getLabel() {
         return label;

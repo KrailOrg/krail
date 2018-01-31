@@ -26,12 +26,22 @@ import uk.q3c.krail.i18n.I18NKey;
 public interface LoginView extends KrailView, UserStatusChangeSource {
 
     @Deprecated
-        // use getUsername().setValue()
+        // use username(username)
     void setUsername(String username);
 
     @Deprecated
-        // use getPassword().setValue()
+        // use password(password)
     void setPassword(String password);
+
+    default LoginView password(String password) {
+        getPassword().setValue(password);
+        return this;
+    }
+
+    default LoginView username(String username) {
+        getUsername().setValue(username);
+        return this;
+    }
 
 
     Button getSubmit();

@@ -1,14 +1,14 @@
-#Introduction
+# Introduction
 
 Krail uses the [Apache BVal](http://bval.apache.org/) implementation of [JSR303](https://jcp.org/en/jsr/detail?id=303) to provide validation.  It also integrates Apache BVal with the Krail I18N framework, so that all I18N requirements can be managed through the same process.  These are some of the things you may want to do with validation.
 
 Validation is invoked automatically through Krail's implementation of ```BeanFieldGroup``` (basically a form without the layout), once its fields have been annotated.
 
-#Use standard javax Validation
+# Use standard javax Validation
 
 That's easy.  Just use it the [same way as you always do](http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html).  This also true of the additional constraints Bval provides (**@NotEmpty** and **@Email**)
 
-#Use a different message for a single use of a javax annotation
+# Use a different message for a single use of a javax annotation
 
 If you want to change a message in just one or two places, for example, to change a validation failure of **@Min** to say:  "speed really, really must be less than 20" you could use standard javax and provide a message pattern:
 ```
@@ -24,7 +24,7 @@ Note the "{}" around the message, this denotes a message key rather than a patte
 
 This method means you can take advantage of Krail's translation mechanism, but you do lose the type-safety Krail normally provides by using enum keys.  There are no alternatives because of Java's limitations on what can be declared in an annotation.
 
-#Change a javax message for all uses
+# Change a javax message for all uses
 
 If you want to change the message for all uses, there is a facility within the Bval implementation to do that.  Krail provides a method in ```KrailValidationModule``` to assist.
 ```
@@ -39,7 +39,7 @@ public class MyValidationModule extends KrailValidationModule{
 ```
 
 
-#Move all translations to one source
+# Move all translations to one source
 
 You may wish to put all your translations into one place, rather than have the validation translations held separately.  There could be many good reasons for doing so, and there is an [open ticket](https://github.com/davidsowerby/krail/issues/319) to provide a utility to migrate the standard keys and patterns to the I18N source of your choice.  You will need to provide a set of I18NKeys for the validation messages (the full set of keys used by Apache Bval are listed below).  Then, by using the substitution method shown above, all standard javax.validation.constraints and org.apache.bval.constraints messages can directed to use the new Krail keys.
 
@@ -69,11 +69,11 @@ org.apache.bval.constraints.NotEmpty.message=may not be empty
 org.apache.bval.constraints.Email.message=not a well-formed email address
 
 
-#Create a Custom Validation
+# Create a Custom Validation
 
 There are many cases where a custom validator can be useful, and Apache Bval does enable the creation of custom validators.  With one small addition, a custom validation can also integrate neatly with Krail's enum based I18N.  There are three parts to the creation of a custom validator - the validator itself, the annotation used to invoke it and the key for the message.  Most of this is standard JSR303 - the only difference in the annotation is the ```messageKey()``` method needed to enable the use of Krail I18N keys.
 
-##The annotation
+## The annotation
 
 ```
 import javax.validation.Constraint;
@@ -117,7 +117,7 @@ public @interface Adult  {
 }
 ```
 
-##The Constraint Validator
+## The Constraint Validator
 ```
 public class AdultValidator implements ConstraintValidator<Adult, Number> {
 
@@ -142,7 +142,7 @@ public class AdultValidator implements ConstraintValidator<Adult, Number> {
 }
 ```
 
-##The Key
+## The Key
 ```
 public enum ValidationKey implements I18NKey {
     Too_Big, Must_be_an_Adult

@@ -13,6 +13,7 @@
 package fixture.testviews2;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -20,6 +21,7 @@ import uk.q3c.krail.i18n.I18NKey;
 
 public class ViewA11 implements KrailView {
 
+    private Label label;
 
     @Override
     public void beforeBuild(ViewChangeBusMessage busMessage) {
@@ -28,7 +30,7 @@ public class ViewA11 implements KrailView {
 
     @Override
     public void buildView(ViewChangeBusMessage busMessage) {
-
+        label = new Label("Wiggly");
     }
 
     @Override

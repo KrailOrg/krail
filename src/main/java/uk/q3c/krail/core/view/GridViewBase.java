@@ -18,11 +18,8 @@ import com.vaadin.ui.GridLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
-
-import java.util.Optional;
 
 public abstract class GridViewBase extends ViewBase implements KrailView {
     private static Logger log = LoggerFactory.getLogger(GridViewBase.class);
@@ -38,14 +35,6 @@ public abstract class GridViewBase extends ViewBase implements KrailView {
         return gridLayout;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setIds() {
-        super.setIds();
-        gridLayout.setId(ID.getId(Optional.empty(), gridLayout));
-    }
 
     /**
      * Builds the UI components of the view.  MUST set the root component of the View (returned by {@link

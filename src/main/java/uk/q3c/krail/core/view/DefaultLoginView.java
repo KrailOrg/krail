@@ -47,14 +47,11 @@ import uk.q3c.krail.core.i18n.Value;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.LoginFormException;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
-
-import java.util.Optional;
 
 public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, ClickListener {
     private static Logger log = LoggerFactory.getLogger(DefaultLoginView.class);
@@ -68,12 +65,12 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     @Value(LabelKey.Authentication)
     private Label label;
     @Caption(caption = LabelKey.Password, description = DescriptionKey.Enter_Your_Password)
-    private PasswordField passwordBox;
+    private PasswordField password;
     private Label statusMsgLabel;
     @Caption(caption = LabelKey.Submit, description = DescriptionKey.Submit_Your_Login_Details)
-    private Button submitButton;
+    private Button submit;
     @Caption(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
-    private TextField usernameBox;
+    private TextField username;
 
     @Inject
     protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, SessionBusProvider
@@ -98,23 +95,25 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         vl.setSpacing(true);
         vl.setSizeUndefined();
         label = new Label();
-        usernameBox = new TextField();
-        passwordBox = new PasswordField();
+        username = new TextField();
+        password = new PasswordField();
 
         Label demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
         Label demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
 
-        submitButton = new Button();
-        submitButton.addClickListener(this);
+        submit = new Button();
+        submit.addClickListener(this);
+        submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        submit.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
         statusMsgLabel = new Label("Please enter your username and password");
 
         vl.addComponent(label);
         vl.addComponent(demoInfoLabel);
         vl.addComponent(demoInfoLabel2);
-        vl.addComponent(usernameBox);
-        vl.addComponent(passwordBox);
-        vl.addComponent(submitButton);
+        vl.addComponent(username);
+        vl.addComponent(password);
+        vl.addComponent(submit);
         vl.addComponent(statusMsgLabel);
 
         setMiddleCentre(centrePanel);
@@ -122,23 +121,11 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
 
     }
 
-    @Override
-    protected void setIds() {
-        super.setIds();
-        submitButton.setId(ID.getId(Optional.empty(), this, submitButton));
-        submitButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        submitButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        usernameBox.setId(ID.getId(Optional.of("username"), this, usernameBox));
-        passwordBox.setId(ID.getId(Optional.of("password"), this, passwordBox));
-        statusMsgLabel.setId(ID.getId(Optional.of("status"), this, statusMsgLabel));
-        label.setId(ID.getId(Optional.of("label"), this, label));
-    }
-
 
     @Override
     public void buttonClick(ClickEvent event) {
-        String username = usernameBox.getValue();
-        String password = passwordBox.getValue();
+        String username = this.username.getValue();
+        String password = this.password.getValue();
         if (StringUtils.isEmpty(username)) {
             throw new LoginFormException(LabelKey.Username_Cannot_be_Empty);
         }
@@ -173,25 +160,25 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         // an exception would be raised if login failed
     }
 
-    @Override
-    public void setUsername(String username) {
-        usernameBox.setValue(username);
-    }
-
-    @Override
-    public void setPassword(String password) {
-        passwordBox.setValue(password);
-    }
-
     @Deprecated // use getSubmit()
     public Button getSubmitButton() {
-        return submitButton;
+        return submit;
     }
 
     @Override
     @Deprecated // use getSubmit()
     public Button getSubmit() {
-        return submitButton;
+        return submit;
+    }
+
+    @Override
+    public TextField getUsername() {
+        return username;
+    }
+
+    @Override
+    public void setUsername(String username) {
+        this.username.setValue(username);
     }
 
     @Override
@@ -210,23 +197,23 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public TextField getUsername() {
-        return usernameBox;
+    public PasswordField getPassword() {
+        return password;
     }
 
     @Override
-    public PasswordField getPassword() {
-        return passwordBox;
+    public void setPassword(String password) {
+        this.password.setValue(password);
     }
 
     @Deprecated // use getUsername
     public TextField getUsernameBox() {
-        return usernameBox;
+        return username;
     }
 
     @Deprecated // user getPassword
     public PasswordField getPasswordBox() {
-        return passwordBox;
+        return password;
     }
 
 

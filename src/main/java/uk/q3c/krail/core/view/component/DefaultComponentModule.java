@@ -31,6 +31,7 @@ public class DefaultComponentModule extends AbstractModule {
         bindUserStatusPanel();
     }
 
+
     /**
      * Override this method to provide your own implementation of {@link LocaleSelector} in a sub-class of this module.
      * Your module will then need to replace this module in {@link DefaultBindingManager}

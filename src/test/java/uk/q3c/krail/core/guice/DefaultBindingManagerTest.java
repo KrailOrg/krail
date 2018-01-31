@@ -32,18 +32,18 @@ import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.service.model.DefaultServiceModel;
 import uk.q3c.krail.testutil.dummy.Dummy;
 import uk.q3c.krail.testutil.guice.TestBindingManager;
-import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.testutil.LogMonitor;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import java.io.File;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UtilsModule.class})
+@GuiceContext({})
 public class DefaultBindingManagerTest {
 
     static File iniDir = new File("src/test/java");
@@ -75,7 +75,7 @@ public class DefaultBindingManagerTest {
     }
 
     @Test
-    public void startAndStop() throws Exception {
+    public void startAndStop() {
 
         //then
 //        assertThat(DefaultBindingManager.injector()).isNull();

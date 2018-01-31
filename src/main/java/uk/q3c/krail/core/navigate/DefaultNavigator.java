@@ -15,6 +15,7 @@ package uk.q3c.krail.core.navigate;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.server.Page;
+import com.vaadin.ui.HasComponents;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
@@ -43,10 +44,11 @@ import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
-import uk.q3c.krail.core.view.DefaultViewFactory;
 import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.ViewFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
@@ -83,7 +85,7 @@ public class DefaultNavigator implements Navigator {
     private final Provider<Subject> subjectProvider;
     private final PageAccessController pageAccessController;
     private final ScopedUIProvider uiProvider;
-    private final DefaultViewFactory viewFactory;
+    private final ViewFactory viewFactory;
     private final SitemapService sitemapService;
     private final UserSitemapBuilder userSitemapBuilder;
     private final LoginNavigationRule loginNavigationRule;
@@ -97,12 +99,13 @@ public class DefaultNavigator implements Navigator {
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
     private ViewChangeRule viewChangeRule;
+    private ComponentIdGenerator idGenerator;
 
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
-            pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
+            pageAccessController, ScopedUIProvider uiProvider, ViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
                                     loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider eventBusProvider, ViewChangeRule
-                                    viewChangeRule, InvalidURIHandler invalidURIHandler, MasterSitemapQueue masterSitemapQueue) {
+                                    viewChangeRule, InvalidURIHandler invalidURIHandler, MasterSitemapQueue masterSitemapQueue, ComponentIdGenerator idGenerator) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -121,6 +124,7 @@ public class DefaultNavigator implements Navigator {
         this.viewChangeRule = viewChangeRule;
 
 
+        this.idGenerator = idGenerator;
     }
 
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
@@ -251,6 +255,7 @@ public class DefaultNavigator implements Navigator {
             KrailView view = viewFactory.get(node.getViewClass());
             AfterViewChangeBusMessage afterMessage = new AfterViewChangeBusMessage(beforeMessage);
             changeView(view, afterMessage);
+
             // and tell listeners its changed
             publishAfterViewChange(afterMessage);
         } else {
@@ -288,8 +293,17 @@ public class DefaultNavigator implements Navigator {
         ui.changeView(view);
         log.debug("calling view.afterBuild(event) {}", view.getClass()
                 .getName());
+
+        generateAndApplyComponentIds(view);
+        generateAndApplyComponentIds(ui);
         view.afterBuild(new AfterViewChangeBusMessage(busMessage));
         currentView = view;
+        HasComponents g;
+    }
+
+    private void generateAndApplyComponentIds(Object containingObject) {
+        // TODO configuration should allow Ids to be switched off see https://github.com/davidsowerby/krail/issues/662
+        idGenerator.generateAndApply(containingObject);
     }
 
     /**

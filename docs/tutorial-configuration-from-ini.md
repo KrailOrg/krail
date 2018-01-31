@@ -1,4 +1,4 @@
-#Introduction
+# Introduction
 
 In the previous section we covered the use of options, and mentioned that Krail sees Options as the [top layer of configuration](devguide-configuration-overview.md).
 
@@ -6,7 +6,7 @@ This Tutorial has so far covered the top layer and part of the bottom layer.  Th
   
 The middle layer is the one provided by the facility to load ini files (and other formats), and that is what we will explore in this section
 
-#Overview
+# Overview
 
 Krail integrates [Apache Commons Configuration](https://commons.apache.org/proper/commons-configuration/) to provide support for this form of loading configuration, which extends well beyond just ini files.  (See the Apache documentation for more information).   
 
@@ -20,7 +20,7 @@ In the meantime, <code>ApplicationConfiguration</code> should be treated as read
 </div>
 
 
-#Example
+# Example
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -97,11 +97,11 @@ addEntry("ini-config", IniConfigView.class, LabelKey.Ini_Config, PageAccessContr
 ```
 
 
-#More layers
+# More layers
 
 When an application comprises multiple libraries, there may be a need for multiple sets of configuration. You can add as many configuration files as you require.   
 
-##Adding ini files
+## Adding ini files
 
 - create a file 'krail.ini' in *src/main/webapp/WEB-INF*
 - you may be familiar with the extended properties file format .... populate it with:
@@ -122,7 +122,7 @@ timeout=1000
 This will be used to show a property overriding another, while also adding new properties. 
 
 
-##Configure Guice
+## Configure Guice
 
 We now need to set up the Guice configuration so it knows about the additional file.  You can sub-class ```ApplicationConfigurationModule``` , and then tell the ```BindingManager``` about it, or more easily, simply add the configs as part of the the ```BindingManager``` entry like this:
 
@@ -143,7 +143,7 @@ Be aware that the order that the files are processed is important if they contai
     - *connection.timeout* is a new property from *moreConfig.ini*
     - *tutorial.quality* from *krail.ini* has been overridden by the value in *moreConfig.ini*
     
-#Fail early
+# Fail early
 If an ini file is essential for the operation of your application, ```addConfig()``` allows you to specify that.  Both the examples have the 'optional' parameter set to 'false', but of course both files are present.
  
 - add another config to the ```BindingManager entry```, but do not create the corresponding file
@@ -272,7 +272,7 @@ public class IniConfigView extends Grid3x3ViewBase {
     }
 }
 ```
-#Summary
+# Summary
 
 - We have loaded an ini file
 - we have demonstrated the principle of overriding the the values in one ini file with those from another
@@ -281,7 +281,7 @@ public class IniConfigView extends Grid3x3ViewBase {
  
 Apache Commons Configuration supports much more than just ini files, and can support [variety of sources](https://commons.apache.org/proper/commons-configuration/userguide_v1.10/overview.html#Configuration_Sources) - Krail will just accept anything that Apache Commons Configuration provides
   
-#Download from GitHub
+# Download from GitHub
 
 To get to this point straight from GitHub:
 

@@ -20,13 +20,10 @@ import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.Experimental;
-
-import java.util.Optional;
 
 /**
  * Created by David Sowerby on 24/05/15.
@@ -55,9 +52,5 @@ public class SystemAdminView extends Grid3x3ViewBase {
         return buildReportBtn;
     }
 
-    @Override
-    protected void setIds() {
-        super.setIds();
-        buildReportBtn.setId(ID.getId(Optional.of("build report"), this, buildReportBtn));
-    }
+
 }
