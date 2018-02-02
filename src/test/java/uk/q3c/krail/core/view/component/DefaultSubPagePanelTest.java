@@ -288,16 +288,6 @@ public class DefaultSubPagePanelTest {
     }
 
     @Test
-    public void id() {
-        //given
-
-        //when
-
-        //then
-        assertThat(panel.getId()).isEqualTo("DefaultSubPagePanel");
-    }
-
-    @Test
     public void rebuildWithCurrentNodeNull() {
         //given
         when(navigator.getCurrentNode()).thenReturn(null);

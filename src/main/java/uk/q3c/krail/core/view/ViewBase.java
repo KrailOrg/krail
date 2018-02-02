@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.DefaultNavigator;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -29,7 +28,6 @@ import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -113,7 +111,7 @@ public abstract class ViewBase implements KrailView, Serializable {
      */
     @Deprecated
     protected void setIds() {
-        getRootComponent().setId(ID.getId(Optional.empty(), this, getRootComponent()));
+
     }
 
     @Override

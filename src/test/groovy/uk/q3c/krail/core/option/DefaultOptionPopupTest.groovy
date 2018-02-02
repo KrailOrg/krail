@@ -87,7 +87,6 @@ class DefaultOptionPopupTest extends Specification {
 
         then:
         popup.getWindow().getCaption().equals("Authorisation")
-        popup.getWindow().getId() != null
         popup.getWindow().isClosable()
         popup.getWindow().getContent() instanceof Panel
         Panel windowContent = (Panel) popup.getWindow().getContent()
@@ -122,7 +121,6 @@ class DefaultOptionPopupTest extends Specification {
         ((FormLayout) layout1).getComponent(0) instanceof Button
         TextField field = (TextField) ((FormLayout) layout0).getComponent(0)
         field.getCaption().equals("Private Static")
-        field.getId().equals("DefaultOptionPopup-TextField-Private_Static")
         field.getValue().equals("126")
     }
 

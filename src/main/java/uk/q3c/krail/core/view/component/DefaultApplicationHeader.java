@@ -17,10 +17,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.ui.ApplicationTitle;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.i18n.Translate;
-
-import java.util.Optional;
 
 public class DefaultApplicationHeader extends Panel implements ApplicationHeader {
     private Label label;
@@ -34,7 +31,6 @@ public class DefaultApplicationHeader extends Panel implements ApplicationHeader
         this.applicationTitle = applicationTitle;
         this.translate = translate;
         build();
-        setIds();
     }
 
 
@@ -44,11 +40,6 @@ public class DefaultApplicationHeader extends Panel implements ApplicationHeader
         layout.addComponent(label);
         this.setContent(layout);
 
-    }
-
-    private void setIds() {
-        this.setId(ID.getId(Optional.empty(), this));
-        label.setId(ID.getId(Optional.empty(), this, label));
     }
 
     public Label getLabel() {

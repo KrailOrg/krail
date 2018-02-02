@@ -39,8 +39,6 @@ class DefaultApplicationHeaderTest extends Specification {
         header.getContent() instanceof HorizontalLayout
         HorizontalLayout layout = header.getContent()
         layout.getComponent(0) == header.getLabel()
-        header.getId() != null
-        header.getLabel().getId() != null
         header.getLabel().getValue().equals('Krail')
 
     }

@@ -27,14 +27,12 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.MessageKey;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 
 import java.util.Locale;
-import java.util.Optional;
 
 @I18N
 @Listener
@@ -72,7 +70,6 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
         combo = new ComboBox<>();
         combo.setEmptySelectionAllowed(false);
         combo.setWidth(250 + "px");
-        combo.setId(ID.getId(Optional.empty(), this, combo));
     }
 
     /**

@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.krail.core.vaadin.DefaultOptionBinder;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.vaadin.OptionBinder;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -111,7 +110,6 @@ public class DefaultOptionPopup implements OptionPopup {
                 log.debug("option field {} value is at {}", field.getCaption(), field.getValue());
                 Button defaultsButton = new Button(translate.from(LabelKey.Reset_to_Default));
                 Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
-                defaultsButton.setId(ID.getId(optionKeyName, this, defaultsButton));
                 defaultsButton.addClickListener((event -> {
                     // reset to previous level by removing entry for user
                     option.delete(key, 0);
@@ -123,7 +121,6 @@ public class DefaultOptionPopup implements OptionPopup {
                 row++;
             }
         }
-        window.setId(ID.getId(Optional.empty(), context, this, window));
         window.setClosable(true);
         //use panel to scroll
         window.setContent(new Panel(baseLayout));
@@ -141,9 +138,9 @@ public class DefaultOptionPopup implements OptionPopup {
     private void setFieldMetaData(OptionKey<?> key, AbstractField<?> uiField) {
         uiField.setCaption(translate.from(key.getKey()));
         uiField.setDescription(translate.from(key.getDescriptionKey()));
-        Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
-        uiField.setId(ID.getId(optionKeyName, this, uiField));
-        log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
+//        Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
+//        uiField.setId(ID.getId(optionKeyName, this, uiField));
+//        log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
     }
 
     private void calculateWindowSize(Sizeable window) {

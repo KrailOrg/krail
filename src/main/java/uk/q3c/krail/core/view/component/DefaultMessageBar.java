@@ -26,11 +26,8 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.user.notify.ErrorNotificationMessage;
 import uk.q3c.krail.core.user.notify.InformationNotificationMessage;
 import uk.q3c.krail.core.user.notify.WarningNotificationMessage;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.Translate;
-
-import java.util.Optional;
 
 @UIScoped
 @Listener
@@ -56,7 +53,6 @@ public class DefaultMessageBar extends Panel implements MessageBar {
         display = new Label(translate.from(LabelKey.Message_Bar));
         layout.addComponent(display);
         this.setContent(layout);
-        display.setId(ID.getId(Optional.empty(), this, display));
     }
 
     @Handler

@@ -26,7 +26,6 @@ import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.util.forest.NodeFilter;
@@ -34,7 +33,6 @@ import uk.q3c.util.forest.NodeFilter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Listener
 @SubscribeTo({UIBus.class, SessionBus.class})
@@ -54,8 +52,6 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements
         this.sitemap = sitemap;
         this.setSizeUndefined();
         this.setSpacing(true);
-        String id = ID.getId(Optional.empty(), this);
-        setId(id);
     }
 
     public void moveToNavigationState() {
@@ -105,8 +101,6 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements
         button.addStyleName(ValoTheme.BUTTON_LINK);
         button.addClickListener(this);
         buttons.add(button);
-        String id = ID.getId(Optional.of(buttons.size() - 1), this, button);
-        button.setId(id);
         this.addComponent(button);
         return button;
     }

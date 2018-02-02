@@ -42,12 +42,5 @@ class GridViewBaseTest extends ViewTest {
         gridTest = view
     }
 
-    def "id not null"() {
-        given:
-        view.buildView(busMessage)
 
-        expect:
-        view.getRootComponent().getId() != null
-        gridTest.getGridLayout() == view.getRootComponent()
-    }
 }

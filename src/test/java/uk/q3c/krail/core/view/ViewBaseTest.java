@@ -54,13 +54,12 @@ public class ViewBaseTest {
         view2.buildView(null);
         view2.afterBuild(null);
         //then
-        assertThat(view2.getRootComponent()
-                        .getId()).isNotNull();
+
         assertThat(view2.isComponentsConstructed()).isTrue();
     }
 
     @Test
-    public void dirtyAndComponentsConstructed() throws Exception {
+    public void dirtyAndComponentsConstructed() {
         //given
 
         //when
@@ -73,7 +72,7 @@ public class ViewBaseTest {
     }
 
     @Test
-    public void nameAndDescriptionDefaultsAndSetters() throws Exception {
+    public void nameAndDescriptionDefaultsAndSetters() {
         assertThat(view2.getName()).isEqualTo("Unnamed");
         assertThat(view2.getNameKey()).isEqualTo(LabelKey.Unnamed);
         assertThat(view2.getDescription()).isEqualTo("No description provided");

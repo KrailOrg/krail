@@ -36,14 +36,11 @@ import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
-
-import java.util.Optional;
 
 /**
  * Represents the "logged in" status of the current {@link Subject}.
@@ -86,7 +83,6 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         hl.addComponent(usernameLabel);
         hl.addComponent(login_logout_Button);
         this.setContent(hl);
-        setIds();
         build();
 
     }
@@ -101,11 +97,6 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         usernameLabel.setValue(subjectIdentifier.subjectName());
     }
 
-    private void setIds() {
-        setId(ID.getId(Optional.empty(), this));
-        login_logout_Button.setId(ID.getId(Optional.empty(), this, login_logout_Button));
-        usernameLabel.setId(ID.getId(Optional.empty(), this, usernameLabel));
-    }
 
     /**
      * Responds to the {@code busMessage} by rebuilding the panel to reflect a change in user status.

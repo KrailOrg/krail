@@ -37,7 +37,6 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.option.VaadinOptionContext;
-import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.eventbus.GlobalMessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
@@ -46,7 +45,6 @@ import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
 import java.util.Comparator;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -96,7 +94,6 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
         // is different for each selection mode
         setSelectionMode(Grid.SelectionMode.SINGLE);
         addSelectionListener(this);
-        setId(ID.getId(Optional.empty(), this));
         sorters.setOptionSortAscending(getOptionSortAscending());
 
 
