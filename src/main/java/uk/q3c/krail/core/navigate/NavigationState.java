@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.*;
-import static org.slf4j.LoggerFactory.*;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Represents a navigation state (basically a URI fragment, potentially with parameters) but with its component parts
@@ -214,9 +214,8 @@ public class NavigationState implements Serializable {
         if (getClass() != obj.getClass()) return false;
         NavigationState other = (NavigationState) obj;
         if (fragment == null) {
-            if (other.getFragment() != null) return false;
-        } else if (!fragment.equals(other.getFragment())) return false;
-        return true;
+            return other.getFragment() == null;
+        } else return fragment.equals(other.getFragment());
     }
 
     public boolean isFragmentChanged() {
@@ -276,5 +275,10 @@ public class NavigationState implements Serializable {
         fragmentChanged = false;
         partsChanged = false;
         updateInProgress = false;
+    }
+
+    @Override
+    public String toString() {
+        return getFragment();
     }
 }
