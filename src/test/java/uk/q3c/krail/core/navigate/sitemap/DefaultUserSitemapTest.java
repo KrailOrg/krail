@@ -22,6 +22,7 @@ import fixture.ReferenceUserSitemap;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.SessionBus;
@@ -69,7 +70,8 @@ public class DefaultUserSitemapTest {
     }
 
     @Test
-    public void localeChange() throws InterruptedException {
+    @Ignore("https://github.com/davidsowerby/krail/issues/652")
+    public void localeChange() {
 
         // given
         currentLocale.setLocale(Locale.UK);
