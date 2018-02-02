@@ -4,38 +4,26 @@ import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
 import com.google.inject.Inject
 import com.vaadin.ui.Component
+import com.vaadin.ui.HasComponents
 import com.vaadin.ui.Layout
 import org.slf4j.LoggerFactory
 import uk.q3c.util.clazz.UnenhancedClassIdentifier
 import java.lang.reflect.Field
-import java.util.function.Predicate
 
 
 /**
+ *
+ * Generates Ids for Vaadin components (which then become CSS selectors).  Default implementation provided by [DefaultComponentIdGenerator]
+ *
  * Created by David Sowerby on 27 Jan 2018
  */
 
 interface ComponentIdGenerator {
 
     /**
-     * Selects which components have ids assigned to them.  See [ComponentIDAssignmentFilter]
-     */
-    val assignmentFilter: Predicate<Field>
-
-    /**
-     * Selects which components are drilled into for further components. See [ComponentIDDrilldownFilter]
-     */
-    val drilldownFilter: Predicate<Field>
-
-    /**
-     * Generates a map of field names to ids for the given class, using [assignmentFilter] and [drilldownFilter]
-     */
-    fun <T> generate(clazz: Class<out T>): MutableGraph<ComponentIdEntry>
-
-    /**
      * Generates a map of field names to ids using [generate] and applies them to the components in [obj]
      */
-    fun <T> generateAndApply(obj: T): MutableGraph<ComponentIdEntry>
+    fun <T : Any> generateAndApply(obj: T): MutableGraph<ComponentIdEntry>
 
 }
 
@@ -43,66 +31,45 @@ interface ComponentIdGenerator {
  * Selects a component to receive an annotation, returns:
  *
  * - the value of [AssignComponentId.assign] if annotated (a field annotation overrides a class annotation)
- * - if there is no annotation, false if the component implements Layout
- * - if there is no annotation, true for all other components, unless annotated otherwise
+ * - true if annotated with [AssignComponentId.drilldown] set to true (because drilldown without assign causes duplicate ids)
+ * - if there is no annotation, false if the component implements [Layout]
+ * - if there is no annotation, true for all other components
+ *
  *
  */
-class ComponentIDAssignmentFilter : Predicate<Field> {
+data class IdAnnotationValues(val annotationPresent: Boolean, val assign: Boolean, val drilldown: Boolean)
+
+
+class ComponentIDAssignmentFilter {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    override fun test(t: Field): Boolean {
+    fun apply(field: Field, annotationValues: IdAnnotationValues): Boolean {
 
-        // look for class annotation
-        var annotation = t.type.getAnnotation(AssignComponentId::class.java)
-
-        // overridden by field annotation if there is one
-        if (t.isAnnotationPresent(AssignComponentId::class.java)) {
-            annotation = t.getAnnotation(AssignComponentId::class.java)
+        var assign = !Layout::class.java.isAssignableFrom(field.type)
+        if (annotationValues.annotationPresent) {
+            assign = annotationValues.assign
         }
 
-        if (annotation != null) {
-            log.debug("Component '${t.name}' selected for id assign is: '${annotation.assign}'")
-            return annotation.assign
-        }
-
-        // No assignment to Layouts unless annotated
-        val result = !Layout::class.java.isAssignableFrom(t.type)
-        log.debug("Component '${t.name}' selected by default for id assign is: '$result'")
-        return result
+        log.debug("Component '${field.name}' selected for id assign is: '$assign'")
+        return assign
     }
 }
 
 /**
  * Selects a component to drill down into:
  *
+ * - If the Field type implements [HasComponents] but does not implement [Layout], returns true, unless overruled by annotation
  * - the value of [AssignComponentId.drilldown] if annotated (a field annotation overrides a class annotation)
- * - if the declared field is an interface, no drill down is possible, and is rejected
- * - if there is no annotation, no drill down
- *
  *
  */
-class ComponentIDDrilldownFilter : Predicate<Field> {
+class ComponentIDDrilldownFilter {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    override fun test(t: Field): Boolean {
-        // look for class annotation
-        var annotation = t.type.getAnnotation(AssignComponentId::class.java)
+    fun apply(field: Field, annotationValues: IdAnnotationValues): Boolean {
+        var drilldown = HasComponents::class.java.isAssignableFrom(field.type)
 
-        // overridden by field annotation if there is one
-        if (t.isAnnotationPresent(AssignComponentId::class.java)) {
-            annotation = t.getAnnotation(AssignComponentId::class.java)
+        if (annotationValues.annotationPresent) {
+            drilldown = annotationValues.drilldown
         }
-
-        var drilldown = if (annotation != null) {
-            annotation.drilldown
-        } else {
-            false
-        }
-
-        // we can never drilldown into an interface (is that true of Kotlin?)
-        if (t.type.isInterface) {
-            drilldown = false
-            log.warn("Cannot drill down into {}, it is an interface", t.name)
-        }
-
+        log.debug("Component '${field.name}' selected for id drilldown is: '$drilldown'")
         return drilldown
     }
 
@@ -110,20 +77,34 @@ class ComponentIDDrilldownFilter : Predicate<Field> {
 
 data class ComponentIdEntry(val name: String, val id: String, val type: String)
 
-
+/**
+ * Creates an id of the form *SomeView-component-nestedcomponent* using the following logic, provided in part by [ComponentIDAssignmentFilter] and [ComponentIDDrilldownFilter]:
+ *
+ * - All instances of Component are allocated an id, except those which implement [Layout]
+ * - All components which implement [HasComponents], except those which implement [Layout], are drilled down to find further components
+ *
+ * This can be modified by using [AssignComponentId], which can be applied to either class or field. When the annotation is used:
+ *
+ * - if EITHER *assign* or *drilldown* is true, an id is assigned (drilldown without assign can cause duplicate ids)
+ * - if *assign* is false, no id is assigned, even if would otherwise have been.
+ * - if *drilldown* is false, no drilldown occurs, even if it would otherwise have done
+ *
+ * The generator is generally invoked on the instance of a [View] or [UI], but, and components should already be constructed.  If a field has not been constructed it will simply be ignored
+ *
+ */
 class DefaultComponentIdGenerator @Inject constructor(private val realClassIdentifier: UnenhancedClassIdentifier) : ComponentIdGenerator {
 
-    override val assignmentFilter: Predicate<Field> = ComponentIDAssignmentFilter()
-    override val drilldownFilter: Predicate<Field> = ComponentIDDrilldownFilter()
+    private val assignmentFilter = ComponentIDAssignmentFilter()
+    private val drilldownFilter = ComponentIDDrilldownFilter()
     lateinit var graph: MutableGraph<ComponentIdEntry>
 
 
-    private fun <T> doDrillDown(parentEntry: ComponentIdEntry, clazz: Class<out T>, apply: Boolean, obj: T?) {
+    private fun <T : Any> doDrillDown(parentEntry: ComponentIdEntry, clazz: Class<out T>, apply: Boolean, obj: T) {
         // sort the fields into those which need an id assigned, and those which need to be drilled down into
         // the same field may be in both lists
         val componentFields = collectAllComponents(clazz)
-        val assigns = componentFields.filter { assignmentFilter.test(it) }
-        val drilldowns = componentFields.filter { drilldownFilter.test(it) }
+        val assigns = componentFields.filter { assignmentFilter.apply(it, readAnnotation(it, obj)) }
+        val drilldowns = componentFields.filter { drilldownFilter.apply(it, readAnnotation(it, obj)) }
 
         // We want to provide a mapping back to the caller, so the id assignments can be used elsewhere
 
@@ -134,15 +115,13 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
             graph.putEdge(parentEntry, entry)
 
             if (apply) {
-                if (obj != null) {
-                    f.isAccessible = true
-                    val c = f.get(obj)
-                    if (c != null) {
-                        log.debug("Assigning id '${entry.id}' to component ${f.name}")
-                        (c as Component).id = entry.id
-                    } else {
-                        log.warn("Component with id '{}' has not been constructed, id cannot be applied", entry.id)
-                    }
+                f.isAccessible = true
+                val c = f.get(obj)
+                if (c != null) {
+                    log.debug("Assigning id '${entry.id}' to component ${f.name}")
+                    (c as Component).id = entry.id
+                } else {
+                    log.warn("Component with id '{}' has not been constructed, id cannot be applied", entry.id)
                 }
             }
         })
@@ -151,22 +130,45 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         drilldowns.forEach({ f ->
             log.debug("drilling down into {}", f.name)
             f.isAccessible = true
-            val c = if (obj == null) {
-                null
-            } else {
-                f.get(obj)
-            }
+            val c = f.get(obj)
             val thisEntry = entryFor(parentEntry, f)
-
-            // we have to check, otherwise thisEntry will be added to the graph even though it is not to be assigned
-            if (assigns.contains(f)) {
-                doDrillDown(thisEntry, f.type, apply, c)
-            } else {
-                doDrillDown(parentEntry, f.type, apply, c)
-            }
+            doDrillDown(thisEntry, c.javaClass, apply, c)
 
         })
     }
+
+    /**
+     * Reads the values of annotation(s) present on the field or class.  Field takes precedence.  Looks for class annotation
+     * on the instance type, as it may be a subclass (or implementation) of the declared field type
+     */
+    private fun readAnnotation(f: Field, obj: Any): IdAnnotationValues {
+        f.isAccessible = true
+        // no component, so no point trying to assign
+        val c = f.get(obj)
+        if (c == null) {
+            log.debug("Field ${f.name} has not been constructed, so we cannot assign an id to it")
+            return IdAnnotationValues(false, false, false)
+        }
+
+        var annotation = c.javaClass.getAnnotation(AssignComponentId::class.java)
+
+        // override with field annotation if there is one
+        if (f.isAnnotationPresent(AssignComponentId::class.java)) {
+            annotation = f.getAnnotation(AssignComponentId::class.java)
+        }
+        var assign = true
+        var drilldown = true
+
+        if (annotation != null) {
+            assign = annotation.assign
+            drilldown = annotation.drilldown
+        }
+
+        if (drilldown) assign = true
+
+        return IdAnnotationValues(annotationPresent = annotation != null, assign = assign, drilldown = drilldown)
+    }
+
 
     private fun entryFor(parentEntry: ComponentIdEntry, f: Field): ComponentIdEntry {
         val id = "${parentEntry.id}-${f.name}"
@@ -178,9 +180,13 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         log.debug("scanning '{}' to generate component ids", classToScan.name)
         val fields: MutableList<Field> = mutableListOf()
         try {
-            while (classToScan != Any::class.java) {
+            var done = false
+            while (!done) {
                 fields.addAll(classToScan.declaredFields.filter({ f -> componentFilter(f) }))
-                classToScan = classToScan.superclass
+                done = (classToScan == Any::class.java) || (classToScan.superclass == null)
+                if (!done) {
+                    classToScan = classToScan.superclass
+                }
             }
         } catch (iae: IllegalAccessException) {
             log.error("reflective scan of components failed", iae)
@@ -202,7 +208,7 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         return (Component::class.java.isAssignableFrom(t))
     }
 
-    private fun <T> generateAndApply(clazz: Class<out T>, apply: Boolean, obj: T?) {
+    private fun <T : Any> generateAndApply(clazz: Class<out T>, apply: Boolean, obj: T) {
         val entry = ComponentIdEntry(clazz.simpleName, clazz.simpleName, clazz.simpleName)
         graph = GraphBuilder.directed().build<ComponentIdEntry>()
         graph.addNode(entry)
@@ -210,13 +216,7 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
     }
 
 
-    override fun <T> generate(clazz: Class<out T>): MutableGraph<ComponentIdEntry> {
-        generateAndApply(clazz = clazz, apply = false, obj = null)
-        return graph
-    }
-
-
-    override fun <T> generateAndApply(obj: T): MutableGraph<ComponentIdEntry> {
+    override fun <T : Any> generateAndApply(obj: T): MutableGraph<ComponentIdEntry> {
         val clazz = realClassIdentifier.getOriginalClassFor(obj)
         generateAndApply(clazz = clazz, apply = true, obj = obj)
         return graph
@@ -226,15 +226,11 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
 }
 
 /**
- * Annotation to modify the default behaviour of the [ComponentIdGenerator]
-- if *assign* is true, an id is assigned, even if it would otherwise have been excluded,
-- if *assign* is false, an id is not assigned, even if it would otherwise have been included,
-- if *drilldown* is true, the generator drills down (by reflection) into the annotated component to look for any other `Component` fields
-- if *drilldown* is false, no drilldown occurs
+ * See [ComponentIdGenerator] and [DefaultComponentIdGenerator]
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
-annotation class AssignComponentId(val assign: Boolean = true, val drilldown: Boolean = false)
+annotation class AssignComponentId(val assign: Boolean = true, val drilldown: Boolean = true)
 
 
