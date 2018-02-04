@@ -233,7 +233,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
      *
      * @return the layout in which views are placed
      */
-    protected abstract AbstractOrderedLayout screenLayout();
+    public abstract AbstractOrderedLayout screenLayout();
 
     @Override
     public void receiveBroadcast(final String group, final String message, UIKey sender, int messageId) {

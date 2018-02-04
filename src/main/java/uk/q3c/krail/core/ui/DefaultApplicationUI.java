@@ -109,7 +109,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     }
 
     @Override
-    protected AbstractOrderedLayout screenLayout() {
+    public AbstractOrderedLayout screenLayout() {
         buildPage();
         return baseLayout;
     }

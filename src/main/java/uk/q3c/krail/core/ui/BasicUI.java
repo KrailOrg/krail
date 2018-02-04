@@ -38,7 +38,7 @@ public class BasicUI extends ScopedUI {
     }
 
     @Override
-    protected AbstractOrderedLayout screenLayout() {
+    public AbstractOrderedLayout screenLayout() {
         return new VerticalLayout(getViewDisplayPanel());
     }
 

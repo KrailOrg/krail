@@ -176,7 +176,7 @@ public class ScopedUITest {
     }
 
     @Test
-    public void pageTitle() throws Exception {
+    public void pageTitle() {
         //given
         when(applicationTitle.getTitleKey()).thenReturn(LabelKey.Yes);
         when(translate.from(LabelKey.Yes)).thenReturn("Title");
@@ -243,7 +243,7 @@ public class ScopedUITest {
      * There is a much better functional test
      */
     @Test
-    public void receiveBroadcastMessage() throws Exception {
+    public void receiveBroadcastMessage() {
         //given
         prepAttach();
         ui.attach();
@@ -264,7 +264,7 @@ public class ScopedUITest {
         }
 
         @Override
-        protected AbstractOrderedLayout screenLayout() {
+        public AbstractOrderedLayout screenLayout() {
             return new VerticalLayout();
         }
 
@@ -273,7 +273,7 @@ public class ScopedUITest {
     public class ConnectorIdAnswer implements Answer<String> {
 
         @Override
-        public String answer(InvocationOnMock invocation) throws Throwable {
+        public String answer(InvocationOnMock invocation) {
             connectCount++;
             return Integer.toString(connectCount);
         }

@@ -7,6 +7,8 @@ import com.vaadin.ui.Component
 import com.vaadin.ui.HasComponents
 import com.vaadin.ui.Layout
 import org.slf4j.LoggerFactory
+import uk.q3c.krail.core.ui.ScopedUI
+import uk.q3c.krail.core.view.KrailView
 import uk.q3c.util.clazz.UnenhancedClassIdentifier
 import java.lang.reflect.Field
 
@@ -102,7 +104,7 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
     private fun <T : Any> doDrillDown(parentEntry: ComponentIdEntry, clazz: Class<out T>, apply: Boolean, obj: T) {
         // sort the fields into those which need an id assigned, and those which need to be drilled down into
         // the same field may be in both lists
-        val componentFields = collectAllComponents(clazz)
+        val componentFields = collectAllComponents(clazz, obj)
         val assigns = componentFields.filter { assignmentFilter.apply(it, readAnnotation(it, obj)) }
         val drilldowns = componentFields.filter { drilldownFilter.apply(it, readAnnotation(it, obj)) }
 
@@ -175,14 +177,14 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         return ComponentIdEntry(name = f.name, id = id, type = f.type.simpleName)
     }
 
-    private fun <T> collectAllComponents(clazz: Class<out T>): List<Field> {
+    private fun <T> collectAllComponents(clazz: Class<out T>, obj: Any): List<Field> {
         var classToScan: Class<out Any?> = clazz
         log.debug("scanning '{}' to generate component ids", classToScan.name)
         val fields: MutableList<Field> = mutableListOf()
         try {
             var done = false
             while (!done) {
-                fields.addAll(classToScan.declaredFields.filter({ f -> componentFilter(f) }))
+                fields.addAll(classToScan.declaredFields.filter({ f -> componentFilter(f, obj) }))
                 done = (classToScan == Any::class.java) || (classToScan.superclass == null)
                 if (!done) {
                     classToScan = classToScan.superclass
@@ -197,15 +199,36 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
 
     private val log = LoggerFactory.getLogger(this.javaClass.name)
 
-    private fun componentFilter(field: Field): Boolean {
-        val t = field.type
-        if (field.name == "rootComponent") {
-            return false
-        }
+    private fun componentFilter(field: Field, obj: Any): Boolean {
         if (field.name == "parent") {
             return false
         }
-        return (Component::class.java.isAssignableFrom(t))
+        if (obj is KrailView) {
+            if (field.name == "rootComponent") {
+                return false
+            }
+        }
+        if (obj is ScopedUI) {
+            if (field.name == "screenLayout") {
+                return false
+            }
+            if (field.name == "viewDisplayPanel") {
+                return false
+            }
+            if (field.name == "scrollIntoView") {
+                return false
+            }
+            if (field.name == "content") {
+                return false
+            }
+            if (field.name == "pendingFocus") {
+                return false
+            }
+        }
+
+
+
+        return (Component::class.java.isAssignableFrom(field.type))
     }
 
     private fun <T : Any> generateAndApply(clazz: Class<out T>, apply: Boolean, obj: T) {
