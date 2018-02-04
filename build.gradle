@@ -85,7 +85,6 @@ dependencies {
 
 
 
-
     compile 'commons-beanutils:commons-beanutils:1.9.3'
     // need this for Guice 4.1.0 to override older version brought in by Bval
 

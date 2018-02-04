@@ -47,6 +47,7 @@ import uk.q3c.krail.core.i18n.Value;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.view.component.AssignComponentId;
 import uk.q3c.krail.core.view.component.LoginFormException;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
@@ -60,6 +61,7 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final PubSubSupport<BusMessage> eventBus;
+    @AssignComponentId(assign = false, drilldown = false)
     @Caption(caption = LabelKey.Log_In, description = DescriptionKey.Please_log_in)
     private Panel centrePanel;
     @Value(LabelKey.Authentication)

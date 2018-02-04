@@ -134,8 +134,11 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
             f.isAccessible = true
             val c = f.get(obj)
             val thisEntry = entryFor(parentEntry, f)
-            doDrillDown(thisEntry, c.javaClass, apply, c)
-
+            if (c != null) {
+                doDrillDown(thisEntry, realClassIdentifier.getOriginalClassFor(c), apply, c)
+            } else {
+                log.warn("Component for ${f.name} has not been constructed, cannot drill down")
+            }
         })
     }
 

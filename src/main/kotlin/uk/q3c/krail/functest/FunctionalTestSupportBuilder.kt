@@ -3,12 +3,14 @@ package uk.q3c.krail.functest
 import com.google.common.graph.MutableGraph
 import com.google.inject.Inject
 import com.google.inject.Injector
+import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
 import uk.q3c.krail.core.navigate.sitemap.SitemapService
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue
 import uk.q3c.krail.core.view.ViewFactory
 import uk.q3c.krail.core.view.component.ComponentIdEntry
 import uk.q3c.krail.core.view.component.ComponentIdGenerator
+import uk.q3c.util.clazz.UnenhancedClassIdentifier
 
 /**
  * Created by David Sowerby on 03 Feb 2018
@@ -23,9 +25,11 @@ class DefaultFunctionalTestSupportBuilder @Inject constructor(
         val injector: Injector,
         val componentIdGenerator: ComponentIdGenerator,
         val viewFactory: ViewFactory,
-        val uiCreator: UICreator) : FunctionalTestSupportBuilder {
+        val uiCreator: UICreator,
+        val realClassNameIdentifier: UnenhancedClassIdentifier) : FunctionalTestSupportBuilder {
 
     val masterSitemap: MasterSitemap
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
 
     init {
         sitemapService.start()
@@ -42,25 +46,29 @@ class DefaultFunctionalTestSupportBuilder @Inject constructor(
         val uiClasses = uiCreator.definedUIClasses()
 
         uiClasses.forEach({ c ->
-            val className = c.javaClass.simpleName
+            val className = c.simpleName
             val ui = uiCreator.getInstanceOf(c)
             val graph = componentIdGenerator.generateAndApply(ui)
             uis[className] = UIIdEntry(className, graph)
         })
 
         masterSitemap.allNodes.forEach({ node ->
-            val view = viewFactory.get(node.viewClass)
-            val graph = componentIdGenerator.generateAndApply(view)
-            val route = masterSitemap.uri(node)
-            val entry = RouteIdEntry(route = route, idGraph = graph)
-            routes[route] = entry
+            if (node.viewClass != null) {
+                val view = viewFactory.get(node.viewClass)
+                val graph = componentIdGenerator.generateAndApply(view)
+                val route = masterSitemap.uri(node)
+                val entry = RouteIdEntry(route = route, viewName = realClassNameIdentifier.getOriginalClassFor(view).simpleName, idGraph = graph)
+                routes[route] = entry
+            } else {
+                log.debug("entry for route '${masterSitemap.uri(node)}' not created, because no view is defined for it")
+            }
 
         })
         return FunctionalTestSupport(uis, routes)
     }
 }
 
-data class RouteIdEntry(val route: String, val idGraph: MutableGraph<ComponentIdEntry>)
+data class RouteIdEntry(val route: String, val viewName: String, val idGraph: MutableGraph<ComponentIdEntry>)
 
 data class UIIdEntry(val uiName: String, val idGraph: MutableGraph<ComponentIdEntry>)
 

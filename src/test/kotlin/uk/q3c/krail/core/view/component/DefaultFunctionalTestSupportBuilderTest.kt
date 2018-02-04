@@ -41,11 +41,13 @@ import uk.q3c.krail.core.view.ViewBase
 import uk.q3c.krail.core.view.ViewFactory
 import uk.q3c.krail.functest.DefaultFunctionalTestSupportBuilder
 import uk.q3c.krail.functest.FunctionalTestSupportBuilder
+import uk.q3c.krail.functest.KotlinPageObjectGenerator
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.util.UtilModule
+import java.io.File
 
 
 /**
@@ -75,7 +77,6 @@ class DefaultFunctionalTestSupportBuilderTest {
         val mockService: VaadinService = mock()
         whenever(mockRequest.service).thenReturn(mockService)
         uiProvider.createInstance(UICreateEvent(mockRequest, TestUI::class.java))
-        val ui = uiProvider.get()
         masterSitemap.addNode(MasterSitemapNode(1, "simple", SimpleView::class.java, LabelKey.Log_In, -1, PageAccessControl.PUBLIC, ImmutableList.of()))
         masterSitemap.addNode(MasterSitemapNode(2, "simple/another", AnotherSimpleView::class.java, LabelKey.Active_Source, -1, PageAccessControl.PUBLIC, ImmutableList.of()))
 
@@ -89,6 +90,8 @@ class DefaultFunctionalTestSupportBuilderTest {
         fts.routes["simple/another"].shouldNotBeNull()
         fts.routes["simple/another"]?.route?.shouldBeEqualTo("simple/another")
 
+        fts.uis.keys.shouldContain("TestUI")
+
         fts.uis.values.forEach({ u ->
             u.idGraph.nodes()
                     .shouldContain(ComponentIdEntry(name = "TestUI", id = "TestUI", type = "TestUI"))
@@ -96,6 +99,9 @@ class DefaultFunctionalTestSupportBuilderTest {
         })
 
 
+        // when we generate view objects
+        val pageObjectGenerator = KotlinPageObjectGenerator()
+        pageObjectGenerator.generate(fts, File("/tmp/PageObjects.kt"), "uk.q3c.krail.functest")
     }
 }
 
