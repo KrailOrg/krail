@@ -3,9 +3,11 @@ package uk.q3c.krail.functest;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.vaadin.ui.Component;
 import uk.q3c.krail.core.guice.uiscope.UIKeyProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,8 @@ public class UICreator {
     private final Injector injector;
     private final UIKeyProvider uiKeyProvider;
     private final Map<String, Class<? extends ScopedUI>> uiMapBinder;
+    private final List<Class<? extends Component>> baseComponents = new ArrayList<>();
+
 
     @Inject
     public UICreator(Injector injector, UIKeyProvider uiKeyProvider, Map<String, Class<? extends ScopedUI>> uiMapBinder) {
@@ -32,6 +36,7 @@ public class UICreator {
         ui.screenLayout();
         return ui;
     }
+
 
     public List<Class<? extends ScopedUI>> definedUIClasses() {
         return ImmutableList.copyOf(uiMapBinder.values());

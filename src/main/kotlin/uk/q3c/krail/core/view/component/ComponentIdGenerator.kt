@@ -3,9 +3,11 @@ package uk.q3c.krail.core.view.component
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
 import com.google.inject.Inject
-import com.vaadin.ui.Component
-import com.vaadin.ui.HasComponents
-import com.vaadin.ui.Layout
+import com.vaadin.ui.*
+import com.vaadin.ui.components.colorpicker.ColorPickerGradient
+import com.vaadin.ui.components.colorpicker.ColorPickerGrid
+import com.vaadin.ui.components.colorpicker.ColorPickerHistory
+import com.vaadin.ui.components.colorpicker.ColorPickerSelect
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.ui.ScopedUI
 import uk.q3c.krail.core.view.KrailView
@@ -42,11 +44,21 @@ interface ComponentIdGenerator {
 data class IdAnnotationValues(val annotationPresent: Boolean, val assign: Boolean, val drilldown: Boolean)
 
 
-class ComponentIDAssignmentFilter {
+class ComponentIDAssignmentFilter(val realClassIdentifier: UnenhancedClassIdentifier) {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    fun apply(field: Field, annotationValues: IdAnnotationValues): Boolean {
 
-        var assign = !Layout::class.java.isAssignableFrom(field.type)
+    fun apply(field: Field, obj: Any): Boolean {
+        field.isAccessible = true
+        val c = field.get(obj)
+        if (c == null) {
+            log.warn("Field '${field.name}' must be constructed to be included in id assignment")
+            return false
+        }
+        val cc = c as Component
+        val cClazz = realClassIdentifier.getOriginalClassFor(cc)
+        var assign = !layoutClasses.contains(cClazz)
+        val annotationReader = AnnotationReader(realClassIdentifier)
+        val annotationValues: IdAnnotationValues = annotationReader.readAnnotation(field, c)
         if (annotationValues.annotationPresent) {
             assign = annotationValues.assign
         }
@@ -59,25 +71,45 @@ class ComponentIDAssignmentFilter {
 /**
  * Selects a component to drill down into:
  *
- * - If the Field type implements [HasComponents] but does not implement [Layout], returns true, unless overruled by annotation
- * - the value of [AssignComponentId.drilldown] if annotated (a field annotation overrides a class annotation)
+ * Annotation has already been read and set by [DefaultComponentIdGenerator.readAnnotation], and if no specific
+ * annotation rule has been applied, drilldown is applied if the field type implements [HasComponents], but not if it implements [Layout]
  *
  */
-class ComponentIDDrilldownFilter {
+class ComponentIDDrilldownFilter(val realClassIdentifier: UnenhancedClassIdentifier) {
+
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    fun apply(field: Field, annotationValues: IdAnnotationValues): Boolean {
-        var drilldown = HasComponents::class.java.isAssignableFrom(field.type)
+
+
+    fun apply(field: Field, obj: Any): Boolean {
+
+        field.isAccessible = true
+        val c = field.get(obj)
+        if (c == null) {
+            log.warn("Field '${field.name}' must be constructed to be included in drilldown")
+            return false
+        }
+        val cc = c as Component
+
+        var drilldown = true
+        val annotationReader = AnnotationReader(realClassIdentifier)
+        val annotationValues: IdAnnotationValues = annotationReader.readAnnotation(field, c)
 
         if (annotationValues.annotationPresent) {
             drilldown = annotationValues.drilldown
         }
+
+        val cClazz = realClassIdentifier.getOriginalClassFor(cc)
+        if (layoutClasses.contains(cClazz) || baseVaadinComponents.contains(cClazz)) {
+            drilldown = false
+        }
+
         log.debug("Component '${field.name}' selected for id drilldown is: '$drilldown'")
         return drilldown
     }
 
 }
 
-data class ComponentIdEntry(val name: String, val id: String, val type: String)
+data class ComponentIdEntry(val name: String, val id: String, val type: String, val baseComponent: Boolean)
 
 /**
  * Creates an id of the form *SomeView-component-nestedcomponent* using the following logic, provided in part by [ComponentIDAssignmentFilter] and [ComponentIDDrilldownFilter]:
@@ -96,8 +128,9 @@ data class ComponentIdEntry(val name: String, val id: String, val type: String)
  */
 class DefaultComponentIdGenerator @Inject constructor(private val realClassIdentifier: UnenhancedClassIdentifier) : ComponentIdGenerator {
 
-    private val assignmentFilter = ComponentIDAssignmentFilter()
-    private val drilldownFilter = ComponentIDDrilldownFilter()
+
+    private val assignmentFilter = ComponentIDAssignmentFilter(realClassIdentifier)
+    private val drilldownFilter = ComponentIDDrilldownFilter(realClassIdentifier)
     lateinit var graph: MutableGraph<ComponentIdEntry>
 
 
@@ -105,27 +138,31 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         // sort the fields into those which need an id assigned, and those which need to be drilled down into
         // the same field may be in both lists
         val componentFields = collectAllComponents(clazz, obj)
-        val assigns = componentFields.filter { assignmentFilter.apply(it, readAnnotation(it, obj)) }
-        val drilldowns = componentFields.filter { drilldownFilter.apply(it, readAnnotation(it, obj)) }
+        val assigns = componentFields.filter { assignmentFilter.apply(it, obj) }
+        val drilldowns = componentFields.filter { drilldownFilter.apply(it, obj) }
 
         // We want to provide a mapping back to the caller, so the id assignments can be used elsewhere
 
-        // construct the id, and if assign is true, apply it
+        // construct the id, and if apply is true, apply it
         assigns.forEach({ f ->
-            val entry = entryFor(parentEntry, f)
-            graph.addNode(entry)
-            graph.putEdge(parentEntry, entry)
+            f.isAccessible = true
+            val c = f.get(obj)
+            if (c != null) {
+                val entry = entryFor(parentEntry, f, c as Component)
+                log.debug("adding node ${parentEntry.id} to graph")
+                graph.addNode(entry)
+                log.debug("placing edge from ${parentEntry.id} to ${entry.id}")
+                graph.putEdge(parentEntry, entry)
 
-            if (apply) {
-                f.isAccessible = true
-                val c = f.get(obj)
-                if (c != null) {
+                if (apply) {
                     log.debug("Assigning id '${entry.id}' to component ${f.name}")
-                    (c as Component).id = entry.id
-                } else {
-                    log.warn("Component with id '{}' has not been constructed, id cannot be applied", entry.id)
+                    c.id = entry.id
                 }
+
+            } else {
+                log.warn("Component for field '${f.name}' has not been constructed, id cannot be applied")
             }
+
         })
 
         // drill down with prefix set to "this" component / View / UI
@@ -133,51 +170,19 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
             log.debug("drilling down into {}", f.name)
             f.isAccessible = true
             val c = f.get(obj)
-            val thisEntry = entryFor(parentEntry, f)
             if (c != null) {
+                val thisEntry = entryFor(parentEntry, f, c as Component)
                 doDrillDown(thisEntry, realClassIdentifier.getOriginalClassFor(c), apply, c)
             } else {
-                log.warn("Component for ${f.name} has not been constructed, cannot drill down")
+                log.warn("Component for field '${f.name}' has not been constructed, cannot drill down")
             }
         })
     }
 
-    /**
-     * Reads the values of annotation(s) present on the field or class.  Field takes precedence.  Looks for class annotation
-     * on the instance type, as it may be a subclass (or implementation) of the declared field type
-     */
-    private fun readAnnotation(f: Field, obj: Any): IdAnnotationValues {
-        f.isAccessible = true
-        // no component, so no point trying to assign
-        val c = f.get(obj)
-        if (c == null) {
-            log.debug("Field ${f.name} has not been constructed, so we cannot assign an id to it")
-            return IdAnnotationValues(false, false, false)
-        }
 
-        var annotation = c.javaClass.getAnnotation(AssignComponentId::class.java)
-
-        // override with field annotation if there is one
-        if (f.isAnnotationPresent(AssignComponentId::class.java)) {
-            annotation = f.getAnnotation(AssignComponentId::class.java)
-        }
-        var assign = true
-        var drilldown = true
-
-        if (annotation != null) {
-            assign = annotation.assign
-            drilldown = annotation.drilldown
-        }
-
-        if (drilldown) assign = true
-
-        return IdAnnotationValues(annotationPresent = annotation != null, assign = assign, drilldown = drilldown)
-    }
-
-
-    private fun entryFor(parentEntry: ComponentIdEntry, f: Field): ComponentIdEntry {
+    private fun entryFor(parentEntry: ComponentIdEntry, f: Field, component: Component): ComponentIdEntry {
         val id = "${parentEntry.id}-${f.name}"
-        return ComponentIdEntry(name = f.name, id = id, type = f.type.simpleName)
+        return ComponentIdEntry(name = f.name, id = id, type = component::class.java.simpleName, baseComponent = isBaseComponent(component))
     }
 
     private fun <T> collectAllComponents(clazz: Class<out T>, obj: Any): List<Field> {
@@ -196,7 +201,12 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         } catch (iae: IllegalAccessException) {
             log.error("reflective scan of components failed", iae)
         }
+        log.debug("${fields.size} fields selected")
         return fields
+    }
+
+    private fun isBaseComponent(component: Component): Boolean {
+        return baseVaadinComponents.contains(component::class.java)
     }
 
 
@@ -229,13 +239,11 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
             }
         }
 
-
-
         return (Component::class.java.isAssignableFrom(field.type))
     }
 
     private fun <T : Any> generateAndApply(clazz: Class<out T>, apply: Boolean, obj: T) {
-        val entry = ComponentIdEntry(clazz.simpleName, clazz.simpleName, clazz.simpleName)
+        val entry = ComponentIdEntry(clazz.simpleName, clazz.simpleName, clazz.simpleName, false)
         graph = GraphBuilder.directed().build<ComponentIdEntry>()
         graph.addNode(entry)
         doDrillDown(parentEntry = entry, clazz = clazz, apply = apply, obj = obj)
@@ -260,3 +268,81 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
 annotation class AssignComponentId(val assign: Boolean = true, val drilldown: Boolean = true)
 
 
+class AnnotationReader(val realClassIdentifier: UnenhancedClassIdentifier) {
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
+    /**
+     * Reads the values of annotation(s) present on the field or class.  Field takes precedence.  Looks for class annotation
+     * on the instance type, as it may be a subclass (or implementation) of the declared field type.
+     *
+     */
+    fun readAnnotation(f: Field, c: Component): IdAnnotationValues {
+        f.isAccessible = true
+        // no component, so no point trying to assign
+
+        val cClazz = realClassIdentifier.getOriginalClassFor(c)
+        var annotation = cClazz.getAnnotation(AssignComponentId::class.java)
+
+        // override with field annotation if there is one
+        if (f.isAnnotationPresent(AssignComponentId::class.java)) {
+            annotation = f.getAnnotation(AssignComponentId::class.java)
+        }
+        var assign = true
+        var drilldown = true
+
+        if (annotation != null) {
+            assign = annotation.assign
+            drilldown = annotation.drilldown
+        }
+
+        if (drilldown) assign = true
+
+        return IdAnnotationValues(annotationPresent = annotation != null, assign = assign, drilldown = drilldown)
+    }
+}
+
+
+private val baseVaadinComponents: List<Class<out Component>> = listOf(Button::class.java, TabSheet::class.java,
+        Accordion::class.java,
+        BrowserFrame::class.java,
+        Flash::class.java,
+        Image::class.java,
+        ColorPicker::class.java,
+        ColorPickerArea::class.java,
+        DateField::class.java,
+        InlineDateField::class.java,
+        DateTimeField::class.java,
+        InlineDateTimeField::class.java,
+        TextArea::class.java,
+        TextField::class.java,
+        PasswordField::class.java,
+        CheckBox::class.java,
+        ColorPickerGradient::class.java,
+        ColorPickerGrid::class.java,
+        ColorPickerHistory::class.java,
+        ColorPickerSelect::class.java,
+        RichTextArea::class.java,
+        Slider::class.java,
+        Button::class.java,
+        NativeButton::class.java,
+        Grid::class.java,
+        TreeGrid::class.java,
+        Audio::class.java,
+        Video::class.java,
+        Tree::class.java,
+        DragAndDropWrapper::class.java,
+        Embedded::class.java,
+        Label::class.java,
+        Link::class.java,
+        MenuBar::class.java,
+        PopupView::class.java,
+        ProgressBar::class.java,
+        Upload::class.java)
+
+private val layoutClasses: List<Class<out Component>> = listOf(
+        Panel::class.java,
+        VerticalLayout::class.java,
+        HorizontalLayout::class.java,
+        GridLayout::class.java,
+        VerticalSplitPanel::class.java,
+        HorizontalSplitPanel::class.java
+)

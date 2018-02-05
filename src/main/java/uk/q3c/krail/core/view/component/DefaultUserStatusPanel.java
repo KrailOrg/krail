@@ -51,7 +51,7 @@ import uk.q3c.krail.i18n.Translate;
 // TODO I18N
 @Listener
 @SubscribeTo(SessionBus.class)
-@AssignComponentId(assign = true, drilldown = true)
+@AssignComponentId()
 public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, ClickListener, UserStatusChangeSource {
     private static Logger log = LoggerFactory.getLogger(DefaultUserStatusPanel.class);
     private final Label usernameLabel;

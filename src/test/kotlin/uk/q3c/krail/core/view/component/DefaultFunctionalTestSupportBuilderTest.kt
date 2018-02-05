@@ -10,10 +10,7 @@ import com.vaadin.server.ErrorHandler
 import com.vaadin.server.UICreateEvent
 import com.vaadin.server.VaadinRequest
 import com.vaadin.server.VaadinService
-import com.vaadin.ui.AbstractOrderedLayout
-import com.vaadin.ui.Button
-import com.vaadin.ui.Label
-import com.vaadin.ui.VerticalLayout
+import com.vaadin.ui.*
 import org.amshove.kluent.mock
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContain
@@ -42,6 +39,7 @@ import uk.q3c.krail.core.view.ViewFactory
 import uk.q3c.krail.functest.DefaultFunctionalTestSupportBuilder
 import uk.q3c.krail.functest.FunctionalTestSupportBuilder
 import uk.q3c.krail.functest.KotlinPageObjectGenerator
+import uk.q3c.krail.functest.RouteIdEntry
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
@@ -94,9 +92,15 @@ class DefaultFunctionalTestSupportBuilderTest {
 
         fts.uis.values.forEach({ u ->
             u.idGraph.nodes()
-                    .shouldContain(ComponentIdEntry(name = "TestUI", id = "TestUI", type = "TestUI"))
-                    .shouldContain(ComponentIdEntry(name = "label", id = "TestUI-label", type = "Label"))
+                    .shouldContain(ComponentIdEntry(name = "TestUI", id = "TestUI", type = "TestUI", baseComponent = false))
+                    .shouldContain(ComponentIdEntry(name = "label", id = "TestUI-label", type = "Label", baseComponent = true))
         })
+
+        val routeEntry: RouteIdEntry = fts.routes["simple"] ?: throw AssertionError("failed to find route")
+        val customEntry = ComponentIdEntry(name = "custom", type = "TestCustomComponent", id = "SimpleView-custom", baseComponent = false)
+        val customLabel = ComponentIdEntry(name = "labelInCustom", type = "Label", id = "SimpleView-custom-labelInCustom", baseComponent = true)
+        routeEntry.idGraph.successors(routeEntry.root).shouldContain(customEntry)
+        routeEntry.idGraph.successors(customEntry).shouldContain(customLabel)
 
 
         // when we generate view objects
@@ -157,8 +161,10 @@ class IdGeneratorModule : AbstractModule() {
 
 class SimpleView @Inject constructor(translate: Translate) : ViewBase(translate) {
     lateinit var label: Label
+    lateinit var custom: TestCustomComponent
     override fun doBuild(busMessage: ViewChangeBusMessage?) {
         label = Label("boo")
+        custom = TestCustomComponent()
     }
 }
 
@@ -167,4 +173,9 @@ class AnotherSimpleView @Inject constructor(translate: Translate) : ViewBase(tra
     override fun doBuild(busMessage: ViewChangeBusMessage?) {
         button = Button("boo button")
     }
+}
+
+class TestCustomComponent : Panel() {
+    var labelInCustom = Label()
+    var butonnInCustom = Button()
 }

@@ -1,6 +1,8 @@
 package uk.q3c.krail.functest
 
+import com.google.common.graph.MutableGraph
 import org.slf4j.LoggerFactory
+import uk.q3c.krail.core.view.component.ComponentIdEntry
 import java.io.File
 
 /**
@@ -11,108 +13,83 @@ interface PageObjectGenerator {
 }
 
 interface ViewObject
-interface PageObject
+interface PageObject : ViewObject
+interface CustomObject : ViewObject
 
 class KotlinPageObjectGenerator : PageObjectGenerator {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
+    // use Set to avoid duplicates
+    val objects: MutableSet<KPOClass> = mutableSetOf()
 
     override fun generate(model: FunctionalTestSupport, file: File, packageName: String) {
         val buf = StringBuilder()
         buf.append("package $packageName\n\n")
         buf.append("import uk.q3c.krail.functest.*\n\n")
 
-        val viewObjects = generateViewObjects(model)
+        generateViewObjects(model)
+        generatePageObjects(model)
 
-        viewObjects.forEach({ v ->
+        objects.forEach({ v ->
             buf.append(v)
             buf.append("\n")
         })
 
-        val pageObjects = generatePageObjects(model)
-        pageObjects.forEach({ p ->
-            buf.append(p)
-            buf.append("\n")
-        })
 
         file.createNewFile()
         file.writeText(buf.toString())
         log.info("Page objects generated to ${file.absolutePath}")
     }
 
-    private fun generatePageObjects(model: FunctionalTestSupport): MutableSet<KPOClass> {
-        val pageObjects: MutableSet<KPOClass> = mutableSetOf()
+    private fun generatePageObjects(model: FunctionalTestSupport) {
         model.uis.values.forEach({ uiEntry ->
-            val kpoClass = KPOClass(uiEntry.uiName)
-            uiEntry.idGraph.nodes().forEach({ node ->
-                if (node.name != kpoClass.uiName) {
-                    kpoClass.property(node.name, node.type)
-                }
-            })
-            pageObjects.add(kpoClass)
+            generateObject(uiEntry.root, objectType = "PageObject", idGraph = uiEntry.idGraph)
         })
-        return pageObjects
     }
 
-    private fun generateViewObjects(model: FunctionalTestSupport): MutableSet<KVOClass> {
-        // use a set in case the same view is used on more than one route
-        val viewObjects: MutableSet<KVOClass> = mutableSetOf()
+    private fun generateViewObjects(model: FunctionalTestSupport) {
         model.routes.values.forEach({ routeIdEntry ->
-            val kvoClass = KVOClass(routeIdEntry.viewName)
-            routeIdEntry.idGraph.nodes().forEach({ node ->
-                if (node.name != kvoClass.viewName) {
-                    kvoClass.property(node.name, node.type)
-                }
-            })
-            viewObjects.add(kvoClass)
+            generateObject(source = routeIdEntry.root, objectType = "ViewObject", idGraph = routeIdEntry.idGraph)
         })
-        return viewObjects
     }
 
+    private fun generateObject(source: ComponentIdEntry, objectType: String, idGraph: MutableGraph<ComponentIdEntry>) {
+        val kpoClass = KPOClass(sourceType = source.type, objectInterfaceType = objectType, baseComponent = source.baseComponent)
+
+        idGraph.successors(source).forEach({ node ->
+            kpoClass.property(node.name, node.type, node.baseComponent)
+            generateObject(node, "CustomObject", idGraph)
+        })
+
+        objects.add(kpoClass)
+    }
 
 }
 
+data class PropertySpec(val name: String, val type: String, val baseComponent: Boolean)
 
-data class KVOClass(val viewName: String) {
-    private val props: MutableMap<String, String> = mutableMapOf()
-    private val name: String = "${viewName}Object"
+data class KPOClass(val sourceType: String, val objectInterfaceType: String, val baseComponent: Boolean) {
+    private val props: MutableList<PropertySpec> = mutableListOf()
+    private val name: String = "${sourceType}Object"
 
-    fun property(name: String, type: String) {
-        props[name] = type
-    }
-
-    override fun toString(): String {
-        val buf = StringBuilder("class ")
-        buf.append(name)
-        buf.append(" : ViewObject {\n\n")
-        props.forEach({ (k, v) ->
-            buf.append("    val ")
-            buf.append(k)
-            buf.append(" by ")
-            buf.append(v)
-            buf.append("()\n")
-        })
-        buf.append("}\n")
-        return buf.toString()
-    }
-}
-
-data class KPOClass(val uiName: String) {
-    private val props: MutableMap<String, String> = mutableMapOf()
-    private val name: String = "${uiName}Object"
-
-    fun property(name: String, type: String) {
-        props[name] = type
+    fun property(name: String, type: String, baseComponent: Boolean) {
+        props.add(PropertySpec(name = name, type = type, baseComponent = baseComponent))
     }
 
     override fun toString(): String {
         val buf = StringBuilder("class ")
         buf.append(name)
         buf.append(" : PageObject {\n\n")
-        props.forEach({ (k, v) ->
+        props.forEach({ p ->
             buf.append("    val ")
-            buf.append(k)
-            buf.append(" by ")
-            buf.append(v)
+            buf.append(p.name)
+            if (p.baseComponent) {
+                buf.append(" by ")
+                buf.append(p.type)
+            } else {
+                buf.append(" = ")
+                buf.append(p.type)
+                buf.append("Object")
+            }
             buf.append("()\n")
         })
         buf.append("}\n")

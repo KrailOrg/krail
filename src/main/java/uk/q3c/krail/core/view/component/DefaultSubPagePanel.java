@@ -44,6 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @I18N
 @Listener
 @SubscribeTo({GlobalMessageBus.class, SessionBus.class})
+@AssignComponentId
 public class DefaultSubPagePanel extends NavigationButtonPanel implements VaadinOptionContext, SubPagePanel {
     public static final OptionKey<SortType> optionSortType = new OptionKey<>(SortType.ALPHA, DefaultSubPagePanel.class, LabelKey.Sort_Type, DescriptionKey
             .Sort_Type);

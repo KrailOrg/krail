@@ -16,8 +16,6 @@ package uk.q3c.krail.util;
 import com.google.inject.AbstractModule;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.DefaultComponentIdGenerator;
-import uk.q3c.krail.functest.DefaultFunctionalTestSupportBuilder;
-import uk.q3c.krail.functest.FunctionalTestSupportBuilder;
 
 /**
  * Bindings fo utility classes
@@ -30,17 +28,12 @@ public class UtilsModule extends AbstractModule {
     protected void configure() {
         bindResourceUtils();
         bindIdGenerator();
-        bindIdGraph();
-
     }
 
     protected void bindIdGenerator() {
         bind(ComponentIdGenerator.class).to(DefaultComponentIdGenerator.class);
     }
 
-    protected void bindIdGraph() {
-        bind(FunctionalTestSupportBuilder.class).to(DefaultFunctionalTestSupportBuilder.class);
-    }
 
     /**
      * Override this method to provide your own {@link ResourceUtils} binding
