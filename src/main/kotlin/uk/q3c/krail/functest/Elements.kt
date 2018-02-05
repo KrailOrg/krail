@@ -30,7 +30,6 @@ interface ValueElement<in T> {
 }
 
 interface LabelElement : BaseElement {
-    fun setValue(value: String)
     fun valueShouldBe(expectedValue: String)
 }
 
