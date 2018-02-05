@@ -12,9 +12,21 @@ interface PageObjectGenerator {
     fun generate(model: FunctionalTestSupport, file: File, packageName: String)
 }
 
-interface ViewObject
+interface ViewObject {
+    val id: String
+}
 interface PageObject : ViewObject
 interface CustomObject : ViewObject
+
+abstract class AbstractCustomObject(override val id: String) : CustomObject
+
+abstract class AbstractViewObject : ViewObject {
+    override val id: String = browser.view.id
+}
+
+abstract class AbstractPageObject : PageObject {
+    override val id: String = browser.page.id
+}
 
 class KotlinPageObjectGenerator : PageObjectGenerator {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
@@ -56,8 +68,10 @@ class KotlinPageObjectGenerator : PageObjectGenerator {
         val kpoClass = KPOClass(sourceType = source.type, objectInterfaceType = objectType, baseComponent = source.baseComponent)
 
         idGraph.successors(source).forEach({ node ->
-            kpoClass.property(node.name, node.type, node.baseComponent)
-            generateObject(node, "CustomObject", idGraph)
+            kpoClass.property(node.name, node.type, node.baseComponent, node.id)
+            if (!node.baseComponent) {
+                generateObject(node, "CustomObject", idGraph)
+            }
         })
 
         objects.add(kpoClass)
@@ -65,32 +79,41 @@ class KotlinPageObjectGenerator : PageObjectGenerator {
 
 }
 
-data class PropertySpec(val name: String, val type: String, val baseComponent: Boolean)
+data class PropertySpec(val name: String, val type: String, val baseComponent: Boolean, val id: String)
 
 data class KPOClass(val sourceType: String, val objectInterfaceType: String, val baseComponent: Boolean) {
     private val props: MutableList<PropertySpec> = mutableListOf()
     private val name: String = "${sourceType}Object"
 
-    fun property(name: String, type: String, baseComponent: Boolean) {
-        props.add(PropertySpec(name = name, type = type, baseComponent = baseComponent))
+    fun property(name: String, type: String, baseComponent: Boolean, id: String) {
+        props.add(PropertySpec(name = name, type = type, baseComponent = baseComponent, id = id))
     }
 
     override fun toString(): String {
         val buf = StringBuilder("class ")
         buf.append(name)
-        buf.append(" : PageObject {\n\n")
+        if (objectInterfaceType == "CustomObject") {
+            buf.append("(override val id:String)")
+            buf.append(" : AbstractCustomObject (id)")
+        } else {
+            buf.append("() : Abstract$objectInterfaceType()")
+        }
+
+        buf.append(" {\n\n")
         props.forEach({ p ->
             buf.append("    val ")
             buf.append(p.name)
             if (p.baseComponent) {
                 buf.append(" by ")
                 buf.append(p.type)
+                buf.append("()\n")
             } else {
                 buf.append(" = ")
                 buf.append(p.type)
-                buf.append("Object")
+                buf.append("Object (\"${p.id}\"")
+                buf.append(")\n")
             }
-            buf.append("()\n")
+
         })
         buf.append("}\n")
         return buf.toString()
