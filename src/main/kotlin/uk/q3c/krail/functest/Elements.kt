@@ -41,7 +41,7 @@ interface ButtonElement : BaseElement {
 
 interface GridElement : BaseElement
 interface TreeGridElement : BaseElement
-interface MenuElement : BaseElement {
+interface MenuBarElement : BaseElement {
     fun select(path: String)
 }
 
