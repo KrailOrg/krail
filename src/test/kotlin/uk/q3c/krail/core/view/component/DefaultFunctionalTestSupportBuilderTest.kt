@@ -11,10 +11,7 @@ import com.vaadin.server.UICreateEvent
 import com.vaadin.server.VaadinRequest
 import com.vaadin.server.VaadinService
 import com.vaadin.ui.*
-import org.amshove.kluent.mock
-import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldContain
-import org.amshove.kluent.shouldNotBeNull
+import org.amshove.kluent.*
 import org.junit.Before
 import org.junit.Test
 import uk.q3c.krail.core.i18n.I18NProcessor
@@ -88,10 +85,11 @@ class DefaultFunctionalTestSupportBuilderTest {
         fts.routes["simple/another"].shouldNotBeNull()
         fts.routes["simple/another"]?.route?.shouldBeEqualTo("simple/another")
 
-        fts.uis.keys.shouldContain("TestUI")
+        fts.uis.keys.size.shouldBe(1)
+        fts.uis.keys.first().uiId.name.shouldEqual("TestUI")
 
-        fts.uis.values.forEach({ u ->
-            u.idGraph.nodes()
+        fts.uis.values.forEach({ v ->
+            v.nodes()
                     .shouldContain(ComponentIdEntry(name = "TestUI", id = "TestUI", type = "TestUI", baseComponent = false))
                     .shouldContain(ComponentIdEntry(name = "label", id = "TestUI-label", type = "Label", baseComponent = true))
         })
@@ -99,8 +97,11 @@ class DefaultFunctionalTestSupportBuilderTest {
         val routeEntry: RouteIdEntry = fts.routes["simple"] ?: throw AssertionError("failed to find route")
         val customEntry = ComponentIdEntry(name = "custom", type = "TestCustomComponent", id = "SimpleView-custom", baseComponent = false)
         val customLabel = ComponentIdEntry(name = "labelInCustom", type = "Label", id = "SimpleView-custom-labelInCustom", baseComponent = true)
-        routeEntry.idGraph.successors(routeEntry.root).shouldContain(customEntry)
-        routeEntry.idGraph.successors(customEntry).shouldContain(customLabel)
+        fts.viewFor("simple").viewId.id.shouldBeEqualTo("SimpleView")
+        fts.viewFor("simple/another").viewId.id.shouldBeEqualTo("AnotherSimpleView")
+        fts.uiFor("simple").uiId.id.shouldBeEqualTo("TestUI")
+        fts.uiFor("simple/another").uiId.id.shouldBeEqualTo("TestUI")
+//        routeEntry.idGraph.successors(customEntry).shouldContain(customLabel)
 
 
         // when we generate view objects

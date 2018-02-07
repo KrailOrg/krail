@@ -53,14 +53,14 @@ class KotlinPageObjectGenerator : PageObjectGenerator {
     }
 
     private fun generatePageObjects(model: FunctionalTestSupport) {
-        model.uis.values.forEach({ uiEntry ->
-            generateObject(uiEntry.root, objectType = "PageObject", idGraph = uiEntry.idGraph)
+        model.uis.forEach({ (k, v) ->
+            generateObject(source = k.uiId, objectType = "PageObject", idGraph = v)
         })
     }
 
     private fun generateViewObjects(model: FunctionalTestSupport) {
-        model.routes.values.forEach({ routeIdEntry ->
-            generateObject(source = routeIdEntry.root, objectType = "ViewObject", idGraph = routeIdEntry.idGraph)
+        model.views.forEach({ (k, v) ->
+            generateObject(source = k.viewId, objectType = "ViewObject", idGraph = v)
         })
     }
 

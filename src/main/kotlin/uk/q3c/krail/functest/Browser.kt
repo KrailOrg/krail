@@ -15,6 +15,7 @@ interface Browser {
     var view: ViewElement
     var page: PageElement
     fun back()
+    fun forward()
 
     /**
      * Returns when the [desiredFragment] appears in the browser url, or throws an [AssertionError] on timeout
@@ -23,6 +24,12 @@ interface Browser {
 
     fun fragmentShouldNotBe(desiredFragment: String)
     fun setup()
+
+    /**
+     * Navigates the browser directly to a URI.  **NOTE**This hangs when used with Selenide after the first time of use.
+     * Unless the test specifically requires direct navigation (a user entering URI into Browser address bar), navigate using
+     * controls that the user would use - generally the menu
+     */
     fun navigateTo(fragment: String)
     fun currentUrl(): String
     fun viewShouldBe(viewClass: Class<*>)
