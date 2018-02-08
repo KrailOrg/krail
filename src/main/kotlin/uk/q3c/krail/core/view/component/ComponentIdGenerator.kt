@@ -179,10 +179,25 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
         })
     }
 
-
+    /**
+     * When we have a component which extends a base component (for example, the DefaultNavigationMenu extends MenuBar)
+     * we want to treat it as the base component - for example, we want the property in the ViewObject to be:
+     *
+     * val menu = MenuBar()
+     *
+     *
+     * Otherwise we end up with a mismatch between the id of the property in the ViewObject and the actual id, because
+     * the structures are not the same
+     */
     private fun entryFor(parentEntry: ComponentIdEntry, f: Field, component: Component): ComponentIdEntry {
         val id = "${parentEntry.id}-${f.name}"
-        return ComponentIdEntry(name = f.name, id = id, type = component::class.java.simpleName, baseComponent = isBaseComponent(component))
+        if (isBaseComponent(component)) {
+            return ComponentIdEntry(name = f.name, id = id, type = component::class.java.simpleName, baseComponent = true)
+        }
+        if (isBaseComponentSubClass(component)) {
+            return ComponentIdEntry(name = f.name, id = id, type = component::class.java.superclass.simpleName, baseComponent = true)
+        }
+        return ComponentIdEntry(name = f.name, id = id, type = component::class.java.simpleName, baseComponent = false)
     }
 
     private fun <T> collectAllComponents(clazz: Class<out T>, obj: Any): List<Field> {
@@ -207,6 +222,10 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
 
     private fun isBaseComponent(component: Component): Boolean {
         return baseVaadinComponents.contains(component::class.java)
+    }
+
+    private fun isBaseComponentSubClass(component: Component): Boolean {
+        return baseVaadinComponents.contains(component::class.java.superclass)
     }
 
 

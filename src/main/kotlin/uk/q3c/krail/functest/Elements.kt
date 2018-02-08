@@ -50,6 +50,9 @@ interface TextFieldElement : BaseElement, ValueElement<String>
 
 interface TextAreaElement : BaseElement, ValueElement<String>
 
+interface TreeElement : BaseElement
+interface ImageElement : BaseElement
+
 interface ViewElement {
     val id: String
 }

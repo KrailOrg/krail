@@ -32,6 +32,7 @@ interface Browser {
      */
     fun navigateTo(fragment: String)
     fun currentUrl(): String
+    fun currentFragment(): String
     fun viewShouldBe(viewClass: Class<*>)
 }
 

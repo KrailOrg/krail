@@ -12,6 +12,7 @@ import com.vaadin.server.VaadinRequest
 import com.vaadin.server.VaadinService
 import com.vaadin.ui.*
 import org.amshove.kluent.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import uk.q3c.krail.core.i18n.I18NProcessor
@@ -33,10 +34,7 @@ import uk.q3c.krail.core.ui.ScopedUIProvider
 import uk.q3c.krail.core.view.DefaultViewFactory
 import uk.q3c.krail.core.view.ViewBase
 import uk.q3c.krail.core.view.ViewFactory
-import uk.q3c.krail.functest.DefaultFunctionalTestSupportBuilder
-import uk.q3c.krail.functest.FunctionalTestSupportBuilder
-import uk.q3c.krail.functest.KotlinPageObjectGenerator
-import uk.q3c.krail.functest.RouteIdEntry
+import uk.q3c.krail.functest.*
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
@@ -79,11 +77,11 @@ class DefaultFunctionalTestSupportBuilderTest {
         val fts = functionalTestSupportBuilder.generate()
 
         // then
-        fts.routes["simple"].shouldNotBeNull()
-        fts.routes["simple"]?.route?.shouldBeEqualTo("simple")
+        fts.routeMap.map["simple"].shouldNotBeNull()
+        fts.routeMap.map["simple"]?.route?.shouldBeEqualTo("simple")
 
-        fts.routes["simple/another"].shouldNotBeNull()
-        fts.routes["simple/another"]?.route?.shouldBeEqualTo("simple/another")
+        fts.routeMap.map["simple/another"].shouldNotBeNull()
+        fts.routeMap.map["simple/another"]?.route?.shouldBeEqualTo("simple/another")
 
         fts.uis.keys.size.shouldBe(1)
         fts.uis.keys.first().uiId.name.shouldEqual("TestUI")
@@ -94,19 +92,25 @@ class DefaultFunctionalTestSupportBuilderTest {
                     .shouldContain(ComponentIdEntry(name = "label", id = "TestUI-label", type = "Label", baseComponent = true))
         })
 
-        val routeEntry: RouteIdEntry = fts.routes["simple"] ?: throw AssertionError("failed to find route")
+        val routeEntry: RouteIdEntry = fts.routeMap.map["simple"] ?: throw AssertionError("failed to find route")
         val customEntry = ComponentIdEntry(name = "custom", type = "TestCustomComponent", id = "SimpleView-custom", baseComponent = false)
         val customLabel = ComponentIdEntry(name = "labelInCustom", type = "Label", id = "SimpleView-custom-labelInCustom", baseComponent = true)
-        fts.viewFor("simple").viewId.id.shouldBeEqualTo("SimpleView")
-        fts.viewFor("simple/another").viewId.id.shouldBeEqualTo("AnotherSimpleView")
-        fts.uiFor("simple").uiId.id.shouldBeEqualTo("TestUI")
-        fts.uiFor("simple/another").uiId.id.shouldBeEqualTo("TestUI")
+        fts.routeMap.viewFor("simple").viewId.id.shouldBeEqualTo("SimpleView")
+        fts.routeMap.viewFor("simple/another").viewId.id.shouldBeEqualTo("AnotherSimpleView")
+        fts.routeMap.uiFor("simple").uiId.id.shouldBeEqualTo("TestUI")
+        fts.routeMap.uiFor("simple/another").uiId.id.shouldBeEqualTo("TestUI")
 //        routeEntry.idGraph.successors(customEntry).shouldContain(customLabel)
 
 
         // when we generate view objects
         val pageObjectGenerator = KotlinPageObjectGenerator()
         pageObjectGenerator.generate(fts, File("/tmp/PageObjects.kt"), "uk.q3c.krail.functest")
+
+        fts.routeMap.toJson(File("/tmp/routeMap.json"))
+        val routeMap2 = routeMapFromJson(File("/tmp/routeMap.json"))
+
+        assertThat(fts.routeMap).isEqualTo(routeMap2)
+
     }
 }
 
