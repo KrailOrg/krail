@@ -53,12 +53,12 @@ interface TextAreaElement : BaseElement, ValueElement<String>
 interface TreeElement : BaseElement
 interface ImageElement : BaseElement
 
-interface ViewElement {
+interface CompositeElement {
     val id: String
 }
 
-interface PageElement {
-    val id: String
-}
+interface ViewElement : CompositeElement
+
+interface PageElement : CompositeElement
 
 

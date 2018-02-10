@@ -93,7 +93,7 @@ data class KPOClass(val sourceType: String, val objectInterfaceType: String, val
         val buf = StringBuilder("class ")
         buf.append(name)
         if (objectInterfaceType == "CustomObject") {
-            buf.append("(override val id:String)")
+            buf.append("(id:String)")
             buf.append(" : AbstractCustomObject (id)")
         } else {
             buf.append("() : Abstract$objectInterfaceType()")
