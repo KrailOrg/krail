@@ -45,19 +45,26 @@ group = 'uk.q3c.krail'
 apply plugin: 'uk.q3c.kaytee'
 apply plugin: 'kotlin'
 
-sourceCompatibility='1.8'
+sourceCompatibility = '1.8'
 
 repositories {
     jcenter()
     mavenCentral()
+    maven {
+        url {
+            "http://maven.vaadin.com/vaadin-addons"
+        }
+    }
 }
+
+
 
 kaytee {
     version {
         number = "0.14.0.0"
     }
 
-    release{
+    release {
         mergeToMaster = false
     }
 }
@@ -83,7 +90,7 @@ dependencies {
     compile 'uk.q3c.krail:krail-config:0.10.5.0'
     compile 'uk.q3c.krail:krail-persist-api:0.14.0.0'
 
-
+    compile 'org.vaadin:easybinder:0.5'
 
     compile 'commons-beanutils:commons-beanutils:1.9.3'
     // need this for Guice 4.1.0 to override older version brought in by Bval
