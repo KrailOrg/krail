@@ -92,6 +92,11 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     private Panel nonSplitPanel;
     private Option option;
     private HorizontalSplitPanel splitPanel;
+
+    public ComboBox<Locale> getLocaleCombo() {
+        return localeCombo;
+    }
+
     private ComboBox<Locale> localeCombo;
 
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
