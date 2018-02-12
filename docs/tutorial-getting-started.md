@@ -39,7 +39,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }
     
     vaadin {
-        version = '7.7.10' // This version should match that used by the version of Krail you are using
+        version = '8.2.0' // This version should match that used by the version of Krail you are using
         logToConsole = true
     }
     
@@ -54,7 +54,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.10.0.0')
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.14.0.0')
     }
     
     configurations.all {
@@ -65,7 +65,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }
     
     task wrapper(type: Wrapper) {
-        gradleVersion = '4.1'
+        gradleVersion = '4.4.1'
     }
 ```  
 

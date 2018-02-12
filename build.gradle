@@ -64,9 +64,6 @@ kaytee {
         number = "0.14.0.0"
     }
 
-    release {
-        mergeToMaster = false
-    }
 }
 
 bintray {

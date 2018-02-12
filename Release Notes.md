@@ -33,3 +33,7 @@ See the `EasyBinder` class for the types of binder available.  There is more wor
 
 The EasyBinder addon overcomes some of the limitations of the native Vaadin 8 binder
 
+## Tutorial
+
+The Tutorial has not been updated - this will be done after the move to Vert.x succeeds or fails
+

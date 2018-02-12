@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/davidsowerby/krail.svg?branch=master)](https://travis-ci.org/davidsowerby/krail)
 [![Coverage Status](https://coveralls.io/repos/github/davidsowerby/krail/badge.svg?branch=master)](https://coveralls.io/github/davidsowerby/krail?branch=master)
 
-Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/master/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial))
+Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/master/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial)).  Note that the tutorial is based on the Vaadin 7 version of Krail - it should still be possible to follow it, but it will not be updated until the move to Eclipse Vert.x is done (or fails!) 
 
 
 This core library provides:
@@ -18,6 +18,7 @@ This core library provides:
 * User options
 * Application configuration through ini files, database etc
 * JSR 303 Validation (integrated with I18N)
+* Forms support through [EasyBinder](https://github.com/ljessendk/easybinder)
 * User notifications
 
 Additional libraries, integrated and configured through Guice, provide:
@@ -35,25 +36,16 @@ The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&st
 
 ---
 
-Version 0.10.0.0 of Krail was a major refactoring.  See Release Notes.md for that release for details.  That was the last significant development that will be done under Vaadin 7.
+Krail has now been updated to Vaadin 8.  The next step is to try migrating to [Eclipse Vert](http://vertx.io/).  If that is successful, from that point, the emphasis will be on providing user interface platform designed for use within a distributed environment, and specifically on vertx.
 
-This library, and some of its associated libraries, are undergoing a transition to Vaadin 8. The upgrade to Vaadin 8 affects [krail](https://github.com/davidsowerby/krail) and [krail-jpa](https://github.com/davidsowerby/krail-jpa), and for functional testing [krail-bench](https://github.com/davidsowerby/krail-bench) and [krail-testapp](https://github.com/davidsowerby/krail-testapp)
-
-Normally the versions of these are independent, but to simplify the transition to Vaadin 8, are being brought temporarily into line:
+Normally the versions of the various libraries are independent, but to simplify the transition to Vaadin 8, they are being brought temporarily into line:
 
 | Krail version  |   Vaadin    | 
 |---------|------------|
 |0.12.x.x | version 7  |
 |0.13.x.x-v7compat | version 8, running version 7 compatibility  |
-|0.14.x.x | pure Vaadin 8
+|0.14.x.x | and beyond, pure Vaadin 8
 
-
-This is the current plan:
-
-- Complete the refactoring - released 23rd Aug 2017 (0.10.0.0)
-- Update to latest Vaadin 7  - released 23rd Aug 2017 (0.10.0.0)
-- Upgrade to Vaadin 8 - In progress
-- Attempt a migration to [Eclipse Vert.x](http://vertx.io/) - that may or may not work! 
 
 ---
 
@@ -70,7 +62,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail:0.10.0.0'
+'uk.q3c.krail:krail:0.14.0.0'
 ```
 ## Maven
 
@@ -86,7 +78,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail</artifactId>
-	<version>0.10.0.0</version>
+	<version>0.14.0.0</version>
 </dependency>
 ```
 ## Direct
@@ -99,9 +91,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 # Status
 
-23rd Aug 2017:
-
-* Vaadin 8.1.2 is integrated with:
+* Vaadin 8.2.0 is integrated with:
 * Guice 4.1.0
 * Shiro 1.4.0,
 * MBassador (Event Bus)
@@ -109,7 +99,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 * Guava cache
 
 
-Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.  Tested on Tomcat 7 & 8
+Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.
 
 
 ## testApp
