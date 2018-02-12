@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ErrorHandler;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Tree;
 import org.junit.Before;
@@ -47,6 +46,7 @@ import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 import uk.q3c.util.UtilModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -102,7 +102,6 @@ public class DefaultApplicationUITest {
 
     @Before
     public void setup() {
-        when(localeSelector.getComponent()).thenReturn(new Label());
         when(navTree.getTree()).thenReturn(tree);
         when(menu.getMenuBar()).thenReturn(menuBar);
         ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
@@ -139,10 +138,11 @@ public class DefaultApplicationUITest {
         verify(breadcrumb).setVisible(false);
         verify(messageBar).setVisible(false);
         verify(subpage).setVisible(false);
+        verify(localeSelector).setCombo(anyObject());
     }
 
     @Test
-    public void getters() throws Exception {
+    public void getters() {
         //given
 
         //when

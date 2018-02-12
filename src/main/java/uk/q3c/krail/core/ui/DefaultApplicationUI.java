@@ -16,6 +16,7 @@ package uk.q3c.krail.core.ui;
 import com.google.inject.Inject;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Panel;
@@ -47,6 +48,8 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
+
+import java.util.Locale;
 
 /**
  * A common layout for a business-type application. This is a good place to start even if you replace it eventually.
@@ -89,6 +92,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     private Panel nonSplitPanel;
     private Option option;
     private HorizontalSplitPanel splitPanel;
+    private ComboBox<Locale> localeCombo;
 
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
@@ -115,6 +119,10 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     }
 
     protected void buildPage() {
+        localeCombo = new ComboBox<>();
+        localeCombo.setEmptySelectionAllowed(false);
+        localeCombo.setWidth(250 + "px");
+        localeSelector.setCombo(localeCombo);
         headerRow();
         messageBar();
         subPagePanel();
@@ -143,7 +151,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     }
 
     protected void headerRow() {
-        headerRow = new HorizontalLayout(header, localeSelector.getComponent(), userStatus);
+        headerRow = new HorizontalLayout(header, localeCombo, userStatus);
         headerRow.setWidth("100%");
         headerRow.setExpandRatio(header, 1f);
 

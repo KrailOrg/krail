@@ -15,7 +15,6 @@ package uk.q3c.krail.core.view.component;
 import com.google.inject.Inject;
 import com.vaadin.data.HasValue;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -42,6 +41,11 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
     private final LocaleContainer container;
     private final CurrentLocale currentLocale;
     private final UserNotifier userNotifier;
+
+    public void setCombo(ComboBox<Locale> combo) {
+        this.combo = combo;
+    }
+
     @Description(description = DescriptionKey.Select_from_available_languages)
     private ComboBox<Locale> combo;
     private boolean loaded = false;
@@ -49,9 +53,6 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
     private boolean fireListeners;
     private boolean inhibitMessage;
 
-    public ComboBox<Locale> getCombo() {
-        return combo;
-    }
 
     public boolean isLoaded() {
         return loaded;
@@ -63,17 +64,11 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
         this.container = container;
         this.currentLocale = currentLocale;
         this.userNotifier = userNotifier;
-        buildUI();
     }
 
-    private void buildUI() {
-        combo = new ComboBox<>();
-        combo.setEmptySelectionAllowed(false);
-        combo.setWidth(250 + "px");
-    }
 
     /**
-     * We cannot set up the combox with data until the UI has finished building
+     * We cannot set up the combo with data until the UI has finished building
      *
      * @param message not used
      */
@@ -97,16 +92,18 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
         } else {
             log.debug("responding in change to new locale of {}", busMessage.getNewLocale().getDisplayName());
             inhibitMessage = true;
-            combo.setValue(busMessage.getNewLocale());
+            if (combo != null) {
+                combo.setValue(busMessage.getNewLocale());
+            } else {
+                log.warn("No combo has been set for this Locale selector");
+            }
+
             inhibitMessage = false;
 
         }
     }
 
-    @Override
-    public Component getComponent() {
-        return combo;
-    }
+
 
 
     /**
@@ -114,6 +111,9 @@ public class DefaultLocaleSelector implements LocaleSelector, HasValue.ValueChan
      */
     @Override
     public Locale selectedLocale() {
+        if (combo == null) {
+            return null;
+        }
         return combo.getValue();
     }
 

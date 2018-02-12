@@ -16,9 +16,9 @@ package uk.q3c.krail.core.view.component
 import com.google.inject.Inject
 import com.mycila.testing.junit.MycilaJunitRunner
 import com.mycila.testing.plugin.guice.GuiceContext
-import com.vaadin.data.provider.CallbackDataProvider
 import com.vaadin.data.provider.ListDataProvider
 import com.vaadin.server.VaadinService
+import com.vaadin.ui.ComboBox
 import org.amshove.kluent.mock
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldBeNull
@@ -90,28 +90,45 @@ class DefaultLocaleSelectorTest {
         // we do nothing else
         // then
         selector.selectedLocale().shouldBeNull()
-        // wehave not set the data provider
-        selector.combo.dataProvider.shouldBeInstanceOf(CallbackDataProvider::class)
+
     }
 
 
     @Test
     fun afterViewHasBeenBuilt() {
-        // given the message is not actually used
+        // given a comboBox (the message is not actually used)
+        val combo = ComboBox<Locale>()
+        selector.setCombo(combo)
         val message = AfterViewChangeBusMessage(NavigationState(), NavigationState())
         // when
         selector.afterViewChange(message)
         // then
         selector.selectedLocale().shouldEqual(currentLocale!!.locale)
-        selector.combo.dataProvider.shouldBeInstanceOf(ListDataProvider::class)
-        selector.combo.itemIconGenerator.shouldBeInstanceOf(DefaultLocaleIconGenerator::class)
-        selector.combo.itemCaptionGenerator.shouldBeInstanceOf(DefaultLocaleContainer::class)
+        combo.dataProvider.shouldBeInstanceOf(ListDataProvider::class)
+        combo.itemIconGenerator.shouldBeInstanceOf(DefaultLocaleIconGenerator::class)
+        combo.itemCaptionGenerator.shouldBeInstanceOf(DefaultLocaleContainer::class)
     }
 
     @Test
-    fun localeChanged() {
+    fun localeChanged_butComboNotSet() {
 
         // given
+        // no combo
+
+        // when source is not the selector itself, so it should be processed
+        selector.localeChanged(LocaleChangeBusMessage(this, Locale.GERMANY))
+        // then
+        selector.selectedLocale().shouldBeNull()
+
+    }
+
+    @Test
+    fun localeChanged_withComboSet() {
+
+        // given
+        val combo = ComboBox<Locale>()
+        selector.setCombo(combo)
+
         // when source is not the selector itself, so it should be processed
         selector.localeChanged(LocaleChangeBusMessage(this, Locale.GERMANY))
         // then

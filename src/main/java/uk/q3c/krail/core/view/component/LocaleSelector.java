@@ -10,17 +10,15 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.vaadin.ui.Component;
+import com.vaadin.ui.ComboBox;
 
 import java.util.Locale;
 
 public interface LocaleSelector {
     /**
-     * returns the visual component used to display the current locale
-     *
-     * @return
+     * Sets the visual component to be used to display the current locale
      */
-    Component getComponent();
+    void setCombo(ComboBox<Locale> c);
 
     Locale selectedLocale();
 }
