@@ -52,7 +52,7 @@ This is the current plan:
 
 - Complete the refactoring - released 23rd Aug 2017 (0.10.0.0)
 - Update to latest Vaadin 7  - released 23rd Aug 2017 (0.10.0.0)
-- Upgrade to Vaadin 8 - It is hoped that this can be completed by around late September 2017
+- Upgrade to Vaadin 8 - In progress
 - Attempt a migration to [Eclipse Vert.x](http://vertx.io/) - that may or may not work! 
 
 ---
@@ -101,7 +101,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 23rd Aug 2017:
 
-* Vaadin 7.7.10 is integrated with:
+* Vaadin 8.1.2 is integrated with:
 * Guice 4.1.0
 * Shiro 1.4.0,
 * MBassador (Event Bus)
@@ -128,7 +128,7 @@ Thanks to:
 [Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial<br>
 [Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration<br>
 
-
+[EasyBinder](https://github.com/ljessendk/easybinder)
 [ej technologies](http://www.ej-technologies.com/index.html) for an open source licence of [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
 [Vaadin](https://vaadin.com/home)<br>
 [Guice](https://github.com/google/guice)<br>

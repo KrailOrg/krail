@@ -16,10 +16,20 @@ The behaviour of this annotation changes.  It no longer uses the scope of the ta
 
 If there is a **@Listener**, but an empty **@SubscribeTo()**, the target will not be subscribed to anything - this can be used to remove subscription from an inherited class.
 
-## BeanFieldGroup and BeanValidator
+ 
+## Functional Test Support
+VaadinTestBench has been replaced by [Selenide](http://selenide.org/) for Functional Testing.  This solution is not as complete as TestBench, but covers many use cases. 
 
-`BeanFieldGroup` and `BeanValidator`, with their associated classes have been removed completely.  This attempt at support for Forms has been dropped from this release, so that dependencies on Vaadin 7 can be completely removed. Forms support will be redeveloped and re-instated as a priority - possibly using Vaadin addons [EasyBinder](https://vaadin.com/directory/component/easybinder) and/or [Viritin](https://vaadin.com/directory/component/viritin), though that has yet to be decided.
- 
- 
-## Component Ids
 Component ids are now generated automatically to support functional testing.  There is an [outstanding issue](https://github.com/davidsowerby/krail/issues/662) to control this via configuration.
+A `FunctionalTestSupport` object provides a model of route to View / UI, and the components they contain.
+
+To complement this, there is some early but useful work held currently in the test-app project which generates Page Objects for functional testing.  These, along with some framework code enable testing using Selenide, and could be extend easily for use with Vaadin TestBench
+
+Functional Test Support This will become a separate library in the near future  
+
+## Validation and Forms
+The previous `BeanFieldGroup` solution has been replaced completely, using [EasyBinder](https://github.com/ljessendk/easybinder).  This has been integrated with Krail's I18N mechanism.
+See the `EasyBinder` class for the types of binder available.  There is more work to be done to provide a proper 'Form'.
+
+The EasyBinder addon overcomes some of the limitations of the native Vaadin 8 binder
+
