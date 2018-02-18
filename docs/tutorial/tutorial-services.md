@@ -21,7 +21,7 @@ The transient states of STARTING and STOPPING are there because some services ma
 
 - FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_STOPPED, STARTED, DEPENDENCY_FAILED, FAILED_TO_RESET
 
-The [developer guide](devguide-services.md#state-changes-and-causes) gives more information about how the various method calls to Service affect state and cause;
+The [developer guide](../devguide/devguide-services.md#state-changes-and-causes) gives more information about how the various method calls to Service affect state and cause;
 
 
 ##Dependencies

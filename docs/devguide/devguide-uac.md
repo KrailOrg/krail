@@ -2,7 +2,7 @@
 
 So what actually happens?
 
-Krail has a ```MasterSitemap```, which contains all the page definitions for the whole site.  This is built from the page definitions you provide using either the direct method or annotation method you covered in [Tutorial - Pages and Navigation](tutorial-pages-navigation.md).
+Krail has a ```MasterSitemap```, which contains all the page definitions for the whole site.  This is built from the page definitions you provide using either the direct method or annotation method you covered in [Tutorial - Pages and Navigation](../tutorial/tutorial-pages-navigation.md).
   
 When a user logs in, the ```MasterSitemap``` is copied to a user-specific instance of ```UserSitemap```.  However, only those pages which the user is authorised to see are actually copied across, and displayed in the navigation components.  This means that either the pages must be public, or the user must have permissions to see them in order for them to be displayed.
 

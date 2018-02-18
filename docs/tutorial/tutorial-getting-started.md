@@ -420,13 +420,13 @@ Application context: /tutorial
 
  .... you should now see something like this:
 
-![Screenshot](img/basic-screenshot.png)
+![Screenshot](../img/basic-screenshot.png)
 <a name="explore"></a>
 #Exploring the Basic Application
 
 There are a few things to see, even in this very basic implementation.    
 
-![Screenshot](img/basic-screenshot2.png)
+![Screenshot](../img/basic-screenshot2.png)
 
 
 - The "screen" presentation is provided by ```DefaultApplicationUI``` - UI in this context refers to the Vaadin concept of UI, which is generally equivalent to a browser tab. 

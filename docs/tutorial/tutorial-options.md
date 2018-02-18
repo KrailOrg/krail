@@ -1,6 +1,6 @@
 #Introduction
 
-Krail sees Options as the [top layer of configuration](devguide-configuration-overview.md).  Options give users as much control as the Krail developer wants to give them, at runtime.  They can be used for anything which you would typically find in a settings / preferences / options menu. 
+Krail sees Options as the [top layer of configuration](../devguide/devguide-configuration-overview.md).  Options give users as much control as the Krail developer wants to give them, at runtime.  They can be used for anything which you would typically find in a settings / preferences / options menu. 
 
 #Out of the Box
 

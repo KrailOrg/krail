@@ -6,13 +6,13 @@ Clearly we will want to add some new pages, but first we must know what constitu
 
 A page is represented by a URI, which maps to a specified ```KrailView``` class.  The name of the page is presented to the user in navigation aware components, so that name must be Locale sensitive.  Once the page is defined, it becomes part of the Krail ```Sitemap```, which forms the heart of the navigation system.  
 
-There are two ways to add pages to Krail and make use of the [navigation features](devguide-pages-navigation.md), and you can use either one, or both. These are the "direct" method or "annotation" method. We will use both methods. 
+There are two ways to add pages to Krail and make use of the [navigation features](../devguide/devguide-pages-navigation.md), and you can use either one, or both. These are the "direct" method or "annotation" method. We will use both methods. 
 
 Because the page name is locale sensitive, we will first need to provide I18N support.
 <a name="I18NIntro"></a>
 ##Introducing I18N
 
-You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the [full I18N description](devguide-i18n.md) now, or just follow these steps, as we will come back to I18N later in the Tutorial.  
+You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the [full I18N description](../devguide/devguide-i18n.md) now, or just follow these steps, as we will come back to I18N later in the Tutorial.  
 
 ###Create an I18N Annotation
 

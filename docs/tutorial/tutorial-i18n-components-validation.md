@@ -563,7 +563,7 @@ VerticalLayout layout = new VerticalLayout(personForm.getLayout(), buttonBar1, b
 <p class="last">Apache BVal provides language bundles for Locales de, en, es and it.  If you require others you will currently need to provide your own translations</p>
 </div>
 
-There is a more information about the Apache Bval validation integration in the [Developer Guide](devguide-validation.md)
+There is a more information about the Apache Bval validation integration in the [Developer Guide](../devguide/devguide-validation.md)
 
 #Summary
 

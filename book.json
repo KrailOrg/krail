@@ -1,0 +1,8 @@
+{
+  "root": "docs",
+  "structure": {
+    "readme": "index.md",
+    "glossary": "glossary.md",
+    "summary": "contents.md"
+  }
+}

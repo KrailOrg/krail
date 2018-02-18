@@ -27,8 +27,8 @@ Additional libraries, integrated and configured through Guice, provide:
 * Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
 
 
-The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [Tutorial](http://krail.readthedocs.org/en/master/) provide more information.
-
+The [User Guide](https://www.gitbook.com/book/davidsowerby/krail-user-guide/details) provides more information (regrettably, the absence of a working search facility in ReadTheDocs forced a move to GitBook).
+ 
 
 ---
 

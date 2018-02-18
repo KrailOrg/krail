@@ -12,7 +12,7 @@ Krail makes the use of Views even easier, and as a result probably makes the use
 
 # URI and Page
 
-A central part of the way navigation works in Krail is the interpretation of the [URI](glossary.md#URI).  The default implementation of ```URIFragmentHandler```, is ```StrictURIFragmentHandler``` and it defines the URI with the following example:
+A central part of the way navigation works in Krail is the interpretation of the [URI](../glossary.md#URI).  The default implementation of ```URIFragmentHandler```, is ```StrictURIFragmentHandler``` and it defines the URI with the following example:
 
 This provides a more strict interpretation of the UriFragment than Vaadin does by default. It requires that the URI
 structure is of the form:

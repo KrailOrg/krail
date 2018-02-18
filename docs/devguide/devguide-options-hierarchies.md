@@ -1,6 +1,6 @@
 #Introduction
 
-The idea of providing users with options is a standard requirement for many applications, whether it is just letting them decide what they see on a page, or maybe the news feed they get.  Krail provides an implementation which should be flexible enough for any application, with a minimum of effort.  This guide describes the structure and principles behind Options - for detail of how to use them, please refer to the [Tutorial](tutorial-options.md).
+The idea of providing users with options is a standard requirement for many applications, whether it is just letting them decide what they see on a page, or maybe the news feed they get.  Krail provides an implementation which should be flexible enough for any application, with a minimum of effort.  This guide describes the structure and principles behind Options - for detail of how to use them, please refer to the [Tutorial](../tutorial/tutorial-options.md).
 
 #Relationship to Configuration
 

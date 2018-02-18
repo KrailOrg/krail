@@ -7,7 +7,7 @@ Krail uses a publish - subscribe Event Bus in place of the common Event Listener
 
 #Overview
 
-Most of the work is done in the ```EventBusModule```, which binds bus instances to match the [Krail scopes](tutorial-guice-scopes.md) of **@Singleton**, **@VaadinSessionScope** and **@UIScope**.  You don't have to use all three, but there is a natural correlation between a bus and a scope.
+Most of the work is done in the ```EventBusModule```, which binds bus instances to match the [Krail scopes](../tutorial/tutorial-guice-scopes.md) of **@Singleton**, **@VaadinSessionScope** and **@UIScope**.  You don't have to use all three, but there is a natural correlation between a bus and a scope.
 
 The 3 implementations are represented by 3 binding annotations **@GlobalMessageBus**, **@SessionBus** and **@UIBus** respectively - each of which also is used to bind implementations for bus configuration, bus configuration error handlers and publication error handlers.
 

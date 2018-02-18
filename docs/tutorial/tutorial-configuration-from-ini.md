@@ -1,6 +1,6 @@
 # Introduction
 
-In the previous section we covered the use of options, and mentioned that Krail sees Options as the [top layer of configuration](devguide-configuration-overview.md).
+In the previous section we covered the use of options, and mentioned that Krail sees Options as the [top layer of configuration](../devguide/devguide-configuration-overview.md).
 
 This Tutorial has so far covered the top layer and part of the bottom layer.  The "bottom layer" includes the configuration we have done using Guice and Guice modules, but includes anything which requires a recompile (for example, annotations)
   
