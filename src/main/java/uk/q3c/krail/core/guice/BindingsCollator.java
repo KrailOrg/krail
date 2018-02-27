@@ -14,17 +14,12 @@ package uk.q3c.krail.core.guice;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.google.inject.util.Modules;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.bval.guice.ValidationModule;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,123 +51,77 @@ import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
-import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
-import javax.servlet.ServletContextEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Collects together all the modules used for bindings, and passes them to the {@link Injector}  during the injector creation process.  The separation into
- * different groupings of modules is for clarity only - they do not have to be separate for any other reason.
+ * Collects together all the modules used for bindings. Groupings of modules is for clarity only - they do not have to be separate for any other reason.
  */
-public abstract class DefaultBindingManager extends GuiceServletContextListener {
-    //Visible for testing
-    static Injector injector;
-    private static Logger log = LoggerFactory.getLogger(DefaultBindingManager.class);
+public class BindingsCollator {
+    private static Logger log = LoggerFactory.getLogger(BindingsCollator.class);
+    private final ImmutableList<Module> additionalModules;
 
-    protected DefaultBindingManager() {
+    public BindingsCollator() {
         super();
+        this.additionalModules = ImmutableList.of();
     }
 
-    public static Injector injector() {
-        return injector;
+    public BindingsCollator(Module... modules) {
+        this.additionalModules = ImmutableList.copyOf(modules);
     }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        log.info("Stopping service");
-        try {
-            if (injector != null) {
-                injector.getInstance(ServiceModel.class)
-                        .stopAllServices();
-            } else {
-                log.debug("Injector has not been constructed, no call made to stop service");
-            }
-        } catch (Exception e) {
-            log.error("Exception while stopping service", e);
-        }
-        //context may not have been crated, and super does not check for it
-        if (servletContextEvent.getServletContext() != null) {
-            super.contextDestroyed(servletContextEvent);
-        }
-    }
 
-    /**
-     * Module instances for the core should be added in {@link #getModules()}. Module instances for the app using Krail
-     * should be added to {@link #addAppModules(List)}
-     *
-     * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
-     */
-    @Override
-    public Injector getInjector() {
-        if (injector == null) {
-            createInjector();
-        }
-        return injector;
-    }
+    public List<Module> allModules() {
+        List<Module> modules = new ArrayList<>(30);
+        modules.addAll(additionalModules);
 
-    protected void createInjector() {
-        injector = Guice.createInjector(getModules());
-        log.debug("injector created");
+        modules.add(uiModule());
+        modules.add(i18NModule());
+        modules.add(applicationConfigurationModule());
+        modules.add(sitemapModule());
 
-        // By default Shiro provides a binding to DefaultSecurityManager, but that is replaced by a binding to
-        // KrailSecurityManager in {@link DefaultShiroModule#bindSecurityManager} (or potentially to another security manager if
-        // the developer overrides that method)
-        SecurityManager securityManager = injector.getInstance(SecurityManager.class);
-        SecurityUtils.setSecurityManager(securityManager);
+        modules.add(new ThreadScopeModule());
+        modules.add(new UIScopeModule());
+        modules.add(new VaadinSessionScopeModule());
 
-    }
+        modules.add(servicesModule());
 
-    private List<Module> getModules() {
-        List<Module> coreModules = new ArrayList<>(30);
+        modules.add(shiroModule());
+        modules.add(shiroVaadinModule());
+        modules.add(shiroAopModule());
 
-        coreModules.add(uiModule());
-        coreModules.add(i18NModule());
-        coreModules.add(applicationConfigurationModule());
-        coreModules.add(sitemapModule());
+        modules.add(servletModule());
 
-        coreModules.add(new ThreadScopeModule());
-        coreModules.add(new UIScopeModule());
-        coreModules.add(new VaadinSessionScopeModule());
+        modules.add(standardPagesModule());
 
-        coreModules.add(servicesModule());
+        modules.add(viewModule());
 
-        coreModules.add(shiroModule());
-        coreModules.add(shiroVaadinModule());
-        coreModules.add(shiroAopModule());
+        modules.add(componentModule());
 
-        coreModules.add(servletModule());
+        modules.add(userModule());
 
-        coreModules.add(standardPagesModule());
+        modules.add(optionModule());
 
-        coreModules.add(viewModule());
+        modules.addAll(eventBusModules());
 
-        coreModules.add(componentModule());
+        modules.add(navigationModule());
 
-        coreModules.add(userModule());
+        modules.add(dataModule());
+        modules.add(dataTypeModule());
+        modules.add(pushModule());
 
-        coreModules.add(optionModule());
+        addUtilModules(modules);
+        addValidationModules(modules);
 
-        coreModules.addAll(eventBusModules());
-
-        coreModules.add(navigationModule());
-
-        coreModules.add(dataModule());
-        coreModules.add(dataTypeModule());
-        coreModules.add(pushModule());
-
-        addUtilModules(coreModules);
-        addValidationModules(coreModules);
-
-        addAppModules(coreModules);
-        addSitemapModules(coreModules);
-        addPersistenceModules(coreModules);
-        return coreModules;
+        addAppModules(modules);
+        addSitemapModules(modules);
+        addPersistenceModules(modules);
+        return modules;
     }
 
     protected Module servicesModule() {
@@ -183,7 +132,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         return new SitemapModule();
     }
 
-    protected void addUtilModules(List<Module> coreModules){
+    protected void addUtilModules(List<Module> coreModules) {
         coreModules.add(new UtilModule());
         coreModules.add(new UtilsModule());
     }
@@ -249,20 +198,19 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * will need to keep the Apache Bval {{@link ValidationModule} unless you replace the the javax validation
      * implementation.
      *
-     * @param modules
-     *         the list used to collect modules for injector creation
+     * @param modules the list used to collect modules for injector creation
      */
     protected void addValidationModules(List<Module> modules) {
 
         final Module validationModule = Modules.override(new ValidationModule())
-                                               .with(new KrailValidationModule());
+                .with(new KrailValidationModule());
         modules.add(validationModule);
     }
 
 
     /**
      * Sets the default active source to read/write Option values from / to the in memory store
-     *
+     * <p>
      * Override this if you have provided your own {@link OptionModule} or want to change the active source
      *
      * @return module instance
@@ -294,8 +242,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * Modules used in the creation of the {@link MasterSitemap} do not actually need to be separated, this just makes a convenient way of seeing them as a
      * group
      *
-     * @param modules
-     *         the list used to collect modules for injector creation
+     * @param modules the list used to collect modules for injector creation
      */
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     protected void addSitemapModules(List<Module> modules) {
@@ -363,19 +310,20 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     /**
      * Add as many application specific Guice modules as you wish by overriding this method.
      *
-     * @param modules
-     *         the list used to collect modules for injector creation
+     * @param modules the list used to collect modules for injector creation
      */
-    protected abstract void addAppModules(List<Module> modules);
+    protected void addAppModules(List<Module> modules) {
+    }
 
     /**
      * Add as many persistence related modules as needed.  These modules do not need to be separated, this just forms a convenient grouping for clarity
      *
-     * @param modules
-     *         the list used to collect modules for injector creation
+     * @param modules the list used to collect modules for injector creation
      */
     protected void addPersistenceModules(List<Module> modules) {
         modules.add(new InMemoryModule().provideOptionDao()
-                                        .providePatternDao());
+                .providePatternDao());
     }
+
+
 }

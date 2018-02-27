@@ -181,7 +181,7 @@ import com.example.tutorial.pages.MyPages;
 import com.example.tutorial.pages.MyPublicPages;
 import com.google.inject.Module;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
-import uk.q3c.krail.core.guice.DefaultBindingManager;
+import uk.q3c.krail.core.guice.DefaultServletContextListener;
 import uk.q3c.krail.core.navigate.sitemap.SystemAccountManagementPages;
 import uk.q3c.krail.core.sysadmin.SystemAdminPages;
 import uk.q3c.krail.core.ui.DefaultUIModule;

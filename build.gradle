@@ -61,7 +61,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.14.0.0"
+        number = "0.15.0.0"
     }
 
 }

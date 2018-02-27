@@ -17,17 +17,18 @@ import uk.q3c.krail.option.persist.OptionCache
 import uk.q3c.krail.option.persist.OptionDao
 import uk.q3c.krail.option.persist.OptionDaoDelegate
 import uk.q3c.krail.persist.InMemory
-import uk.q3c.krail.testutil.guice.TestBindingManager
+import uk.q3c.krail.testutil.guice.TestServletContextListener
+
 /**
  * This is not intended to be a comprehensive test, but just checks a sample of interfaces to ensure their bindings are included
  *
  * Created by David Sowerby on 22 Aug 2017
  */
-class DefaultBindingManagerBindingsTest extends Specification {
+class DefaultServletContextListenerBindingsTest extends Specification {
 
     def "bindings"() {
         given:
-        DefaultBindingManager manager = new TestBindingManager()
+        DefaultServletContextListener manager = new TestServletContextListener()
         Key patternDaoKey = Key.get(PatternDao.class, InMemory)
         Key optionDaoDelegateKey = Key.get(OptionDaoDelegate.class, InMemory)
         Key userHierarchyKey = Key.get(UserHierarchy.class, UserHierarchyDefault)

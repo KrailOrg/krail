@@ -20,7 +20,7 @@ import com.google.inject.Module
 import spock.lang.Specification
 
 /**
- * Integration test for {@link DefaultBindingManager}
+ * Integration test for {@link DefaultServletContextListener}
  *
  * Created by David Sowerby on 22/07/15.
  */
@@ -30,9 +30,9 @@ abstract class GuiceModuleTestBase extends Specification {
 
     protected Injector createInjector(Module moduleUnderTest) {
         List<Module> modules = new ArrayList<>()
-        addSupportingModules(modules);
-        modules.add(moduleUnderTest);
-        return Guice.createInjector(modules);
+        addSupportingModules(modules)
+        modules.add(moduleUnderTest)
+        return Guice.createInjector(modules)
 
     }
 

@@ -12,29 +12,25 @@
  */
 package uk.q3c.krail.testutil.guice;
 
-import com.google.inject.Module;
-import uk.q3c.krail.core.guice.DefaultBindingManager;
+import uk.q3c.krail.core.guice.BindingsCollator;
+import uk.q3c.krail.core.guice.DefaultServletContextListener;
 import uk.q3c.krail.testutil.dummy.DummyModule;
 
-import java.util.List;
+public class TestServletContextListener extends DefaultServletContextListener {
 
-public class TestBindingManager extends DefaultBindingManager {
+    private DummyModule dummyModule = new DummyModule();
 
-    private boolean addAppModulesCalled=false;
-
-    public TestBindingManager() {
+    public TestServletContextListener() {
         super();
     }
 
-    public boolean isAddAppModulesCalled() {
-        return addAppModulesCalled;
-    }
-
     @Override
-    protected void addAppModules(List<Module> modules) {
-        modules.add(new DummyModule());
-        addAppModulesCalled = true;
+    protected BindingsCollator getBindingsCollator() {
+        return new BindingsCollator(dummyModule);
     }
 
+    public boolean isAddAppModulesCalled() {
+        return dummyModule.isModuleCalled();
+    }
 
 }

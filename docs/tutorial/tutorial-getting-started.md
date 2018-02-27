@@ -279,7 +279,7 @@ In the com.example.tutorial.app package, create a class ```BindingManager```, ex
 package com.example.tutorial.app;
 
 import com.google.inject.Module;
-import uk.q3c.krail.core.guice.DefaultBindingManager;
+import uk.q3c.krail.core.guice.DefaultServletContextListener;
 
 import java.util.List;
 
@@ -352,7 +352,7 @@ The complete ```BindingManager``` now looks like:
 package com.example.tutorial.app;
 
 import com.google.inject.Module;
-import uk.q3c.krail.core.guice.DefaultBindingManager;
+import uk.q3c.krail.core.guice.DefaultServletContextListener;
 import uk.q3c.krail.core.navigate.sitemap.SystemAccountManagementPages;
 
 import java.util.List;

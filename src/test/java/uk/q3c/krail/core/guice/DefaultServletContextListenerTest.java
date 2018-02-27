@@ -31,7 +31,7 @@ import uk.q3c.krail.service.ServiceKey;
 import uk.q3c.krail.service.ServiceModel;
 import uk.q3c.krail.service.model.DefaultServiceModel;
 import uk.q3c.krail.testutil.dummy.Dummy;
-import uk.q3c.krail.testutil.guice.TestBindingManager;
+import uk.q3c.krail.testutil.guice.TestServletContextListener;
 import uk.q3c.util.testutil.LogMonitor;
 
 import javax.servlet.ServletContext;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultBindingManagerTest {
+public class DefaultServletContextListenerTest {
 
     static File iniDir = new File("src/test/java");
     static VaadinService vaadinService;
@@ -70,7 +70,7 @@ public class DefaultBindingManagerTest {
 
     @Before
     public void setup() {
-        logMonitor.addClassFilter(DefaultBindingManager.class);
+        logMonitor.addClassFilter(DefaultServletContextListener.class);
 
     }
 
@@ -78,32 +78,31 @@ public class DefaultBindingManagerTest {
     public void startAndStop() {
 
         //then
-//        assertThat(DefaultBindingManager.injector()).isNull();
+//        assertThat(DefaultServletContextListener.injector()).isNull();
         // given
-        TestBindingManager bindingManager = new TestBindingManager();
+        TestServletContextListener contextListener = new TestServletContextListener();
         when(servletContextEvent.getServletContext()).thenReturn(servletContext);
-        bindingManager.contextInitialized(servletContextEvent);
+        contextListener.contextInitialized(servletContextEvent);
         when(service.getServiceKey()).thenReturn(new ServiceKey(LabelKey.Yes));
         logMonitor.addClassFilter(DefaultServiceModel.class);
 
 
         // when
-        Injector injector = bindingManager.getInjector();
+        Injector injector = contextListener.getInjector();
         // then
         assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(KrailSecurityManager.class);
         assertThat(injector).isNotNull();
         assertThat(injector.getInstance(Dummy.class)).isNotNull();
-        assertThat(DefaultBindingManager.injector()).isEqualTo(injector);
+        assertThat(DefaultServletContextListener.injector()).isEqualTo(injector);
 
         // when
-        bindingManager.contextDestroyed(servletContextEvent);
+        contextListener.contextDestroyed(servletContextEvent);
 
         // then
         assertThat(logMonitor.infoLogs()).contains("Stopping all service");
 
 
     }
-
 
 
     @After

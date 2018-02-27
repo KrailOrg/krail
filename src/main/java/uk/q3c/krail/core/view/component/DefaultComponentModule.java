@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.AbstractModule;
-import uk.q3c.krail.core.guice.DefaultBindingManager;
+import uk.q3c.krail.core.guice.DefaultServletContextListener;
 
 public class DefaultComponentModule extends AbstractModule {
 
@@ -34,7 +34,7 @@ public class DefaultComponentModule extends AbstractModule {
 
     /**
      * Override this method to provide your own implementation of {@link LocaleSelector} in a sub-class of this module.
-     * Your module will then need to replace this module in {@link DefaultBindingManager}
+     * Your module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindLocaleSelector() {
         bind(LocaleSelector.class).to(DefaultLocaleSelector.class);
@@ -43,7 +43,7 @@ public class DefaultComponentModule extends AbstractModule {
     /**
      * Override this method to provide your own implementation of {@link MessageBar} in a sub-class of this module.
      * Your
-     * module will then need to replace this module in {@link DefaultBindingManager}
+     * module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindMessageStatusPanel() {
         bind(MessageBar.class).to(DefaultMessageBar.class);
@@ -51,7 +51,7 @@ public class DefaultComponentModule extends AbstractModule {
 
     /**
      * Override this method to provide your own implementation of {@link ApplicationHeader} in a sub-class of this
-     * module. Your module will then need to replace this module in {@link DefaultBindingManager}
+     * module. Your module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindApplicationHeader() {
         bind(ApplicationHeader.class).to(DefaultApplicationHeader.class);
@@ -60,7 +60,7 @@ public class DefaultComponentModule extends AbstractModule {
     /**
      * Override this method to provide your own implementation of {@link ApplicationLogo} in a sub-class of this
      * module.
-     * Your module will then need to replace this module in {@link DefaultBindingManager}
+     * Your module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindApplicationLogo() {
         bind(ApplicationLogo.class).to(DefaultApplicationLogo.class);
@@ -68,7 +68,7 @@ public class DefaultComponentModule extends AbstractModule {
 
     /**
      * Override this method to provide your own implementation of {@link SubPagePanel} in a sub-class of this module.
-     * Your module will then need to replace this module in {@link DefaultBindingManager}
+     * Your module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindSubpagePanel() {
         bind(SubPagePanel.class).to(DefaultSubPagePanel.class);
@@ -77,7 +77,7 @@ public class DefaultComponentModule extends AbstractModule {
     /**
      * Override this method to provide your own implementation of {@link UserStatusPanel} in a sub-class of this
      * module.
-     * Your module will then need to replace this module in {@link DefaultBindingManager}
+     * Your module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindLoginStatusPanel() {
         bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
@@ -85,7 +85,7 @@ public class DefaultComponentModule extends AbstractModule {
 
     /**
      * Override this method to provide your own implementation of {@link UserNavigationMenu} in a sub-class of this
-     * module. Your module will then need to replace this module in {@link DefaultBindingManager}
+     * module. Your module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindNavigationMenu() {
         bind(UserNavigationMenu.class).to(DefaultUserNavigationMenu.class);
@@ -95,7 +95,7 @@ public class DefaultComponentModule extends AbstractModule {
     /**
      * Override this method to provide your own implementation of {@link Breadcrumb} in a sub-class of this module.
      * Your
-     * module will then need to replace this module in {@link DefaultBindingManager}
+     * module will then need to replace this module in {@link DefaultServletContextListener}
      */
     protected void bindBreadcrumb() {
         bind(Breadcrumb.class).to(DefaultBreadcrumb.class);
@@ -104,7 +104,7 @@ public class DefaultComponentModule extends AbstractModule {
     /**
      * Override this method to provide your own implementation of {@link UserNavigationTree}, and its associated
      * builder, in a sub-class of this module. Your module will then need to replace this module in
-     * {@link DefaultBindingManager}
+     * {@link DefaultServletContextListener}
      */
     protected void bindUserNavigationTree() {
         bind(UserNavigationTree.class).to(DefaultUserNavigationTree.class);

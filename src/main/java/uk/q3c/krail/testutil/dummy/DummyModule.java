@@ -17,8 +17,15 @@ import com.google.inject.AbstractModule;
 
 public class DummyModule extends AbstractModule {
 
+    private boolean moduleCalled = false;
+
+    public boolean isModuleCalled() {
+        return moduleCalled;
+    }
+
     @Override
     protected void configure() {
+        moduleCalled = true;
         bind(Dummy.class).to(DefaultDummy.class);
     }
 

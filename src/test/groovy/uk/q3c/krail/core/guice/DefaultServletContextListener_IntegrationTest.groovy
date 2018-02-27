@@ -30,32 +30,32 @@ import uk.q3c.util.testutil.LogMonitor
 import javax.servlet.ServletContextEvent
 import javax.validation.MessageInterpolator
 import java.lang.annotation.Annotation
+
 /**
- * Integration test for {@link DefaultBindingManager}
+ * Integration test for {@link DefaultServletContextListener}
  *
  * Created by David Sowerby on 22/07/15.
  */
-class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
+class DefaultServletContextListener_IntegrationTest extends GuiceModuleTestBase {
 
-
-    class TestDefaultBindingManager extends DefaultBindingManager {
+    class TestDefaultServletContextListener extends DefaultServletContextListener {
 
         @Override
-        protected void addAppModules(List<Module> modules) {
-            modules.add(new DummyModule())
+        protected BindingsCollator getBindingsCollator() {
+            return new BindingsCollator(new DummyModule())
         }
     }
 
     def "destroy context with null injector"() {
         given:
         LogMonitor logMonitor = new LogMonitor()
-        logMonitor.addClassFilter(DefaultBindingManager.class)
+        logMonitor.addClassFilter(DefaultServletContextListener.class)
         ServletContextEvent servletContextEvent = Mock(ServletContextEvent)
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
-        DefaultBindingManager.injector = null
+        DefaultServletContextListener contextListener = new TestDefaultServletContextListener()
+        DefaultServletContextListener.injector = null
 
         when:
-        bindingManager.contextDestroyed(servletContextEvent)
+        contextListener.contextDestroyed(servletContextEvent)
 
         then:
         logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop service")
@@ -64,7 +64,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     def "InMemory option dao is active dao by default"() {
         when:
 
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        DefaultServletContextListener bindingManager = new TestDefaultServletContextListener()
         injector = bindingManager.getInjector()
 
         then:
@@ -76,7 +76,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     def "OptionDao is bound to InMemoryOptionDao with InMemory annotation"() {
         when:
 
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        DefaultServletContextListener bindingManager = new TestDefaultServletContextListener()
         injector = bindingManager.getInjector()
 
         then:
@@ -88,7 +88,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     def "KrailValidationModule overrides ValidationModule, provides I18NKey substitutes for JSR303 and replacement interpolator"() {
         when:
 
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        DefaultServletContextListener bindingManager = new TestDefaultServletContextListener()
         injector = bindingManager.getInjector()
 
         then:
@@ -101,7 +101,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
         when:
 
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        DefaultServletContextListener bindingManager = new TestDefaultServletContextListener()
         injector = bindingManager.getInjector()
 
         then:
@@ -110,7 +110,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
     def "app modules have been added"() {
         when:
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        DefaultServletContextListener bindingManager = new TestDefaultServletContextListener()
         injector = bindingManager.getInjector()
 
         then:
