@@ -23,3 +23,9 @@ Responsibilities have now been split:
 
 The Tutorial has not been updated - this will be done after the move to Vert.x succeeds or fails
 
+## Dev Guide
+Some notes added regarding Vert.x, but Vert.x not yet implemented
+
+## Vaadin
+
+Updated to 8.3.1

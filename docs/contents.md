@@ -29,6 +29,8 @@
   * [Event Bus](devguide/devguide-eventbus.md)
   * [Services](devguide/devguide-services.md)
   * [Validation](devguide/devguide-validation.md)
+  * [Vert.x](devguide/devguide-vertx.md)
   * [Persistence providers](devguide/devguide-persistence.md)
   * [Functional Testing](devguide/devguide-functional-test.md)
+  
 

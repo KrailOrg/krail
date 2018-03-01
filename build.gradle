@@ -28,7 +28,7 @@ buildscript {
 
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
-ext.vaadinVersion = '8.2.0'
+ext.vaadinVersion = '8.3.1'
 ext.assertjVersion = '3.8.0'
 ext.commonsLangVersion = '3.3.2'
 ext.groovyVersion = '2.4.1'
