@@ -21,6 +21,7 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.ShiroException
 import org.apache.shiro.authz.UnauthenticatedException
 import org.apache.shiro.authz.annotation.*
+import org.apache.shiro.subject.PrincipalCollection
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
@@ -36,6 +37,8 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.util.UtilModule
+
+import java.util.concurrent.locks.Lock
 /**
  *
  *  Tests are limited to ensuring that the interceptors are called - not whether they do the right thing.  (The latter takes a lot of setting up of the Subject and is nothing to do with the module under test)
@@ -47,10 +50,12 @@ class KrailShiroAopModuleTest extends Specification {
     KrailSecurityManager krailSecurityManager = Mock()
     VaadinSession vaadinSession = Mock()
     Injector injector
+    Lock sessionLock = Mock()
 
     def setup() {
         SecurityUtils.setSecurityManager(krailSecurityManager)
         ThreadContext.unbindSubject()
+        vaadinSession.getLockInstance() >> sessionLock
     }
 
     def "PermissionsMethodInterceptor throws exception when invoked through AOP"() {
@@ -204,9 +209,11 @@ class KrailShiroAopModuleTest extends Specification {
         // need to mock the subject as by default will appear to be a guest, and therefore not throw an exception
         // we need the exception to ensure AOP interception has happened
         Subject subject = Mock()
-        subject.getPrincipal() >> "anything"
+        PrincipalCollection principals = Mock()
+        principals.getPrimaryPrincipal() >> "anything"// null is a guest, so we need something else
+
         createInjector(new KrailShiroAopModule().select(RequiresGuest))
-        vaadinSession.getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE) >> subject
+        vaadinSession.getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE) >> principals
 
         when:
 

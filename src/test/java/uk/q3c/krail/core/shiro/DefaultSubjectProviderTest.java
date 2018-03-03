@@ -14,20 +14,26 @@ package uk.q3c.krail.core.shiro;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinSession;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.util.ThreadContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
+import java.util.concurrent.locks.Lock;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class SubjectProviderTest extends AbstractShiroTest {
+public class DefaultSubjectProviderTest extends AbstractShiroTest {
 
 
     SubjectProvider provider;
@@ -42,6 +48,14 @@ public class SubjectProviderTest extends AbstractShiroTest {
     @Mock
     Subject mockSubject;
 
+    @Mock
+    Subject mockSubject2;
+
+    @Mock
+    private PrincipalCollection principals;
+
+    @Mock
+    Lock sessionLock;
 
 
     @Before
@@ -50,19 +64,26 @@ public class SubjectProviderTest extends AbstractShiroTest {
         setSecurityManager(krailSecurityManager);
         ThreadContext.unbindSubject();
         provider = new DefaultSubjectProvider(krailSecurityManager);
+        when(mockSubject.getPrincipals()).thenReturn(principals);
+        when(krailSecurityManager.createSubject(any(SubjectContext.class))).thenReturn(mockSubject2);
+        when(vaadinSession.getLockInstance()).thenReturn(sessionLock);
     }
 
 
     @Test
     public void get_no_previous() {
         //given
-
+        final ArgumentCaptor<SubjectContext> captor = ArgumentCaptor.forClass(SubjectContext.class);
         //when
         Subject actual = provider.get();
         //then
         verify(vaadinSession).getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE);
-        verify(krailSecurityManager).createSubject(any(SubjectContext.class));
-        verify(vaadinSession).setAttribute(SubjectProvider.SUBJECT_ATTRIBUTE, actual);
+        verify(krailSecurityManager).createSubject(captor.capture());
+        verify(vaadinSession).setAttribute(SubjectProvider.SUBJECT_ATTRIBUTE, actual.getPrincipals());
+
+
+        final SubjectContext argument = captor.getValue();
+        assertThat(argument.getPrincipals()).isNull();
 
     }
 
@@ -70,12 +91,15 @@ public class SubjectProviderTest extends AbstractShiroTest {
     @Test
     public void get_with_previous() {
         //given
-        when(vaadinSession.getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE)).thenReturn(mockSubject);
+        final ArgumentCaptor<SubjectContext> captor = ArgumentCaptor.forClass(SubjectContext.class);
+        when(vaadinSession.getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE)).thenReturn(principals);
         //when
         Subject actual = provider.get();
         //then
-        assertThat(actual).isEqualTo(mockSubject);
-        verify(krailSecurityManager, never()).createSubject(any(SubjectContext.class));
-        verify(vaadinSession, never()).setAttribute(SubjectProvider.SUBJECT_ATTRIBUTE, actual);
+        assertThat(actual).isEqualTo(mockSubject2);
+        verify(krailSecurityManager).createSubject(captor.capture());
+        final SubjectContext argument = captor.getValue();
+        assertThat(argument.getPrincipals()).isEqualTo(principals);
+
     }
 }
