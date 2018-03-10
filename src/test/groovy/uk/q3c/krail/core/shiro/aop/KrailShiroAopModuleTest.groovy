@@ -30,6 +30,7 @@ import uk.q3c.krail.core.i18n.Caption
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
 import uk.q3c.krail.core.shiro.SubjectProvider
+import uk.q3c.krail.core.user.UserModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule
@@ -337,7 +338,7 @@ class KrailShiroAopModuleTest extends Specification {
 
 
     private void createInjector(Module module) {
-        injector = Guice.createInjector(module, new EventBusModule(), new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new VaadinEventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new InMemoryModule())
+        injector = Guice.createInjector(module, new UserModule(), new EventBusModule(), new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new VaadinEventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new InMemoryModule())
         VaadinSession.setCurrent(vaadinSession)
     }
 }

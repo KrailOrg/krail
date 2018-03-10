@@ -25,7 +25,8 @@ public class DefaultUIModule extends AbstractModule {
     private I18NKey applicationTitleKey;
     private Class<? extends ScopedUI> uiClass;
 
-    private MapBinder<String, Class<? extends ScopedUI>> uiMapBinder;
+    private MapBinder<String, Class<? extends ScopedUI>> uiMapClass;
+    private MapBinder<String, ScopedUI> uiMapProvider;
 
     public DefaultUIModule() {
         uiClass = DefaultApplicationUI.class;
@@ -40,8 +41,8 @@ public class DefaultUIModule extends AbstractModule {
         TypeLiteral<Class<? extends ScopedUI>> scopedUIClassLiteral = new TypeLiteral<Class<? extends ScopedUI>>() {
         };
 
-        uiMapBinder = MapBinder.newMapBinder(binder(), annotationTypeLiteral, scopedUIClassLiteral);
-
+        uiMapClass = MapBinder.newMapBinder(binder(), annotationTypeLiteral, scopedUIClassLiteral);
+        uiMapProvider = MapBinder.newMapBinder(binder(), String.class, ScopedUI.class);
 
         bindApplicationTitle();
         bind(WebBrowser.class).toProvider(BrowserProvider.class);
@@ -60,9 +61,16 @@ public class DefaultUIModule extends AbstractModule {
         addUIBinding(uiClass);
     }
 
-    protected void addUIBinding(Class<? extends ScopedUI> uIClass) {
-        uiMapBinder.addBinding(uIClass.getName())
-                   .toInstance(uIClass);
+    /**
+     * There are two bindings created, because the Vaadin UIProvider requires a Class in response to a ClassSelectionEvent, followed by an instance of that class.
+     * {@link #uiMapClass} binds the former, and {@link #uiMapProvider} binds Providers to enable lazy instantiation
+     *
+     * @param aClass the UI class to bind
+     */
+    protected void addUIBinding(Class<? extends ScopedUI> aClass) {
+        uiMapClass.addBinding(aClass.getName())
+                .toInstance(aClass);
+        uiMapProvider.addBinding(aClass.getName()).to(uiClass);
     }
 
     private void bindApplicationTitle() {

@@ -26,6 +26,7 @@ import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DirectSitemapModuleTest.TestDirectSitemapModule1;
 import uk.q3c.krail.core.navigate.sitemap.DirectSitemapModuleTest.TestDirectSitemapModule2;
+import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -52,7 +53,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule
         .class, VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, InMemoryModule.class, TestOptionModule.class,
-        VaadinSessionScopeModule.class, EventBusModule.class, NavigationModule.class, UtilModule.class, DefaultUIModule.class, UtilsModule.class})
+        VaadinSessionScopeModule.class, PushModule.class, EventBusModule.class, NavigationModule.class, UtilModule.class, DefaultUIModule.class, UtilsModule.class})
 public class DirectSitemapModuleTest {
 
     @Inject

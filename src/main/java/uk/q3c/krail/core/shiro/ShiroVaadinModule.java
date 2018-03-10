@@ -16,7 +16,6 @@ import com.google.inject.Provides;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorHandler;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.ShiroException;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 public class ShiroVaadinModule extends AbstractModule {
@@ -30,7 +29,6 @@ public class ShiroVaadinModule extends AbstractModule {
         bindErrorHandler();
         bindUnauthenticatedHandler();
         bindUnauthorisedHandler();
-        bindLoginExceptionsHandler();
         bindNotAUserHandler();
         bindNotAGuestHandler();
 
@@ -72,13 +70,6 @@ public class ShiroVaadinModule extends AbstractModule {
         bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
     }
 
-    /**
-     * The login process may raise a number of {@link ShiroException}s. This handler is called to manage those
-     * exceptions gracefully.
-     */
-    protected void bindLoginExceptionsHandler() {
-        bind(LoginExceptionHandler.class).to(DefaultLoginExceptionHandler.class);
-    }
 
     @Provides
     KrailSecurityManager providesSecurityManager() {

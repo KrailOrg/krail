@@ -19,19 +19,16 @@ import org.apache.shiro.authc.*
 import org.apache.shiro.subject.Subject
 import uk.q3c.krail.core.eventbus.SessionBusProvider
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.shiro.LoginExceptionHandler
 import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.core.view.component.LoginFormException
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.eventbus.BusMessage
-
 /**
  * Created by David Sowerby on 09 Feb 2016
  */
 class DefaultLoginViewTest extends ViewTest {
 
     DefaultLoginView thisView
-    LoginExceptionHandler loginExceptionHandler = Mock()
     SubjectProvider subjectProvider = Mock()
     SessionBusProvider eventBusProvider = Mock()
     PubSubSupport<BusMessage> eventBus = Mock()
@@ -42,7 +39,8 @@ class DefaultLoginViewTest extends ViewTest {
     def setup() {
         eventBusProvider.get() >> eventBus
         subjectProvider.get() >> subject
-        thisView = new DefaultLoginView(loginExceptionHandler, subjectProvider, translate, eventBusProvider)
+//        thisView = new DefaultLoginView( subjectProvider, translate, eventBusProvider)
+        thisView = new DefaultLoginView(subjectProvider, translate)
         view = thisView
         fieldsWithoutCaptions = ['label', 'statusMsgLabel']
         fieldsWIthoutIds = ['centrePanel']

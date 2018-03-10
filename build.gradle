@@ -61,7 +61,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.15.0.0"
+        number = "0.15.1.0"
     }
 
 }
@@ -77,6 +77,14 @@ compileKotlin {
 }
 
 dependencies {
+
+    // EasyBinder
+    compile 'org.vaadin:easybinder:0.5'
+
+
+    // JWT
+    compile 'io.jsonwebtoken:jjwt:0.9.0'
+
     // Kotlin (can be removed when q3c util catches up with Kotlin version)
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -87,7 +95,7 @@ dependencies {
     compile 'uk.q3c.krail:krail-config:0.10.5.0'
     compile 'uk.q3c.krail:krail-persist-api:0.14.0.0'
 
-    compile 'org.vaadin:easybinder:0.5'
+
 
     compile 'commons-beanutils:commons-beanutils:1.9.3'
     // need this for Guice 4.1.0 to override older version brought in by Bval

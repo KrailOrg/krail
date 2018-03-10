@@ -40,6 +40,7 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
+import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.option.Option;
@@ -59,7 +60,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestUIScopeModule.class, TestKrailI18NModule2.class, DefaultShiroModule.class, TestOptionModule.class, InMemoryModule.class, VaadinSessionScopeModule.class,
-        VaadinEventBusModule.class, UtilModule.class, UtilsModule.class})
+        VaadinEventBusModule.class, UtilModule.class, UserModule.class, UtilsModule.class})
 public class DefaultUserNavigationTreeTest {
 
     @Inject
@@ -85,7 +86,7 @@ public class DefaultUserNavigationTreeTest {
     private DefaultUserNavigationTree userNavigationTree;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         userSitemap.clear();
@@ -94,7 +95,7 @@ public class DefaultUserNavigationTreeTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 

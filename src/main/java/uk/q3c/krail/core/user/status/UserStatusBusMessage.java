@@ -11,16 +11,21 @@
 
 package uk.q3c.krail.core.user.status;
 
+import uk.q3c.krail.core.user.UserHasLoggedIn;
+import uk.q3c.krail.core.user.UserHasLoggedOut;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.eventbus.BusMessage;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A bus message published when a user logs in or logs out.
  * <p>
  * Created by David Sowerby on 08/03/15.
+ *
+ * @deprecated Use {@link UserHasLoggedIn} and {@link UserHasLoggedOut}
  */
+@Deprecated
 public class UserStatusBusMessage implements BusMessage {
 
     private final UserStatusChangeSource source;

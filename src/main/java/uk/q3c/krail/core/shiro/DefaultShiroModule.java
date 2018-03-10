@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.multibindings.OptionalBinder;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -55,6 +56,12 @@ public class DefaultShiroModule extends ShiroModule {
         expose(SubjectIdentifier.class);
         bindSubjectProvider();
         expose(SubjectProvider.class);
+        bindJWTKeyProvider();
+        expose(JWTKeyProvider.class);
+        bindJWTProvider();
+        TypeLiteral<JWTProvider<KrailJWTBody>> providerInterface = new TypeLiteral<JWTProvider<KrailJWTBody>>() {
+        };
+        expose(providerInterface);
 
         if (cacheEnabled) {
             bindCacheManager();
@@ -109,6 +116,19 @@ public class DefaultShiroModule extends ShiroModule {
     protected void bindSubjectProvider() {
         bind(SubjectProvider.class).to(DefaultSubjectProvider.class);
         //        bind(Subject.class).toProvider(SubjectProvider.class);
+    }
+
+    protected void bindJWTProvider() {
+        TypeLiteral<JWTProvider<KrailJWTBody>> providerInterface = new TypeLiteral<JWTProvider<KrailJWTBody>>() {
+        };
+        TypeLiteral<DefaultJWTProvider> providerImplementation = new TypeLiteral<DefaultJWTProvider>() {
+
+        };
+        bind(providerInterface).to(providerImplementation);
+    }
+
+    protected void bindJWTKeyProvider() {
+        bind(JWTKeyProvider.class).to(DefaultJWTKeyProvider.class);
     }
 
     /**

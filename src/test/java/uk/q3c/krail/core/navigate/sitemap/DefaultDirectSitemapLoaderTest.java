@@ -29,6 +29,7 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDirectSitemapModule_A;
 import uk.q3c.krail.core.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDirectSitemapModule_B;
+import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -53,7 +54,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
         ShiroVaadinModule.class, KrailI18NModule.class, SitemapModule.class, UserModule.class, InMemoryModule.class, TestOptionModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class,
-        VaadinEventBusModule.class, EventBusModule.class, UtilsModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class,})
+        VaadinEventBusModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class,})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";

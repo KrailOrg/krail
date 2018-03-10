@@ -22,6 +22,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.shiro.DefaultShiroModule
+import uk.q3c.krail.core.user.UserModule
 import uk.q3c.krail.core.vaadin.DataModule
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.LocaleDefault
@@ -43,6 +44,7 @@ import java.lang.annotation.Annotation
  * Created by David Sowerby on 21/07/15.
  */
 class KrailI18NModuleTest extends GuiceModuleTestBase {
+
 
 
 
@@ -193,7 +195,8 @@ class KrailI18NModuleTest extends GuiceModuleTestBase {
     }
 
     Map<Class<? extends I18NKey>, Set<Class<? extends Annotation>>> sourcesOrderByBundle() {
-        getBinding new TypeLiteral<Map<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>>>() {}, PatternSourceOrderByBundle.class
+        getBinding new TypeLiteral<Map<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>>>() {
+        }, PatternSourceOrderByBundle.class
     }
 
     Map<Class<? extends Annotation>, Provider<PatternDao>> sources() {
@@ -223,6 +226,7 @@ class KrailI18NModuleTest extends GuiceModuleTestBase {
         modules.add(new InMemoryModule().providePatternDao())
         modules.add(new VaadinEventBusModule())
         modules.add(new UtilModule())
+        modules.add(new UserModule())
 
         return modules
     }

@@ -24,6 +24,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
+import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
@@ -46,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class,
         SitemapModule.class, UserModule.class, DataTypeModule.class, KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule
         .class, VaadinSessionScopeModule.class, NavigationModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule.class,
-        DefaultUIModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
+        DefaultUIModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
 public class SystemAccountManagementPagesTest {
 
     @Inject

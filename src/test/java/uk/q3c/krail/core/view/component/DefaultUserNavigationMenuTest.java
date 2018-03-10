@@ -32,6 +32,7 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
+import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -52,7 +53,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class,
-        VaadinEventBusModule.class, UtilModule.class, UtilsModule.class, TestUIScopeModule.class})
+        VaadinEventBusModule.class, UtilModule.class, UserModule.class, UtilsModule.class, TestUIScopeModule.class})
 public class DefaultUserNavigationMenuTest {
 
     @Inject
@@ -79,7 +80,7 @@ public class DefaultUserNavigationMenuTest {
     private DefaultUserNavigationMenu userNavigationMenu;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         userSitemap.clear();
@@ -88,7 +89,7 @@ public class DefaultUserNavigationMenuTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 

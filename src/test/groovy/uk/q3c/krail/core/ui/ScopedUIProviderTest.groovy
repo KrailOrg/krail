@@ -14,9 +14,12 @@
 package uk.q3c.krail.core.ui
 
 import com.google.inject.Injector
+import com.google.inject.Provider
 import com.vaadin.server.UIClassSelectionEvent
+import com.vaadin.server.UICreateEvent
 import com.vaadin.ui.UI
 import spock.lang.Specification
+import uk.q3c.krail.core.guice.uiscope.UIKey
 import uk.q3c.krail.core.guice.uiscope.UIKeyProvider
 import uk.q3c.util.testutil.LogMonitor
 
@@ -28,13 +31,17 @@ class ScopedUIProviderTest extends Specification {
     ScopedUIProvider provider
     Injector injector = Mock()
     UIKeyProvider keyProvider = Mock()
-    Map<String, Class<? extends ScopedUI>> map
+    Map<String, Class<? extends ScopedUI>> uiMapBinder
+    Map<String, Provider<ScopedUI>> uiMapBinderProvider
     LogMonitor logMonitor
+    UIKey uiKey = Mock()
+
 
     def setup() {
         provider = new ScopedUIProvider()
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(ScopedUIProvider)
+        keyProvider.get() >> uiKey
     }
 
     def cleanup() {
@@ -43,9 +50,10 @@ class ScopedUIProviderTest extends Specification {
 
     def "getUIClass with no entries in map, throws UIProviderException"() {
         given:
-        map = new HashMap<>()
+        uiMapBinder = new HashMap<>()
+        uiMapBinderProvider = new HashMap<>()
         UIClassSelectionEvent event = Mock()
-        provider.init(injector, keyProvider, map)
+        provider.init(keyProvider, uiMapBinder, uiMapBinderProvider)
 
         when:
         provider.getUIClass(event)
@@ -56,11 +64,13 @@ class ScopedUIProviderTest extends Specification {
 
     def "more than one defined, log warning and return the first"() {
         given:
-        map = new HashMap<>()
-        map.put("a", BasicUI)
-        map.put("b", DefaultApplicationUI)
+
+        uiMapBinder = new HashMap<>()
+        uiMapBinder.put("a", BasicUI)
+        uiMapBinder.put("b", DefaultApplicationUI)
+
         UIClassSelectionEvent event = Mock()
-        provider.init(injector, keyProvider, map)
+        provider.init(keyProvider, uiMapBinder, uiMapBinderProvider)
 
         when:
         Class<? extends UI> result = provider.getUIClass(event)
@@ -68,6 +78,28 @@ class ScopedUIProviderTest extends Specification {
         then:
         logMonitor.warnCount() == 1
         result == BasicUI.class
+    }
+
+    def "create instance"() {
+        given:
+        BasicUI basicUI = Mock()
+        Provider<BasicUI> basicUiProvider = Mock()
+        basicUiProvider.get() >> basicUI
+        uiMapBinderProvider = new HashMap<>()
+        uiMapBinderProvider.put(BasicUI.class.getName(), basicUiProvider)
+
+        uiMapBinder = new HashMap<>()
+        uiMapBinder.put(BasicUI.class.getName(), BasicUI)
+        UICreateEvent event = Mock()
+        event.getUIClass() >> BasicUI.class
+        provider.init(keyProvider, uiMapBinder, uiMapBinderProvider)
+
+        when:
+        ScopedUI result = provider.createInstance(event)
+
+        then:
+        logMonitor.warnCount() == 0
+        result == basicUI
     }
 
     def "get() returns UI.getCurrent()"() {

@@ -13,7 +13,6 @@
 package uk.q3c.krail.core.ui;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UICreateEvent;
@@ -43,14 +42,14 @@ import java.util.Map;
 public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, Serializable {
     private static Logger log = LoggerFactory.getLogger(ScopedUIProvider.class);
     protected UIKeyProvider uiKeyProvider;
-    protected Injector injector;
     private Map<String, Class<? extends ScopedUI>> uiMapBinder;
+    private Map<String, Provider<ScopedUI>> uiMapBinderProvider;
 
     @Inject
-    protected void init(Injector injector, UIKeyProvider uiKeyProvider, Map<String, Class<? extends ScopedUI>> uiMapBinder) {
-        this.injector = injector;
+    protected void init(UIKeyProvider uiKeyProvider, Map<String, Class<? extends ScopedUI>> uiMapBinder, Map<String, Provider<ScopedUI>> uiMapBinderProvider) {
         this.uiKeyProvider = uiKeyProvider;
         this.uiMapBinder = uiMapBinder;
+        this.uiMapBinderProvider = uiMapBinderProvider;
     }
 
     /**
@@ -88,7 +87,8 @@ public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, 
         UIScope scope = UIScope.getCurrent();
         scope.startScope(uiKey);
         // create the UI
-        ScopedUI ui = (ScopedUI) injector.getInstance(uiClass);
+        Provider<ScopedUI> provider = uiMapBinderProvider.get(event.getUIClass().getName());
+        ScopedUI ui = provider.get();
         ui.setInstanceKey(uiKey);
         ui.setScope(scope);
 

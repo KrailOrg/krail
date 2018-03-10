@@ -14,7 +14,6 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -25,42 +24,26 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.ConcurrentAccessException;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Value;
-import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.view.component.AssignComponentId;
 import uk.q3c.krail.core.view.component.LoginFormException;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
 public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, ClickListener {
     private static Logger log = LoggerFactory.getLogger(DefaultLoginView.class);
 
-    private final LoginExceptionHandler loginExceptionHandler;
-    private final Provider<Subject> subjectProvider;
+    private final SubjectProvider subjectProvider;
     private final Translate translate;
-    private final PubSubSupport<BusMessage> eventBus;
     @AssignComponentId(assign = false, drilldown = false)
     @Caption(caption = LabelKey.Log_In, description = DescriptionKey.Please_log_in)
     private Panel centrePanel;
@@ -75,13 +58,10 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     private TextField username;
 
     @Inject
-    protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, SessionBusProvider
-            eventBusProvider) {
+    protected DefaultLoginView(SubjectProvider subjectProvider, Translate translate) {
         super(translate);
-        this.loginExceptionHandler = loginExceptionHandler;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
-        this.eventBus = eventBusProvider.get();
         nameKey = LabelKey.Log_In;
         descriptionKey = DescriptionKey.Log_In;
     }
@@ -135,31 +115,8 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
             throw new LoginFormException(LabelKey.Password_Cannot_be_Empty);
         }
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        try {
-            subjectProvider.get()
-                           .login(token);
-            log.debug("Publishing UserStatusBusMessage from: '{}'", this.getClass()
-                                                                        .getSimpleName());
-            eventBus.publish(new UserStatusBusMessage(this, true));
-        } catch (UnknownAccountException uae) {
-            loginExceptionHandler.unknownAccount(this, token);
-        } catch (IncorrectCredentialsException ice) {
-            loginExceptionHandler.incorrectCredentials(this, token);
-        } catch (ExpiredCredentialsException ece) {
-            loginExceptionHandler.expiredCredentials(this, token);
-        } catch (LockedAccountException lae) {
-            loginExceptionHandler.accountLocked(this, token);
-        } catch (ExcessiveAttemptsException excess) {
-            loginExceptionHandler.excessiveAttempts(this, token);
-        } catch (DisabledAccountException dae) {
-            loginExceptionHandler.disabledAccount(this, token);
-        } catch (ConcurrentAccessException cae) {
-            loginExceptionHandler.concurrentAccess(this, token);
-        } catch (AuthenticationException ae) {
-            loginExceptionHandler.authentication(this, token);
-        }
-        // unexpected condition - error?
-        // an exception would be raised if login failed
+        subjectProvider.login(this, token);
+
     }
 
     @Deprecated // use getSubmit()

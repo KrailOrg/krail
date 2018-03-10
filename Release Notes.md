@@ -1,31 +1,45 @@
-# Release Notes for krail 0.15.0.0
+# Release Notes for krail 0.15.1.0
 
-The main purpose of this release is to enable the use of [Eclipse Vert.x](http://vertx.io/).  This release includes breaking changes.
+The main purpose of this release is to make correct use of VaadinSession by ensuring that anything which may need to be stored in the session is Serializable.
 
-## Application start up
-The intention is to enable the use of either a standard .war deployment or a Vert.x deployment with as little difference between the two as possible.
+This is needed in any environment where a session could be moved, for example in a clustered environment, and depending on how integration with Vert.x is implemented, may also be used in Vert.x local sessions.
 
-This required some breaking changes around the ServletContextListener
+# Language Change
 
-### DefaultBindingManager
+A small number of classes have been converted to Kotlin.
 
-The collation of Guice modules and the creation of the Guice Injector were combined into a single class, the `DefaultBindingManager`.
+# Units
 
-Responsibilities have now been split:
+Unit tests relating to these changes are written in Spek, and are held in krail-kotlin, pending update of Spek (which will hopefully resolve clashes between Spek and JUnit)
+
+
+# Subject and Sessions
+
+The mechanism for storing the `Subject` in `VaadinSession` has been revised
+
+## SubjectProvider and Subject
+
+`SubjectProvider` assumes a greater role, wrapping the `Subject` login/logout to manage the serialization of a `Subject` to `VaadinSession`.  
+
+`Subject` was previously stored as a native object, but is not `Serializable`.  The `Subject` is now transformed to a [JWT](https://jwt.io/) for serialisation to the session.
+
+
+## DefaultLoginView
+
+Now just captures user input, the rest of the login logic moved to `SubjectProvider` 
+
+## LoginExceptionHandler
+
+Has been removed.  Login success and failures messages are sent via the `SessionBus`.  The `LoginView` handles those for giving feedback to the user
+
+## DescriptionKey
+
+Login related I18NKeys have moved to `LoginDescriptionKey` 
+
+# Deprecated
+
+See javadoc for replacements
+
+- UserStatusBusMessage
+
  
-- the `BindingsCollator` collates the Guice modules
-- the `DefaultServletContextListener` creates the Guice Injector in a web container environment.
-- the `VertxThing` will create the Guice Injector in a Vert.x environment
-
-
-
-## Tutorial
-
-The Tutorial has not been updated - this will be done after the move to Vert.x succeeds or fails
-
-## Dev Guide
-Some notes added regarding Vert.x, but Vert.x not yet implemented
-
-## Vaadin
-
-Updated to 8.3.1

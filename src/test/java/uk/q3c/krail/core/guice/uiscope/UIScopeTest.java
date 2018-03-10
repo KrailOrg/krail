@@ -28,6 +28,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -76,12 +77,14 @@ import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static uk.q3c.krail.core.shiro.SubjectProviderKt.SUBJECT_ATTRIBUTE;
 
 public class UIScopeTest {
     static Optional<CacheManager> cacheManagerOpt = Optional.empty();
@@ -93,9 +96,10 @@ public class UIScopeTest {
     protected VaadinSession mockedSession = mock(VaadinSession.class);
     UIProvider provider;
     VaadinSessionProvider vaadinSessionProvider;
-    VaadinSession vaadinSession;
     private Injector injector;
     private ScopedUI ui;
+    Lock sessionLock = mock(Lock.class);
+    PrincipalCollection principals = mock(PrincipalCollection.class);
 
     @BeforeClass
     public static void setupClass() {
@@ -108,18 +112,19 @@ public class UIScopeTest {
 
     @Before
     public void setup() {
-        vaadinSession = mock(VaadinSession.class);
-        VaadinSession.setCurrent(vaadinSession);
-        when(vaadinSession.getAttribute(Subject.class)).thenReturn(subject);
+        VaadinSession.setCurrent(mockedSession);
+        when(mockedSession.getAttribute(SUBJECT_ATTRIBUTE)).thenReturn(principals);
         Locale.setDefault(Locale.UK);
         vaadinSessionProvider = mock(VaadinSessionProvider.class);
-        when(vaadinSessionProvider.get()).thenReturn(vaadinSession);
+        when(vaadinSessionProvider.get()).thenReturn(mockedSession);
+        when(mockedSession.getLockInstance()).thenReturn(sessionLock);
     }
 
     @Test
     public void uiScope2() {
 
         // given
+
         KrailSecurityManager securityManager = new KrailSecurityManager(cacheManagerOpt);
         //        securityManager.setVaadinSessionProvider(vaadinSessionProvider);
 
@@ -128,6 +133,7 @@ public class UIScopeTest {
         when(subject.isPermitted(anyString())).thenReturn(true);
         when(subject.isPermitted(any(org.apache.shiro.authz.Permission.class))).thenReturn(true);
         when(mockedSession.hasLock()).thenReturn(true);
+
 
         // when
 
@@ -162,7 +168,7 @@ public class UIScopeTest {
         Answer<Class<? extends UI>> answer = new Answer<Class<? extends UI>>() {
 
             @Override
-            public Class<? extends UI> answer(InvocationOnMock invocation) throws Throwable {
+            public Class<? extends UI> answer(InvocationOnMock invocation) {
                 return clazz;
             }
         };
@@ -189,7 +195,7 @@ public class UIScopeTest {
         }
 
         @Override
-        public void doStart() throws Exception {
+        public void doStart() {
 
         }
 
@@ -231,7 +237,7 @@ public class UIScopeTest {
     public class ConnectorIdAnswer implements Answer<String> {
 
         @Override
-        public String answer(InvocationOnMock invocation) throws Throwable {
+        public String answer(InvocationOnMock invocation) {
             connectCount++;
             return Integer.toString(connectCount);
         }
