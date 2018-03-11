@@ -30,7 +30,7 @@ import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.view.LoginView;
+import uk.q3c.krail.core.user.LoginView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;

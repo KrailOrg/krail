@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.i18n;
 
 /**
- * The base for the resource bundle of Labels for Locale de. Entry is purely for testing
+ * The base for the resource bundle of LoginLabels for Locale de. Entry is purely for testing
  *
  * @author David Sowerby 9 Feb 2013
  */
@@ -31,7 +31,6 @@ public class Labels_de extends Labels {
         put(LabelKey.Guest, "Gast");
         put(LabelKey.Home_Page, "Startseite");
         put(LabelKey.Last_Name, "Nachname");
-        put(LabelKey.Log_In, "Einloggen");
         put(LabelKey.Message_Box, "Nachrichtenfeld");
         put(LabelKey.No, "Nein");
         put(LabelKey.Notifications, "Benachrichtigungen");
@@ -54,7 +53,6 @@ public class Labels_de extends Labels {
         put(LabelKey.Invalid_Page, "Ungültige Seite");
         put(LabelKey.Insertion_Order_Ascending, "aufsteigend einfügen");
         put(LabelKey.Insertion_Order_Descending, "absteigend einfügen");
-        put(LabelKey.Log_Out, "Ausloggen");
         put(LabelKey.Message_Bar, "Nachrichtenzeile");
         put(LabelKey.Nested, "verschachtelt");
         put(LabelKey.Ok, "OK");
@@ -65,11 +63,8 @@ public class Labels_de extends Labels {
         put(LabelKey.Splash, "Splash");
         put(LabelKey.Unlock_Account, "Konto entsperren");
         put(LabelKey.Unnamed, "unbenannt");
-        put(LabelKey.User_Name, "Benutzername");
         put(LabelKey.Krail, "Krail");
         put(LabelKey.Warning, "Warnung");
-        put(LabelKey.Password, "Passwort");
-        put(LabelKey.Submit, "Absenden");
 
 
     }

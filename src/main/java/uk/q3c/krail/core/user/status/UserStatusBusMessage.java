@@ -11,9 +11,9 @@
 
 package uk.q3c.krail.core.user.status;
 
+import uk.q3c.krail.core.user.LoginView;
 import uk.q3c.krail.core.user.UserHasLoggedIn;
 import uk.q3c.krail.core.user.UserHasLoggedOut;
-import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.eventbus.BusMessage;
 
 import static com.google.common.base.Preconditions.checkNotNull;

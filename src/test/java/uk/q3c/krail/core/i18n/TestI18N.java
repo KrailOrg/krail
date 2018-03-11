@@ -38,7 +38,7 @@ public @interface TestI18N {
     TestLabelKey description() default TestLabelKey.Large;
 
     /**
-     * Rarely used under Vaadin 8, was needed in Vaadin 7 for Labels
+     * Rarely used under Vaadin 8, was needed in Vaadin 7 for LoginLabels
      *
      * @return
      */

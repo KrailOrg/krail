@@ -21,7 +21,7 @@ import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
-import uk.q3c.krail.core.view.LoginView;
+import uk.q3c.krail.core.user.LoginView;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;

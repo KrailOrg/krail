@@ -29,11 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
-import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.core.user.LoginLabelKey;
+import uk.q3c.krail.core.user.UserHasLoggedIn;
+import uk.q3c.krail.core.user.UserHasLoggedOut;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.eventbus.BusMessage;
@@ -92,23 +94,25 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         log.debug("building with Locale={}", currentLocale.getLocale());
         boolean authenticated = subjectProvider.get()
                                                .isAuthenticated();
-        String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
+        String caption = (authenticated) ? translate.from(LoginLabelKey.Log_Out) : translate.from(LoginLabelKey.Log_In);
         log.debug("Caption is '{}'", caption);
         login_logout_Button.setCaption(caption.toLowerCase());
         usernameLabel.setValue(subjectIdentifier.subjectName());
     }
 
 
-    /**
-     * Responds to the {@code busMessage} by rebuilding the panel to reflect a change in user status.
-     *
-     * @param busMessage
-     *         the message received from the event bus
-     */
     @Handler
-    public void userStatusChange(UserStatusBusMessage busMessage) {
-        log.debug("user status has changed to authenticated = '{}', reset the user status panel", busMessage.isAuthenticated());
-        build();
+    public void handleUserHasLoggedIn(UserHasLoggedIn event) {
+        log.debug("user has logged in");
+        login_logout_Button.setCaption(translate.from(LoginLabelKey.Log_Out).toLowerCase());
+        usernameLabel.setValue(event.getKnownAs());
+    }
+
+    @Handler
+    public void handleUserHasLoggedOut(UserHasLoggedOut event) {
+        log.debug("user has logged out");
+        login_logout_Button.setCaption(translate.from(LoginLabelKey.Log_In).toLowerCase());
+        usernameLabel.setValue("?");
     }
 
     @Override

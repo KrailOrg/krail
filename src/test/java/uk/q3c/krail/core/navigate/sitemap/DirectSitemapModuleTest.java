@@ -32,8 +32,9 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
+import uk.q3c.krail.core.user.LoginLabelKey;
+import uk.q3c.krail.core.user.LoginView;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PrivateHomeView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
@@ -87,21 +88,21 @@ public class DirectSitemapModuleTest {
         entry = map.get("public/login");
         assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
         assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.GUEST);
-        assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
+        assertThat(entry.getLabelKey()).isEqualTo(LoginLabelKey.Log_In);
         assertThat(entry.getRoles()).isEqualTo("roles");
         assertThat(entry.getPositionIndex()).isEqualTo(1);
 
         entry = map.get("private/roles");
         assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
         assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.ROLES);
-        assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
+        assertThat(entry.getLabelKey()).isEqualTo(LoginLabelKey.Log_In);
         assertThat(entry.getRoles()).isEqualTo("roles");
         assertThat(entry.getPositionIndex()).isEqualTo(500);
 
         entry = map.get("private/noroles");
         assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
         assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
-        assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
+        assertThat(entry.getLabelKey()).isEqualTo(LoginLabelKey.Log_In);
         assertThat(entry.getRoles()).isNullOrEmpty();
         assertThat(entry.getPositionIndex()).isEqualTo(300);
 
@@ -128,9 +129,9 @@ public class DirectSitemapModuleTest {
         protected void define() {
             rootURI("");
             addEntry("public/home", PublicHomeView.class, LabelKey.Home_Page, PageAccessControl.PUBLIC);
-            addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST, "roles");
-            addEntry("private/roles", LoginView.class, LabelKey.Log_In, PageAccessControl.ROLES, "roles", 500);
-            addEntry("private/noroles", LoginView.class, LabelKey.Log_In, PageAccessControl.PUBLIC, 300);
+            addEntry("public/login", LoginView.class, LoginLabelKey.Log_In, PageAccessControl.GUEST, "roles");
+            addEntry("private/roles", LoginView.class, LoginLabelKey.Log_In, PageAccessControl.ROLES, "roles", 500);
+            addEntry("private/noroles", LoginView.class, LoginLabelKey.Log_In, PageAccessControl.PUBLIC, 300);
         }
 
     }

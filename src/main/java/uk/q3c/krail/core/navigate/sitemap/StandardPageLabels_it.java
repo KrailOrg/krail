@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 /**
- * The base for the resource bundle of Labels for Locale it.
+ * The base for the resource bundle of LoginLabels for Locale it.
  *
  * @author David Sowerby 9 Feb 2013
  */

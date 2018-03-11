@@ -21,15 +21,13 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.ShiroException
 import org.apache.shiro.authz.UnauthenticatedException
 import org.apache.shiro.authz.annotation.*
-import org.apache.shiro.subject.PrincipalCollection
-import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
-import uk.q3c.krail.core.i18n.Caption
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
-import uk.q3c.krail.core.shiro.SubjectProvider
+import uk.q3c.krail.core.shiro.SubjectProviderKt
+import uk.q3c.krail.core.user.LoginCaption
 import uk.q3c.krail.core.user.UserModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
@@ -207,14 +205,9 @@ class KrailShiroAopModuleTest extends Specification {
     def "GuestMethodInterceptor throws exception when invoked through AOP"() {
 
         given:
-        // need to mock the subject as by default will appear to be a guest, and therefore not throw an exception
-        // we need the exception to ensure AOP interception has happened
-        Subject subject = Mock()
-        PrincipalCollection principals = Mock()
-        principals.getPrimaryPrincipal() >> "anything"// null is a guest, so we need something else
-
+        def headlessToken = "eyJzdWIiOiJkYXZpZCIsImtub3duQXMiOiJkYXZpZCIsInJlYWxtTmFtZSI6ImRlZmF1bHRSZWFsbSJ9.QKkeO1w4HwGXLRuTxofDlEp7PsH6N8nYyhak7P0SKnn-OuvG8OTuuFne0bhAmMuN3dY3iOHNvHXzP4uMxr6sQA"
         createInjector(new KrailShiroAopModule().select(RequiresGuest))
-        vaadinSession.getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE) >> principals
+        vaadinSession.getAttribute(SubjectProviderKt.SUBJECT_ATTRIBUTE) >> headlessToken // the presence of a toke indicates authentication, therefore not a guest
 
         when:
 
@@ -287,7 +280,7 @@ class KrailShiroAopModuleTest extends Specification {
     def "invalid Annotation type in module.select"() {
         when:
 
-        new KrailShiroAopModule().select(Caption)
+        new KrailShiroAopModule().select(LoginCaption)
 
         then:
 

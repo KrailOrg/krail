@@ -10,16 +10,13 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.i18n;
+package uk.q3c.krail.core.user
 
-/**
- * The base for the resource bundle of LoginLabels specifically for Locale de_CH. Not currently populated as it is used only
- * for testing
- *
- * @author David Sowerby 9 Feb 2013
- */
-public class Labels_de_CH extends Labels {
+class LoginDescriptions_it : LoginDescriptions() {
 
+
+    override fun loadMap() {
+    }
 
 
 }

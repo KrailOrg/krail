@@ -17,7 +17,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import uk.q3c.krail.core.view.LoginView;
+import org.jetbrains.annotations.NotNull;
+import uk.q3c.krail.core.user.LoginView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
@@ -55,12 +56,12 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public String getStatusMessage() {
+    public Label getStatusMessage() {
         return null;
     }
 
     @Override
-    public void setStatusMessage(String invalidLogin) {
+    public void setStatusMessage(String message) {
 
     }
 
@@ -84,6 +85,11 @@ public class TestLoginView implements LoginView {
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
+
+    }
+
+    @Override
+    public void rebuild() {
 
     }
 
@@ -114,6 +120,23 @@ public class TestLoginView implements LoginView {
 
     @Override
     public String getDescription() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public LoginView password(@NotNull String aPassword) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public LoginView username(@NotNull String aUsername) {
+        return null;
+    }
+
+    @Override
+    public String identity() {
         return null;
     }
 }

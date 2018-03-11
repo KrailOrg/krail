@@ -28,7 +28,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -99,7 +98,7 @@ public class UIScopeTest {
     private Injector injector;
     private ScopedUI ui;
     Lock sessionLock = mock(Lock.class);
-    PrincipalCollection principals = mock(PrincipalCollection.class);
+    String headlessToken = "eyJzdWIiOiJkYXZpZCIsImtub3duQXMiOiJkYXZpZCIsInJlYWxtTmFtZSI6ImRlZmF1bHRSZWFsbSJ9.QKkeO1w4HwGXLRuTxofDlEp7PsH6N8nYyhak7P0SKnn-OuvG8OTuuFne0bhAmMuN3dY3iOHNvHXzP4uMxr6sQA";
 
     @BeforeClass
     public static void setupClass() {
@@ -113,7 +112,7 @@ public class UIScopeTest {
     @Before
     public void setup() {
         VaadinSession.setCurrent(mockedSession);
-        when(mockedSession.getAttribute(SUBJECT_ATTRIBUTE)).thenReturn(principals);
+        when(mockedSession.getAttribute(SUBJECT_ATTRIBUTE)).thenReturn(headlessToken);
         Locale.setDefault(Locale.UK);
         vaadinSessionProvider = mock(VaadinSessionProvider.class);
         when(vaadinSessionProvider.get()).thenReturn(mockedSession);

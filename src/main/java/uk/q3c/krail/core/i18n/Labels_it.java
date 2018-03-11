@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.i18n;
 
 /**
- * The base for the resource bundle of Labels for Locale de. Entry is purely for testing
+ * The base for the resource bundle of LoginLabels for Locale de. Entry is purely for testing
  *
  * @author David Sowerby 9 Feb 2013
  */
@@ -27,7 +27,6 @@ public class Labels_it extends Labels {
         put(LabelKey.First_Name, "Nome");
         put(LabelKey.Guest, "Ospite");
         put(LabelKey.Last_Name, "Cognome");
-        put(LabelKey.Log_In, "Log in");
         put(LabelKey.Message_Box, "Scatola di Messaggio");
         put(LabelKey.Notifications, "Notifiche");
         put(LabelKey.No, "No");

@@ -29,8 +29,8 @@ import org.apache.shiro.subject.Subject
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.Event
 import uk.q3c.krail.core.eventbus.SessionBusProvider
-import uk.q3c.krail.core.i18n.LoginDescriptionKey
-import uk.q3c.krail.core.i18n.LoginKey
+import uk.q3c.krail.core.user.LoginDescriptionKey
+import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
 import uk.q3c.krail.core.user.UserHasLoggedOut
 import uk.q3c.krail.core.user.UserLoginFailed
@@ -133,36 +133,36 @@ class DefaultSubjectProvider @Inject constructor(
     }
 
     private fun publishExceptionEvent(username: String, exception: AuthenticationException) {
-        val errorKey: LoginKey
+        val errorKey: LoginLabelKey
         val errorDescriptionKey: LoginDescriptionKey
 
         when (exception) {
             is IncorrectCredentialsException -> {
-                errorKey = LoginKey.Invalid_Login
+                errorKey = LoginLabelKey.Invalid_Login
                 errorDescriptionKey = LoginDescriptionKey.Invalid_Login
             }
             is ExpiredCredentialsException -> {
-                errorKey = LoginKey.Account_Expired
+                errorKey = LoginLabelKey.Account_Expired
                 errorDescriptionKey = LoginDescriptionKey.Account_Expired
             }
             is LockedAccountException -> {
-                errorKey = LoginKey.Account_Locked
+                errorKey = LoginLabelKey.Account_Locked
                 errorDescriptionKey = LoginDescriptionKey.Account_Locked
             }
             is ExcessiveAttemptsException -> {
-                errorKey = LoginKey.Too_Many_Login_Attempts
+                errorKey = LoginLabelKey.Too_Many_Login_Attempts
                 errorDescriptionKey = LoginDescriptionKey.Too_Many_Login_Attempts
             }
             is DisabledAccountException -> {
-                errorKey = LoginKey.Account_is_Disabled
+                errorKey = LoginLabelKey.Account_is_Disabled
                 errorDescriptionKey = LoginDescriptionKey.Account_is_Disabled
             }
             is ConcurrentAccessException -> {
-                errorKey = LoginKey.Account_Already_In_Use
+                errorKey = LoginLabelKey.Account_Already_In_Use
                 errorDescriptionKey = LoginDescriptionKey.Account_Already_In_Use
             }
             else -> {
-                errorKey = LoginKey.Authentication_Failed
+                errorKey = LoginLabelKey.Authentication_Failed
                 errorDescriptionKey = LoginDescriptionKey.Authentication_Failed
             }
 

@@ -35,7 +35,6 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
     @Override
     protected void loadMap() {
         put(Last_Name, "the last name or family name");
-        put(Last_Name, "the last name or family name");
         put(Confirm_Ok, "Confirm this Value is Ok");
         put(No_Permission, "You do not have permission for that action");
         put(Sitemap_Service, "This service creates the Sitemap using options from the application" +

@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.i18n
+package uk.q3c.krail.core.user
 
 class LoginDescriptions_de : LoginDescriptions() {
     override fun loadMap() {

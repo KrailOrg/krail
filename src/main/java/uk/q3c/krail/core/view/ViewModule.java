@@ -15,6 +15,8 @@ package uk.q3c.krail.core.view;
 import com.google.inject.AbstractModule;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.DirectSitemapModule;
+import uk.q3c.krail.core.user.DefaultLoginView;
+import uk.q3c.krail.core.user.LoginView;
 
 /**
  * Maps standard views (Login, Logout and Error Views) to their implementations. These can all be overridden if

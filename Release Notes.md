@@ -4,13 +4,14 @@ The main purpose of this release is to make correct use of VaadinSession by ensu
 
 This is needed in any environment where a session could be moved, for example in a clustered environment, and depending on how integration with Vert.x is implemented, may also be used in Vert.x local sessions.
 
+
 # Language Change
 
-A small number of classes have been converted to Kotlin.
+A number of classes, and test classes have been converted to Kotlin.
 
 # Units
 
-Unit tests relating to these changes are written in Spek, and are held in krail-kotlin, pending update of Spek (which will hopefully resolve clashes between Spek and JUnit)
+Unit tests relating to these changes are written in Spek, and are held in a separate repo, krail-kotlin, pending update of Spek to 2.0, (which will hopefully resolve clashes between Spek and JUnit)
 
 
 # Subject and Sessions

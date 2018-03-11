@@ -13,7 +13,6 @@
 
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
     ext.kaytee_plugin_version = "0.18.10.0"
     repositories {
         jcenter()
@@ -21,9 +20,12 @@ buildscript {
 
     dependencies {
         classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
     }
+}
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.30"
 }
 
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
@@ -35,6 +37,7 @@ ext.groovyVersion = '2.4.1'
 ext.guiceVersion = '4.1.0'
 ext.shiroVersion = '1.4.0'
 ext.slf4jVersion = '1.7.6'
+ext.kotlin_version = '1.2.30'
 
 ext.versionDescription = 'No version description provided'
 
@@ -43,7 +46,6 @@ group = 'uk.q3c.krail'
 
 
 apply plugin: 'uk.q3c.kaytee'
-apply plugin: 'kotlin'
 
 sourceCompatibility = '1.8'
 

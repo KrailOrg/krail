@@ -1,6 +1,6 @@
 package uk.q3c.krail;
 
-import uk.q3c.krail.core.view.DefaultLoginView;
+import uk.q3c.krail.core.user.DefaultLoginView;
 
 /**
  * Created by David Sowerby on 27 Jan 2018

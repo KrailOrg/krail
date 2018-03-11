@@ -34,7 +34,7 @@ public @interface KrailCaption {
     TestLabelKey description() default TestLabelKey.Large;
 
     /**
-     * Usually only used with Vaadin Labels
+     * Usually only used with Vaadin LoginLabels
      *
      * @return
      */

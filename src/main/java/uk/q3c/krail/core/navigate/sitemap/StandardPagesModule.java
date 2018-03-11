@@ -14,7 +14,11 @@ package uk.q3c.krail.core.navigate.sitemap;
 
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
-import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.core.user.LoginView;
+import uk.q3c.krail.core.view.LogoutView;
+import uk.q3c.krail.core.view.PrivateHomeView;
+import uk.q3c.krail.core.view.PublicHomeView;
+import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.i18n.I18NKey;
 
 public class StandardPagesModule extends DirectSitemapModule {
