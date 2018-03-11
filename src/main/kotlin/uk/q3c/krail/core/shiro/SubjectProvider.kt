@@ -44,6 +44,9 @@ interface SubjectProvider : Provider<Subject> {
      */
     fun login(source: UserStatusChangeSource, token: UsernamePasswordToken): Subject
 
+    /**
+     * Logs out the current user
+     */
     fun logout(source: UserStatusChangeSource)
 
 
