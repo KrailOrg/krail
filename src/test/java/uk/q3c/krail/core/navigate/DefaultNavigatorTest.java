@@ -57,8 +57,9 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.LoginView;
+import uk.q3c.krail.core.user.UserHasLoggedIn;
+import uk.q3c.krail.core.user.UserHasLoggedOut;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
 import uk.q3c.krail.core.view.DefaultErrorView;
@@ -224,10 +225,11 @@ public class DefaultNavigatorTest {
     public void logout_rule_invoked() {
 
         // given
+        UserHasLoggedOut userHasLoggedOut = new UserHasLoggedOut("User", "xx", "david", logoutSource);
         navigator = createNavigator();
         when(logoutNavigationRule.changedNavigationState(navigator, logoutSource)).thenReturn(Optional.empty());
         // when
-        navigator.userStatusChange(new UserStatusBusMessage(logoutSource, false));
+        navigator.handleUserHasLoggedOut(userHasLoggedOut);
         // then
         verify(logoutNavigationRule).changedNavigationState(navigator, logoutSource);
     }
@@ -237,12 +239,12 @@ public class DefaultNavigatorTest {
     public void login_rule_invoked() {
 
         // given
-
+        UserHasLoggedIn userHasLoggedIn = new UserHasLoggedIn("User", "xx", "david", loginSource);
         //        assertThat(loginNavigationRule.changedNavigationState(navigator,loginSource)).isNotNull();
         navigator = createNavigator();
         when(loginNavigationRule.changedNavigationState(navigator, loginSource)).thenReturn(Optional.empty());
         // when
-        navigator.userStatusChange(new UserStatusBusMessage(loginSource, true));
+        navigator.handleUserHasLoggedIn(userHasLoggedIn);
         // then
         verify(loginNavigationRule).changedNavigationState(navigator, loginSource);
     }

@@ -42,7 +42,8 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.shiro.UnauthorizedExceptionHandler;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.user.UserHasLoggedIn;
+import uk.q3c.krail.core.user.UserHasLoggedOut;
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
 import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.KrailView;
@@ -100,6 +101,7 @@ public class DefaultNavigator implements Navigator {
     private UserSitemap userSitemap;
     private ViewChangeRule viewChangeRule;
     private ComponentIdGenerator idGenerator;
+
 
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
@@ -414,24 +416,23 @@ public class DefaultNavigator implements Navigator {
      * Applies the login / logout navigation rules.  Handler priority is set so that Navigators respond after other listeners - they must complete before the
      * Navigator attempts to change page
      *
-     * @param busMessage message from the event bus
+     * @param event message from the event bus
      */
     @Handler(priority = -1)
-    public void userStatusChange(UserStatusBusMessage busMessage) {
-        log.debug("UserStatusBusMessage received");
-        if (busMessage.isAuthenticated()) {
-            log.info("user logged in successfully, applying login navigation rule");
-            Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, busMessage.getSource());
-            if (newState.isPresent()) {
-                navigateTo(newState.get());
-            }
-        } else {
-            log.info("user logged out, applying logout navigation rule");
-            Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, busMessage.getSource());
-            if (newState.isPresent()) {
-                navigateTo(newState.get());
-            }
-        }
+    public void handleUserHasLoggedIn(UserHasLoggedIn event) {
+        log.debug("UserHasLoggedIn received");
+        log.info("user logged in, applying login navigation rule");
+        Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, event.getSource());
+        newState.ifPresent(this::navigateTo);
+    }
+
+
+    @Handler(priority = -1)
+    public void handleUserHasLoggedOut(UserHasLoggedOut busMessage) {
+        log.debug("UserHasLoggedOut received");
+        log.info("user logged out, applying logout navigation rule");
+        Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, busMessage.getSource());
+        newState.ifPresent(this::navigateTo);
     }
 
 

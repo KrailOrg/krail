@@ -105,7 +105,7 @@ class DefaultSubjectProvider @Inject constructor(
         try {
             subject.login(token)
             storeInSession(subject)
-            publishStatusChangeMessage(loggedIn = true, primaryPrincipal = token.username, name = "?")
+            publishStatusChangeMessage(loggedIn = true, primaryPrincipal = token.username, name = "?", source = source)
 
         } catch (uae: AuthenticationException) {
             val username = token.username ?: ""
@@ -120,12 +120,12 @@ class DefaultSubjectProvider @Inject constructor(
         return session
     }
 
-    private fun publishStatusChangeMessage(loggedIn: Boolean, primaryPrincipal: String, name: String) {
+    private fun publishStatusChangeMessage(loggedIn: Boolean, primaryPrincipal: String, name: String, source: UserStatusChangeSource) {
         val message: Event =
                 if (loggedIn) {
-                    UserHasLoggedIn(aggregateId = primaryPrincipal, knownAs = name)
+                    UserHasLoggedIn(aggregateId = primaryPrincipal, knownAs = name, source = source)
                 } else {
-                    UserHasLoggedOut(aggregateId = primaryPrincipal, knownAs = name)
+                    UserHasLoggedOut(aggregateId = primaryPrincipal, knownAs = name, source = source)
                 }
         log.debug("Publishing user status message ${message.javaClass.simpleName} from ${this.javaClass
                 .simpleName}")
@@ -191,7 +191,7 @@ class DefaultSubjectProvider @Inject constructor(
             val jwtBody = getJWTFromSession()
             val subject = get()
             subject.logout()
-            publishStatusChangeMessage(loggedIn = false, primaryPrincipal = jwtBody.subject, name = jwtBody.knownAs)
+            publishStatusChangeMessage(loggedIn = false, primaryPrincipal = jwtBody.subject, name = jwtBody.knownAs, source = source)
         } else {
             log.warn("User attempted to log out when not logged in.  Should not matter but may indicate a logic problem")
         }
