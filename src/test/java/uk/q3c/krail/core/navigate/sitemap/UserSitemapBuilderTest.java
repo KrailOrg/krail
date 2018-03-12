@@ -30,7 +30,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilderTest.TestVaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.VaadinSessionProvider;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.user.UserHasLoggedIn;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
@@ -146,7 +146,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
         // when
         when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(true);
         //it doesn't matter what the user status actually is, just that it has changed
-        userSitemapBuilder.userStatusChanged(new UserStatusBusMessage(userStatusChangeSource,true));
+        userSitemapBuilder.handleUserLoggedIn(new UserHasLoggedIn("User", "xx", "david", userStatusChangeSource));
         // then
         assertThat(userSitemap.getUriMap()
                               .keySet()).containsOnly("1", "1/3", "2");
