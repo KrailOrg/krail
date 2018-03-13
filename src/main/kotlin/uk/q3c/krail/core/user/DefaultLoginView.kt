@@ -28,6 +28,7 @@ import net.engio.mbassy.listener.Handler
 import net.engio.mbassy.listener.Listener
 import org.apache.commons.lang3.StringUtils
 import org.apache.shiro.authc.UsernamePasswordToken
+import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.Value
@@ -48,7 +49,7 @@ class DefaultLoginView @Inject constructor(
 
         Grid3x3ViewBase(translate), LoginView, ClickListener {
 
-
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
     @AssignComponentId(assign = false, drilldown = false)
     @LoginCaption(caption = LoginLabelKey.Log_In, description = LoginDescriptionKey.Please_log_in)
     private lateinit var centrePanel: Panel
@@ -106,6 +107,7 @@ class DefaultLoginView @Inject constructor(
 
     @Handler
     fun handleLoginFailed(msg: UserLoginFailed) {
+        log.debug("UserLoginFailed received with ${msg.description}")
         statusMessage.value = translate.from(msg.description)
     }
 

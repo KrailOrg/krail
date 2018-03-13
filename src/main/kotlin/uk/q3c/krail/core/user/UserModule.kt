@@ -27,7 +27,7 @@ class UserModule : AbstractModule() {
     }
 
     private fun bindUserObjectProvider() {
-        bind(UserObjectProvider::class.java).to(DefaultUserObjectProvider::class.java)
+        bind(UserQueryDao::class.java).to(DefaultUserQueryDao::class.java)
     }
 
 

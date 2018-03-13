@@ -22,6 +22,8 @@ import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.NamedAndDescribed;
 
+import java.io.Serializable;
+
 
 /**
  * A view is constructed by the {@link ViewFactory} from a Provider defined in the sitemap building process.  When
@@ -38,7 +40,7 @@ import uk.q3c.krail.i18n.NamedAndDescribed;
  * <p>
  * The easiest way to implement this is to extend {@link ViewBase}
  */
-public interface KrailView extends NamedAndDescribed {
+public interface KrailView extends NamedAndDescribed, Serializable {
 
     /**
      * Called after the view itself has been constructed but before {@link #buildView(ViewChangeBusMessage)}} is called.  Typically checks

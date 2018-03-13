@@ -21,6 +21,7 @@ import org.apache.shiro.authc.ExcessiveAttemptsException
 import org.apache.shiro.authc.ExpiredCredentialsException
 import org.apache.shiro.authc.IncorrectCredentialsException
 import org.apache.shiro.authc.LockedAccountException
+import org.apache.shiro.authc.UnknownAccountException
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.mgt.DefaultSecurityManager
 import org.apache.shiro.mgt.SecurityManager
@@ -34,6 +35,7 @@ import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
 import uk.q3c.krail.core.user.UserHasLoggedOut
 import uk.q3c.krail.core.user.UserLoginFailed
+import uk.q3c.krail.core.user.UserQueryDao
 import uk.q3c.krail.core.user.status.UserStatusChangeSource
 
 /**
@@ -51,6 +53,7 @@ class DefaultSubjectProvider @Inject constructor(
          */
         private var securityManager: SecurityManager,
         private val eventBusProvider: SessionBusProvider,
+        private val userQueryDao: UserQueryDao,
         private val jwtProvider: JWTProvider<KrailJWTBody>)
 
 
@@ -104,8 +107,9 @@ class DefaultSubjectProvider @Inject constructor(
         val subject = get()
         try {
             subject.login(token)
+            val knownAs = userQueryDao.user(token.username).knownAs
             storeInSession(subject)
-            publishStatusChangeMessage(loggedIn = true, primaryPrincipal = token.username, name = "?", source = source)
+            publishStatusChangeMessage(loggedIn = true, primaryPrincipal = token.username, name = knownAs, source = source)
 
         } catch (uae: AuthenticationException) {
             val username = token.username ?: ""
@@ -136,10 +140,16 @@ class DefaultSubjectProvider @Inject constructor(
         val errorKey: LoginLabelKey
         val errorDescriptionKey: LoginDescriptionKey
 
+
         when (exception) {
+            is UnknownAccountException -> {
+                errorKey = LoginLabelKey.Unknown_Account
+                errorDescriptionKey = LoginDescriptionKey.Unknown_Account
+            }
+
             is IncorrectCredentialsException -> {
-                errorKey = LoginLabelKey.Invalid_Login
-                errorDescriptionKey = LoginDescriptionKey.Invalid_Login
+                errorKey = LoginLabelKey.Unknown_Account
+                errorDescriptionKey = LoginDescriptionKey.Unknown_Account
             }
             is ExpiredCredentialsException -> {
                 errorKey = LoginLabelKey.Account_Expired
@@ -167,6 +177,7 @@ class DefaultSubjectProvider @Inject constructor(
             }
 
         }
+        log.debug("Mapping login exception ${exception.javaClass.simpleName} to enum identifier $errorKey")
         val message = UserLoginFailed(label = errorKey, description = errorDescriptionKey, aggregateId = username)
         eventBusProvider.get().publish(message)
 
@@ -188,9 +199,16 @@ class DefaultSubjectProvider @Inject constructor(
 
     override fun logout(source: UserStatusChangeSource) {
         if (sessionContainsSubjectJWT()) {
-            val jwtBody = getJWTFromSession()
+            val jwtBody = getJWTFromSession() // we want the info before removing the JWT
             val subject = get()
             subject.logout()
+            val session = vaadinSession()
+            try {
+                session.lockInstance.lock()
+                session.setAttribute(SUBJECT_ATTRIBUTE, null)
+            } finally {
+                session.lockInstance.unlock()
+            }
             publishStatusChangeMessage(loggedIn = false, primaryPrincipal = jwtBody.subject, name = jwtBody.knownAs, source = source)
         } else {
             log.warn("User attempted to log out when not logged in.  Should not matter but may indicate a logic problem")

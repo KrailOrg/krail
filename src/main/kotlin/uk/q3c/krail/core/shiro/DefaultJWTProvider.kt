@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.apache.shiro.subject.Subject
-import uk.q3c.krail.core.user.UserObjectProvider
+import uk.q3c.krail.core.user.UserQueryDao
 
 /**
  * Default implementation for encoding / decoding JWTs to and from [Subject] instances.  Uses the io.jsonwebtoken library
@@ -18,7 +18,7 @@ import uk.q3c.krail.core.user.UserObjectProvider
  * Created by David Sowerby on 05 Mar 2018
  */
 class DefaultJWTProvider @Inject
-constructor(private val jwtKeyProvider: JWTKeyProvider, private val userObjectProvider: UserObjectProvider) : JWTProvider<KrailJWTBody> {
+constructor(private val jwtKeyProvider: JWTKeyProvider, private val userObjectProvider: UserQueryDao) : JWTProvider<KrailJWTBody> {
 
     override fun encodeToHeadlessJWT(subject: Subject): String {
 

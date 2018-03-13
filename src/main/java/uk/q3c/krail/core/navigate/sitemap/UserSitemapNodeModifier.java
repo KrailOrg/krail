@@ -25,7 +25,7 @@ import uk.q3c.util.forest.NodeModifier;
 import java.text.Collator;
 import java.util.Comparator;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, UserSitemapNode> {
     private static Logger log = LoggerFactory.getLogger(UserSitemapNodeModifier.class);
@@ -67,7 +67,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
     @Override
     public UserSitemapNode create(UserSitemapNode parentUserNode, MasterSitemapNode masterNode) {
         checkNotNull(masterNode);
-        log.debug("creating a node for master node {}", masterNode);
+        log.debug("creating a user node for master node {}", masterNode);
         // if there is no labelKey (usually when page is redirected), cannot be shown
         if (masterNode.getLabelKey() == null) {
             return null;

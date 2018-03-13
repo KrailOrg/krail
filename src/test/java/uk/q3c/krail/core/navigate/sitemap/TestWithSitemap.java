@@ -41,7 +41,7 @@ import uk.q3c.krail.option.option.DefaultOption;
 import java.text.Collator;
 import java.util.Locale;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -233,7 +233,7 @@ public abstract class TestWithSitemap {
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(userSitemap, translate, currentLocale);
-        userSitemapBuilder = new UserSitemapBuilder(userSitemap, nodeModifier, copyExtension, subjectProvider);
+        userSitemapBuilder = new UserSitemapBuilder(userSitemap, nodeModifier, copyExtension, subjectProvider, sessionBusProvider);
         userSitemapBuilder.setMasterSitemap(masterSitemap);
         userSitemapBuilder.build();
 
