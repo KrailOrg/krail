@@ -26,7 +26,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.user.UserHasLoggedIn;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -224,13 +224,13 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
 
 
     /**
-     * User has just logged in, look for their preferred Locale from user options.
+     * User has just logged in, so now we know who it is, look for their preferred Locale from user options.
      *
-     * @param busMessage message provided by the {@link #eventBus}
+     * @param event provided by the {@link #eventBus}
      */
     @Handler
-    public void userStatusChange(UserStatusBusMessage busMessage) {
-        log.debug("UserStatusBusMessage received");
+    public void handleUserHasLoggedIn(UserHasLoggedIn event) {
+        log.debug("UserHasLoggedIn received");
         setLocaleFromOption(true);
     }
 

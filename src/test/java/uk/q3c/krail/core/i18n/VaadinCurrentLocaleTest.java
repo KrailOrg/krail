@@ -31,7 +31,7 @@ import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.user.UserHasLoggedIn;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.LocaleDefault;
@@ -203,7 +203,7 @@ public class VaadinCurrentLocaleTest {
         when(subject.isAuthenticated()).thenReturn(false);
         when(source.identity()).thenReturn("LogoutView");
         //when user logs out
-        currentLocale.userStatusChange(new UserStatusBusMessage(source, false));
+        currentLocale.handleUserHasLoggedIn(new UserHasLoggedIn("id", "david", source));
 
         //then nothing should happen
         assertThat(currentLocale.getLocale()).isEqualTo(Locale.FRANCE);
