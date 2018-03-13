@@ -26,7 +26,7 @@ import uk.q3c.krail.i18n.I18NKey;
  *
  * @author David Sowerby
  */
-@View(uri = "a/b", labelKeyName = "Account_Locked", pageAccessControl = PageAccessControl.PERMISSION)
+@View(uri = "a/b", labelKeyName = "Confirm_Ok", pageAccessControl = PageAccessControl.PERMISSION)
 public class TestAnnotatedView implements KrailView {
 
 

@@ -20,7 +20,7 @@ package uk.q3c.krail.core.i18n;
  */
 public class I18NTestClass7 {
 
-    @Caption(caption = LabelKey.Field, description = DescriptionKey.Please_log_in)
+    @Caption(caption = LabelKey.Field, description = DescriptionKey.Confirm_Ok)
     CompositeComponent_with_Caption_and_I18N classWithCaptionAndI18N = new CompositeComponent_with_Caption_and_I18N();
 
 }

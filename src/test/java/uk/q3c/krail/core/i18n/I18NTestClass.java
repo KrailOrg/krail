@@ -22,7 +22,7 @@ public class I18NTestClass {
     private final Button buttonWithAnnotation;
     @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
     private final Label label;
-    @Caption(caption = LabelKey.Yes, description = DescriptionKey.Please_log_in, locale = "de-DE")
+    @Caption(caption = LabelKey.Yes, description = DescriptionKey.Field, locale = "de-DE")
     private final Label demoLabel;
     @Caption(caption = LabelKey.Field, description = DescriptionKey.Field)
     private final TestCompositeComponent ccs;
@@ -38,15 +38,15 @@ public class I18NTestClass {
     @Value(value = LabelKey.Guest)
     private final TextField value;
     @Value(value = LabelKey.Yes, locale = "de-DE")
-    @Description(description = DescriptionKey.Account_Already_In_Use)
+    @Description(description = DescriptionKey.Enter_your_first_name)
     private final TextField valueLocale;
     private final Button buttonWithoutAnnotation;
     private final Integer integer;
     private double dubble;
     @Caption(caption = LabelKey.Broadcast_Messages, description = DescriptionKey.Field)
     private Grid grid;
-    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Please_log_in)
-    @Description(description = DescriptionKey.Account_Already_In_Use)
+    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Last_Name)
+    @Description(description = DescriptionKey.Confirm_Ok)
     private Button newButton;
 
     protected I18NTestClass() {

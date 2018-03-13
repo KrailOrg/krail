@@ -105,7 +105,7 @@ public class DefaultAnnotationSitemapLoaderTest {
         assertThat(node.getPageAccessControl()).isNotNull();
         assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         assertThat(node.getUriSegment()).isEqualTo("b");
-        assertThat(node.getLabelKey()).isEqualTo(DescriptionKey.Account_Locked);
+        assertThat(node.getLabelKey()).isEqualTo(DescriptionKey.Confirm_Ok);
     }
 
     @ModuleProvider

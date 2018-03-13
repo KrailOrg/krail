@@ -79,8 +79,7 @@ public class DefaultI18NProcessorTest {
 
         // no guarantee is made to which is returned when there are multiple overlapping annotations
         assertThat(testObject.getNewButton()
-                .getDescription()).isIn("Please log in", "This account is already in use.  You must log out of that session before you can log " +
-                "in again.");
+                .getDescription()).isIn("Confirm this Value is Ok");
         assertThat(testObject.getNewButton()
                 .getLocale()).isEqualTo(Locale.UK);
 

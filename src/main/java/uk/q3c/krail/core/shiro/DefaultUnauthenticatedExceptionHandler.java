@@ -15,7 +15,7 @@ package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Notification;
-import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.user.LoginDescriptionKey;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 
 import java.io.Serializable;
@@ -32,7 +32,7 @@ public class DefaultUnauthenticatedExceptionHandler implements UnauthenticatedEx
 
     @Override
     public void invoke() {
-        notifier.notifyError(DescriptionKey.You_have_not_logged_in, Notification.Type.ERROR_MESSAGE);
+        notifier.notifyError(LoginDescriptionKey.You_have_not_logged_in, Notification.Type.ERROR_MESSAGE);
     }
 
 }

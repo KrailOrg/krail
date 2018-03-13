@@ -23,7 +23,7 @@ import uk.q3c.util.test.NotOnWeekends;
  */
 public class I18NTestClass4 {
 
-    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Please_log_in)
+    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Confirm_Ok)
     Button tba;
 
     @NotOnWeekends

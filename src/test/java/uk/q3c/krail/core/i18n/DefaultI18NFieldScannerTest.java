@@ -100,8 +100,8 @@ public class DefaultI18NFieldScannerTest {
                     caption = (Caption) annotations.get(0);
                     Description description = (Description) annotations.get(1);
                     assertThat(caption.caption()).isEqualTo(LabelKey.Authentication);
-                    assertThat(caption.description()).isEqualTo(DescriptionKey.Please_log_in);
-                    assertThat(description.description()).isEqualTo(DescriptionKey.Account_Already_In_Use);
+                    assertThat(caption.description()).isEqualTo(DescriptionKey.Last_Name);
+                    assertThat(description.description()).isEqualTo(DescriptionKey.Confirm_Ok);
             }
         }
 
@@ -177,7 +177,7 @@ public class DefaultI18NFieldScannerTest {
         Caption caption = captionAnnotationFrom(info.getAnnotations());
         assertThat(caption).isNotNull();
         assertThat(caption.caption()).isEqualTo(LabelKey.Field);
-        assertThat(caption.description()).isEqualTo(DescriptionKey.Please_log_in);
+        assertThat(caption.description()).isEqualTo(DescriptionKey.Confirm_Ok);
 
         // the nested label
 

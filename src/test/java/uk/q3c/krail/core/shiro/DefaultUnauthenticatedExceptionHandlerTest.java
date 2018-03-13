@@ -19,7 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.user.LoginDescriptionKey;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 
 import static org.mockito.Mockito.verify;
@@ -46,7 +46,7 @@ public class DefaultUnauthenticatedExceptionHandlerTest {
         // when
         handler.invoke();
         // then
-        verify(notifier).notifyError(DescriptionKey.You_have_not_logged_in, Notification.Type.ERROR_MESSAGE);
+        verify(notifier).notifyError(LoginDescriptionKey.You_have_not_logged_in, Notification.Type.ERROR_MESSAGE);
 
     }
 
