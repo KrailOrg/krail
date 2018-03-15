@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.testutil.guice;
 
-import uk.q3c.krail.core.guice.BindingsCollator;
+import uk.q3c.krail.core.guice.CoreBindingsCollator;
 import uk.q3c.krail.core.guice.DefaultServletContextListener;
 import uk.q3c.krail.testutil.dummy.DummyModule;
 
@@ -25,8 +25,8 @@ public class TestServletContextListener extends DefaultServletContextListener {
     }
 
     @Override
-    protected BindingsCollator getBindingsCollator() {
-        return new BindingsCollator(dummyModule);
+    protected CoreBindingsCollator getBindingsCollator() {
+        return new CoreBindingsCollator(dummyModule);
     }
 
     public boolean isAddAppModulesCalled() {

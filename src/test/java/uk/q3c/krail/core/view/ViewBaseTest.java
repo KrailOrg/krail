@@ -28,12 +28,12 @@ public class ViewBaseTest {
 
     private TestView view;
     private TestView2 view2;
-    private Translate translate = new MockTranslate();
+    private Translate mockTranslate = new MockTranslate();
 
     @Before
     public void setup() {
-        view = new TestView(translate);
-        view2 = new TestView2(translate);
+        view = new TestView(mockTranslate);
+        view2 = new TestView2(mockTranslate);
     }
 
     @Test(expected = ViewBuildException.class)
@@ -88,6 +88,7 @@ public class ViewBaseTest {
     }
 
 
+
     class TestView extends ViewBase {
 
 
@@ -113,4 +114,6 @@ public class ViewBaseTest {
             setRootComponent(new Label("blank"));
         }
     }
+
+
 }

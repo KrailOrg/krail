@@ -41,8 +41,8 @@ class DefaultServletContextListener_IntegrationTest extends GuiceModuleTestBase 
     class TestDefaultServletContextListener extends DefaultServletContextListener {
 
         @Override
-        protected BindingsCollator getBindingsCollator() {
-            return new BindingsCollator(new DummyModule())
+        protected CoreBindingsCollator getBindingsCollator() {
+            return new CoreBindingsCollator(new DummyModule())
         }
     }
 

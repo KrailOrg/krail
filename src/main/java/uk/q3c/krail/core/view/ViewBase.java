@@ -13,11 +13,13 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
+import com.google.inject.MembersInjector;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.guice.InjectorHolder;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.DefaultNavigator;
@@ -27,7 +29,15 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -48,7 +58,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class ViewBase implements KrailView, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
-    private final Translate translate;
+
+    @Inject
+    private Translate translate;
     protected I18NKey nameKey = LabelKey.Unnamed;
     protected I18NKey descriptionKey = DescriptionKey.No_description_provided;
     private boolean componentsConstructed;
@@ -197,5 +209,73 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     public String getDescription() {
         return translate.from(descriptionKey);
+    }
+
+    /**
+     * Initialises transient fields, usually only required after deserialisation.  This is done in two parts, the first
+     * to re-inject any Guice dependencies marked as transient, and the second to call on sub-classes to initialise
+     * any non-Guice transient fields
+     * <p>
+     * For the Guice construction to work, even when constructor injection is used, the transient fields MUST be annotated with the
+     * correct Guice annotation. For example, a constructor might be:
+     *
+     * @Inject public Example(@Named("foo") Thingy thingy){
+     * this.thingy= thingy
+     * }
+     * <p>
+     * The corresponding field would need to be annotated:
+     * @Inject @Named("foo")
+     * private transient Thingy thingy;
+     */
+    protected void constructTransients() {
+        Constructor<?>[] constructors = this.getClass().getDeclaredConstructors();
+        for (Constructor constructor : constructors) {
+            if (constructor.isAnnotationPresent(Inject.class) || constructor.isAnnotationPresent(javax.inject.Inject.class)) {
+                constructGuice(constructor);
+            }
+        }
+    }
+
+    /**
+     * Iterates through fields, and for any transient fields found, then checks for the constructor parameters for a parameter
+     * with the same type and same name as the field.  If a match is found, the field is assigned a new instance created via Guice
+     *
+     * @param constructor the constructor identified by its @Inject annotation
+     */
+    private void constructGuice(Constructor constructor) {
+        Field[] fields = this.getClass().getDeclaredFields();
+        final Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
+        System.out.println(parameterAnnotations.length);
+        List<Class> types = Arrays.asList(constructor.getParameterTypes());
+        for (Field field : fields) {
+            if (Modifier.isTransient(field.getModifiers())) {
+                if (types.contains(field.getType())) {
+
+                    try {
+                        field.setAccessible(true);
+                        Object value = InjectorHolder.getInjector().getInstance(field.getType());
+                        field.set(this, value);
+
+                    } catch (IllegalAccessException e) {
+// TODO
+
+                    }
+                }
+            }
+        }
+
+//       TypeLiteral t =  TypeLiteral.get(String.class);
+//        InjectorHolder.getInjector().injectMembers(this);
+    }
+
+    private void constructGuiceAlternative() {
+        MembersInjector<? extends ViewBase> membersInjector = InjectorHolder.getInjector().getMembersInjector(this.getClass());
+//        (com.google.inject.internal.MembersInjectorImpl) membersInjector.
+        throw new RuntimeException("this won't work, cannot get at com.google.inject.internal.MembersInjectorImpl");
+
+    }
+
+    private void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
+        constructGuiceAlternative();
     }
 }
