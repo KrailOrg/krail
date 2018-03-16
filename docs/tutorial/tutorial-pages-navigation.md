@@ -1,8 +1,8 @@
-#Adding pages
+# Adding pages
 
 Clearly we will want to add some new pages, but first we must know what constitutes the definition of a page
 
-##Defining a Page
+## Defining a Page
 
 A page is represented by a URI, which maps to a specified ```KrailView``` class.  The name of the page is presented to the user in navigation aware components, so that name must be Locale sensitive.  Once the page is defined, it becomes part of the Krail ```Sitemap```, which forms the heart of the navigation system.  
 
@@ -10,11 +10,11 @@ There are two ways to add pages to Krail and make use of the [navigation feature
 
 Because the page name is locale sensitive, we will first need to provide I18N support.
 <a name="I18NIntro"></a>
-##Introducing I18N
+## Introducing I18N
 
 You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the [full I18N description](../devguide/devguide-i18n.md) now, or just follow these steps, as we will come back to I18N later in the Tutorial.  
 
-###Create an I18N Annotation
+### Create an I18N Annotation
 
 - create a package 'i18n', under 'com.example.tutorial'
 - create two Enum classes, one called 'LabelKey' and one called 'DescriptionKey'.  Each should implement the ```I18NKey``` interface
@@ -42,13 +42,14 @@ The names of these classes can be anything, it is the ```I18NKey``` interface wh
 
 This is all we need for our I18N integration for now, so we can get on with adding pages.
 
-##Add a Page - direct method
+## Add a Page - direct method
 
 The "direct" method simply means pages are defined directly in a Guice module.  We will start by adding some private pages ("private" means they will be available only to authorised users).
   
 - To keep our pages separate, create a package 'pages', under 'com.example.tutorial'
 - Create a class 'MyPages' and extend it from ```DirectSitemapModule``` and provide 
-- implement the abstract ```define()``` method 
+- implement the abstract ```define()``` method
+ 
 ```
 package com.example.tutorial.pages;
 
@@ -103,10 +104,9 @@ You will have compile errors, but let's look at what these entries mean.
 We'll make it easier by extending the ```Grid3x3ViewBase```base class from the Krail core - this just gives us a 3x3 grid to place components in.
 
 
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Extending ViewBase or one of its sub-classes is usually the easiest way to create your views, but however you do it, you must implement <code>KrailView</code></p>
-</div>
+>_**Note**_
+>Extending ViewBase or one of its sub-classes is usually the easiest way to create your views, but however you do it, you must implement ```KrailView```.  ```ViewBase``` can also help with [deserialization](tutorial-serialisation.md).
+
 
 - create the 3 views we want ... AccountsView, FinanceView and PayrollView ... just by extending ```Grid3x3ViewBase``` and injecting ```Translate``` (only FinanceView is shown here):
 
@@ -126,10 +126,11 @@ public class FinanceView extends Grid3x3ViewBase {
 }
 ```
 
-###Defining the I18NKeys
+### Defining the I18NKeys
 By default, if Krail's ```I18NProcessor``` cannot find the value of an ```I18NKey```, it uses the name of the enum instead, with underscores replaced with spaces.  This means that as long as you are comfortable with breaking the 'all-uppercase' convention for enum constant names, you can get started quickly by not defining any values for the I18NKeys.  This is great for prototyping, and even if your application uses a language with accents and diacriticals, the enum name may be good enough for a prototype.  
 
 - Add the required constants to LabelKey
+
 ```
 package com.example.tutorial.i18n;
 
@@ -139,8 +140,10 @@ public enum LabelKey implements I18NKey {
     Accounts, Payroll, Finance
 }
 ```
-##Using the Pages
+
+## Using the Pages
 Now we have defined the pages in a Guice module, we need to tell the ```BindingManager``` to include them:
+
 ```
 @Override
    protected void addSitemapModules(List<Module> baseModules) {
@@ -150,19 +153,20 @@ Now we have defined the pages in a Guice module, we need to tell the ```BindingM
 ```
 
 
-##View the Pages
+## View the Pages
 Run the application again.  When the application starts the new pages will not be visible - but that is what we should expect, as we said these pages needed permission to view.
 
 - Log in (any username, password='password'), and you will see the pages, under 'Private', in the navigation tree and menu. 
 
 You may be wondering whether these pages need to be under the 'Private' branch.  At the moment they do, but only because of the very simple access control rules supplied by ```DefaultRealm```.  You can actually define any logical structure, and we will see how to control permissions in the [User Access Control](tutorial-uac.md) section of the Tutorial.
 
-##Add a Page - Annotation method
+## Add a Page - Annotation method
 The second method of defining a page is to use an annotation on a ```KrailView``` implementation.  To begin with, we need to tell Krail where to look for annotated views - this reduces the amount of scanning Krail has to do at start up.  To do that we:
 
 - create a new class in the 'pages' package, "AnnotatedPagesModule" and extend ```AnnotationSitemapModule```
 - implement the ```define()``` method
 - add an entry in the define method, as below:
+
 ```
 package com.example.tutorial.pages;
 
@@ -220,7 +224,7 @@ public enum LabelKey implements I18NKey {
 ```
 - Run the application, log in and you will see that "Purchasing" has been added to the Finance page.  
 
-##Choosing the Method
+## Choosing the Method
 You can mix Direct and Annotation sitemap entries however you wish, but that can get a bit confusing to manage.  Which method you choose is mostly a matter of preference, but there is one feature of the direct method you should be aware of.
 
 Our direct pages module looks currently looks like this:
@@ -261,7 +265,7 @@ public class MyPages extends DirectSitemapModule {
 - update MyPages so it is as above
 - run the application and you will see that the pages appear in the same way as before
 
-##Moving a Set of Pages
+## Moving a Set of Pages
 We can easily move all the pages of a Direct module by changing the ```rootUri``` - they can be moved anywhere in the Sitemap, as a set, as long the Sitemap maintains a logical structure.  We will need to keep the finance pages on the "Private" branch for now, because of the Access Control rules, but as an example, let's suppose we decide that it should have a rootURI of "private/finance-department" instead:
 
 - modify the Binding Manager as below, to provide a different rootURI as the module is constructed:
@@ -298,20 +302,17 @@ public class PurchasingView extends Grid3x3ViewBase {
 - Run the application and check that new URI is being used.
 
 
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you do want to set the rootURI directly in the module, you need to do so in the constructor, or it will prevent the fluent method shown above from working</p>
-</div>
+>_**Note**_
+>If you do want to set the rootURI directly in the module, you need to do so in the constructor, or it will prevent the fluent method shown above from working
 
 
 
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This moving of blocks of pages is available only with Direct pages.  Although it might be possible to do something similar with annotated pages by mapping packages to URIs, there are currently no plans to do so</p>
-</div>
+>_**Note**_
+>This moving of blocks of pages is available only with Direct pages.  Although it might be possible to do something similar with annotated pages by mapping packages to URIs, there are currently no plans to do so
 
 
-#Navigation
+
+# Navigation
 ## Add some public pages
 Add a couple of public pages:<br>
 
@@ -388,7 +389,7 @@ public enum LabelKey implements I18NKey {
 ```
 
 
-##Getting the Navigator
+## Getting the Navigator
 We will do just a little bit more with these views to help demonstrate navigation - we'll just add some buttons to direct us to different URIs.  First, though, we need access to Krail's ```Navigator```.  We will inject it into both views, using constructor injection:
 ```
 package com.example.tutorial.pages;
@@ -429,7 +430,7 @@ public class NewsView extends Grid3x3ViewBase {
 }
 
 ```
-##Adding some components
+## Adding some components
 - Add buttons and actions in the ```doBuild``` method of ```NewsView```:
 ```
   @Override
@@ -452,7 +453,7 @@ The first two lines just create the buttons.  The second two lines add click lis
 - Log in
 - Press the "Accounts" button again, and as you are now authorised, you will be at the "Accounts" page
 
-##Navigating with Parameters
+## Navigating with Parameters
 A common requirement is to land on a page with parameters - a record id, for example, so the page know which data to load.  We are going to add a "Contact Detail" page to simulate this.
 
 - Just as we've done before, add the page to '''MyPublicPages''', create the view and add the ```LabelKey``` constant:
@@ -493,7 +494,7 @@ public class ContactDetailView extends Grid3x3ViewBase {
 }
 
 ```
-###Receiving parameters
+### Receiving parameters
 To set ```ContactDetailView``` up to receive parameters all we need to do is override either the ```afterBuild``` method or the ```loadData``` method.  Using ```loadData``` (even if you are not loading data) means you won't forget to call **super.afterBuild()** first ...
 ```
 package com.example.tutorial.pages;
@@ -535,7 +536,7 @@ public class ContactDetailView extends Grid3x3ViewBase {
 }
 ```
 The process in ```loadData()``` is straightforward.  The busMessage is just an event, and it carries a reference to the navigation state we are navigating from, and the state we are navigating to.  This is represented by ```NavigationState```, which also contains any parameters that have been passed with the URI.
-###Sending parameters
+### Sending parameters
 To send parameters,  construct a ```NavigationState```, specifying the parameters to go with it and call ```Navigator.navigateTo(NavigationState)``` 
 
 - Update ```ContactUsView``` to add a button whose click listener builds the ```NavigationState```, adds parameters, then calls the ```Navigator```.
@@ -556,7 +557,7 @@ protected void doBuild(ViewChangeBusMessage busMessage) {
 - click on "Navigate with Parameters"
 - You will now be at the "Contact Detail" page with the parameter values displayed.
   
-##Excluding a page from Navigation
+## Excluding a page from Navigation
 If you think about the use of the "Contact Detail" page, it does not actually make sense for it to appear in the navigation components - the only time you would want to access this page is with some parameters to set its contents:
 
 - Modify the page entry in ```MyPublicPages```, by setting the positionIndex parameter to < 0
@@ -573,7 +574,7 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
     - Press the "Navigate with Parameters" button
     - The "Contact Detail" page appears as before.
 
-#Summary
+# Summary
 
 - You have explored two methods of defining new pages, using Direct and Annotated methods.
 - You have created navigation actions from code
@@ -581,7 +582,7 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
 - You have excluded a page from navigation, but still make it part of the Sitemap
 - You have "attached" an existing set of pages to a part of the Sitemap different from its default location 
 
-#Download from GitHub
+# Download from GitHub
 To get to this point straight from GitHub:
 
 ```bash

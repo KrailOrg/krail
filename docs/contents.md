@@ -19,6 +19,7 @@
   * [Eclipse IDE](tutorial/tutorial-eclipse.md)
   * [Create User Hierarchy](tutorial/tutorial-create-hierarchy.md)
   * [Functional Testing](tutorial/tutorial-functional-test.md)
+  * [Serialisation](tutorial/tutorial-serialisation.md)
 * [Developer Guide](devguide/intro.md)
   * [License](devguide/license.md)
   * [Krail Configuration Overview](devguide/devguide-configuration-overview.md)

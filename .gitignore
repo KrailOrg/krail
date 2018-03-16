@@ -12,6 +12,8 @@ out
 .classpath
 .project
 
+_book
+
 deps.txt
 
 settings.gradle~
@@ -24,6 +26,4 @@ README.md~
 
 
 
-
-
-
+node_modules

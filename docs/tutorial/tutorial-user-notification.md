@@ -1,7 +1,8 @@
 #Introduction
-Notifying users with messages seems a small topic, and typical code contains numerous calls to message boxes of one form or another.  Vaadin provides the ```Notification``` specifically for that purpose.
+Notifying users with messages seems a small topic, and typical code contains numerous calls to message boxes of one form or another.  Consistency, however, can easily be lost, especially when there is a need for I18N as well.
+There are also times when you want the message to go to more than one place - for example both a splash message, and repeated in the message bar at the bottom of the screen as you have already seen.
 
-Consistency, however, can easily be lost, especially when there is a need for I18N as well.  There are also times when you want the message to go to more than one place - for example both a splash message, and repeated in the message bar at the bottom of the screen as you have already seen.
+Vaadin provides the ```Notification``` specifically for that purpose.
  
 Krail provides a mechanism to support any method of presenting the message, but the message despatch is always from the ```UserNotifier```
 

@@ -4,5 +4,13 @@
     "readme": "index.md",
     "glossary": "glossary.md",
     "summary": "contents.md"
+  },
+  "plugins": [
+    "versions"
+  ],
+  "pluginsConfig": {
+    "versions": {
+      "type": "branches"
+    }
   }
 }
