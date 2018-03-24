@@ -1,7 +1,5 @@
 = Serialization
 
-TIP: Don't stick your tongue in the socket
-
 When Vaadin serialises to the session, it serialises the entire UI. This means anything contained within the UI is also serialized. If you follow the Krail approach of constructor injection for Views and UIs, it will mean that those dependencies will also be serialized, unless, of course, they are marked as *transient*.
 
 This clearly could affect the amount that needs to be serialized/deserialized - you may want to reduce that by making dependencies *transient* (or you may just have dependencies which cannot be serialized), but that in turn means you need a way to reconstruct the *transient* fields.
@@ -12,6 +10,8 @@ To make this easier, `ViewBase` and `ScopedUI` use `SerializationSupport` to mak
 
 When instances of these classes are deserialized, they implement the standard Java `readObject()` method and use `SerializationSupport` to re-inject any *transient* fields using the Guice Injector. Hooks are also provided to allow you to intervene with your own logic at various points.
 
+[CAUTION]
+====
 To enable this to work, however, certain conditions apply:
 
 Sub-classes of `ViewBase` and `ScopedUI` :
@@ -26,6 +26,8 @@ Sub-classes of `ViewBase` and `ScopedUI` :
 . –injection by SerializationSupport
 . afterTransientInjection()
 . checkForNullTransients()
+
+====
 
 == Servlet and Vertx environments
 
