@@ -21,26 +21,32 @@ You can, however, download the code for the entire https://github.com/davidsower
 === Command Line
 
 Change to your Git root directory, for example:
-`
+
+[source,bash]
+----
     cd /home/david/git
-`
+----
+
 Create a directory for your project (called "*krail-tutorial*" in this case), and initialise it for git.
-`
+
+[source,bash]
+----
     mkdir krail-tutorial
     cd krail-tutorial
     git init
     gedit build.gradle
-`
+----
+
 You will now have an empty build file open. Cut and paste the following into the file &amp; save it
-```groovy
+
+[source,groovy]
+----
  plugins {
  id "com.devsoap.plugin.vaadin" version "1.2.3"
  id 'eclipse-wtp'
  id 'idea'
  }
 
-[source]
-----
 vaadin {
     version = '8.2.0' // This version should match that used by the version of Krail you are using
     logToConsole = true
@@ -72,26 +78,24 @@ task wrapper(type: Wrapper) {
 }
 ----
 
-[source]
-----
-
-- The first entry is for a [Vaadin Gradle plugin](https://github.com/johndevs/gradle-vaadin-plugin), and provides some valuable Vaadin specific Gradle tasks
+- The first entry is for a https://github.com/johndevs/gradle-vaadin-plugin[Vaadin Gradle plugin], and provides some valuable Vaadin specific Gradle tasks
 - The 'eclipse' and 'idea' plugins are optional, but useful for generating IDE specific files.
 - We need to tell the vaadin-gradle plugin which version of Vaadin to use - this must match the version being used by the version of Krail selected 
 - Krail requires Java 8, hence the line "sourceCompatibility = '1.8'"
 - Of course, you cannot do without Krail ...
-- There are a lot of dependencies involved in building Krail - that is no surprise, when you consider how many things it integrates.  However, that also means that there can be version conflicts to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
-- finally, the gradle-vaadin plugin needs Gradle at version 4+, so we will create a [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) task 
+- There is a version conflict to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
+- finally, the gradle-vaadin plugin needs Gradle at version 4+, so we will create a https://docs.gradle.org/current/userguide/gradle_wrapper.html[Gradle wrapper] task
 
 Now save the file and add it to Git
 
+[source,bash]
 ----
-
 git add build.gradle
-```
+
+----
 And finally, create a Gradle wrapper:
 
-[source]
+[source,bash]
 ----
 gradle wrapper
 ----
@@ -110,34 +114,23 @@ gradle vaadinCreateProject
 === IDEA
 
 * From the command line
-`sh
+[source,bash]
+----
 gradle idea
-`
-* In IDEA, start the import
+----
+* In IDEA, start the import: File | Open and select _krail-tutorial/build.gradle_
 
-____
+** In the import dialog:
 
-File | Open and select _krail-tutorial/build.gradle_
+*** Ensure that JDK 1.8 is selected
+*** Use "default gradle wrapper"
+*** Select "Create directories for empty content roots automatically"
 
-____
+TIP: IDEA may prompt you to add the project VCS root - say yes if it does.
 
-* 
+* Delete the pacakge _com.example.krailtutorial_ completely - we will create our own shortly. There are a couple of generated files in these folders, but they can be deleted.
 
-In the import dialog:
-
-** Ensure that JDK 1.8 is selected
-** Use "default gradle wrapper"
-** Select "Create directories for empty content roots automatically"
-
-IDEA may prompt you to add the project VCS root - say yes if it does.
-
-* 
-
-Delete the pacakge _com.example.krailtutorial_ completely - we will create our own shortly. There are a couple of generated files in these folders, but they can be deleted.
-
-* 
-
-To reduce what goes in to Git, let's just add a simple .gitignore file at the project root:
+* To reduce what goes in to Git, let's just add a simple .gitignore file at the project root:
 
 [source]
 ----
@@ -158,7 +151,7 @@ classes
 
 == Eclipse
 
-Please see link:tutorial-eclipse.md[this contribution]
+Please see link:tutorial-eclipse.html[this contribution]
 
 == Krail preparation
 
@@ -177,7 +170,9 @@ Let's keep all the application configuration in one place and create a package u
 You may have noticed when you deleted the groovy folders, that a `TutorialServlet` had been generated. We do need one, but not that one!
 
 In the com.example.tutorial.app package, create a class `TutorialServlet`, extended from `BaseServlet`:
-```java
+
+[source,java]
+----
 package com.example.tutorial.app;
 
 import com.google.inject.Inject;
@@ -188,16 +183,13 @@ import uk.q3c.krail.core.ui.ScopedUIProvider;
 @Singleton
 public class TutorialServlet extends BaseServlet {
 
-[source]
-----
+
 @Inject
 public TutorialServlet(ScopedUIProvider uiProvider) {
     super(uiProvider);
 }
 ----
 
-}
-```
 
 ==== Define a Widgetset
 
@@ -273,7 +265,9 @@ task wrapper(type: Wrapper) {
 ==== Create a Servlet Module
 
 In the _com.example.tutorial.app package_, create a class `TutorialServletModule`, extended from `BaseServletModule`:
-```
+
+[source,java]
+----
 package com.example.tutorial.app;
 
 import uk.q3c.krail.core.guice.BaseServletModule;
@@ -285,14 +279,17 @@ public class TutorialServletModule extends BaseServletModule {
  serve("/*").with(TutorialServlet.class);
  }
 }
-```
+----
 
 ==== Create a Binding Manager
 
 In Krail terminology, the Binding Manager is a central point of Guice configuration. Guice modules specify how things are bound together, and the Binding Manager selects which modules to use. All Krail applications use their own Binding Manager, usually sub-classed from `DefaultBindingManager`. To create one for the tutorial:
 
 In the com.example.tutorial.app package, create a class `BindingManager`, extended from `DefaultBindingManager`
-```
+
+[source,java]
+----
+
 package com.example.tutorial.app;
 
 import com.google.inject.Module;
@@ -302,8 +299,6 @@ import java.util.List;
 
 public class BindingManager extends DefaultBindingManager {
 
-[source]
-----
 @Override
 protected void addAppModules(List<Module> baseModules) {
 
@@ -315,8 +310,6 @@ protected Module servletModule() {
 }
 ----
 
-}
-```
 
 Notice that we override `servletModule()` to let Guice know about our `TutorialServletModule`
 
@@ -324,6 +317,7 @@ Notice that we override `servletModule()` to let Guice know about our `TutorialS
 
 * Create a new directory, src/main/webapp/WEB-INF
 * Then create a _web.xml_ file. Note that the listener refers to our `BindingManager.` This could be the only xml you will use for the entire project
+
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
@@ -362,17 +356,21 @@ Notice that we override `servletModule()` to let Guice know about our `TutorialS
 That's all the plumbing that is needed to get started - but we do not have any pages yet, so there's nothing to see. We will take a shortcut for the Tutorial and use some that already exists - you will see how the relationship between Guice modules and pages could be very convenient for building modular applications.
 
 The `SystemAccountManagementPages` class in Krail is a set of not very useful pages (it just meant as an example) composed as a Guice module. We will add that module to the Binding Manager. Note that we use the `addSitemapModules()` method - we could just add all modules in `addAppModules(),` the separation is purely for clarity.
-```
+
+[source,java]
+----
+
  @Override
- protected void addSitemapModules(List<Module> baseModules) {
- baseModules.add(new SystemAccountManagementPages());
+    protected void addSitemapModules(List<Module> baseModules) {
+    baseModules.add(new SystemAccountManagementPages());
  }
 
-[source]
 ----
 The complete ```BindingManager``` now looks like:
-----
 
+
+[source,java]
+----
 package com.example.tutorial.app;
 
 import com.google.inject.Module;
@@ -383,8 +381,6 @@ import java.util.List;
 
 public class BindingManager extends DefaultBindingManager {
 
-[source]
-----
 @Override
 protected void addAppModules(List<Module> baseModules) {
 
@@ -401,18 +397,14 @@ protected void addSitemapModules(List<Module> baseModules) {
 }
 ----
 
-}
-```
 
 ==== Theme(s)
 
 You could actually launch the Tutorial application now, but if you did it would look terrible - it has no CSS applied. To give the application some style we need to apply a Vaadin theme. It is possible to use themes from the Vaadin theme jar, but it is advisable to extract them and serve them statically, as recommended by the https://vaadin.com/book/-/page/themes.creating.html#themes.creating.builtin[Vaadin documentation]:
 
-____
 
-_The built-in themes included in the Vaadin library JAR are served dynamically from the JAR by the servlet. Serving themes and widget sets statically by the web server is more efficient._ 
+The built-in themes included in the Vaadin library JAR are served dynamically from the JAR by the servlet. Serving themes and widget sets statically by the web server is more efficient._
 
-____
 
 So let's do that now.
 
@@ -428,11 +420,11 @@ For readers less familiar with Vaadin, "reindeer" is the default style, and "val
 
 The one aspect of the build that tends to give problems is the widgetset compile - it seems very sensitive. We therefore suggest compiling it first by executing:
 
-____
-
+[source,bash]
+----
 gradle vaadinCompile
+----
 
-____
 
 from either the command line or IDE. You can see whether it has compiled by checking the src/main/webapp/VAADIN/widgetsets folder - it should have contents. (A compile failure usually creates a widgetsets folder, but leaves it empty)
 
@@ -440,15 +432,14 @@ We can now build and run the application - set up a run configuration in your ID
 
 ==== Run Configuration in IDEA
 
-____
-
+[source,java]
+----
 Run | Edit Configurations<br>
  + | Tomcat Server | Local<br>
 Name: Tutorial<br>
 Deployment: + | artifact | tutorial.war<br>
 Application context: /tutorial
-
-____
+----
 
 * refresh Gradle
 * Build | Rebuild project

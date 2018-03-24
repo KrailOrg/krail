@@ -6,13 +6,13 @@ Clearly we will want to add some new pages, but first we must know what constitu
 
 A page is represented by a URI, which maps to a specified `KrailView` class. The name of the page is presented to the user in navigation aware components, so that name must be Locale sensitive. Once the page is defined, it becomes part of the Krail `Sitemap`, which forms the heart of the navigation system. 
 
-There are two ways to add pages to Krail and make use of the link:../devguide/devguide-pages-navigation.md[navigation features], and you can use either one, or both. These are the "direct" method or "annotation" method. We will use both methods. 
+There are two ways to add pages to Krail and make use of the link:/devguide/devguide-pages-navigation.html[navigation features], and you can use either one, or both. These are the "direct" method or "annotation" method. We will use both methods.
 
 Because the page name is locale sensitive, we will first need to provide I18N support.
 
 == Introducing I18N
 
-You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the link:../devguide/devguide-i18n.md[full I18N description] now, or just follow these steps, as we will come back to I18N later in the Tutorial. 
+You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the link:/devguide/devguide-i18n.html[full I18N description] now, or just follow these steps, as we will come back to I18N later in the Tutorial.
 
 === Create an I18N Annotation
 
@@ -112,7 +112,7 @@ You will have compile errors, but let's look at what these entries mean.
 We'll make it easier by extending the `Grid3x3ViewBase`base class from the Krail core - this just gives us a 3x3 grid to place components in.
 
 
-TIP: Extending ViewBase or one of its sub-classes is usually the easiest way to create your views, but however you do it, you must implement `KrailView`. `ViewBase` can also help with link:tutorial-serialisation.md[deserialization].
+TIP: Extending ViewBase or one of its sub-classes is usually the easiest way to create your views, but however you do it, you must implement `KrailView`. `ViewBase` can also help with link:/userguide/userguide-serialisation.html[deserialization].
 
 
 * create the 3 views we want … AccountsView, FinanceView and PayrollView … just by extending `Grid3x3ViewBase` and injecting `Translate` (only FinanceView is shown here):
@@ -170,7 +170,7 @@ Run the application again. When the application starts the new pages will not be
 
 * Log in (any username, password='password'), and you will see the pages, under 'Private', in the navigation tree and menu.
 
-You may be wondering whether these pages need to be under the 'Private' branch. At the moment they do, but only because of the very simple access control rules supplied by `DefaultRealm`. You can actually define any logical structure, and we will see how to control permissions in the link:tutorial-uac.md[User Access Control] section of the Tutorial.
+You may be wondering whether these pages need to be under the 'Private' branch. At the moment they do, but only because of the very simple access control rules supplied by `DefaultRealm`. You can actually define any logical structure, and we will see how to control permissions in the link:tutorial-uac.html[User Access Control] section of the Tutorial.
 
 == Add a Page - Annotation method
 
