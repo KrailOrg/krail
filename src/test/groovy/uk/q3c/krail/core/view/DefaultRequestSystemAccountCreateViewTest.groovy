@@ -18,6 +18,6 @@ package uk.q3c.krail.core.view
 class DefaultRequestSystemAccountCreateViewTest extends ViewTest {
 
     def setup() {
-        view = new DefaultRequestSystemAccountCreateView()
+        view = new DefaultRequestSystemAccountCreateView(translate, serializationSupport)
     }
 }

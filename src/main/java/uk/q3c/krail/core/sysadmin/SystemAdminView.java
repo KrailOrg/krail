@@ -16,6 +16,7 @@ package uk.q3c.krail.core.sysadmin;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -35,8 +36,8 @@ public class SystemAdminView extends Grid3x3ViewBase {
     private Navigator navigator;
 
     @Inject
-    public SystemAdminView(Navigator navigator, Translate translate) {
-        super(translate);
+    public SystemAdminView(Navigator navigator, Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
         this.navigator = navigator;
     }
 

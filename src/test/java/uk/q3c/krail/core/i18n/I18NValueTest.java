@@ -17,11 +17,14 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
@@ -45,6 +48,17 @@ public class I18NValueTest {
 
     @Inject
     Translate i18NValue;
+
+
+    @Before
+    public void setup() {
+        MockVaadinSession.setup();
+    }
+
+    @After
+    public void teardown() {
+        MockVaadinSession.clear();
+    }
 
     @Test
     public void value() {

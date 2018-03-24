@@ -15,6 +15,7 @@ package uk.q3c.krail.core.ui
 
 import com.vaadin.server.ErrorHandler
 import spock.lang.Specification
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
@@ -42,6 +43,7 @@ class ScopedUITest2 extends Specification {
     I18NProcessor translator = Mock()
     Option option = Mock()
     LogMonitor logMonitor
+    SerializationSupport serializationSupport = Mock()
 
     def setup() {
         logMonitor = new LogMonitor()
@@ -58,7 +60,7 @@ class ScopedUITest2 extends Specification {
     //Not a great test but cannot access Page title
     def "after view change, page title updated"() {
         given:
-        DefaultPublicHomeView view = new DefaultPublicHomeView(translate)
+        DefaultPublicHomeView view = new DefaultPublicHomeView(translate, serializationSupport)
         view.buildView(null)
 
         when:

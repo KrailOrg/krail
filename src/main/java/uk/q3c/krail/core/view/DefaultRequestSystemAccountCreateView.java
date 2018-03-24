@@ -14,14 +14,15 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.i18n.Translate;
 
 public class DefaultRequestSystemAccountCreateView extends StandardPageViewBase implements
         RequestSystemAccountCreateView {
 
     @Inject
-    protected DefaultRequestSystemAccountCreateView(Translate translate) {
-        super(translate);
+    protected DefaultRequestSystemAccountCreateView(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
 

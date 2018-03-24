@@ -16,10 +16,11 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class Grid3x3ViewBase extends ViewBase {
     private final float[] defaultColumnWidths = new float[]{1f, 1f, 1f};
@@ -27,8 +28,8 @@ public class Grid3x3ViewBase extends ViewBase {
     private GridLayout grid;
 
     @Inject
-    protected Grid3x3ViewBase(Translate translate) {
-        super(translate);
+    protected Grid3x3ViewBase(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
     @Override

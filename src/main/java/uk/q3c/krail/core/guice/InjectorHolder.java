@@ -1,32 +1,29 @@
 package uk.q3c.krail.core.guice;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
+ *
+ * Does nothing but keep a static reference to the Guice inject - used only when running in a Servlet environment
+ *
  * Created by David Sowerby on 14 Mar 2018
  */
 public class InjectorHolder {
-    private static Logger log = LoggerFactory.getLogger(InjectorHolder.class);
 
     private static Injector injector;
-    private static BindingsCollator bindingsCollator;
-
-    private static void createInjector() {
-        injector = Guice.createInjector(bindingsCollator.allModules());
-        log.debug("injector created");
-    }
 
     public static Injector getInjector() {
         if (injector == null) {
-            createInjector();
+            new InjectorFactory().createInjector(RuntimeEnvironment.SERVLET);
         }
         return injector;
     }
 
-    public static void setBindingsCollator(BindingsCollator bindingsCollator) {
-        InjectorHolder.bindingsCollator = bindingsCollator;
+    public static void setInjector(Injector injector) {
+        InjectorHolder.injector = injector;
+    }
+
+    public static boolean hasInjector() {
+        return injector != null;
     }
 }

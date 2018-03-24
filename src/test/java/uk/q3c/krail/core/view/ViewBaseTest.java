@@ -16,6 +16,8 @@ package uk.q3c.krail.core.view;
 import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -29,11 +31,12 @@ public class ViewBaseTest {
     private TestView view;
     private TestView2 view2;
     private Translate mockTranslate = new MockTranslate();
+    private SerializationSupport serializationSupport = Mockito.mock(SerializationSupport.class);
 
     @Before
     public void setup() {
-        view = new TestView(mockTranslate);
-        view2 = new TestView2(mockTranslate);
+        view = new TestView(mockTranslate, serializationSupport);
+        view2 = new TestView2(mockTranslate, serializationSupport);
     }
 
     @Test(expected = ViewBuildException.class)
@@ -92,8 +95,8 @@ public class ViewBaseTest {
     class TestView extends ViewBase {
 
 
-        protected TestView(Translate translate) {
-            super(translate);
+        protected TestView(Translate translate, SerializationSupport serializationSupport) {
+            super(translate, serializationSupport);
         }
 
         @Override
@@ -105,8 +108,8 @@ public class ViewBaseTest {
     class TestView2 extends ViewBase {
 
 
-        protected TestView2(Translate translate) {
-            super(translate);
+        protected TestView2(Translate translate, SerializationSupport serializationSupport) {
+            super(translate, serializationSupport);
         }
 
         @Override

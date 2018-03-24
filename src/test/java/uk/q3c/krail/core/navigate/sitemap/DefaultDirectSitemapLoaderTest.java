@@ -22,6 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.KrailI18NModule;
@@ -54,7 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
         ShiroVaadinModule.class, KrailI18NModule.class, SitemapModule.class, UserModule.class, InMemoryModule.class, TestOptionModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class,
-        VaadinEventBusModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class,})
+        VaadinEventBusModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class,})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";

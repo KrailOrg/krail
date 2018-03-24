@@ -24,6 +24,7 @@ import com.vaadin.util.CurrentInstance;
 import net.engio.mbassy.bus.SyncMessageBus;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.bus.config.IBusConfiguration;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +77,11 @@ public class VaadinEventBusModuleTest_binding {
         setUIScope(1);
         uiBus = uiBusProvider.get();
         uiBus2 = uiBusProvider.get();
+    }
+
+    @AfterClass
+    public static void teardownClass() {
+        VaadinSession.setCurrent(null);
     }
 
     private void setUIScope(int index) {

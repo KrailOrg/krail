@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.sysadmin
 
 import spock.lang.Specification
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
 import uk.q3c.krail.core.user.notify.UserNotifier
@@ -28,6 +29,7 @@ class I18NViewTest extends Specification {
 
     UserNotifier userNotifier = Mock()
     Translate translate = Mock()
+    SerializationSupport serializationSupport = Mock()
 
     def setup() {
     }
@@ -41,7 +43,7 @@ class I18NViewTest extends Specification {
 
     def "doBuild"() {
         given:
-        I18NView view = new I18NView(userNotifier, translate)
+        I18NView view = new I18NView(userNotifier, translate, serializationSupport)
         translate.from(MessageKey.Setup_I18NKey_export, LabelKey.Export) >> "instruction1 text"
         translate.from(MessageKey.All_Keys_exported) >> "instruction2 text"
         when:
@@ -56,7 +58,7 @@ class I18NViewTest extends Specification {
 
     def "export button clicked"() {
         given:
-        I18NView view = new I18NView(userNotifier, translate)
+        I18NView view = new I18NView(userNotifier, translate, serializationSupport)
         view.doBuild()
 
         when:

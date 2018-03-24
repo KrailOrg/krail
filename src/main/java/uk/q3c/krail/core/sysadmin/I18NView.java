@@ -23,6 +23,7 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -56,8 +57,8 @@ public class I18NView extends Grid3x3ViewBase {
     private Translate translate;
     private UserNotifier userNotifier;
     @Inject
-    protected I18NView(UserNotifier userNotifier, Translate translate) {
-        super(translate);
+    protected I18NView(UserNotifier userNotifier, Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
         this.userNotifier = userNotifier;
         this.translate = translate;
     }

@@ -42,6 +42,8 @@ import java.util.concurrent.locks.Lock
  *
  *  Tests are limited to ensuring that the interceptors are called - not whether they do the right thing.  (The latter takes a lot of setting up of the Subject and is nothing to do with the module under test)
  *
+ *  Cannot use MockVaadinSession for this
+ *
  * Created by David Sowerby on 20 Jan 2016
  */
 class KrailShiroAopModuleTest extends Specification {

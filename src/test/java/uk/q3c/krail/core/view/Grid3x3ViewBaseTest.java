@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 
@@ -47,9 +48,12 @@ public class Grid3x3ViewBaseTest {
     @Mock
     private ViewChangeBusMessage busMessage;
 
+    @Mock
+    private SerializationSupport serializationSupport;
+
     @Before
     public void setup() {
-        view = new Grid3x3ViewBase(translate);
+        view = new Grid3x3ViewBase(translate, serializationSupport);
         topLeft = new Label();
         topCentre = new Label();
         topRight = new Label();

@@ -25,7 +25,7 @@ class SitemapReportViewTest extends ViewTest {
     MasterSitemap masterSitemap = Mock()
 
     def setup() {
-        thisView = new SitemapReportView(masterSitemap, translate)
+        thisView = new SitemapReportView(masterSitemap, translate, serializationSupport)
         masterSitemap.getReport() >> "wiggly report"
         view = thisView
     }

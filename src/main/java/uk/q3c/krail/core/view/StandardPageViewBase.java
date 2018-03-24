@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 
@@ -24,8 +25,8 @@ public abstract class StandardPageViewBase extends ViewBase {
     private Label label;
 
     @Inject
-    protected StandardPageViewBase(Translate translate) {
-        super(translate);
+    protected StandardPageViewBase(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
     @Override

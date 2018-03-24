@@ -24,14 +24,14 @@ class DefaultErrorViewTest extends ViewTest {
     DefaultErrorView thisView
 
     def setup() {
-        thisView = new DefaultErrorView(translate)
+        thisView = new DefaultErrorView(translate, serializationSupport)
         view = thisView
         fieldsWithoutCaptions = ['textArea']
     }
 
     def "set and get error"() {
         given:
-        Throwable error = new RuntimeException();
+        Throwable error = new RuntimeException()
         when:
         thisView.setError(error)
 
@@ -49,7 +49,7 @@ class DefaultErrorViewTest extends ViewTest {
 
     def "do build with error set, shows error stack"() {
         given:
-        Throwable error = new RuntimeException();
+        Throwable error = new RuntimeException()
         thisView.setError(error)
 
         when:

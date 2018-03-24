@@ -63,7 +63,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.15.1.0"
+        number = "0.16.0.0"
     }
 
 }
@@ -97,7 +97,8 @@ dependencies {
     compile 'uk.q3c.krail:krail-config:0.10.5.0'
     compile 'uk.q3c.krail:krail-persist-api:0.14.0.0'
 
-
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.20'
+    compile 'com.github.mcollovati.vertx:vertx-vaadin8:0.4.0'
 
     compile 'commons-beanutils:commons-beanutils:1.9.3'
     // need this for Guice 4.1.0 to override older version brought in by Bval

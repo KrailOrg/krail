@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view
 
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockTranslate
@@ -30,7 +31,12 @@ abstract class ViewTest extends Specification {
     Translate translate = new MockTranslate()
     String[] fieldsWithoutCaptions = new String[0]
     String[] fieldsWIthoutIds = new String[0]
+    SerializationSupport serializationSupport
 
+
+    def setup() {
+        serializationSupport = Mock()
+    }
 
     def "root component set"() {
         given:

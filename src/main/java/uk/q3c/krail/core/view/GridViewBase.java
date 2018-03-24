@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
@@ -27,8 +28,8 @@ public abstract class GridViewBase extends ViewBase implements KrailView {
 
 
     @Inject
-    protected GridViewBase(Translate translate) {
-        super(translate);
+    protected GridViewBase(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
     public GridLayout getGridLayout() {

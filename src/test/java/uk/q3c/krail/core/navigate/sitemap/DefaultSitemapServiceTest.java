@@ -19,6 +19,7 @@ import com.vaadin.server.VaadinService;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,6 +27,8 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DescriptionKey;
@@ -40,6 +43,7 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
@@ -60,7 +64,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -73,10 +76,9 @@ import static org.mockito.Mockito.when;
 @GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, VaadinEventBusModule.class, ServicesModule.class,
         ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, DefaultShiroModule.class,
         DefaultComponentModule.class, InMemoryModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class,
-        NavigationModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class, DefaultUIModule.class, TestOptionModule.class})
+        NavigationModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class, DefaultUIModule.class, TestOptionModule.class})
 public class DefaultSitemapServiceTest {
 
-    static VaadinService vaadinService;
     static ResourceUtils resourceUtils = new DefaultResourceUtils();
     private final int FILE_NODE_COUNT = 4;
     private final int DIRECT_NODE_COUNT = 2;
@@ -91,9 +93,13 @@ public class DefaultSitemapServiceTest {
 
     @BeforeClass
     public static void setupClass() {
-        vaadinService = mock(VaadinService.class);
+        VaadinService vaadinService = MockVaadinSession.setup().getVaadinService();
         when(vaadinService.getBaseDirectory()).thenReturn(resourceUtils.userTempDirectory());
-        VaadinService.setCurrent(vaadinService);
+    }
+
+    @AfterClass
+    public static void teardownClass() {
+        MockVaadinSession.clear();
     }
 
     @Before

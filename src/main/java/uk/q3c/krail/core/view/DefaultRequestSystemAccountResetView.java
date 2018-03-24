@@ -14,14 +14,15 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.i18n.Translate;
 
 public class DefaultRequestSystemAccountResetView extends StandardPageViewBase implements
         RequestSystemAccountResetView {
 
     @Inject
-    protected DefaultRequestSystemAccountResetView(Translate translate) {
-        super(translate);
+    protected DefaultRequestSystemAccountResetView(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
 

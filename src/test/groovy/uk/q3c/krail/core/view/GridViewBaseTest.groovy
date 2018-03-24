@@ -14,9 +14,9 @@
 package uk.q3c.krail.core.view
 
 import com.vaadin.ui.Label
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
-
 /**
  * Created by David Sowerby on 08 Feb 2016
  */
@@ -24,8 +24,8 @@ class GridViewBaseTest extends ViewTest {
 
     class GridTest extends GridViewBase {
 
-        protected GridTest(Translate translate) {
-            super(translate)
+        protected GridTest(Translate translate, SerializationSupport serializationSupport) {
+            super(translate, serializationSupport)
         }
 
         @Override
@@ -38,7 +38,7 @@ class GridViewBaseTest extends ViewTest {
 
 
     def setup() {
-        view = new GridTest(translate)
+        view = new GridTest(translate, serializationSupport)
         gridTest = view
     }
 

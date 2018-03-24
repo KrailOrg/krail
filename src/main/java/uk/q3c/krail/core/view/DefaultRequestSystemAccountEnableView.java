@@ -14,14 +14,15 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.i18n.Translate;
 
 public class DefaultRequestSystemAccountEnableView extends StandardPageViewBase implements
         RequestSystemAccountEnableView {
 
     @Inject
-    protected DefaultRequestSystemAccountEnableView(Translate translate) {
-        super(translate);
+    protected DefaultRequestSystemAccountEnableView(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
 

@@ -12,14 +12,14 @@
  */
 package uk.q3c.krail.core.view;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.google.inject.MembersInjector;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.guice.InjectorHolder;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.DefaultNavigator;
@@ -32,11 +32,6 @@ import uk.q3c.krail.i18n.Translate;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -58,11 +53,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class ViewBase implements KrailView, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
-
-    @Inject
-    private Translate translate;
     protected I18NKey nameKey = LabelKey.Unnamed;
     protected I18NKey descriptionKey = DescriptionKey.No_description_provided;
+    private Translate translate;
+
+
+    private SerializationSupport serializationSupport;
     private boolean componentsConstructed;
     private boolean dirty;
     @Deprecated
@@ -70,9 +66,10 @@ public abstract class ViewBase implements KrailView, Serializable {
     private Component rootComponent;
 
     @Inject
-    protected ViewBase(Translate translate) {
+    protected ViewBase(Translate translate, SerializationSupport serializationSupport) {
         super();
         this.translate = translate;
+        this.serializationSupport = serializationSupport;
     }
 
     public Translate getTranslate() {
@@ -101,7 +98,7 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
-        log.debug("====> View.afterBuild called");
+        log.debug("View.afterBuild called");
         if (!idsAssigned) {
             setIds();
             idsAssigned = true;
@@ -211,71 +208,60 @@ public abstract class ViewBase implements KrailView, Serializable {
         return translate.from(descriptionKey);
     }
 
+    public SerializationSupport getSerializationSupport() {
+        return serializationSupport;
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        beforeDeserialization();
+        inputStream.defaultReadObject();
+        beforeTransientInjection();
+        serializationSupport.injectTransientFields(this);
+        afterTransientInjection();
+        checkForNullTransients();
+    }
+
+
     /**
-     * Initialises transient fields, usually only required after deserialisation.  This is done in two parts, the first
-     * to re-inject any Guice dependencies marked as transient, and the second to call on sub-classes to initialise
-     * any non-Guice transient fields
-     * <p>
-     * For the Guice construction to work, even when constructor injection is used, the transient fields MUST be annotated with the
-     * correct Guice annotation. For example, a constructor might be:
-     *
-     * @Inject public Example(@Named("foo") Thingy thingy){
-     * this.thingy= thingy
-     * }
-     * <p>
-     * The corresponding field would need to be annotated:
-     * @Inject @Named("foo")
-     * private transient Thingy thingy;
+     * By default does nothing but can be overridden to execute code before any other action is taken for deserialization
      */
-    protected void constructTransients() {
-        Constructor<?>[] constructors = this.getClass().getDeclaredConstructors();
-        for (Constructor constructor : constructors) {
-            if (constructor.isAnnotationPresent(Inject.class) || constructor.isAnnotationPresent(javax.inject.Inject.class)) {
-                constructGuice(constructor);
-            }
-        }
+    protected void beforeDeserialization() {
+
     }
 
     /**
-     * Iterates through fields, and for any transient fields found, then checks for the constructor parameters for a parameter
-     * with the same type and same name as the field.  If a match is found, the field is assigned a new instance created via Guice
-     *
-     * @param constructor the constructor identified by its @Inject annotation
+     * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
+     * has injected Guice dependencies
      */
-    private void constructGuice(Constructor constructor) {
-        Field[] fields = this.getClass().getDeclaredFields();
-        final Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
-        System.out.println(parameterAnnotations.length);
-        List<Class> types = Arrays.asList(constructor.getParameterTypes());
-        for (Field field : fields) {
-            if (Modifier.isTransient(field.getModifiers())) {
-                if (types.contains(field.getType())) {
-
-                    try {
-                        field.setAccessible(true);
-                        Object value = InjectorHolder.getInjector().getInstance(field.getType());
-                        field.set(this, value);
-
-                    } catch (IllegalAccessException e) {
-// TODO
-
-                    }
-                }
-            }
-        }
-
-//       TypeLiteral t =  TypeLiteral.get(String.class);
-//        InjectorHolder.getInjector().injectMembers(this);
-    }
-
-    private void constructGuiceAlternative() {
-        MembersInjector<? extends ViewBase> membersInjector = InjectorHolder.getInjector().getMembersInjector(this.getClass());
-//        (com.google.inject.internal.MembersInjectorImpl) membersInjector.
-        throw new RuntimeException("this won't work, cannot get at com.google.inject.internal.MembersInjectorImpl");
+    protected void beforeTransientInjection() {
 
     }
 
-    private void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
-        constructGuiceAlternative();
+
+    /**
+     * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
+     * injects Guice dependencies
+     */
+    protected void afterTransientInjection() {
+
     }
+
+
+    /**
+     * Throws an exception if there are any transient fields with a null value.  Same as {@link #checkForNullTransients(List)} with no exclusions
+     */
+    protected void checkForNullTransients() {
+        checkForNullTransients(ImmutableList.of());
+    }
+
+    /**
+     * Throws an exception if there are any transient fields with a null value. See {@link SerializationSupport#checkForNullTransients(List)}
+     *
+     * @param exclusions fields names to be excluded from the check
+     */
+    protected void checkForNullTransients(List<String> exclusions) {
+        serializationSupport.checkForNullTransients(exclusions);
+    }
+
 }
+

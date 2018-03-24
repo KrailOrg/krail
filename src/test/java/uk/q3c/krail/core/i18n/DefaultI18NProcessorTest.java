@@ -17,15 +17,19 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.option.mock.MockOption;
@@ -57,14 +61,23 @@ public class DefaultI18NProcessorTest {
     @Inject
     DefaultI18NProcessor processor;
 
+    @Mock
+    VaadinService vaadinService;
+
     @Before
     public void setup() {
+        MockVaadinSession.setup();
         Locale.setDefault(Locale.UK);
         testObject = new I18NTestClass();
         testObject2 = new I18NTestClass2();
         testObject3 = new I18NTestClass3();
         currentLocale.setLocale(Locale.UK);
 
+    }
+
+    @After
+    public void teardown() {
+        MockVaadinSession.clear();
     }
 
     @Test
@@ -98,7 +111,6 @@ public class DefaultI18NProcessorTest {
         // assertThat(testObject.getLabel().getValue()).isEqualTo("Ok");
         assertThat(testObject.getLabel()
                 .getLocale()).isEqualTo(Locale.UK);
-
 
 
         // class annotation overruled by field annotation
@@ -151,7 +163,6 @@ public class DefaultI18NProcessorTest {
     }
 
 
-
     @Test
     public void interpret_de() {
 
@@ -163,19 +174,19 @@ public class DefaultI18NProcessorTest {
         processor.translate(testObject);
         // then
         assertThat(testObject.getButtonWithAnnotation()
-                             .getCaption()).isEqualTo("OK");
+                .getCaption()).isEqualTo("OK");
         assertThat(testObject.getButtonWithAnnotation()
-                             .getDescription()).isEqualTo(confirmValueOk);
+                .getDescription()).isEqualTo(confirmValueOk);
         assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.GERMANY);
+                .getLocale()).isEqualTo(Locale.GERMANY);
 
         assertThat(testObject.getLabel()
-                             .getCaption()).isEqualTo("OK");
+                .getCaption()).isEqualTo("OK");
         assertThat(testObject.getLabel()
-                             .getDescription()).isEqualTo(confirmValueOk);
+                .getDescription()).isEqualTo(confirmValueOk);
         // assertThat(testObject.getLabel().getValue()).isEqualTo("Ok");
         assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.GERMANY);
+                .getLocale()).isEqualTo(Locale.GERMANY);
 
 
     }

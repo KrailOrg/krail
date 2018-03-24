@@ -15,6 +15,7 @@ package uk.q3c.krail.core.sysadmin;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.TextArea;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -36,8 +37,8 @@ public class SitemapReportView extends Grid3x3ViewBase {
     private TextArea reportArea;
 
     @Inject
-    protected SitemapReportView(MasterSitemap masterSitemap, Translate translate) {
-        super(translate);
+    protected SitemapReportView(MasterSitemap masterSitemap, Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
         this.masterSitemap = masterSitemap;
     }
 

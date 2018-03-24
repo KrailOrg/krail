@@ -19,6 +19,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -47,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class,
         SitemapModule.class, UserModule.class, DataTypeModule.class, KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule
         .class, VaadinSessionScopeModule.class, NavigationModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule.class,
-        DefaultUIModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
+        DefaultUIModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
 public class SystemAccountManagementPagesTest {
 
     @Inject

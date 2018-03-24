@@ -24,7 +24,7 @@ class SystemAdminViewTest extends ViewTest {
     SystemAdminView thisView
 
     def setup() {
-        thisView = new SystemAdminView(navigator, translate)
+        thisView = new SystemAdminView(navigator, translate, serializationSupport)
         view = thisView
     }
 

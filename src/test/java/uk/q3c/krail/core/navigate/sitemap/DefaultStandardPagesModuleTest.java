@@ -20,6 +20,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -50,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, StandardPagesModule.class, UIScopeModule.class, VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class,
         TestKrailI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, InMemoryModule.class, TestOptionModule
         .class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule.class,
-        DataTypeModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
+        DataTypeModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})
 public class DefaultStandardPagesModuleTest {
 
     @Inject

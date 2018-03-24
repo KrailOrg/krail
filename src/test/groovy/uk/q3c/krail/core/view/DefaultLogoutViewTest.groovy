@@ -22,7 +22,7 @@ import com.vaadin.ui.VerticalLayout
 class DefaultLogoutViewTest extends ViewTest {
 
     def setup() {
-        view = new DefaultLogoutView()
+        view = new DefaultLogoutView(translate, serializationSupport)
     }
 
     def "doBuild"() {

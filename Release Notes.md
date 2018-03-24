@@ -1,22 +1,21 @@
-# Release Notes for krail 0.15.1.0
+# Release Notes for krail 0.16.0.0
 
-The main purpose of this release is to make correct use of VaadinSession by ensuring that anything which may need to be stored in the session is Serializable.
+The release has two purposes:
 
-This is needed in any environment where a session could be moved, for example in a clustered environment, and depending on how integration with Vert.x is implemented, may also be used in Vert.x local sessions.
+- make correct use of VaadinSession by ensuring that anything which may need to be stored in the session is Serializable. This is needed in any environment where a session could be moved, for example in a clustered environment, and depending on how integration with Vert.x is implemented, may also be used in Vert.x local sessions.
+- enable the same application code to run on Vertx or a Servlet container with minimal (see the Bootstrap section) 
 
 
 # Language Change
 
 A number of classes, and test classes have been converted to Kotlin.
 
-# Units
+# Unit Tests
 
-Unit tests relating to these changes are written in Spek, and are held in a separate repo, krail-kotlin, pending update of Spek to 2.0, (which will hopefully resolve clashes between Spek and JUnit)
+New unit tests, or thoses that have been modified significantly, are written in Spek, and are held in a separate repo, krail-kotlin, pending update of Spek to 2.0, (which will hopefully resolve clashes between Spek and JUnit)
 
 
 # Subject and Sessions
-
-The mechanism for storing the `Subject` in `VaadinSession` has been revised
 
 ## SubjectProvider and Subject
 
@@ -36,6 +35,12 @@ Has been removed.  Login success and failures messages are sent via the `Session
 ## DescriptionKey
 
 Login related I18NKeys have moved to `LoginDescriptionKey` 
+
+
+# Bootstrap
+
+In order to support both Vertx and Servlet environments, a new approach to start up has been introduced.  A bootstrap file 'krail-bootstrap.yml' is required to select a slightly different set of modules depending on the environment.
+More information can be found in the [developer guide](https://davidsowerby.gitbooks.io/krail-user-guide/content/devguide/bootstrap.html)
 
 # Deprecated
 

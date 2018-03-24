@@ -1,7 +1,7 @@
 # Summary
 
 * [Introduction](index.md)
-* [Tutorial](tutorial/intro.md)
+* [Tutorial](tutorial/tutorial-intro.md)
   * [Getting Started](tutorial/tutorial-getting-started.md)
   * [Pages and Navigation](tutorial/tutorial-pages-navigation.md)
   * [UI & Theme](tutorial/tutorial-ui-theme.md)
@@ -19,9 +19,13 @@
   * [Eclipse IDE](tutorial/tutorial-eclipse.md)
   * [Create User Hierarchy](tutorial/tutorial-create-hierarchy.md)
   * [Functional Testing](tutorial/tutorial-functional-test.md)
-  * [Serialisation](tutorial/tutorial-serialisation.md)
-* [Developer Guide](devguide/intro.md)
+* [User Guide](userguide/userguide-intro.md)
+  * [Bootstrap](userguide/userguide-bootstrap.md)
+  * [Serialization](userguide/userguide-serialisation.md)
+  * [Injector Scope](userguide/userguide-injector-scope.md)
+* [Developer Guide](devguide/devguide-intro.md)
   * [License](devguide/license.md)
+  * [Bootstrap](devguide/devguide-bootstrap.md)
   * [Krail Configuration Overview](devguide/devguide-configuration-overview.md)
   * [Pages and Navigation](devguide/devguide-pages-navigation.md)
   * [Options and UserHierarchies](devguide/devguide-options-hierarchies.md)
@@ -32,6 +36,7 @@
   * [Validation](devguide/devguide-validation.md)
   * [Vert.x](devguide/devguide-vertx.md)
   * [Persistence providers](devguide/devguide-persistence.md)
+  * [Serialization](devguide/serialisation.md)
   * [Functional Testing](devguide/devguide-functional-test.md)
   
 

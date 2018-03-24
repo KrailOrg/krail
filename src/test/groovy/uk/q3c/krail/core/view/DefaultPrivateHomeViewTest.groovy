@@ -18,6 +18,6 @@ package uk.q3c.krail.core.view
 class DefaultPrivateHomeViewTest extends ViewTest {
 
     def setup() {
-        view = new DefaultPrivateHomeView()
+        view = new DefaultPrivateHomeView(translate, serializationSupport)
     }
 }

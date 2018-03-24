@@ -121,7 +121,12 @@ public class CoreBindingsCollator implements BindingsCollator {
         addAppModules(modules);
         addSitemapModules(modules);
         addPersistenceModules(modules);
+        addSerializationSupport(modules);
         return modules;
+    }
+
+    private void addSerializationSupport(List<Module> modules) {
+        modules.add(new SerializationSupportModule());
     }
 
     protected Module servicesModule() {

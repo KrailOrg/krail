@@ -14,13 +14,14 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.i18n.Translate;
 
 public class DefaultSystemAccountView extends StandardPageViewBase implements SystemAccountView {
 
     @Inject
-    protected DefaultSystemAccountView(Translate translate) {
-        super(translate);
+    protected DefaultSystemAccountView(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
 

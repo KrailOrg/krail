@@ -15,6 +15,7 @@ package uk.q3c.krail.core.shiro
 
 import com.vaadin.server.VaadinSession
 import spock.lang.Specification
+import uk.q3c.krail.core.vaadin.MockVaadinSession
 
 /**
  * Created by David Sowerby on 09 Feb 2016
@@ -25,7 +26,7 @@ class DefaultVaadinSessionProviderTest extends Specification {
 
     def setup() {
         provider = new DefaultVaadinSessionProvider()
-        VaadinSession.setCurrent(null)
+        MockVaadinSession.clear()
     }
 
     def "no VaadinSession, throw exception"() {
@@ -38,8 +39,7 @@ class DefaultVaadinSessionProviderTest extends Specification {
 
     def "VaadinSession available, returns it"() {
         given:
-        VaadinSession session = Mock()
-        VaadinSession.setCurrent(session)
+        VaadinSession session = MockVaadinSession.setup()
 
         when:
         VaadinSession result = provider.get()

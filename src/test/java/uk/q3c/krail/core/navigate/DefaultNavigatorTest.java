@@ -38,6 +38,8 @@ import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;
 import uk.q3c.krail.core.navigate.sitemap.DefaultMasterSitemap;
@@ -93,7 +95,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule.class,
-        TestUIScopeModule.class, EventBusModule.class, SitemapModule.class, ServicesModule.class, UtilModule.class, UtilsModule.class, KrailApplicationConfigurationModule.class})
+        TestUIScopeModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, EventBusModule.class, SitemapModule.class, ServicesModule.class, UtilModule.class, UtilsModule.class, KrailApplicationConfigurationModule.class})
 public class DefaultNavigatorTest {
 
     @Mock

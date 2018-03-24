@@ -14,8 +14,6 @@ package uk.q3c.krail.core.guice;
 
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.SecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.service.ServiceModel;
@@ -24,27 +22,19 @@ import javax.servlet.ServletContextEvent;
 
 
 /**
- * A subclass of {@link CoreBindingsCollator} is used to collect Guice modules -  this separates the definitions of modules to use from the {@link Injector}  creation.
+ * As this is created by the web container, a parameterless constructor is needed.
  * <p>
- * This allows the same {@link CoreBindingsCollator} to be used for a war file deployment and a Vertx deployment.
- * <p>
- * As this is created by the web container, a parameterless constructor is needed.  Create a sub-class and return your
- * implementation of {@link CoreBindingsCollator} to provide a definition of the Guice modules to include
+ * The Guice injector is held separately, in {@link InjectorHolder} to enable access for a war file deployment and a Vertx deployment.
  */
-public abstract class DefaultServletContextListener extends GuiceServletContextListener {
+public class DefaultServletContextListener extends GuiceServletContextListener {
     private static Logger log = LoggerFactory.getLogger(DefaultServletContextListener.class);
 
     protected DefaultServletContextListener() {
         super();
     }
 
-    public static Injector injector() {
-        return InjectorHolder.getInjector();
-    }
-
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        InjectorHolder.setBindingsCollator(getBindingsCollator());
         super.contextInitialized(servletContextEvent);
     }
 
@@ -52,7 +42,7 @@ public abstract class DefaultServletContextListener extends GuiceServletContextL
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         log.info("Stopping service");
         try {
-            if (InjectorHolder.getInjector() != null) {
+            if (InjectorHolder.hasInjector()) {
                 InjectorHolder.getInjector().getInstance(ServiceModel.class)
                         .stopAllServices();
             } else {
@@ -74,19 +64,6 @@ public abstract class DefaultServletContextListener extends GuiceServletContextL
     public Injector getInjector() {
         return InjectorHolder.getInjector();
     }
-
-    protected void createInjector() {
-
-
-        // By default Shiro provides a binding to DefaultSecurityManager, but that is replaced by a binding to
-        // KrailSecurityManager in {@link DefaultShiroModule#bindSecurityManager} (or potentially to another security manager if
-        // the developer overrides that method)
-        SecurityManager securityManager = InjectorHolder.getInjector().getInstance(SecurityManager.class);
-        SecurityUtils.setSecurityManager(securityManager);
-
-    }
-
-    protected abstract CoreBindingsCollator getBindingsCollator();
 
 
 }

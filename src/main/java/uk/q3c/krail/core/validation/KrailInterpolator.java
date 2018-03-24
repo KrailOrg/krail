@@ -13,6 +13,7 @@
 
 package uk.q3c.krail.core.validation;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.apache.bval.constraints.Email;
 import org.apache.bval.constraints.NotEmpty;
@@ -55,6 +56,10 @@ public class KrailInterpolator implements MessageInterpolator {
     private static Logger log = LoggerFactory.getLogger(KrailInterpolator.class);
     private final CurrentLocale currentLocale;
     private final Translate translate;
+
+    public Map<Class<? extends Annotation>, I18NKey> getJavaxValidationSubstitutes() {
+        return ImmutableMap.copyOf(javaxValidationSubstitutes);
+    }
 
     private Map<Class<? extends Annotation>, I18NKey> javaxValidationSubstitutes;
     private MessageFormat2 messageFormat;
@@ -334,9 +339,7 @@ public class KrailInterpolator implements MessageInterpolator {
      */
     protected boolean isJavaxMessageKey(String patternOrKey, Context context) {
         if (!isPattern(patternOrKey)) {
-            if ((patternOrKey.contains("javax.validation.constraints")) || (patternOrKey.contains("org.apache.bval"))) {
-                return true;
-            }
+            return (patternOrKey.contains("javax.validation.constraints")) || (patternOrKey.contains("org.apache.bval"));
         }
         return false;
     }

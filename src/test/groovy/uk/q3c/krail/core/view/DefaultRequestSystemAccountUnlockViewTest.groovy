@@ -18,6 +18,6 @@ package uk.q3c.krail.core.view
 class DefaultRequestSystemAccountUnlockViewTest extends ViewTest {
 
     def setup() {
-        view = new DefaultRequestSystemAccountUnlockView()
+        view = new DefaultRequestSystemAccountUnlockView(translate, serializationSupport)
     }
 }

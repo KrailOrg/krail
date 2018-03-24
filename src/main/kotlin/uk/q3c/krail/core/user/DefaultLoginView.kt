@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.SessionBus
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.Value
 import uk.q3c.krail.core.shiro.SubjectProvider
@@ -45,9 +46,10 @@ import uk.q3c.krail.i18n.Translate
 @SubscribeTo(SessionBus::class)
 class DefaultLoginView @Inject constructor(
         private val subjectProvider: SubjectProvider,
-        translate: Translate) :
+        translate: Translate,
+        serializationSupport: SerializationSupport) :
 
-        Grid3x3ViewBase(translate), LoginView, ClickListener {
+        Grid3x3ViewBase(translate, serializationSupport), LoginView, ClickListener {
 
     private val log = LoggerFactory.getLogger(this.javaClass.name)
     @AssignComponentId(assign = false, drilldown = false)

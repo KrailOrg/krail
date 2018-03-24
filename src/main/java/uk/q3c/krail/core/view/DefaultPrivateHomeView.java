@@ -14,13 +14,14 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.i18n.Translate;
 
 public class DefaultPrivateHomeView extends StandardPageViewBase implements PrivateHomeView {
 
     @Inject
-    protected DefaultPrivateHomeView(Translate translate) {
-        super(translate);
+    protected DefaultPrivateHomeView(Translate translate, SerializationSupport serializationSupport) {
+        super(translate, serializationSupport);
     }
 
 

@@ -6,11 +6,43 @@
     "summary": "contents.md"
   },
   "plugins": [
-    "versions"
+    "versions",
+    "styles-sass",
+    "asciidoc-admonition-icons"
   ],
+  "styles": {
+    "website": "styles/website.scss"
+  },
   "pluginsConfig": {
     "versions": {
       "type": "branches"
+    },
+    "admonitions": {
+      "note": {
+        "classes": "fa icon-note",
+        "title": "Note",
+        "content": "\uf05a"
+      },
+      "tip": {
+        "classes": "fa icon-tip",
+        "title": "Tip",
+        "content": "\uf0eb"
+      },
+      "important": {
+        "classes": "fa icon-important",
+        "title": "Important",
+        "content": "\uf06a"
+      },
+      "caution": {
+        "classes": "fa icon-caution",
+        "title": "Caution",
+        "content": "\uf06d"
+      },
+      "warning": {
+        "classes": "fa icon-warning",
+        "title": "Warning",
+        "content": "\uf071"
+      }
     }
   }
 }

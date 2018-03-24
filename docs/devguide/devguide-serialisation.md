@@ -2,7 +2,7 @@
 
 A Krail application would originally have only required to support serialisation in a high availability (HA) environment.  In general, using sticky sessions in a clustered environment would be sufficient.
 
-In addition HA, running a Krail application on Vert.x places a further requirement for serialisation support.  This introduces all the usual Java serialisation issues of non-Serializable classes.
+In addition to HA, running a Krail application on Vert.x places a further requirement for serialisation support.  This introduces all the usual Java serialisation issues of non-Serializable classes.
 
 Specifically, Vaadin is designed in such a way that it holds the entire UI state to memory, and therefore needs to serialise it to session when HA or other circumstances need to move a session.
 
@@ -23,68 +23,32 @@ The use of Guice introduces a further challenge - in order to be certain that de
 1. Must allow for transients which are either reconstructed by Guice or by developer code  (a @NotGuice annotation?)
 1. Make the process as simple and clear as possible for Krail application developers
 1. If possible, make transition to a non-native serialisation process an easy option.
+1. Allow Krail developers to populate other transient fields as they need to, before and/or after the injections
+
 
 
 # Options and Obstacles
 
-In order to meet objective 1), any potential resolution requires that the Guice Injector is available via a static reference
+In order to meet objective 1), any potential resolution requires that the Guice Injector is available during deserialisation.
 
 ## Use of Injector.injectMembers
 
-This would be very easy to implement in a readObject - a simply call:
+This would be very easy to implement in a readObject - a simply call (hhoks for the developer to use before and after the injections have been ignored for this example):
 
 ```java
 private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
     in.defaultReadObject();
-    InjectorHolder.getInjector().injectMembers(this)
+    getInjector().injectMembers(this)
 }
 ```
 
 
 ### Obstacles
 
-- This will only work with field or method injection.  Assuming the use of Field injection, all transient fields would then need to be annotated with @Inject, along with any other binding annotations.
-- This would mean abandoning or modifying constructor injection for all the current `KrailView` implementations - the Field injection would simply overwrite the constructor injection during normal instance creation.
+- This will only work with field or method injection - any non-serialisable fields would have to be field or method injected.  While this would work, it imposes a restriction on constructor injection.
+- This would mean abandoning or modifying constructor injection for all the current `KrailView` implementations
 - Field injection has its own limitations, and most see it as a less attractive option.  Difficulty of testing is usually overstated especially with the introduction of [Bound Fields](https://github.com/google/guice/wiki/BoundFields), and the choices are discussed in the [Guice documentation](https://github.com/google/guice/wiki/Injections).  
 - Even if Field injection were considered a good option, it would remove the choice from a Krail application developer. 
-
-
-## Bespoke transient field initialiser
-
-It would seem possible to create a routine to populate transient fields by reflection, using an Injector, as part of readObject.  Some preliminary code below shows how this might look - this is not fully tested, but copes with mainstream cases including generics and could cope with binding annotations.
-
- 
-```java
-private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
-    in.defaultReadObject();
-    Field[] fields = this.getClass().getDeclaredFields();
-    final Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
-    List<Class> types = Arrays.asList(constructor.getParameterTypes());
-    for (Field field : fields) {
-        if (Modifier.isTransient(field.getModifiers())) {
-            if (types.contains(field.getType())) {
-
-                try {
-                    field.setAccessible(true);
-                    Object value = InjectorHolder.getInjector().getInstance(field.getType());
-                    field.set(this, value);
-
-                } catch (IllegalAccessException e) {
-                    // TODO
-
-                }
-            }
-        }
-    }
-}
-```
-        
-### Obstacles
-
-- Edge cases will be difficult to encompass
-- Fields would have to be annotated with binding annotations where there are two instances of the same type being injected - there is no other way to match a constructor parameter to the field it is assigned to.
-- It may introduce inconsistency with Guice - even though the injector is used, this has to cope with multi-bindings and assisted inject
-- It is likely to be fairly complex code, with the maintenance that goes with it
 
 
 ## Proxy serialisation
@@ -100,12 +64,26 @@ An [old post](https://groups.google.com/forum/#!topic/google-guice/T9VMiv6pgLw) 
 
 ### Obstacles
 
-- `Key` is not serialisable, and nor is TypeLiteral, which would be an alternative
+- `Key` is not serialisable, and nor is TypeLiteral, which would be an alternative.  [Guava TypeToken](https://github.com/google/guava/wiki/ReflectionExplained) may be an option
 - Defining a proxy would need to cater for generics, which is complicated by `Key` not being serialisable
 - Reflection is still required
+- Fields would have to be annotated with binding annotations where there are two instances of the same type being injected - there is no other way to match a constructor parameter to the field it is assigned to.
+- If we can serialise a representation of the key on write, we could just as easily construct the key on read, and just inject an instance from that Key
+
+
+
+
+## Bespoke transient field initialiser
+
+It would seem possible to create a routine to populate transient fields by reflection, using an Injector, as part of readObject, in ```ViewBase```  
+This might mean repeating the binding annotations on fields (but without the @Inject), where there are multiple injections of the same type.
+
+        
+### Obstacles
+
 - Fields would have to be annotated with binding annotations where there are two instances of the same type being injected - there is no other way to match a constructor parameter to the field it is assigned to.
 
  
  
 # Conclusion
-Of these 3 not very attractive choices Proxy Serialisation looks the most promising
+Of these choices, the _Bespoke transient field initialiser_ seems to offer the best solution, in that it all it requires is that the Krail developer annotates transient fields with binding annotations where needed.  

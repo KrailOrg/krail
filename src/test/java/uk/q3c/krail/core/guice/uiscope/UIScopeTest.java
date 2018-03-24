@@ -22,21 +22,22 @@ import com.vaadin.server.ClientConnector;
 import com.vaadin.server.UICreateEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.subject.Subject;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule;
@@ -56,6 +57,7 @@ import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.vaadin.DataModule;
+import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.eventbus.MessageBus;
@@ -69,14 +71,11 @@ import uk.q3c.krail.service.AbstractService;
 import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.ui.TestUIModule;
-import uk.q3c.krail.util.DefaultResourceUtils;
-import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 import java.util.Optional;
-import java.util.concurrent.locks.Lock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -88,8 +87,6 @@ import static uk.q3c.krail.core.shiro.SubjectProviderKt.SUBJECT_ATTRIBUTE;
 public class UIScopeTest {
     static Optional<CacheManager> cacheManagerOpt = Optional.empty();
     static Subject subject = mock(Subject.class);
-    static VaadinService vaadinService;
-    static ResourceUtils resourceUtils;
     public int connectCount;
     protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
     protected VaadinSession mockedSession = mock(VaadinSession.class);
@@ -97,26 +94,22 @@ public class UIScopeTest {
     VaadinSessionProvider vaadinSessionProvider;
     private Injector injector;
     private ScopedUI ui;
-    Lock sessionLock = mock(Lock.class);
+    MockVaadinSession mockVaadinSession;
     String headlessToken = "eyJzdWIiOiJkYXZpZCIsImtub3duQXMiOiJkYXZpZCIsInJlYWxtTmFtZSI6ImRlZmF1bHRSZWFsbSJ9.QKkeO1w4HwGXLRuTxofDlEp7PsH6N8nYyhak7P0SKnn-OuvG8OTuuFne0bhAmMuN3dY3iOHNvHXzP4uMxr6sQA";
 
-    @BeforeClass
-    public static void setupClass() {
-        resourceUtils = new DefaultResourceUtils();
-        vaadinService = mock(VaadinService.class);
-
-        when(vaadinService.getBaseDirectory()).thenReturn(resourceUtils.userTempDirectory());
-        VaadinService.setCurrent(vaadinService);
-    }
 
     @Before
     public void setup() {
-        VaadinSession.setCurrent(mockedSession);
-        when(mockedSession.getAttribute(SUBJECT_ATTRIBUTE)).thenReturn(headlessToken);
+        mockVaadinSession = MockVaadinSession.setup();
+        VaadinSession.getCurrent().setAttribute(SUBJECT_ATTRIBUTE, headlessToken);
         Locale.setDefault(Locale.UK);
         vaadinSessionProvider = mock(VaadinSessionProvider.class);
-        when(vaadinSessionProvider.get()).thenReturn(mockedSession);
-        when(mockedSession.getLockInstance()).thenReturn(sessionLock);
+        when(vaadinSessionProvider.get()).thenReturn(VaadinSession.getCurrent());
+    }
+
+    @After
+    public void teardown() {
+        MockVaadinSession.clear();
     }
 
     @Test
@@ -140,7 +133,7 @@ public class UIScopeTest {
                 new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
                 new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(),
                 new NavigationModule(), new VaadinEventBusModule(), new EventBusModule(), new UtilModule(), new DataModule(),
-                new DataTypeModule(), new UtilsModule(), new InMemoryModule().provideOptionDao());
+                new DataTypeModule(), new UtilsModule(), new InMemoryModule().provideOptionDao(), new ServletEnvironmentModule(), new SerializationSupportModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         TestObject to1 = injector.getInstance(TestObject.class);
@@ -162,7 +155,7 @@ public class UIScopeTest {
         CurrentInstance.set(UI.class, null);
         CurrentInstance.set(UIKey.class, null);
         UICreateEvent event = mock(UICreateEvent.class);
-        when(event.getSource()).thenReturn(vaadinService);
+        when(event.getSource()).thenReturn(mockVaadinSession.getVaadinService());
 
         Answer<Class<? extends UI>> answer = new Answer<Class<? extends UI>>() {
 
