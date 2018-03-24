@@ -1,0 +1,15 @@
+= Serialization
+
+The following applies equally to `ViewBase` for `KrailView` implementations, and `ScopedUI` for `UI` implementations, but to make reading easier refers only to views.
+
+The simplest way to ensure your `KrailView` is `Serializable` is to inherit from `ViewBase`. In many cases your dependencies (those injected into the constructor) will be `Serializable` themselves, and will therefore deserialize as normal. 
+
+If, however, you have constructor dependencies which are not Serializable, you would normally need to define a `readObject()` method to handle reconstruction of that dependency after deserialization. ViewBase can do this for you automatically, but for this to happen, there are some restrictions you need to be aware of - these are required in order to ensure support for Guice's annotated injections.
+
+`ViewBase` therefore requires that:
+
+* `ViewBase` will only attempt to re-inject transient fields which have a null value at the time its `readObject()` method is invoked - you may need to consider this if you have other fields to manage after deserialization. (`beforeReadObject()` and `afterReadObject()` are provided for this purpose)
+* The non-Serializable field must be marked *transient*, as normal
+* To guarantee injection is of the correct type, the field and the constructor parameter which is assigned to it must have identical names (`this.widget=widget`)
+* If `ViewBase` cannot make an exact match on field and parameter names, an attempt will be made to match on exact type, but that may fail where there are multiple fields of the same type. If this match succeeds, a warning is logged to suggest a field/parameter name change.
+* If matching fails, an exception is thrown

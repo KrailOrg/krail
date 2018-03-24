@@ -1,9 +1,9 @@
 {
   "root": "docs",
   "structure": {
-    "readme": "index.md",
-    "glossary": "glossary.md",
-    "summary": "contents.md"
+    "readme": "index.adoc",
+    "glossary": "glossary.adoc",
+    "summary": "contents.adoc"
   },
   "plugins": [
     "versions",
