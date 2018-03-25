@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule2;
@@ -53,7 +55,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class,
-        VaadinEventBusModule.class, UtilModule.class, UserModule.class, UtilsModule.class, TestUIScopeModule.class})
+        VaadinEventBusModule.class, UtilModule.class, UserModule.class, UtilsModule.class, TestUIScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 public class DefaultUserNavigationMenuTest {
 
     @Inject

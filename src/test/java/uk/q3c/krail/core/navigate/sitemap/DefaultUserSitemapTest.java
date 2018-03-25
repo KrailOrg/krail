@@ -28,6 +28,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupportModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule2;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -50,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestKrailI18NModule2.class, VaadinSessionScopeModule.class, InMemoryModule.class, VaadinEventBusModule.class,
-        TestUIScopeModule.class, TestOptionModule.class, UserModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class, DefaultShiroModule.class})
+        TestUIScopeModule.class, TestOptionModule.class, UserModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class, DefaultShiroModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 @Listener
 @SubscribeTo(SessionBus.class)
 public class DefaultUserSitemapTest {

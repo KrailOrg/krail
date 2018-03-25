@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
@@ -81,7 +82,10 @@ public class VaadinCurrentLocaleTest {
     private BrowserProvider browserProvider;
     private Set<Locale> supportedLocales;
     @Mock
-    Provider<Set<Locale>> supportedLocalesProvider;
+    private Provider<Set<Locale>> supportedLocalesProvider;
+
+    @Mock
+    private SerializationSupport serializationSupport;
 
 
     @Before
@@ -115,7 +119,7 @@ public class VaadinCurrentLocaleTest {
     }
 
     private VaadinCurrentLocale createCurrentLocale() {
-        return new VaadinCurrentLocale(browserProvider, supportedLocales, defaultLocale, eventBusProvider, subjectProvider, option);
+        return new VaadinCurrentLocale(browserProvider, supportedLocales, defaultLocale, eventBusProvider, subjectProvider, option, serializationSupport);
     }
 
     @Test

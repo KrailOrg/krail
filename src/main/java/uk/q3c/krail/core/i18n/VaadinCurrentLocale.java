@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.option.VaadinOptionContext;
@@ -39,6 +40,9 @@ import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Set;
 
@@ -73,23 +77,24 @@ import java.util.Set;
 
 @Listener
 @SubscribeTo(SessionBus.class)
-public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
+public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, Serializable {
 
     public static final OptionKey<Locale> optionPreferredLocale = new OptionKey<>(Locale.UK, VaadinCurrentLocale.class, LabelKey.Preferred_Locale,
             DescriptionKey.Preferred_Locale);
     private static Logger log = LoggerFactory.getLogger(VaadinCurrentLocale.class);
 
-    private final BrowserProvider browserProvider;
+    private final transient BrowserProvider browserProvider;
     private final Locale defaultLocale;
-    private final PubSubSupport<BusMessage> eventBus;
-    private final SubjectProvider subjectProvider;
-    private final Option option;
+    private final transient PubSubSupport<BusMessage> eventBus;
+    private final transient SubjectProvider subjectProvider;
+    private final transient Option option;
     private Locale locale;
-    private Set<Locale> supportedLocales;
+    private SerializationSupport serializationSupport;
+    private transient Set<Locale> supportedLocales;
 
     @Inject
     protected VaadinCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @LocaleDefault Locale defaultLocale,
-                                  SessionBusProvider eventBusProvider, SubjectProvider subjectProvider, Option option) {
+                                  SessionBusProvider eventBusProvider, SubjectProvider subjectProvider, Option option, SerializationSupport serializationSupport) {
         super();
         this.browserProvider = browserProvider;
         this.supportedLocales = supportedLocales;
@@ -98,6 +103,7 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
         this.subjectProvider = subjectProvider;
         this.option = option;
         locale = defaultLocale;
+        this.serializationSupport = serializationSupport;
     }
 
 
@@ -233,5 +239,41 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext {
         log.debug("UserHasLoggedIn received");
         setLocaleFromOption(true);
     }
+
+    @SuppressWarnings("Duplicates")
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        beforeDeserialization();
+        inputStream.defaultReadObject();
+        beforeTransientInjection();
+        serializationSupport.injectTransientFields(this);
+        afterTransientInjection();
+        serializationSupport.checkForNullTransients();
+    }
+
+    /**
+     * By default does nothing but can be overridden to execute code before any other action is taken for deserialization.
+     * It could be used to set exclusions for {@link #serializationSupport}
+     */
+    protected void beforeDeserialization() {
+
+    }
+
+    /**
+     * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
+     * has injected Guice dependencies. It could be used to set exclusions for {@link #serializationSupport}
+     */
+    protected void beforeTransientInjection() {
+
+    }
+
+
+    /**
+     * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
+     * injects Guice dependencies
+     */
+    protected void afterTransientInjection() {
+
+    }
+
 
 }
