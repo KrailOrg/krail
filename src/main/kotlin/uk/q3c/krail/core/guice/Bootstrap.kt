@@ -10,7 +10,8 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.mgt.SecurityManager
 import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
-import uk.q3c.krail.core.guice.RuntimeEnvironment.*
+import uk.q3c.krail.core.guice.RuntimeEnvironment.SERVLET
+import uk.q3c.krail.core.guice.RuntimeEnvironment.VERTX
 import java.io.InputStream
 import java.io.Serializable
 import java.nio.file.Paths
@@ -73,7 +74,7 @@ class InjectorFactory {
                     SERVLET -> bootstrapConfig.servletConfig
                     VERTX -> bootstrapConfig.vertxConfig
                 }
-        val collatorClass = Class.forName(environmentConfig.collatorClassName)
+        val collatorClass = Class.forName(bootstrapConfig.collator)
         val collator = bootstrapInjector.getInstance(collatorClass) as BindingsCollator
         val additionalModuleNames = environmentConfig.additionalModules
         val additionalModules: MutableList<Module> = mutableListOf()
@@ -138,43 +139,48 @@ class BootstrapYAMLReader {
 
     fun read(inputStream: InputStream): BootstrapConfig {
         val yaml = Yaml()
-        val result = yaml.load(inputStream) as LinkedHashMap<String, LinkedHashMap<String, Any>>
+        val result = yaml.load(inputStream) as LinkedHashMap<String, Any>
         return processInput(result)
     }
 
     fun read(input: String): BootstrapConfig {
         val yaml = Yaml()
-        val result = yaml.load(input) as LinkedHashMap<String, LinkedHashMap<String, Any>>
+        val result = yaml.load(input) as LinkedHashMap<String, Any>
         return processInput(result)
     }
 
-    private fun processInput(result: LinkedHashMap<String, LinkedHashMap<String, Any>>): BootstrapConfig {
-        var servletConfig = EnvironmentConfig()
-        var vertxConfig = EnvironmentConfig()
-        for (k in listOf("servlet", "vertx")) {
-            val environmentKey = valueOf(k.toUpperCase())
-            val config = result[k]
-                    ?: throw EnvironmentConfigurationException("krail-bootstrap.yml must contain an entry for '$k'")
-            val collatorName: String = config.getOrDefault("collator", "") as String
-            val modules: List<String> = config.getOrDefault("modules", listOf<String>()) as List<String>
-            val cfg = if (collatorName.isEmpty()) {
-                EnvironmentConfig(additionalModules = modules)
-            } else {
-                EnvironmentConfig(collatorClassName = collatorName, additionalModules = modules)
-            }
-            when (environmentKey) {
-                SERVLET -> servletConfig = cfg
-                VERTX -> vertxConfig = cfg
-            }
+    private fun processInput(result: LinkedHashMap<String, Any>): BootstrapConfig {
+        val filename = "krail-bootstrap.yml"
+        val version = result["version"] ?: 1
+        val collator = result["collator"] as String?
+                ?: throw BootstrapConfigurationException("$filename must contain a 'collator' property")
+        val modules = result["modules"] as List<String>? ?: listOf<String>()
+
+
+        val servlet = result["servlet"] as Map<String, Any>?
+        val servletConfig = if (servlet == null) {
+            EnvironmentConfig(listOf("uk.q3c.krail.core.guice.ServletEnvironmentModule"))
+        } else {
+            val servletModules = servlet["modules"] as List<String>? ?: listOf()
+            EnvironmentConfig(servletModules)
         }
-        return BootstrapConfig(servletConfig = servletConfig, vertxConfig = vertxConfig)
+
+        val vertx = result["vertx"] as Map<String, Any>?
+        val vertxConfig = if (vertx == null) {
+            EnvironmentConfig(listOf("uk.q3c.krail.core.guice.VertxEnvironmentModule"))
+        } else {
+            val vertxModules = vertx["modules"] as List<String>? ?: listOf()
+            EnvironmentConfig(vertxModules)
+        }
+
+        return BootstrapConfig(collator = collator, servletConfig = servletConfig, vertxConfig = vertxConfig, version = 1, modules = modules)
     }
 }
 
-class BootstrapConfig(val servletConfig: EnvironmentConfig, val vertxConfig: EnvironmentConfig)
-class EnvironmentConfig(val collatorClassName: String = "uk.q3c.krail.core.guice.CoreBindingsCollator", val additionalModules: List<String> = listOf())
+class BootstrapConfig(val version: Int = 1, val collator: String, val modules: List<String>, val servletConfig: EnvironmentConfig, val vertxConfig: EnvironmentConfig)
+class EnvironmentConfig(val additionalModules: List<String> = listOf())
 
-class EnvironmentConfigurationException(msg: String) : RuntimeException(msg)
+class BootstrapConfigurationException(msg: String) : RuntimeException(msg)
 
 interface BindingsCollator {
     fun allModules(): List<Module>

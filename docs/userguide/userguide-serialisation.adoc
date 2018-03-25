@@ -69,7 +69,7 @@ class MyView @Inject constructor(translate:Translate, serializationSupport:Seria
 
 === Excluding fields
 
-If for some reason you want a transient field to be null at the end of the deserialization process, fields can be excluded from injection (and the final check by) overriding the `ViewBase` or `ScopedUI` method `beforeDeserialization()` or `beforeTransientInjection()` to set the exclusions
+If for some reason you want a transient field to be null at the end of the deserialization process, fields can be excluded from injection and the final check, by overriding the `ViewBase` or `ScopedUI` method `beforeDeserialization()` or `beforeTransientInjection()` to set the exclusions
 
 [source,java]
 ----
