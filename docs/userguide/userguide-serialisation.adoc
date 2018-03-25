@@ -6,29 +6,69 @@ This clearly could affect the amount that needs to be serialized/deserialized - 
 
 == Guice Deserialization
 
-To make this easier, `ViewBase` and `ScopedUI` use `SerializationSupport` to make the management of this situation simpler. 
+`ViewBase` and `ScopedUI` use `SerializationSupport` to make the management of this situation simpler, designed in a way for sub-classes to make use of this facility.
 
-When instances of these classes are deserialized, they implement the standard Java `readObject()` method and use `SerializationSupport` to re-inject any *transient* fields using the Guice Injector. Hooks are also provided to allow you to intervene with your own logic at various points.
+When instances or sub-classes of `ViewBase` and `ScopedUI` are deserialized, a standard Java `readObject()` is invoked method, and `SerializationSupport` used to re-inject *transient* fields using the Guice Injector. Hooks are also provided to allow you to intervene with your own logic at various points.
 
 [CAUTION]
 ====
-To enable this to work, however, certain conditions apply:
-
-Sub-classes of `ViewBase` and `ScopedUI` :
+To enable this to work, certain conditions apply. Sub-classes of `ViewBase` and `ScopedUI` :
 
 * must have non-Serializable fields must be marked *transient*, as normal
-* will only attempt to re-inject transient fields which have a null value at the time it invokes `SerializationSupport.injectTransientFields()` - you may need to consider this if you have other fields to manage during deserialization. See below for the hooks available, and the sequence of calls made
-* may have constructor parameters with binding annotations, but for automatic re-injection to work, the associated field must have exactly the same binding annotation, but NO @Inject annotation. If you have @Inject on the field as well, Guice will inject the field twice in effect, once via the constructor and once directly to the field. Your IDE may flag a warning that you have a binding annotation without @Inject, but that can be ignored.
+* will only attempt to re-inject transient fields which have a null value at the time it invokes `SerializationSupport.injectTransientFields()` - see the call sequence below
+* must have an exact match between the type of the constructor parameter and the type of the field that it is associated with
 * will raise an exception if, after completing the sequence of calls below, there are still null *transient* fields
-. beforeDeserialization()
-. –default deserialization
-. beforeTransientInjection()
-. –injection by SerializationSupport
-. afterTransientInjection()
-. checkForNullTransients()
-
 ====
+
+=== Call Sequence
+
+This is the sequence of calls made during deserialization. Note that _injection by SerializationSupport_ will only inject into null *transient* fields
+
+* beforeDeserialization()
+* _default deserialization_
+* beforeTransientInjection()
+* _injection by SerializationSupport_
+* afterTransientInjection()
+* checkForNullTransients()
+
+=== Matching constructor parameters with fields
+
+In order to match a constructor parameter with its field for automatic re-injection, they must both be of exactly the same type (and not just assignable).  In the case of Guice, the type includes the use of binding annotations.
+
+This means that where a binding annotation is used on a constructor parameter, its associated field must also have the same binding annotation.
+
+==== Java example
+
+In Java, we must annotate the field to match a constructor parameter that uses a binding annotation.  Your IDE may flag a warning that you have a binding annotation without @Inject - this can be ignored / suppressed.  If you do annotate the field with @Inject, then outside of deserialization, Guice will inject the field twice, once via the constructor, and once directly to the field.
+
+[source,java]
+----
+public class MyView extends ViewBase{
+
+   @Named("1)  // to match its constructor parameter
+   private transient Widget widget1;
+
+   @Inject
+   protected MyView(Translate translate, SerializationSupport serializationSupport, @Named("1") Widget widget1){
+      super(translate, serializationSupport)
+      this.widget1=widget1
+   }
+
+}
+----
+
+==== Kotlin example
+
+Because Kotlin declares a property rather than a separate constructor parameter and field, the property needs to be annotated in a way that causes Kotlin's code generator to properly annotated its Java output:
+
+[source,kotlin]
+----
+class MyView @Inject constructor(translate:Translate, serializationSupport:SerializationSupport, @field:Named("1") @param:Named("1") @Transient val widget1:Widget) : ViewBase(translate,serializationSupport)
+----
+
+
+
 
 == Servlet and Vertx environments
 
-You do not need to do anything different for these environments, as long as you set up the application as described in the link:userguide/userguide-bootstrap.md[Bootstrap] section. This is because `SerializationSupport` delegates to an environment specific implementation of `InjectorLocator`.
+You do not need to do anything different for these environments, as long as you set up the application as described in the link:/userguide/userguide-bootstrap.html[Bootstrap] section. This is because `SerializationSupport` uses an environment specific implementation of `InjectorLocator`.

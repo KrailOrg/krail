@@ -1,6 +1,6 @@
 = Bootstrap
 
-In order to allow the same application code to run in both Vertx and Servlet environments, a bootstrap sequence is needed. This is only really needed to enable the Guice Injector to be held in a location suitable to the environment, so that it can be retrieved during link:userguide/serialisation.md[deserialisation]
+In order to allow the same application code to run in both Vertx and Servlet environments, a bootstrap sequence is used. This is only really needed to enable the Guice Injector to be held in a location suitable to the environment, so that it can be retrieved during link:/userguide/userguide-serialisation.html[deserialisation]
 
 == Bootstrap File
 
