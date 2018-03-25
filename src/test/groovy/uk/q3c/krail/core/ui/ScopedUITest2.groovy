@@ -50,7 +50,7 @@ class ScopedUITest2 extends Specification {
         logMonitor.addClassFilter(ScopedUI)
         applicationTitle.getTitleKey() >> LabelKey.Krail
         ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
-                option)
+                serializationSupport)
     }
 
     def cleanup() {

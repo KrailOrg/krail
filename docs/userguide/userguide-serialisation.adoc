@@ -67,8 +67,6 @@ class MyView @Inject constructor(translate:Translate, serializationSupport:Seria
 ----
 
 
+=== Excluding fields
 
-
-== Servlet and Vertx environments
-
-You do not need to do anything different for these environments, as long as you set up the application as described in the link:/userguide/userguide-bootstrap.html[Bootstrap] section. This is because `SerializationSupport` uses an environment specific implementation of `InjectorLocator`.
+If for some reason you want a transient field to be null at the end of the deserialization process, fields can be excluded from the final check by overriding the `ViewBase` or `ScopedUI` method `checkForNullTransients()`.

@@ -33,6 +33,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.config.ConfigurationException;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.i18n.I18NProcessor;
@@ -46,7 +47,6 @@ import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.option.Option;
 import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.Locale;
@@ -95,7 +95,7 @@ public class ScopedUITest {
     @Mock
     Component viewContent;
     @Mock
-    Option option;
+    SerializationSupport serializationSupport;
     LogMonitor logMonitor;
     UIKey uiKey;
     @Mock
@@ -109,8 +109,7 @@ public class ScopedUITest {
         logMonitor = new LogMonitor();
         logMonitor.addClassFilter(ScopedUI.class);
         uiKey = new UIKey(33);
-        ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
-                option);
+        ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
         ui.setInstanceKey(uiKey);
     }
 
@@ -206,7 +205,7 @@ public class ScopedUITest {
     @Test(expected = ConfigurationException.class)
     public void init_with_viewDisplayPanel_parent_null() {
         // given
-        ui = new DuffUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        ui = new DuffUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
         prepAttach();
         // when
         ui.init(request);
@@ -259,8 +258,8 @@ public class ScopedUITest {
 
     class DuffUI extends ScopedUI {
         protected DuffUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
-                pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
-            super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+                pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport) {
+            super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
         }
 
         @Override

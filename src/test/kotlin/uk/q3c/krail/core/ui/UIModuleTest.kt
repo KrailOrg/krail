@@ -7,6 +7,7 @@ import com.vaadin.server.UIClassSelectionEvent
 import org.amshove.kluent.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
@@ -49,6 +50,7 @@ class MockedModule : AbstractModule() {
     val mockUserStatusPanel: UserStatusPanel = mock()
     val mockBreadcrumb: Breadcrumb = mock()
     val mockOption: Option = mock()
+    val mockSerializationSupport: SerializationSupport = mock()
 
 
     override fun configure() {
@@ -70,6 +72,7 @@ class MockedModule : AbstractModule() {
         bind(UserStatusPanel::class.java).toInstance(mockUserStatusPanel)
         bind(Option::class.java).toInstance(mockOption)
         bind(Breadcrumb::class.java).toInstance(mockBreadcrumb)
+        bind(SerializationSupport::class.java).toInstance(mockSerializationSupport)
     }
 }
 

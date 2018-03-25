@@ -249,6 +249,8 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     /**
      * Throws an exception if there are any transient fields with a null value.  Same as {@link #checkForNullTransients(List)} with no exclusions
+     *
+     * If you want to exclude fields from the check, override this method with a call to  {@link #checkForNullTransients(List)}, using a list of field names to exclude
      */
     protected void checkForNullTransients() {
         checkForNullTransients(ImmutableList.of());

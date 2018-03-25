@@ -18,13 +18,13 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.VerticalLayout;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.option.Option;
 
 // @PreserveOnRefresh
 @Theme("chameleon")
@@ -32,8 +32,8 @@ public class BasicUI extends ScopedUI {
 
     @Inject
     protected BasicUI(Navigator navigator, ErrorHandler errorHandler,
-                      Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, Option option) {
-        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+                      Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport) {
+        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
 
     }
 

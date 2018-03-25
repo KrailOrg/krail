@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
@@ -99,12 +100,14 @@ public class DefaultApplicationUITest {
     private UserStatusPanel userStatusPanel;
     @Mock
     private VaadinNotification vaadinNotification;
+    @Mock
+    private SerializationSupport serializationSupport;
 
     @Before
     public void setup() {
         when(navTree.getTree()).thenReturn(tree);
         when(menu.getMenuBar()).thenReturn(menuBar);
-        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
+        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option, serializationSupport);
     }
 
     @Test

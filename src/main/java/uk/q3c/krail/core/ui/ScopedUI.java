@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.ui;
 
+import com.google.common.collect.ImmutableList;
 import com.vaadin.annotations.Push;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
@@ -26,6 +27,7 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ConfigurationException;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
@@ -39,6 +41,10 @@ import uk.q3c.krail.core.view.KrailViewHolder;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -55,6 +61,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener {
     private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
     protected final CurrentLocale currentLocale;
+    private SerializationSupport serializationSupport;
     private final ErrorHandler errorHandler;
     //    private final ConverterFactory converterFactory;
     private final PushMessageRouter pushMessageRouter;
@@ -70,7 +77,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private Panel viewDisplayPanel;
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
-            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
+            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport) {
         super();
         this.errorHandler = errorHandler;
         this.navigator = navigator;
@@ -81,6 +88,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         this.translate = translate;
         this.translator = translator;
         this.currentLocale = currentLocale;
+        this.serializationSupport = serializationSupport;
         registerWithBroadcaster();
 
     }
@@ -272,5 +280,58 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         return view;
     }
 
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        beforeDeserialization();
+        inputStream.defaultReadObject();
+        beforeTransientInjection();
+        serializationSupport.injectTransientFields(this);
+        afterTransientInjection();
+        checkForNullTransients();
+    }
+
+
+    /**
+     * By default does nothing but can be overridden to execute code before any other action is taken for deserialization
+     */
+    protected void beforeDeserialization() {
+
+    }
+
+    /**
+     * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
+     * has injected Guice dependencies
+     */
+    protected void beforeTransientInjection() {
+
+    }
+
+
+    /**
+     * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
+     * injects Guice dependencies
+     */
+    protected void afterTransientInjection() {
+
+    }
+
+
+    /**
+     * Throws an exception if there are any transient fields with a null value.  Same as {@link #checkForNullTransients(List)} with no exclusions
+     * <p>
+     * If you want to exclude fields from the check, override this method with a call to  {@link #checkForNullTransients(List)}, using a list of field names to exclude
+     */
+    protected void checkForNullTransients() {
+        checkForNullTransients(ImmutableList.of());
+    }
+
+    /**
+     * Throws an exception if there are any transient fields with a null value. See {@link SerializationSupport#checkForNullTransients(List)}
+     *
+     * @param exclusions fields names to be excluded from the check
+     */
+    protected void checkForNullTransients(List<String> exclusions) {
+        serializationSupport.checkForNullTransients(exclusions);
+    }
 
 }

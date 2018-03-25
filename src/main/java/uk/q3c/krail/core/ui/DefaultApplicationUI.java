@@ -24,6 +24,7 @@ import com.vaadin.ui.VerticalLayout;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
+import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -102,8 +103,8 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ApplicationLogo logo, ApplicationHeader
-            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
-        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option, SerializationSupport serializationSupport) {
+        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
         this.userStatus = userStatusPanel;
