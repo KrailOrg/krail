@@ -6,6 +6,7 @@ import com.google.inject.BindingAnnotation
 import com.google.inject.Inject
 import com.google.inject.Key
 import com.google.inject.spi.InjectionPoint
+import org.apache.commons.lang3.reflect.FieldUtils
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 import java.lang.reflect.Constructor
@@ -18,8 +19,9 @@ import java.lang.reflect.Modifier
  */
 @FunctionalInterface
 interface SerializationSupport : Serializable {
+    var excludedFieldNames: List<String>
     fun injectTransientFields(target: Any)
-    fun checkForNullTransients(exclusions: List<String> = listOf())
+    fun checkForNullTransients()
 }
 
 
@@ -28,6 +30,7 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
     private val candidateFieldKeys: MutableMap<Field, Key<*>> = mutableMapOf()
     private val unResolvedFieldKeys: MutableMap<Field, Key<*>> = mutableMapOf()
     private val constructorParameterKeys = mutableListOf<Key<*>>()
+    override var excludedFieldNames: List<String> = listOf()
 
     private lateinit var target: Any
 
@@ -35,7 +38,7 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
         this.target = target
         val injector = injectorLocator.get()
 
-        val candidateFields = collectCandidateFields(listOf())
+        val candidateFields = collectCandidateFields()
         candidateFields.forEach({ f -> candidateFieldKeys[f] = createFieldKey(f) })
         val constructorInjectionPoint = InjectionPoint.forConstructorOf(target.javaClass)
         val constructorParams = (constructorInjectionPoint.member as Constructor<*>).parameterTypes
@@ -84,9 +87,9 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
     /**
      * Execute this method at the end of readObject() to make sure there are no transient fields left with value still at null
      */
-    override fun checkForNullTransients(exclusions: List<String>) {
+    override fun checkForNullTransients() {
         // we can't just use unresolvedFieldKeys, because the developer could set a transient to null after injectTransientFields was invoked
-        val candidateFields = collectCandidateFields(exclusions)
+        val candidateFields = collectCandidateFields()
         if (candidateFields.isEmpty()) {
             // all transients have been populated
             log.debug("Deserialization complete, all fields resolved")
@@ -96,7 +99,7 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
             }
             if (constructorParameterKeys.isNotEmpty()) {
                 // somehow all the fields have been populated but not all the constructor params have been used. Warn the developer
-                log.warn("All transient fields have been populated after deserialization, but these constructor parameters were not used: $constructorParameterKeys. This will only occur if you have populated a Guice injected transient field without using SerializationSupport")
+                log.warn("All transient fields have been populated after deserialization, but these constructor parameters were not used: $constructorParameterKeys. This can occur if you have populated a Guice injected transient field without using SerializationSupport, or you have excluded a Guice injected transient field")
             }
         } else {
             // a field has been missed - throw exception, suggest exclusion
@@ -111,15 +114,17 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
     /**
      * Selects fields that need checking for injection. These are transient fields, with a null value, which are not listed in exclusions
      */
-    private fun collectCandidateFields(exclusions: List<String>): List<Field> {
-        val fields = target.javaClass.declaredFields.asList()
+    private fun collectCandidateFields(): List<Field> {
+        val fields = FieldUtils.getAllFields(target.javaClass)
         // We only process transient fields that have null value - user code may have already set some values
         return fields.filter { f -> Modifier.isTransient(f.modifiers) }
                 .filter { f ->
                     f.isAccessible = true
                     f.get(target) == null
-                }.filter { f -> !exclusions.contains(f.name) }
+                }.filter { f -> !excludedFieldNames.contains(f.name) }
     }
+
+
 }
 
 

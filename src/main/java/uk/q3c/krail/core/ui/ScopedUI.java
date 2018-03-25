@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.ui;
 
-import com.google.common.collect.ImmutableList;
 import com.vaadin.annotations.Push;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
@@ -44,7 +43,6 @@ import uk.q3c.krail.i18n.Translate;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -281,18 +279,20 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     }
 
 
+    @SuppressWarnings("Duplicates")
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
         beforeDeserialization();
         inputStream.defaultReadObject();
         beforeTransientInjection();
         serializationSupport.injectTransientFields(this);
         afterTransientInjection();
-        checkForNullTransients();
+        serializationSupport.checkForNullTransients();
     }
 
 
     /**
-     * By default does nothing but can be overridden to execute code before any other action is taken for deserialization
+     * By default does nothing but can be overridden to execute code before any other action is taken for deserialization.
+     * It could be used to set exclusions for {@link #serializationSupport}
      */
     protected void beforeDeserialization() {
 
@@ -300,7 +300,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
     /**
      * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
-     * has injected Guice dependencies
+     * has injected Guice dependencies. It could be used to set exclusions for {@link #serializationSupport}
      */
     protected void beforeTransientInjection() {
 
@@ -315,23 +315,5 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
     }
 
-
-    /**
-     * Throws an exception if there are any transient fields with a null value.  Same as {@link #checkForNullTransients(List)} with no exclusions
-     * <p>
-     * If you want to exclude fields from the check, override this method with a call to  {@link #checkForNullTransients(List)}, using a list of field names to exclude
-     */
-    protected void checkForNullTransients() {
-        checkForNullTransients(ImmutableList.of());
-    }
-
-    /**
-     * Throws an exception if there are any transient fields with a null value. See {@link SerializationSupport#checkForNullTransients(List)}
-     *
-     * @param exclusions fields names to be excluded from the check
-     */
-    protected void checkForNullTransients(List<String> exclusions) {
-        serializationSupport.checkForNullTransients(exclusions);
-    }
 
 }
