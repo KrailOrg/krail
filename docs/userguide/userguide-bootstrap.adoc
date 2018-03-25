@@ -43,18 +43,17 @@ Optional. Fully qualified references to modules you want to add to the collator.
 
 ==== servlet
 
-required if you intend to run the application in a Servlet environment.
+Required if you intend to run the application in a Servlet environment.
 
 ===== servlet/modules
 
-Modules to be added to the collator only for the Servlet environment.  Unless its bindings are replaced elsewhere you will need at least _uk.q3c.krail.core.guice.ServletEnvironmentModule_ as shown in the example.
+Required if you intend to run the application in a Servlet environment. Modules to be added to the collator only for the Servlet environment.  Unless its bindings are replaced elsewhere you will need at least _uk.q3c.krail.core.guice.ServletEnvironmentModule_ as shown in the example.
 
 ==== vertx
-required if you intend to run the application in a Vertx environment.
+Required if you intend to run the application in a Vertx environment.
 
 ===== vertx/modules
-Modules to be added to the collator only for the Vertx environment.  Unless its bindings are replaced elsewhere you will need at least _uk.q3c.krail.core.guice.VertxEnvironmentModule_ as shown in the example.
+Required if you intend to run the application in a Vertx environment. Modules to be added to the collator only for the Vertx environment.  Unless its bindings are replaced elsewhere you will need at least _uk.q3c.krail.core.guice.VertxEnvironmentModule_ as shown in the example.
 
 
-This allows a slight variance between the environments with minimum configuration, and has the side effect of reducing the number of classes which need to be defined for each specific application.
 
