@@ -77,3 +77,9 @@ protected void beforeTransientInjection(){
    serializationSupport.setExcludedFieldNames(ImmutableList.of("thisField"));
 }
 ----
+
+
+TIP: *Guice, Binding Annotations and Inheritance*.  There is an "interesting" side effect from using Guice binding annotations.  It is very easy to provide the binding on a superclass constructor parameter, and then forget to put it on the equivalent sub-class constructor parameter.  Your IDE and compiler will not tell you.  This Serialization routine should tell you if you do so.  This was not really a design choice, just a bit of luck!
+
+
+

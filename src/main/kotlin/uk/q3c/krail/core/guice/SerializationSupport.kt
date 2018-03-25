@@ -99,7 +99,7 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
             }
             if (constructorParameterKeys.isNotEmpty()) {
                 // somehow all the fields have been populated but not all the constructor params have been used. Warn the developer
-                log.warn("All transient fields have been populated after deserialization, but these constructor parameters were not used: $constructorParameterKeys. This can occur if you have populated a Guice injected transient field without using SerializationSupport, or you have excluded a Guice injected transient field")
+                log.warn("All transient fields have been populated after deserialization, but these constructor parameters were not used: $constructorParameterKeys. This can occur if you have populated a Guice injected transient field without using SerializationSupport, or you have excluded a Guice injected transient field, or you have missed an annotation from a subclass constructor parameter")
             }
         } else {
             // a field has been missed - throw exception, suggest exclusion
