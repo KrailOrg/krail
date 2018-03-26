@@ -14,7 +14,6 @@ package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.UserHasLoggedIn;
-import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
@@ -85,7 +83,7 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
 
     private final transient BrowserProvider browserProvider;
     private final Locale defaultLocale;
-    private final transient PubSubSupport<BusMessage> eventBus;
+    private final transient SessionBusProvider eventBus;
     private final transient SubjectProvider subjectProvider;
     private final transient Option option;
     private Locale locale;
@@ -99,7 +97,7 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
         this.browserProvider = browserProvider;
         this.supportedLocales = supportedLocales;
         this.defaultLocale = defaultLocale;
-        this.eventBus = eventBusProvider.get();
+        this.eventBus = eventBusProvider;
         this.subjectProvider = subjectProvider;
         this.option = option;
         locale = defaultLocale;
@@ -193,7 +191,7 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
                 log.debug("CurrentLocale set to {}", locale);
                 if (fireListeners) {
                     log.debug("publish locale change");
-                    eventBus.publish(new LocaleChangeBusMessage(this, locale));
+                    eventBus.get().publish(new LocaleChangeBusMessage(this, locale));
                 }
             }
         } else {
