@@ -14,9 +14,10 @@
 package uk.q3c.krail.core.view
 
 import com.vaadin.ui.Label
-import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.util.guice.SerializationSupport
+
 /**
  * Created by David Sowerby on 08 Feb 2016
  */

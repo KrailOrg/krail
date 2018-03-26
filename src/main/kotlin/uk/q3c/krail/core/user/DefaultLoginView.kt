@@ -30,7 +30,6 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.SessionBus
-import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.Value
 import uk.q3c.krail.core.shiro.SubjectProvider
@@ -41,6 +40,7 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.eventbus.SubscribeTo
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.util.guice.SerializationSupport
 
 @Listener
 @SubscribeTo(SessionBus::class)

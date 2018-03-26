@@ -30,7 +30,6 @@ import org.apache.shiro.subject.Subject
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.Event
 import uk.q3c.krail.core.eventbus.SessionBusProvider
-import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.user.LoginDescriptionKey
 import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
@@ -38,6 +37,7 @@ import uk.q3c.krail.core.user.UserHasLoggedOut
 import uk.q3c.krail.core.user.UserLoginFailed
 import uk.q3c.krail.core.user.UserQueryDao
 import uk.q3c.krail.core.user.status.UserStatusChangeSource
+import uk.q3c.util.guice.SerializationSupport
 import java.io.IOException
 import java.io.ObjectInputStream
 

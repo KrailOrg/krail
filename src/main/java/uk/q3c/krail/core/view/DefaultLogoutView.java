@@ -14,9 +14,9 @@ package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Panel;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 

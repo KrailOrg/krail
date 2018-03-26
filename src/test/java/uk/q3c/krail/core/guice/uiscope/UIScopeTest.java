@@ -36,7 +36,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
-import uk.q3c.krail.core.guice.SerializationSupportModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -73,6 +72,7 @@ import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.Locale;
 import java.util.Optional;

@@ -14,8 +14,8 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 public class DefaultRequestSystemAccountUnlockView extends StandardPageViewBase implements
         RequestSystemAccountUnlockView {

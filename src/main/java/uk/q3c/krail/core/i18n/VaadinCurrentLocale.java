@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.option.VaadinOptionContext;
@@ -37,6 +36,7 @@ import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
+import uk.q3c.util.guice.SerializationSupport;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

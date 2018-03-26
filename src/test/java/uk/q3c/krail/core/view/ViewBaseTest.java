@@ -17,12 +17,12 @@ import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.MockTranslate;
+import uk.q3c.util.guice.SerializationSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

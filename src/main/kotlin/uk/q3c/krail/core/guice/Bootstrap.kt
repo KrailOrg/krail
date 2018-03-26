@@ -12,19 +12,14 @@ import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
 import uk.q3c.krail.core.guice.RuntimeEnvironment.SERVLET
 import uk.q3c.krail.core.guice.RuntimeEnvironment.VERTX
+import uk.q3c.util.guice.InjectorLocator
 import java.io.InputStream
-import java.io.Serializable
 import java.nio.file.Paths
 
 /**
  * Created by David Sowerby on 18 Mar 2018
  */
 
-
-interface InjectorLocator : Serializable {
-    fun get(): Injector
-    fun put(injector: Injector)
-}
 
 class VertxInjectorLocator : InjectorLocator {
     private val injectorKey = "Injector"

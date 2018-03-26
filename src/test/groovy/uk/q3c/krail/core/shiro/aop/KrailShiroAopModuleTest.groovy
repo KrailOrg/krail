@@ -24,7 +24,6 @@ import org.apache.shiro.authz.annotation.*
 import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
-import uk.q3c.krail.core.guice.SerializationSupportModule
 import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
@@ -335,7 +334,7 @@ class KrailShiroAopModuleTest extends Specification {
 
 
     private void createInjector(Module module) {
-        injector = Guice.createInjector(module, new UserModule(), new EventBusModule(), new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new VaadinEventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new InMemoryModule(), new SerializationSupportModule(), new ServletEnvironmentModule())
+        injector = Guice.createInjector(module, new UserModule(), new EventBusModule(), new DefaultShiroModule(), new TestI18NModule(), new TestVaadinSessionScopeModule(), new VaadinEventBusModule(), new TestOptionModule(), new UtilModule(), new TestUIScopeModule(), new InMemoryModule(), new uk.q3c.util.guice.SerializationSupportModule(), new ServletEnvironmentModule())
         VaadinSession.setCurrent(vaadinSession)
     }
 }

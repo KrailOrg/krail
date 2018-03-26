@@ -18,7 +18,6 @@ import com.vaadin.ui.UI;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.DefaultNavigator;
@@ -27,6 +26,7 @@ import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -14,12 +14,12 @@
 package uk.q3c.krail.core.sysadmin
 
 import spock.lang.Specification
-import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
 import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.util.Experimental
+import uk.q3c.util.guice.SerializationSupport
 
 /**
  * Created by David Sowerby on 19 Jan 2016

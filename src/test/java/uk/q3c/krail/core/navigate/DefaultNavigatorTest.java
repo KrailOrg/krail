@@ -38,7 +38,6 @@ import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
-import uk.q3c.krail.core.guice.SerializationSupportModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;
@@ -80,6 +79,7 @@ import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.LinkedHashMap;
 import java.util.List;

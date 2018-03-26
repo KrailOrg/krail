@@ -2,9 +2,9 @@ package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 /**
  * Created by David Sowerby on 14 Mar 2018

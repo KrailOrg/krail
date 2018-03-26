@@ -17,10 +17,10 @@ import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 public abstract class GridViewBase extends ViewBase implements KrailView {
     private static Logger log = LoggerFactory.getLogger(GridViewBase.class);

@@ -18,7 +18,6 @@ import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
 import uk.q3c.krail.core.guice.GuiceModuleTestBase
-import uk.q3c.krail.core.guice.SerializationSupportModule
 import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
@@ -38,6 +37,7 @@ import uk.q3c.krail.persist.InMemory
 import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.persist.inmemory.InMemoryPatternDao
 import uk.q3c.util.UtilModule
+import uk.q3c.util.guice.SerializationSupportModule
 
 import java.lang.annotation.Annotation
 /**

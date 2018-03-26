@@ -15,11 +15,11 @@ package uk.q3c.krail.core.view
 
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
-import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.krail.testutil.view.ViewFieldChecker
+import uk.q3c.util.guice.SerializationSupport
 
 /**
  * Created by David Sowerby on 07 Feb 2016

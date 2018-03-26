@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
-import uk.q3c.krail.core.guice.SerializationSupportModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule2;
@@ -51,6 +50,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.ArrayList;
 import java.util.List;

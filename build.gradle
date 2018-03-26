@@ -81,7 +81,7 @@ compileKotlin {
 
 dependencies {
 // These can be removed when libraries catch up
-    compile 'uk.q3c.util:q3c-util:0.13.2.0'
+    compile 'uk.q3c.util:q3c-util:1.0.0.0'
     compile 'uk.q3c.krail:krail-i18n-api:0.15.5.0'
     compile 'uk.q3c.krail:krail-option-api:0.18.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

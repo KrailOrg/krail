@@ -24,7 +24,6 @@ import com.vaadin.ui.VerticalLayout;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -49,6 +48,7 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
+import uk.q3c.util.guice.SerializationSupport;
 
 import java.util.Locale;
 

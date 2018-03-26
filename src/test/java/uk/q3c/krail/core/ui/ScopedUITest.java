@@ -33,7 +33,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.config.ConfigurationException;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.i18n.I18NProcessor;
@@ -47,6 +46,7 @@ import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.Locale;

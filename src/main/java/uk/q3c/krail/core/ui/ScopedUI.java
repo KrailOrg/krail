@@ -26,7 +26,6 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ConfigurationException;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
@@ -40,6 +39,7 @@ import uk.q3c.krail.core.view.KrailViewHolder;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

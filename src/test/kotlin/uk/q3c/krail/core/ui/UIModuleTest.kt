@@ -7,7 +7,6 @@ import com.vaadin.server.UIClassSelectionEvent
 import org.amshove.kluent.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
@@ -26,6 +25,7 @@ import uk.q3c.krail.core.view.component.UserStatusPanel
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
+import uk.q3c.util.guice.SerializationSupport
 
 
 /**

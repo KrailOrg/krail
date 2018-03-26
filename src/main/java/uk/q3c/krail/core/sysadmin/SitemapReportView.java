@@ -15,7 +15,6 @@ package uk.q3c.krail.core.sysadmin;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.TextArea;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -24,6 +23,7 @@ import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.Experimental;
+import uk.q3c.util.guice.SerializationSupport;
 
 /**
  * Created by David Sowerby on 24/05/15.

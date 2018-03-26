@@ -23,7 +23,6 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
-import uk.q3c.krail.core.guice.SerializationSupport;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
@@ -35,6 +34,7 @@ import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.Experimental;
+import uk.q3c.util.guice.SerializationSupport;
 
 /**
  * Enables the export of I18NKeys to a database - or at least it will one day

@@ -54,6 +54,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.ArrayList;
 import java.util.List;
