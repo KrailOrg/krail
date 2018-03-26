@@ -18,6 +18,8 @@ import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
 import uk.q3c.krail.core.guice.GuiceModuleTestBase
+import uk.q3c.krail.core.guice.SerializationSupportModule
+import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
@@ -227,6 +229,8 @@ class KrailI18NModuleTest extends GuiceModuleTestBase {
         modules.add(new VaadinEventBusModule())
         modules.add(new UtilModule())
         modules.add(new UserModule())
+        modules.add(new SerializationSupportModule())
+        modules.add(new ServletEnvironmentModule())
 
         return modules
     }

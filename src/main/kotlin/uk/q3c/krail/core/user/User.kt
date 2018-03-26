@@ -1,11 +1,13 @@
 package uk.q3c.krail.core.user
 
+import java.io.Serializable
+
 /**
  * A read only DAO to obtain the details of a user from a unique user id
  *
  * Created by David Sowerby on 08 Mar 2018
  */
-interface UserQueryDao {
+interface UserQueryDao : Serializable {
 
     fun user(id: String): User
 

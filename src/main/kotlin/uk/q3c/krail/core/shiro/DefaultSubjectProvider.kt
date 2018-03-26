@@ -30,6 +30,7 @@ import org.apache.shiro.subject.Subject
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.Event
 import uk.q3c.krail.core.eventbus.SessionBusProvider
+import uk.q3c.krail.core.guice.SerializationSupport
 import uk.q3c.krail.core.user.LoginDescriptionKey
 import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
@@ -37,6 +38,8 @@ import uk.q3c.krail.core.user.UserHasLoggedOut
 import uk.q3c.krail.core.user.UserLoginFailed
 import uk.q3c.krail.core.user.UserQueryDao
 import uk.q3c.krail.core.user.status.UserStatusChangeSource
+import java.io.IOException
+import java.io.ObjectInputStream
 
 /**
  * A [Subject] is not stored directly in a [VaadinSession] as it is not Serializable, but rather a JWT representation of it.
@@ -51,7 +54,8 @@ class DefaultSubjectProvider @Inject constructor(
         /**
          * The security manager for the application.
          */
-        private var securityManager: SecurityManager,
+        private val serializationSupport: SerializationSupport,
+        @Transient private var securityManager: SecurityManager,
         @Transient private val eventBusProvider: SessionBusProvider,
         private val userQueryDao: UserQueryDao,
         private val jwtProvider: JWTProvider<KrailJWTBody>)
@@ -230,6 +234,11 @@ class DefaultSubjectProvider @Inject constructor(
     private fun sessionContainsSubjectJWT(): Boolean {
         val session = vaadinSession()
         return session.getAttribute(SUBJECT_ATTRIBUTE) != null
+    }
+
+    @Throws(ClassNotFoundException::class, IOException::class)
+    private fun readObject(inputStream: ObjectInputStream) {
+        serializationSupport.deserialize(this, inputStream)
     }
 }
 

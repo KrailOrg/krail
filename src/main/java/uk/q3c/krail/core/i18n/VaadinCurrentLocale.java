@@ -81,10 +81,10 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
             DescriptionKey.Preferred_Locale);
     private static Logger log = LoggerFactory.getLogger(VaadinCurrentLocale.class);
 
-    private final transient BrowserProvider browserProvider;
+    private final BrowserProvider browserProvider;
     private final Locale defaultLocale;
     private final transient SessionBusProvider eventBus;
-    private final transient SubjectProvider subjectProvider;
+    private final SubjectProvider subjectProvider;
     private final transient Option option;
     private Locale locale;
     private SerializationSupport serializationSupport;

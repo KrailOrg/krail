@@ -16,7 +16,9 @@ import com.google.inject.Provider;
 import com.vaadin.server.Page;
 import com.vaadin.server.WebBrowser;
 
-public class BrowserProvider implements Provider<WebBrowser> {
+import java.io.Serializable;
+
+public class BrowserProvider implements Provider<WebBrowser>, Serializable {
 
     @Override
     public WebBrowser get() {
