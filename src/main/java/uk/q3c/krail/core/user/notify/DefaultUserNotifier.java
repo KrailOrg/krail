@@ -14,46 +14,53 @@ package uk.q3c.krail.core.user.notify;
 
 import com.google.inject.Inject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
-import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
-import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 
 @SuppressFBWarnings("SE_BAD_FIELD")
-public class DefaultUserNotifier implements UserNotifier, Serializable {
+public class DefaultUserNotifier implements UserNotifier {
     private static final long serialVersionUID = 1L;
-    private PubSubSupport<BusMessage> eventBus;
+    private transient final UIBusProvider uiBusProvider;
     private Translate translate;
+    private SerializationSupport serializationSupport;
 
 
     @Inject
-    protected DefaultUserNotifier(UIBusProvider uiBusProvider, Translate translate) {
-        this.eventBus = uiBusProvider.get();
+    protected DefaultUserNotifier(UIBusProvider uiBusProvider, Translate translate, SerializationSupport serializationSupport) {
+        this.uiBusProvider = uiBusProvider;
         this.translate = translate;
+        this.serializationSupport = serializationSupport;
     }
 
     @Override
     public void notifyError(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         ErrorNotificationMessage message = new ErrorNotificationMessage(translatedMessage);
-        eventBus.publish(message);
+        uiBusProvider.get().publish(message);
     }
 
     @Override
     public void notifyWarning(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         WarningNotificationMessage message = new WarningNotificationMessage(translatedMessage);
-        eventBus.publish(message);
+        uiBusProvider.get().publish(message);
     }
 
     @Override
     public void notifyInformation(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         InformationNotificationMessage message = new InformationNotificationMessage(translatedMessage);
-        eventBus.publish(message);
+        uiBusProvider.get().publish(message);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        serializationSupport.deserialize(this, inputStream);
     }
 
 }

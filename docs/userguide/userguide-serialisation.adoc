@@ -4,7 +4,7 @@ When Vaadin serialises to the session, it serialises the entire UI. This means a
 
 This clearly could affect the amount that needs to be serialized/deserialized - you may want to reduce that by making dependencies *transient* (or you may just have dependencies which cannot be serialized), but that in turn means you need a way to reconstruct the *transient* fields.
 
-== Guice Deserialization
+== Guice Deserialization for View and UI instances
 
 `ViewBase` and `ScopedUI` use `SerializationSupport` to make the management of this situation simpler, designed in a way for sub-classes to make use of this facility.
 
@@ -85,8 +85,19 @@ TIP: *Guice, Binding Annotations and Inheritance*.  There is an "interesting" si
 
 This list is not exhaustive, but identifies some of the commonly used Krail classes which cannot be made Serializable.  For these, use the method described above to re-inject them.
 
-- `SubjectProvider`
 - `BusProvider` implementations which use MBassador.  This currently applies to all `BusProvider` implementations.
 - `PubSubSupport` from MBassador
 
+= Making your classes 'Guice Serializable'
 
+To implement a simpler process for your own classes (that is, those which are not Views or UIs), you can still use `SerializationSupport`, using the standard `readObject()` deserialization method:
+
+[source,java]
+----
+private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+    serializationSupport.deserialize(this, inputStream);
+}
+----
+
+This combines the calls above, and invokes `defaultReadObject()`, `injectTransients()` and `checkForNullTransients()`
+If yuo want to exclude any fields, just set `serializationSupport.excludedFieldNames` before invoking `deserialize()`

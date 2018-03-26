@@ -14,12 +14,14 @@ package uk.q3c.krail.core.user.notify;
 
 import uk.q3c.krail.i18n.I18NKey;
 
+import java.io.Serializable;
+
 /**
  * Provides a common entry point for all notifications to users, at error, warning and information level.
  *
  * @author David Sowerby
  */
-public interface UserNotifier {
+public interface UserNotifier extends Serializable {
 
     /**
      * Sends a translated {@link ErrorNotificationMessage} via the Session Bus

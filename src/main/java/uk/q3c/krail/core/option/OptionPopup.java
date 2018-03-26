@@ -17,6 +17,7 @@ import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Map;
  * <p>
  * Created by David Sowerby on 29/05/15.
  */
-public interface OptionPopup {
+public interface OptionPopup extends Serializable {
 
     /**
      * Returns a map of {@link OptionKey} to field type, which provide enough information for an option selection form to be displayed (name, description,
