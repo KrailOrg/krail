@@ -52,7 +52,7 @@ class DefaultSubjectProvider @Inject constructor(
          * The security manager for the application.
          */
         private var securityManager: SecurityManager,
-        private val eventBusProvider: SessionBusProvider,
+        @Transient private val eventBusProvider: SessionBusProvider,
         private val userQueryDao: UserQueryDao,
         private val jwtProvider: JWTProvider<KrailJWTBody>)
 

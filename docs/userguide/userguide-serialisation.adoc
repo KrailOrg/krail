@@ -79,7 +79,14 @@ protected void beforeTransientInjection(){
 ----
 
 
-TIP: *Guice, Binding Annotations and Inheritance*.  There is an "interesting" side effect from using Guice binding annotations.  It is very easy to provide the binding on a superclass constructor parameter, and then forget to put it on the equivalent sub-class constructor parameter.  Your IDE and compiler will not tell you.  This Serialization routine should tell you if you do so.  This was not really a design choice, just a bit of luck!
+TIP: *Guice, Binding Annotations and Inheritance*.  There is an "interesting" side effect from using Guice binding annotations.  It is very easy to provide the binding on a superclass constructor parameter, and then forget to put it on the equivalent sub-class constructor parameter - meaning you have injected something different via the sub-class.  Your IDE and compiler will not tell you.  This Serialization routine will tell you if you do so.  This was not really a design choice, just a bit of luck!
 
+== Non-Serializable classes
+
+This list is not exhaustive, but identifies some of the commonly used Krail classes which cannot be made Serializable.  For these, use the method described above to re-inject them.
+
+- `SubjectProvider`
+- `BusProvider` implementations which use MBassador.  This currently applies to all `BusProvider` implementations.
+- `PubSubSupport` from MBassador
 
 

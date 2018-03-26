@@ -8,6 +8,7 @@ import com.google.inject.Key
 import com.google.inject.spi.InjectionPoint
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.slf4j.LoggerFactory
+import java.io.ObjectInputStream
 import java.io.Serializable
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
@@ -22,10 +23,12 @@ interface SerializationSupport : Serializable {
     var excludedFieldNames: List<String>
     fun injectTransientFields(target: Any)
     fun checkForNullTransients()
+    fun deserialize(target: Any, inputStream: ObjectInputStream)
 }
 
 
 class DefaultSerializationSupport @Inject constructor(val injectorLocator: InjectorLocator) : SerializationSupport {
+
     private var log = LoggerFactory.getLogger(this.javaClass.name)
     private val candidateFieldKeys: MutableMap<Field, Key<*>> = mutableMapOf()
     private val unResolvedFieldKeys: MutableMap<Field, Key<*>> = mutableMapOf()
@@ -109,6 +112,12 @@ class DefaultSerializationSupport @Inject constructor(val injectorLocator: Injec
             }
             throw SerializationSupportException("One or more transient fields is still null after deserialization. If this is required state, add them to the 'exclusions' parameter to prevent this exception.  Null fields are: $nullFieldNames")
         }
+    }
+
+    override fun deserialize(target: Any, inputStream: ObjectInputStream) {
+        inputStream.defaultReadObject()
+        injectTransientFields(target)
+        checkForNullTransients()
     }
 
     /**

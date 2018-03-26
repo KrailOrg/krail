@@ -15,6 +15,8 @@ package uk.q3c.krail.core.shiro;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
+import java.io.Serializable;
+
 /**
  * A Shiro {@link Subject} contains a {@link PrincipalCollection}, which may contain just about anything to identify
  * the
@@ -26,7 +28,7 @@ import org.apache.shiro.subject.Subject;
  *
  * @author David Sowerby 3 Oct 2013
  */
-public interface SubjectIdentifier {
+public interface SubjectIdentifier extends Serializable {
 
     String subjectName();
 

@@ -238,40 +238,11 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
         setLocaleFromOption(true);
     }
 
-    @SuppressWarnings("Duplicates")
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
-        beforeDeserialization();
-        inputStream.defaultReadObject();
-        beforeTransientInjection();
-        serializationSupport.injectTransientFields(this);
-        afterTransientInjection();
-        serializationSupport.checkForNullTransients();
-    }
-
-    /**
-     * By default does nothing but can be overridden to execute code before any other action is taken for deserialization.
-     * It could be used to set exclusions for {@link #serializationSupport}
-     */
-    protected void beforeDeserialization() {
-
-    }
-
-    /**
-     * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
-     * has injected Guice dependencies. It could be used to set exclusions for {@link #serializationSupport}
-     */
-    protected void beforeTransientInjection() {
-
+        serializationSupport.deserialize(this, inputStream);
     }
 
 
-    /**
-     * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
-     * injects Guice dependencies
-     */
-    protected void afterTransientInjection() {
-
-    }
 
 
 }

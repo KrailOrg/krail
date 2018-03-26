@@ -3,6 +3,7 @@ package uk.q3c.krail.core.shiro
 import io.jsonwebtoken.SignatureException
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.subject.Subject
+import java.io.Serializable
 
 /**
  * Converts a Shiro [Subject] to a Json Web Token (JWT), and provides for verifying a JWT.
@@ -21,7 +22,7 @@ import org.apache.shiro.subject.Subject
  *
  * Created by David Sowerby on 05 Mar 2018
  */
-interface JWTProvider<T : JWTBody> {
+interface JWTProvider<T : JWTBody> : Serializable {
 
     /**
      * Encodes a JWT from `subject`.  A JWT should be returned only if the subject has authenticated.

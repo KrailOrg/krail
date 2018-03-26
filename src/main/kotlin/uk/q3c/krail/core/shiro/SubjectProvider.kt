@@ -18,6 +18,7 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.subject.Subject
 import uk.q3c.krail.core.user.status.UserStatusChangeSource
+import java.io.Serializable
 
 /**
  * Use this instead of using [SecurityUtils.getSubject] - that will fail because of various issues around threading and session management.
@@ -33,7 +34,7 @@ import uk.q3c.krail.core.user.status.UserStatusChangeSource
  * @author mpilone
  * @author David Sowerby 15 Jul 2013
  */
-interface SubjectProvider : Provider<Subject> {
+interface SubjectProvider : Provider<Subject>, Serializable {
 
     /**
      * Attempt to login
