@@ -18,6 +18,8 @@ import com.vaadin.ui.Component;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.ui.ScopedUI;
 
+import java.io.Serializable;
+
 
 /**
  * Implementations 'broadcast' messages to registered {@link Broadcaster.BroadcastListener}s. using Vaadin Server Push.  {@link ScopedUI} implements {@link
@@ -25,7 +27,7 @@ import uk.q3c.krail.core.ui.ScopedUI;
  * <p>
  * Created by David Sowerby on 27/05/15.
  */
-public interface Broadcaster {
+public interface Broadcaster extends Serializable {
     String ALL_MESSAGES = "all";
 
     /**

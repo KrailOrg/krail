@@ -18,6 +18,7 @@ import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.service.AbstractService;
 import uk.q3c.krail.service.RelatedServiceExecutor;
+import uk.q3c.util.guice.SerializationSupport;
 
 /**
  * Created by David Sowerby on 01/11/15.
@@ -31,8 +32,8 @@ public class MockService extends AbstractService {
     private int startDelay;
     private int stopDelay;
 
-    protected MockService(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
-        super(translate, globalBusProvider, servicesExecutor);
+    protected MockService(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
         setNameKey(LabelKey.Yes);
     }
 
@@ -47,7 +48,7 @@ public class MockService extends AbstractService {
 
 
     @Override
-    protected void doStart() throws Exception {
+    protected void doStart() {
         System.out.println("starting " + getNameKey());
         callsToStart++;
         try {
@@ -63,7 +64,7 @@ public class MockService extends AbstractService {
 
 
     @Override
-    protected void doStop() throws Exception {
+    protected void doStop() {
         System.out.println("stopping " + getNameKey());
         callsToStop++;
         if (failToStop) {

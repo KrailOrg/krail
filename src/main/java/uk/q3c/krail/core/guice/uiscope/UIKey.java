@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.guice.uiscope;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 
 /**
  * This class is entirely passive - it is a surrogate for the UI itself during the IoC process in support of
@@ -27,7 +28,7 @@ import javax.annotation.concurrent.Immutable;
  * The counter value is set by the {@link UIKeyProvider}
  */
 @Immutable
-public class UIKey implements Comparable<UIKey> {
+public class UIKey implements Comparable<UIKey>, Serializable {
     private final int counter;
 
     public UIKey(int counter) {

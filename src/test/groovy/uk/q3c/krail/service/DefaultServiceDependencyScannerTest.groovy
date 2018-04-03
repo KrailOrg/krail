@@ -24,6 +24,7 @@ import uk.q3c.krail.i18n.i18n.PatternLabelKey
 import uk.q3c.krail.service.model.DefaultServiceDependencyScanner
 import uk.q3c.util.UtilModule
 import uk.q3c.util.clazz.ClassNameUtils
+import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.testutil.LogMonitor
 /**
  *
@@ -45,7 +46,7 @@ class DefaultServiceDependencyScannerTest extends Specification {
     MessageBus globalBusProvider = Mock(MessageBus)
     LogMonitor logMonitor
     RelatedServiceExecutor servicesExecutor = Mock(RelatedServiceExecutor)
-
+    SerializationSupport serializationSupport = Mock()
 
 
     def setup() {
@@ -66,7 +67,7 @@ class DefaultServiceDependencyScannerTest extends Specification {
         given:
 
         def scanner = new DefaultServiceDependencyScanner(model, classNameUtils)
-        def service = new TestService(translate, mockA, mockB, mockC, mockD, globalBusProvider, servicesExecutor)
+        def service = new TestService(translate, mockA, mockB, mockC, mockD, globalBusProvider, servicesExecutor, serializationSupport)
 
         when:
         scanner.scan(service)
@@ -85,7 +86,7 @@ class DefaultServiceDependencyScannerTest extends Specification {
         given:
 
         def scanner = new DefaultServiceDependencyScanner(model, classNameUtils)
-        def service = new TestService(translate, null, mockB, mockC, mockD, globalBusProvider, servicesExecutor)
+        def service = new TestService(translate, null, mockB, mockC, mockD, globalBusProvider, servicesExecutor, serializationSupport)
 
         when:
         scanner.scan(service)

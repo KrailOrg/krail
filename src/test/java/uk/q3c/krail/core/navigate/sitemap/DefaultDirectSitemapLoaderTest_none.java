@@ -20,6 +20,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -29,6 +30,7 @@ import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule
-        .class, EventBusModule.class, UIScopeModule.class, UtilModule.class})
+        .class, EventBusModule.class, UIScopeModule.class, UtilModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 public class DefaultDirectSitemapLoaderTest_none {
 
     @Inject

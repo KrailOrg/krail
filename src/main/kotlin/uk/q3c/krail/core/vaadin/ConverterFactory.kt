@@ -14,7 +14,7 @@ import java.io.Serializable
  * Created by David Sowerby on 05 Oct 2017.
  */
 
-interface ConverterSet {
+interface ConverterSet : Serializable {
 
     fun get(converterPair: ConverterPair): Converter<Any, Any>
     fun supports(converterPair: ConverterPair): Boolean

@@ -24,12 +24,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.List;
@@ -37,7 +39,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinEventBusModule.class, VaadinSessionScopeModule.class, TestUIScopeModule.class, EventBusModule.class})
+@GuiceContext({VaadinEventBusModule.class, VaadinSessionScopeModule.class, TestUIScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, EventBusModule.class})
 public class VaadinEventBusModuleTest_BusScopeAndNames {
 
     @Inject

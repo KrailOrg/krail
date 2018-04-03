@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -40,12 +41,13 @@ import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, EventBusModule.class, TestI18NModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class,
-        TestUIScopeModule.class, UtilModule.class})
+        TestUIScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, UtilModule.class})
 public class DefaultUserNavigationTreeBuilderTest {
     CurrentLocale currentLocale = new MockCurrentLocale();
 
@@ -63,7 +65,7 @@ public class DefaultUserNavigationTreeBuilderTest {
     private DefaultUserNavigationTree userNavigationTree;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         builder = new DefaultUserNavigationTreeBuilder(userSitemap);
         userNavigationTree = new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
     }

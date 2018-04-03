@@ -13,7 +13,9 @@
 
 package uk.q3c.krail.core.view.component;
 
-public interface UserNavigationTreeBuilder {
+import java.io.Serializable;
+
+public interface UserNavigationTreeBuilder extends Serializable {
 
     void build();
 

@@ -15,6 +15,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ import java.util.Set;
  *
  * @author David Sowerby
  */
-public interface SitemapFinisher {
+public interface SitemapFinisher extends Serializable {
 
     /**
      * Throws a {@link SitemapException} if the check finishes with one or more nodes not having a view or a key. This

@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
@@ -45,6 +46,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.clazz.ClassNameUtils;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, InMemoryModule.class, TestKrailI18NModule.class, VaadinSessionScopeModule.class,
-        VaadinEventBusModule.class, EventBusModule.class, UIScopeModule.class, UtilsModule.class, UtilModule.class, TestOptionModule.class})
+        VaadinEventBusModule.class, EventBusModule.class, UIScopeModule.class, UtilsModule.class, UtilModule.class, TestOptionModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject

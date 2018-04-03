@@ -41,6 +41,7 @@ import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
+import uk.q3c.util.guice.SerializationSupport;
 
 import java.text.CollationKey;
 import java.text.Collator;
@@ -142,8 +143,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
      */
 
     @Inject
-    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider sessionBusProvider) {
-        super(translate, uriHandler, sessionBusProvider);
+    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider sessionBusProvider, SerializationSupport serializationSupport) {
+        super(translate, uriHandler, sessionBusProvider, serializationSupport);
 
         insertionOrder = new LinkedList<>();
         positionIndexes = new HashMap<>();

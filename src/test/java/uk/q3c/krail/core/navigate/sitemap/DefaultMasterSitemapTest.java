@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
@@ -39,6 +40,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.util.UtilsModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule.class, UtilsModule.class, EventBusModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, InMemoryModule.class, UIScopeModule.class,})
+@GuiceContext({TestKrailI18NModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, UtilsModule.class, EventBusModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class, InMemoryModule.class, UIScopeModule.class,})
 public class DefaultMasterSitemapTest {
 
     @Mock

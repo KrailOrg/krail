@@ -17,7 +17,6 @@ import com.google.inject.Provider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.HasComponents;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.authz.AuthorizationException;
@@ -50,7 +49,6 @@ import uk.q3c.krail.core.view.ViewFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 
 import java.net.URI;
@@ -69,7 +67,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * moving
  * to another page
  * <p>
- * The {@link #eventBus} is used to manage view changes - note that the eventBus must be synchronous for the view change cancellation to work (see {@link
+ * The {@link #uiBusProvider} is used to manage view changes - note that the eventBus must be synchronous for the view change cancellation to work (see {@link
  * #publishBeforeViewChange(BeforeViewChangeBusMessage)}
  *
  * @author David Sowerby
@@ -95,7 +93,7 @@ public class DefaultNavigator implements Navigator {
     private MasterSitemap masterSitemap;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
-    private PubSubSupport<BusMessage> eventBus;
+    private UIBusProvider uiBusProvider;
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
     private ViewChangeRule viewChangeRule;
@@ -105,7 +103,7 @@ public class DefaultNavigator implements Navigator {
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
             pageAccessController, ScopedUIProvider uiProvider, ViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
-                                    loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider eventBusProvider, ViewChangeRule
+                                    loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider uiBusProvider, ViewChangeRule
                                     viewChangeRule, InvalidURIHandler invalidURIHandler, MasterSitemapQueue masterSitemapQueue, ComponentIdGenerator idGenerator) {
         super();
         this.uriHandler = uriHandler;
@@ -121,7 +119,7 @@ public class DefaultNavigator implements Navigator {
         this.invalidURIHandler = invalidURIHandler;
         this.masterSitemapQueue = masterSitemapQueue;
 
-        this.eventBus = eventBusProvider.get();
+        this.uiBusProvider = uiBusProvider;
         this.viewChangeRule = viewChangeRule;
 
 
@@ -183,7 +181,7 @@ public class DefaultNavigator implements Navigator {
      * the
      * View is instantiated, and made the current view in the UI via {@link ScopedUI#changeView(KrailView)}.<br>
      * <br>
-     * Messages are published to the {{@link #eventBus}} before and after the view change. Message handlers have the
+     * Messages are published to the {{@link #uiBusProvider}} before and after the view change. Message handlers have the
      * option to block the view change by returning false (see {@link #publishBeforeViewChange(BeforeViewChangeBusMessage)}
      * <p>
      *
@@ -308,7 +306,7 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     * Publishes a message to the {@link #eventBus} before an imminent view change.  At this point the {@code message}:<ol> <
+     * Publishes a message to the {@link #uiBusProvider} before an imminent view change.  At this point the {@code message}:<ol> <
      * <li><{@code fromState} represents the current navigation state/li>
      * li>{@code toState} represents the navigation state which will be moved to if the change is successful.</li></ol>
      * <p>
@@ -322,20 +320,20 @@ public class DefaultNavigator implements Navigator {
     protected boolean publishBeforeViewChange(BeforeViewChangeBusMessage busMessage) {
 
         // must be a synchronous bus, or the blocking mechanism will not work
-        eventBus.publish(busMessage);
+        uiBusProvider.get().publish(busMessage);
         return !busMessage.isCancelled();
 
     }
 
     /**
-     * Publishes a message to the {@link #eventBus} immediately after a view change.
+     * Publishes a message to the {@link #uiBusProvider} immediately after a view change.
      * <p>
      * Message Handlers are called in an undefined order unless {@link Handler#priority()} is used to specify an order.
      *
      * @param busMessage view change message from the bus
      */
     protected void publishAfterViewChange(AfterViewChangeBusMessage busMessage) {
-        eventBus.publish(busMessage);
+        uiBusProvider.get().publish(busMessage);
     }
 
     @Override

@@ -15,12 +15,14 @@ import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.core.shiro.aop.NotAGuestException;
 
+import java.io.Serializable;
+
 /**
  * Handles a {@link NotAGuestException}, which indicates current {@link Subject} is not a User in the sense of {@link RequiresGuest}.  Only used by the Shiro
  * annotations
  * <p>
  * Created by David Sowerby on 11/06/15.
  */
-public interface NotAGuestExceptionHandler {
+public interface NotAGuestExceptionHandler extends Serializable {
     void invoke();
 }

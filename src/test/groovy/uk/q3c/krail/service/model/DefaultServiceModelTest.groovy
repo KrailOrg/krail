@@ -21,6 +21,7 @@ import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
 import uk.q3c.krail.service.test.*
+import uk.q3c.util.guice.SerializationSupport
 
 import static org.assertj.core.api.Assertions.*
 import static uk.q3c.krail.i18n.test.TestLabelKey.*
@@ -58,23 +59,24 @@ class DefaultServiceModelTest extends Specification {
     MessageBus globalBusProvider = Mock(MessageBus)
     RelatedServiceExecutor servicesExecutor
     PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)
+    SerializationSupport serializationSupport = Mock()
 
     def setup() {
         Set<DependencyDefinition> dependencyDefinitions = new HashSet<>()
         registeredServices = new HashMap<>()
-        servicesModel = new DefaultServiceModel(dependencyDefinitions, new DefaultServiceClassGraph(), new DefaultServiceInstanceGraph(), registeredServices)
+        servicesModel = new DefaultServiceModel(dependencyDefinitions, new DefaultServiceClassGraph(), new DefaultServiceInstanceGraph(), registeredServices, serializationSupport)
         servicesExecutor = new DefaultRelatedServiceExecutor(servicesModel, translate)
         translate.from(_, _) >> "translated key"
         globalBusProvider.get() >> globalBus
 
-        sA = new MockServiceA(translate, globalBusProvider, servicesExecutor)
-        sB = new MockServiceB(translate, globalBusProvider, servicesExecutor)
-        sC = new MockServiceC(translate, globalBusProvider, servicesExecutor)
-        sD = new MockServiceD(translate, globalBusProvider, servicesExecutor)
-        sE = new MockServiceE(translate, globalBusProvider, servicesExecutor)
-        sF = new MockServiceF(translate, globalBusProvider, servicesExecutor)
-        sG = new MockServiceG(translate, globalBusProvider, servicesExecutor)
-        sH = new MockServiceH(translate, globalBusProvider, servicesExecutor)
+        sA = new MockServiceA(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sB = new MockServiceB(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sC = new MockServiceC(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sD = new MockServiceD(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sE = new MockServiceE(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sF = new MockServiceF(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sG = new MockServiceG(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        sH = new MockServiceH(translate, globalBusProvider, servicesExecutor, serializationSupport)
 
         providerA.get() >> sA
         providerB.get() >> sB
@@ -203,7 +205,7 @@ class DefaultServiceModelTest extends Specification {
 
         when:
 
-        servicesModel = new DefaultServiceModel(dependencyDefinitions, new DefaultServiceClassGraph(), new DefaultServiceInstanceGraph(), registeredServices)
+        servicesModel = new DefaultServiceModel(dependencyDefinitions, new DefaultServiceClassGraph(), new DefaultServiceInstanceGraph(), registeredServices, serializationSupport)
 
 
         then:
@@ -222,7 +224,7 @@ class DefaultServiceModelTest extends Specification {
 
 
         when:
-        servicesModel = new DefaultServiceModel(dependencyDefinitions, new DefaultServiceClassGraph(), new DefaultServiceInstanceGraph(), registeredServices)
+        servicesModel = new DefaultServiceModel(dependencyDefinitions, new DefaultServiceClassGraph(), new DefaultServiceInstanceGraph(), registeredServices, serializationSupport)
 
         then:
         servicesModel.registeredServices() != null

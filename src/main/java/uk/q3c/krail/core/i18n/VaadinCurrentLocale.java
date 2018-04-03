@@ -88,7 +88,7 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
     private final transient Option option;
     private Locale locale;
     private SerializationSupport serializationSupport;
-    private transient Set<Locale> supportedLocales;
+    private Set<Locale> supportedLocales;
 
     @Inject
     protected VaadinCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @LocaleDefault Locale defaultLocale,
@@ -239,7 +239,8 @@ public class VaadinCurrentLocale implements CurrentLocale, VaadinOptionContext, 
     }
 
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
-        serializationSupport.deserialize(this, inputStream);
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
     }
 
 

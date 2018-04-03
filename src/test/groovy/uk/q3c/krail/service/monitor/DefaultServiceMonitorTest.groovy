@@ -17,6 +17,7 @@ import spock.lang.Specification
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
+import uk.q3c.util.guice.SerializationSupport
 
 import java.time.LocalDateTime
 
@@ -29,11 +30,12 @@ class DefaultServiceMonitorTest extends Specification {
     Translate translate = Mock(Translate)
     RelatedServiceExecutor servicesExecutor = Mock(RelatedServiceExecutor)
     Service serviceA
+    SerializationSupport serializationSupport = Mock()
 
     def setup() {
         servicesExecutor.execute(_, _) >> true
         globalBusProvider.get() >> globalBus
-        serviceA = new TestService0(translate, globalBusProvider, servicesExecutor)
+        serviceA = new TestService0(translate, globalBusProvider, servicesExecutor, serializationSupport)
     }
 
 

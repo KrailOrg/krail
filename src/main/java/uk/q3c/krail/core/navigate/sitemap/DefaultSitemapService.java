@@ -32,7 +32,10 @@ import uk.q3c.krail.service.AbstractService;
 import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.util.clazz.ClassNameUtils;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,18 +44,21 @@ import java.util.Map;
 public class DefaultSitemapService extends AbstractService implements SitemapService {
 
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
-    private final Provider<MasterSitemap> sitemapProvider;
+    private final transient Provider<MasterSitemap> sitemapProvider;
+    private final transient Provider<DirectSitemapLoader> directSitemapLoaderProvider;
+    private final transient Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
     private final ApplicationConfiguration configuration;
     private final ResourceUtils resourceUtils;
     private final ClassNameUtils classNameUtils;
-    private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
-    private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
+
+    private transient List<SitemapLoader> loaders;
+    private transient List<SitemapSourceType> sourceTypes;
     private final SitemapFinisher sitemapFinisher;
     private MasterSitemapQueue masterSitemapQueue;
     private boolean loaded;
-    private List<SitemapLoader> loaders;
-    private StringBuilder report;
-    private List<SitemapSourceType> sourceTypes;
+
+    private transient StringBuilder report;
+
 
     @SuppressFBWarnings({"FCBL_FIELD_COULD_BE_LOCAL"})  // ResourceUtils have to be injected
     @Inject
@@ -60,8 +66,8 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
             directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Provider<MasterSitemap> sitemapProvider,
                                     SitemapFinisher sitemapFinisher, MasterSitemapQueue masterSitemapQueue, ApplicationConfiguration configuration,
                                     MessageBus globalBusProvider, ResourceUtils resourceUtils, ClassNameUtils
-                                            classNameUtils, RelatedServiceExecutor servicesExecutor) {
-        super(translate, globalBusProvider, servicesExecutor);
+                                            classNameUtils, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
         this.sitemapProvider = sitemapProvider;
@@ -185,5 +191,10 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
     @Override
     public I18NKey getNameKey() {
         return LabelKey.Sitemap_Service;
+    }
+
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
     }
 }

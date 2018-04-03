@@ -14,11 +14,12 @@
 package uk.q3c.krail.util;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by David Sowerby on 03 Jan 2016
  */
-public interface ResourceUtils {
+public interface ResourceUtils extends Serializable {
 
     /**
      * Returns the base directory path for the application if there is a VaadinService is running, or throws a {@link

@@ -72,6 +72,7 @@ import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupport;
 import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.Locale;
@@ -182,8 +183,8 @@ public class UIScopeTest {
 
         @Inject
         protected MockSitemapService(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor
-                servicesExecutor) {
-            super(translate, globalBusProvider, servicesExecutor);
+                servicesExecutor, SerializationSupport serializationSupport) {
+            super(translate, globalBusProvider, servicesExecutor, serializationSupport);
         }
 
         @Override

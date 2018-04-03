@@ -24,8 +24,11 @@ import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultUserNotifierTest {
@@ -38,10 +41,13 @@ public class DefaultUserNotifierTest {
     @Mock
     private Translate translate;
 
+    @Mock
+    private SerializationSupport serializationSupport;
+
     @Before
     public void setup() {
         when(messageBusProvider.get()).thenReturn(messageBus);
-        notifier = new DefaultUserNotifier(messageBusProvider, translate);
+        notifier = new DefaultUserNotifier(messageBusProvider, translate, serializationSupport);
     }
     @Test
     public void error() {

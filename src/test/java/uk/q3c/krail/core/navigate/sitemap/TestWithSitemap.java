@@ -37,6 +37,7 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.option.DefaultOption;
+import uk.q3c.util.guice.SerializationSupport;
 
 import java.text.Collator;
 import java.util.Locale;
@@ -90,6 +91,8 @@ public abstract class TestWithSitemap {
 
 
     int id;
+    @Mock
+    private SerializationSupport serializationSupport;
 
 
     @Before
@@ -229,7 +232,7 @@ public abstract class TestWithSitemap {
      * needed before calling this method
      */
     protected void createUserSitemap() {
-        userSitemap = new DefaultUserSitemap(translate, uriHandler, sessionBusProvider);
+        userSitemap = new DefaultUserSitemap(translate, uriHandler, sessionBusProvider, serializationSupport);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(userSitemap, translate, currentLocale);

@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import java.util.Map;
  *
  * @author David Sowerby
  */
-public interface SitemapLoader {
+public interface SitemapLoader extends Serializable {
 
     /**
      * Loads the {@code sitemap} from whichever source the implementation chooses. Returns true if the load is successful

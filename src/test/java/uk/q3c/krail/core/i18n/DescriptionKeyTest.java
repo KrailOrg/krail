@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
@@ -33,6 +34,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.Locale;
 
@@ -40,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, EventBusModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule
-        .class, UtilModule.class})
+        .class, SerializationSupportModule.class, ServletEnvironmentModule.class, UtilModule.class})
 public class DescriptionKeyTest {
 
     @Inject

@@ -12,7 +12,9 @@
  */
 package uk.q3c.krail.core.navigate;
 
-public interface InvalidURIHandler {
+import java.io.Serializable;
+
+public interface InvalidURIHandler extends Serializable {
 
     void invoke(Navigator navigator, String targetUri);
 }

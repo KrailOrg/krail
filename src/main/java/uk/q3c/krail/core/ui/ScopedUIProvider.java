@@ -41,9 +41,9 @@ import java.util.Map;
 @SuppressFBWarnings("SE_BAD_FIELD")
 public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, Serializable {
     private static Logger log = LoggerFactory.getLogger(ScopedUIProvider.class);
-    protected UIKeyProvider uiKeyProvider;
-    private Map<String, Class<? extends ScopedUI>> uiMapBinder;
-    private Map<String, Provider<ScopedUI>> uiMapBinderProvider;
+    protected transient UIKeyProvider uiKeyProvider;
+    private transient Map<String, Class<? extends ScopedUI>> uiMapBinder;
+    private transient Map<String, Provider<ScopedUI>> uiMapBinderProvider;
 
     @Inject
     protected void init(UIKeyProvider uiKeyProvider, Map<String, Class<? extends ScopedUI>> uiMapBinder, Map<String, Provider<ScopedUI>> uiMapBinderProvider) {

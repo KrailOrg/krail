@@ -27,6 +27,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
+import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.TestKrailI18NModule
@@ -41,11 +42,12 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.util.ResourceUtils
 import uk.q3c.krail.util.UtilsModule
 import uk.q3c.util.UtilModule
+import uk.q3c.util.guice.SerializationSupportModule
 import java.util.*
 
 
 @RunWith(MycilaJunitRunner::class)
-@GuiceContext(VaadinSessionScopeModule::class, EventBusModule::class, TestOptionModule::class, InMemoryModule::class, VaadinEventBusModule::class, UIScopeModule::class, TestKrailI18NModule::class, UtilModule::class, UtilsModule::class)
+@GuiceContext(VaadinSessionScopeModule::class, SerializationSupportModule::class, ServletEnvironmentModule::class, EventBusModule::class, TestOptionModule::class, InMemoryModule::class, VaadinEventBusModule::class, UIScopeModule::class, TestKrailI18NModule::class, UtilModule::class, UtilsModule::class)
 class DefaultLocaleSelectorTest {
 
 

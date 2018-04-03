@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy;
@@ -59,6 +60,8 @@ import uk.q3c.krail.persist.inmemory.dao.InMemoryOptionDaoDelegate;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.guava.GuavaCacheConfiguration;
+import uk.q3c.util.guice.SerializationSupport;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -73,7 +76,7 @@ import static org.mockito.Mockito.when;
  * Running this test through the debugger sometimes causes random failures - running normally doesn't
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class, UtilModule.class})
+@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class, UtilModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 public class Option_IntegrationTest {
 
     Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders = new HashMap<>();
@@ -116,6 +119,9 @@ public class Option_IntegrationTest {
     @Mock
     MessageBus globalBus;
 
+    @Mock
+    private SerializationSupport serializationSupport;
+
     @Before
     public void setup() {
         when(subjectIdentifier.userId()).thenReturn("fbaton");
@@ -128,7 +134,7 @@ public class Option_IntegrationTest {
 
         cacheLoader = new DefaultOptionCacheLoader(optionDao);
         optionCache = new DefaultOptionCache(optionDao, cacheProvider);
-        option = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBus);
+        option = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBus, serializationSupport);
     }
 
 
@@ -204,7 +210,7 @@ public class Option_IntegrationTest {
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBus);
+        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBus, serializationSupport);
         //when
         option2.set(key1, 3);
         Integer actual = option2.get(key1);

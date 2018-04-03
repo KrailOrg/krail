@@ -31,8 +31,8 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
     private static Logger log = LoggerFactory.getLogger(UserSitemapNodeModifier.class);
 
     private final SubjectProvider subjectProvider;
+    private CurrentLocale currentLocale;
     private final PageAccessController pageAccessController;
-    private final Collator collator;
     private final Translate translate;
     private MasterSitemap masterSitemap;
 
@@ -42,8 +42,8 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
                                    Translate translate) {
         super();
         this.subjectProvider = subjectProvider;
+        this.currentLocale = currentLocale;
         this.pageAccessController = pageAccessController;
-        this.collator = Collator.getInstance(currentLocale.getLocale());
         this.translate = translate;
     }
 
@@ -67,6 +67,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
     @Override
     public UserSitemapNode create(UserSitemapNode parentUserNode, MasterSitemapNode masterNode) {
         checkNotNull(masterNode);
+        Collator collator = Collator.getInstance(currentLocale.getLocale());
         log.debug("creating a user node for master node {}", masterNode);
         // if there is no labelKey (usually when page is redirected), cannot be shown
         if (masterNode.getLabelKey() == null) {

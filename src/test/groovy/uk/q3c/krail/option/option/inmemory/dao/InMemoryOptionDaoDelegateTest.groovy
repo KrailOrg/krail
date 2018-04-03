@@ -15,6 +15,7 @@ package uk.q3c.krail.option.option.inmemory.dao
 
 import com.google.inject.Guice
 import com.google.inject.Injector
+import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.option.persist.dao.DefaultOptionDao
@@ -23,6 +24,8 @@ import uk.q3c.krail.persist.inmemory.dao.InMemoryOptionDaoDelegate
 import uk.q3c.krail.testutil.option.OptionDaoTestBase
 import uk.q3c.util.UtilModule
 import uk.q3c.util.data.DataConverter
+import uk.q3c.util.guice.SerializationSupportModule
+
 /**
  * Created by David Sowerby on 21 Jan 2016
  */
@@ -31,7 +34,7 @@ class InMemoryOptionDaoDelegateTest extends OptionDaoTestBase {
 
 
     def setup() {
-        Injector injector = Guice.createInjector(new InMemoryModule().provideOptionDao(), new TestOptionModule(), new VaadinSessionScopeModule(), new UtilModule())
+        Injector injector = Guice.createInjector(new InMemoryModule().provideOptionDao(), new TestOptionModule(), new VaadinSessionScopeModule(), new UtilModule(), new SerializationSupportModule(), new ServletEnvironmentModule())
         InMemoryOptionDaoDelegate injectedDaoDelegate = injector.getInstance(InMemoryOptionDaoDelegate)
         optionElementConverter = injector.getInstance(DataConverter)
 

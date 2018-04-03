@@ -13,7 +13,6 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -22,12 +21,14 @@ import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.Collator;
 import java.util.List;
 
@@ -53,14 +54,16 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
     private static Logger log = LoggerFactory.getLogger(DefaultUserSitemap.class);
 
     private final Translate translate;
-    private final PubSubSupport<BusMessage> eventBus;
+    private final transient SessionBusProvider sessionBusProvider;
+    private SerializationSupport serializationSupport;
 
 
     @Inject
-    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider eventBusProvider) {
+    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider sessionBusProvider, SerializationSupport serializationSupport) {
         super(uriHandler);
         this.translate = translate;
-        this.eventBus = eventBusProvider.get();
+        this.sessionBusProvider = sessionBusProvider;
+        this.serializationSupport = serializationSupport;
     }
 
 
@@ -77,11 +80,11 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         Collator collator = translate.collator();
         for (UserSitemapNode userNode : nodeList) {
             String label = translate.from(userNode.getMasterNode()
-                                                  .getLabelKey());
+                    .getLabelKey());
             userNode.setLabel(label);
             userNode.setCollationKey(collator.getCollationKey(userNode.getLabel()));
         }
-        eventBus.publish(new UserSitemapLabelChangeMessage());
+        sessionBusProvider.get().publish(new UserSitemapLabelChangeMessage());
     }
 
 
@@ -118,7 +121,7 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         super.setLoaded(loaded);
         buildUriMap();
         if (loaded) {
-            eventBus.publish(new UserSitemapStructureChangeMessage());
+            sessionBusProvider.get().publish(new UserSitemapStructureChangeMessage());
         }
     }
 
@@ -151,5 +154,15 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         return translate;
     }
 
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
 
+        // Collation key is not serializable
+        List<UserSitemapNode> nodeList = getAllNodes();
+        Collator collator = translate.collator();
+        for (UserSitemapNode userNode : nodeList) {
+            userNode.setCollationKey(collator.getCollationKey(userNode.getLabel()));
+        }
+    }
 }

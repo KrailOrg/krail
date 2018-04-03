@@ -17,6 +17,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
+import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
@@ -25,6 +26,7 @@ import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.service.bind.ServicesModule
 import uk.q3c.util.UtilModule
+import uk.q3c.util.guice.SerializationSupportModule
 
 import static uk.q3c.krail.i18n.test.TestLabelKey.*
 /**
@@ -184,7 +186,7 @@ class Service_IntegrationTest extends Specification {
     }
 
     private Injector createInjector() {
-        return Guice.createInjector([new UtilModule(), new EventBusModule(), new TestServiceModule(), new ServicesModule(), new TestI18NModule(), new TestOptionModule(), new InMemoryModule(), new VaadinEventBusModule(), new VaadinSessionScopeModule(), new UIScopeModule()])
+        return Guice.createInjector([new SerializationSupportModule(), new ServletEnvironmentModule(), new UtilModule(), new EventBusModule(), new TestServiceModule(), new ServicesModule(), new TestI18NModule(), new TestOptionModule(), new InMemoryModule(), new VaadinEventBusModule(), new VaadinSessionScopeModule(), new UIScopeModule()])
     }
 
 }

@@ -17,6 +17,7 @@ import com.google.inject.Inject
 import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
+import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule
@@ -25,10 +26,12 @@ import uk.q3c.krail.service.bind.ServicesModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.util.UtilModule
+import uk.q3c.util.guice.SerializationSupportModule
+
 /**
  * Created by David Sowerby on 16 Dec 2015
  */
-@UseModules([ServicesModule, TestI18NModule, VaadinEventBusModule, EventBusModule, TestVaadinSessionScopeModule, TestUIScopeModule, TestOptionModule, InMemoryModule, UtilModule])
+@UseModules([ServicesModule, SerializationSupportModule, ServletEnvironmentModule, TestI18NModule, VaadinEventBusModule, EventBusModule, TestVaadinSessionScopeModule, TestUIScopeModule, TestOptionModule, InMemoryModule, UtilModule])
 class ServiceIntegrationTest extends Specification {
 
     @Inject

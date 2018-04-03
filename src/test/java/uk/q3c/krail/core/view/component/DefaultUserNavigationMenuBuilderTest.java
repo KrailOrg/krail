@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -40,11 +41,12 @@ import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, EventBusModule.class, UtilModule.class, TestI18NModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class, TestUIScopeModule.class,})
+@GuiceContext({VaadinSessionScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, EventBusModule.class, UtilModule.class, TestI18NModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class, TestUIScopeModule.class,})
 public class DefaultUserNavigationMenuBuilderTest {
 
     DefaultUserNavigationMenuBuilder builder;
@@ -64,7 +66,7 @@ public class DefaultUserNavigationMenuBuilderTest {
     private DefaultUserNavigationMenu userNavigationMenu;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         builder = new DefaultUserNavigationMenuBuilder(userSitemap, navigator);
         userNavigationMenu = new DefaultUserNavigationMenu(option, builder);
         userSitemap.populate();

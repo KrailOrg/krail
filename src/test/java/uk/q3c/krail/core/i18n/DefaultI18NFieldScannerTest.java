@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
@@ -32,6 +33,7 @@ import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.clazz.UnenhancedClassIdentifier;
+import uk.q3c.util.guice.SerializationSupportModule;
 import uk.q3c.util.test.AOPTestModule;
 
 import java.lang.annotation.Annotation;
@@ -43,8 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinEventBusModule.class, UIScopeModule.class, TestOptionModule.class, InMemoryModule.class,
-        VaadinSessionScopeModule.class, EventBusModule.class,
-        AOPTestModule.class, UtilModule.class})
+        VaadinSessionScopeModule.class, EventBusModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, AOPTestModule.class, UtilModule.class})
 public class DefaultI18NFieldScannerTest {
 
     @Inject
@@ -82,13 +83,13 @@ public class DefaultI18NFieldScannerTest {
         assertThat(scanner.annotatedComponents()).hasSize(16);
 
         for (AbstractComponent abstractComponent : scanner.annotatedComponents()
-                                                          .keySet()) {
+                .keySet()) {
             AnnotationInfo annotationInfo = scanner.annotatedComponents()
-                                                   .get(abstractComponent);
+                    .get(abstractComponent);
             List<Annotation> annotations = annotationInfo.getAnnotations();
 
             switch (annotationInfo.getField()
-                                  .getName()) {
+                    .getName()) {
                 case "buttonWithAnnotation":
                     assertThat(annotations).hasSize(1);
                     Caption caption = (Caption) annotations.get(0);
@@ -114,7 +115,7 @@ public class DefaultI18NFieldScannerTest {
         for (AbstractComponent component : abstractComponentAnnotationInfoMap.keySet()) {
             final AnnotationInfo annotationInfo = abstractComponentAnnotationInfoMap.get(component);
             fieldNames.add(annotationInfo.getField()
-                                         .getName());
+                    .getName());
         }
         return fieldNames;
     }
@@ -199,14 +200,14 @@ public class DefaultI18NFieldScannerTest {
             return null;
         }
         return scanner.annotatedComponents()
-                      .get(component);
+                .get(component);
     }
 
     private <T extends AbstractComponent> T getScannedComponentOfType(DefaultI18NFieldScanner scanner, Class<T> componentClass) {
         for (AbstractComponent component : scanner.annotatedComponents()
-                                                  .keySet()) {
+                .keySet()) {
             if (component.getClass()
-                         .equals(componentClass)) {
+                    .equals(componentClass)) {
                 return (T) component;
             }
         }

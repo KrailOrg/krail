@@ -95,7 +95,8 @@ To implement a simpler process for your own classes (that is, those which are no
 [source,java]
 ----
 private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
-    serializationSupport.deserialize(this, inputStream);
+    inputStream.defaultReadObject();
+    serializationSupport.deserialize(this);
 }
 ----
 

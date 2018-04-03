@@ -3,7 +3,48 @@ package uk.q3c.krail.core.view.component
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
 import com.google.inject.Inject
-import com.vaadin.ui.*
+import com.vaadin.ui.Accordion
+import com.vaadin.ui.Audio
+import com.vaadin.ui.BrowserFrame
+import com.vaadin.ui.Button
+import com.vaadin.ui.CheckBox
+import com.vaadin.ui.ColorPicker
+import com.vaadin.ui.ColorPickerArea
+import com.vaadin.ui.Component
+import com.vaadin.ui.DateField
+import com.vaadin.ui.DateTimeField
+import com.vaadin.ui.DragAndDropWrapper
+import com.vaadin.ui.Embedded
+import com.vaadin.ui.Flash
+import com.vaadin.ui.Grid
+import com.vaadin.ui.GridLayout
+import com.vaadin.ui.HasComponents
+import com.vaadin.ui.HorizontalLayout
+import com.vaadin.ui.HorizontalSplitPanel
+import com.vaadin.ui.Image
+import com.vaadin.ui.InlineDateField
+import com.vaadin.ui.InlineDateTimeField
+import com.vaadin.ui.Label
+import com.vaadin.ui.Layout
+import com.vaadin.ui.Link
+import com.vaadin.ui.MenuBar
+import com.vaadin.ui.NativeButton
+import com.vaadin.ui.Panel
+import com.vaadin.ui.PasswordField
+import com.vaadin.ui.PopupView
+import com.vaadin.ui.ProgressBar
+import com.vaadin.ui.RichTextArea
+import com.vaadin.ui.Slider
+import com.vaadin.ui.TabSheet
+import com.vaadin.ui.TextArea
+import com.vaadin.ui.TextField
+import com.vaadin.ui.Tree
+import com.vaadin.ui.TreeGrid
+import com.vaadin.ui.UI
+import com.vaadin.ui.Upload
+import com.vaadin.ui.VerticalLayout
+import com.vaadin.ui.VerticalSplitPanel
+import com.vaadin.ui.Video
 import com.vaadin.ui.components.colorpicker.ColorPickerGradient
 import com.vaadin.ui.components.colorpicker.ColorPickerGrid
 import com.vaadin.ui.components.colorpicker.ColorPickerHistory
@@ -12,6 +53,7 @@ import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.ui.ScopedUI
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.util.clazz.UnenhancedClassIdentifier
+import java.io.Serializable
 import java.lang.reflect.Field
 
 
@@ -22,7 +64,7 @@ import java.lang.reflect.Field
  * Created by David Sowerby on 27 Jan 2018
  */
 
-interface ComponentIdGenerator {
+interface ComponentIdGenerator : Serializable {
 
     /**
      * Generates a map of field names to ids using [generate] and applies them to the components in [obj]
@@ -44,10 +86,10 @@ interface ComponentIdGenerator {
 data class IdAnnotationValues(val annotationPresent: Boolean, val assign: Boolean, val drilldown: Boolean)
 
 
-class ComponentIDAssignmentFilter(val realClassIdentifier: UnenhancedClassIdentifier) {
-    private val log = LoggerFactory.getLogger(this.javaClass.name)
+class ComponentIDAssignmentFilter(val realClassIdentifier: UnenhancedClassIdentifier) : Serializable {
 
     fun apply(field: Field, obj: Any): Boolean {
+        val log = LoggerFactory.getLogger(this.javaClass.name)
         field.isAccessible = true
         val c = field.get(obj)
         if (c == null) {
@@ -75,13 +117,11 @@ class ComponentIDAssignmentFilter(val realClassIdentifier: UnenhancedClassIdenti
  * annotation rule has been applied, drilldown is applied if the field type implements [HasComponents], but not if it implements [Layout]
  *
  */
-class ComponentIDDrilldownFilter(val realClassIdentifier: UnenhancedClassIdentifier) {
-
-    private val log = LoggerFactory.getLogger(this.javaClass.name)
+class ComponentIDDrilldownFilter(val realClassIdentifier: UnenhancedClassIdentifier) : Serializable {
 
 
     fun apply(field: Field, obj: Any): Boolean {
-
+        val log = LoggerFactory.getLogger(this.javaClass.name)
         field.isAccessible = true
         val c = field.get(obj)
         if (c == null) {

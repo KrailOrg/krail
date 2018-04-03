@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
@@ -40,6 +41,7 @@ import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.util.guice.SerializationSupport;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -50,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinEventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({VaadinEventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 @Listener
 public class VaadinCurrentLocaleTest {
 

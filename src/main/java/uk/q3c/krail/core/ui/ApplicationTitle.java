@@ -14,6 +14,8 @@ package uk.q3c.krail.core.ui;
 
 import uk.q3c.krail.i18n.I18NKey;
 
+import java.io.Serializable;
+
 /**
  * A wrapper to simplify binding to an interface applied to an enum (although a Guice binding can be made, the result
  * has to carry a @SuppressWarning in UI constructors, which is messy)
@@ -21,7 +23,7 @@ import uk.q3c.krail.i18n.I18NKey;
  * @author David Sowerby
  * @date 19 Apr 2014
  */
-public class ApplicationTitle {
+public class ApplicationTitle implements Serializable {
     private final I18NKey titleKey;
 
     public ApplicationTitle(I18NKey titleKey) {

@@ -16,20 +16,33 @@ package uk.q3c.krail.core.eventbus;
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.util.guice.SerializationSupport;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 
+@SuppressWarnings("BindingAnnotationWithoutInject")
 public class DefaultUIBusProvider implements UIBusProvider {
 
-    private PubSubSupport<BusMessage> uiBus;
+    @UIBus
+    private final transient PubSubSupport<BusMessage> uiBus;
+    private SerializationSupport serializationSupport;
 
     @Inject
-    protected DefaultUIBusProvider(@UIBus PubSubSupport<BusMessage> uiBus) {
+    protected DefaultUIBusProvider(@UIBus PubSubSupport<BusMessage> uiBus, SerializationSupport serializationSupport) {
         this.uiBus = uiBus;
+        this.serializationSupport = serializationSupport;
     }
 
 
     @Override
     public PubSubSupport<BusMessage> get() {
         return uiBus;
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
     }
 }

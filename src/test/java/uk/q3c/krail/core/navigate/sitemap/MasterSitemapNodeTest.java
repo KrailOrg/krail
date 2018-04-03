@@ -18,6 +18,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -28,12 +29,13 @@ import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule
-        .class, UIScopeModule.class, EventBusModule.class, UtilModule.class})
+        .class, UIScopeModule.class, EventBusModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, UtilModule.class})
 public class MasterSitemapNodeTest {
 
     @Test

@@ -16,6 +16,7 @@ package uk.q3c.krail.core.eventbus
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.eventbus.BusMessage
+import uk.q3c.util.guice.SerializationSupport
 
 /**
  * Created by David Sowerby on 17 Jan 2016
@@ -24,9 +25,10 @@ class DefaultSessionBusProviderTest extends Specification {
 
     PubSubSupport<BusMessage> sessionBus = Mock(PubSubSupport)
     DefaultSessionBusProvider provider
+    SerializationSupport serializationSupport = Mock()
 
     def setup() {
-        provider = new DefaultSessionBusProvider(sessionBus)
+        provider = new DefaultSessionBusProvider(sessionBus, serializationSupport)
     }
 
     def "get and getSessionBus"() {

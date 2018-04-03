@@ -37,7 +37,7 @@ import java.util.Locale;
 public class UserSitemapNode implements SitemapNode, NodeVisitable, Comparable<UserSitemapNode> {
 
     private final MasterSitemapNode masterNode;
-    private CollationKey collationKey;
+    private transient CollationKey collationKey;
     private String label;
     private int positionIndex = 1;//visible by default;
 

@@ -14,7 +14,9 @@ package uk.q3c.krail.core.navigate.sitemap;
 
 import uk.q3c.krail.i18n.I18NKey;
 
-public class AnnotationSitemapEntry {
+import java.io.Serializable;
+
+public class AnnotationSitemapEntry implements Serializable {
 
     private I18NKey labelSample;
 

@@ -21,6 +21,7 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode
 import uk.q3c.krail.core.navigate.sitemap.Sitemap
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException
 import uk.q3c.krail.eventbus.MessageBus
+import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.testutil.LogMonitor
 
 import java.time.Duration
@@ -42,9 +43,10 @@ class DefaultSitemapQueueTest extends Specification {
     SitemapQueue<MasterSitemap> queue
 
     LogMonitor logMonitor
+    SerializationSupport serializationSupport = Mock(SerializationSupport)
 
     def setup() {
-        queue = new DefaultSitemapQueue<>(globalBus, applicationConfiguration)
+        queue = new DefaultSitemapQueue<>(globalBus, applicationConfiguration, serializationSupport)
 
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(DefaultSitemapQueue)

@@ -19,12 +19,13 @@ import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.service.RelatedServiceExecutor;
+import uk.q3c.util.guice.SerializationSupport;
 
 public class MockServiceF extends MockService {
 
     @Inject
-    protected MockServiceF(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
-        super(translate, globalBusProvider, servicesExecutor);
+    protected MockServiceF(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
         setNameKey(TestLabelKey.ServiceF);
     }
 }

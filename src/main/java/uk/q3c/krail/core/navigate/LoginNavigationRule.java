@@ -13,6 +13,7 @@ package uk.q3c.krail.core.navigate;
 
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Optional;
  * <p>
  * Created by David Sowerby on 08/02/15.
  */
-public interface LoginNavigationRule {
+public interface LoginNavigationRule extends Serializable {
 
     /**
      * Optionally provides a new NavigationState to be navigated to in response to a user login.

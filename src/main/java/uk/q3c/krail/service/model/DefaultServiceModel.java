@@ -18,15 +18,32 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import org.slf4j.Logger;
-import uk.q3c.krail.service.*;
+import uk.q3c.krail.service.Dependency;
+import uk.q3c.krail.service.DependencyDefinition;
+import uk.q3c.krail.service.DependencyInstanceDefinition;
+import uk.q3c.krail.service.Service;
+import uk.q3c.krail.service.ServiceClassGraph;
+import uk.q3c.krail.service.ServiceEdge;
+import uk.q3c.krail.service.ServiceGraph;
+import uk.q3c.krail.service.ServiceInstanceGraph;
+import uk.q3c.krail.service.ServiceKey;
+import uk.q3c.krail.service.ServiceModel;
+import uk.q3c.krail.service.ServiceRegistrationException;
+import uk.q3c.util.guice.SerializationSupport;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-import static com.google.common.base.Preconditions.*;
-import static org.slf4j.LoggerFactory.*;
-import static uk.q3c.krail.service.Dependency.Type.*;
-import static uk.q3c.krail.service.ServiceGraph.Selection.*;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.slf4j.LoggerFactory.getLogger;
+import static uk.q3c.krail.service.Dependency.Type.REQUIRED_ONLY_AT_START;
+import static uk.q3c.krail.service.ServiceGraph.Selection.ALL;
 
 /**
  * Created by David Sowerby on 16 Dec 2015
@@ -37,16 +54,20 @@ public class DefaultServiceModel implements ServiceModel {
 
 
     private static Logger log = getLogger(DefaultServiceModel.class);
-    private final ServiceClassGraph classGraph;
-    private final ServiceInstanceGraph instanceGraph;
-    private Map<ServiceKey, Provider<Service>> registeredServices;
+    private transient final ServiceClassGraph classGraph;
+    private transient final ServiceInstanceGraph instanceGraph;
+    private transient Set<DependencyDefinition> configuredDependencies;
+    private transient Map<ServiceKey, Provider<Service>> registeredServices;
+    private SerializationSupport serializationSupport;
 
     @Inject
     public DefaultServiceModel(Set<DependencyDefinition> configuredDependencies, ServiceClassGraph classGraph, ServiceInstanceGraph instanceGraph,
-                               Map<ServiceKey, Provider<Service>> registeredServices) {
+                               Map<ServiceKey, Provider<Service>> registeredServices, SerializationSupport serializationSupport) {
+        this.configuredDependencies = configuredDependencies;
         this.classGraph = classGraph;
         this.instanceGraph = instanceGraph;
         this.registeredServices = registeredServices;
+        this.serializationSupport = serializationSupport;
         processConfiguredDependencies(configuredDependencies);
     }
 
@@ -206,6 +227,11 @@ public class DefaultServiceModel implements ServiceModel {
 
     }
 
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
+        processConfiguredDependencies(configuredDependencies);
+    }
 
 }
 

@@ -20,7 +20,10 @@ import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException;
 import uk.q3c.krail.eventbus.MessageBus;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -34,14 +37,16 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class DefaultSitemapQueue<T extends Sitemap> implements SitemapQueue<T> {
     private static Logger log = getLogger(DefaultSitemapQueue.class);
-    private final MessageBus messageBus;
+    private final transient MessageBus messageBus;
     private final ApplicationConfiguration applicationConfiguration;
+    private SerializationSupport serializationSupport;
 
     private BlockingQueue<T> queue;
 
     @Inject
-    protected DefaultSitemapQueue(MessageBus messageBus, ApplicationConfiguration applicationConfiguration) {
+    protected DefaultSitemapQueue(MessageBus messageBus, ApplicationConfiguration applicationConfiguration, SerializationSupport serializationSupport) {
         this.applicationConfiguration = applicationConfiguration;
+        this.serializationSupport = serializationSupport;
         queue = new ArrayBlockingQueue<>(10, true);
         this.messageBus = messageBus;
     }
@@ -108,5 +113,10 @@ public class DefaultSitemapQueue<T extends Sitemap> implements SitemapQueue<T> {
     @Override
     public int size() {
         return queue.size();
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
     }
 }

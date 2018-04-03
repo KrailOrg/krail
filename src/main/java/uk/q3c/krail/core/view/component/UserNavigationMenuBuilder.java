@@ -13,7 +13,9 @@
 
 package uk.q3c.krail.core.view.component;
 
-public interface UserNavigationMenuBuilder {
+import java.io.Serializable;
+
+public interface UserNavigationMenuBuilder extends Serializable {
 
     void build();
 

@@ -5,13 +5,18 @@ import org.vaadin.easybinder.data.AutoBinder
 import org.vaadin.easybinder.data.BasicBinder
 import org.vaadin.easybinder.data.ReflectionBinder
 import uk.q3c.krail.core.validation.KrailValidationModule
+import uk.q3c.util.guice.SerializationSupport
+import java.io.IOException
+import java.io.ObjectInputStream
+import java.io.Serializable
 import javax.validation.Validator
+
 
 /**
  * Krail needs to use a [validator] that is aware of its I18N mechanism.  The [validator] itself is constructed in the [KrailValidationModule],
  * and then injected into one of the 3 binder types provided by [EasyBinder](https://github.com/ljessendk/easybinder)
  */
-class EasyBinder @Inject constructor(val validator: Validator) {
+class EasyBinder @Inject constructor(@Transient val validator: Validator, val serializationSupport: SerializationSupport) : Serializable {
 
     fun <BEAN> auto(clazz: Class<BEAN>): AutoBinder<BEAN> {
         return KrailAutoBinder<BEAN>(validator, clazz)
@@ -23,6 +28,12 @@ class EasyBinder @Inject constructor(val validator: Validator) {
 
     fun <BEAN> basic(clazz: Class<BEAN>): BasicBinder<BEAN> {
         return KrailBasicBinder<BEAN>(validator, clazz)
+    }
+
+    @Throws(ClassNotFoundException::class, IOException::class)
+    private fun readObject(inputStream: ObjectInputStream) {
+        inputStream.defaultReadObject()
+        serializationSupport.deserialize(this)
     }
 }
 

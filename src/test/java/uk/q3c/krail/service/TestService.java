@@ -17,6 +17,7 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
 public class TestService extends AbstractService {
 
@@ -33,8 +34,8 @@ public class TestService extends AbstractService {
     Service serviceD;
 
     protected TestService(Translate translate, Service serviceA, Service serviceB, Service serviceC, Service serviceD,
-                          MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
-        super(translate, globalBusProvider, servicesExecutor);
+                          MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
         this.serviceA = serviceA;
         this.serviceB = serviceB;
         this.serviceC = serviceC;
@@ -47,12 +48,12 @@ public class TestService extends AbstractService {
     }
 
     @Override
-    protected void doStop() throws Exception {
+    protected void doStop() {
 
     }
 
     @Override
-    protected void doStart() throws Exception {
+    protected void doStart() {
 
     }
 }

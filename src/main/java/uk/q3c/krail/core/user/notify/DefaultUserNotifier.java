@@ -60,7 +60,8 @@ public class DefaultUserNotifier implements UserNotifier {
     }
 
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
-        serializationSupport.deserialize(this, inputStream);
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
     }
 
 }

@@ -5,6 +5,8 @@ import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.util.guice.SerializationSupport
+
 /**
  * Created by David Sowerby on 18 Aug 2017
  */
@@ -15,8 +17,8 @@ class TestService0 extends AbstractService implements Service {
     boolean throwResetException = false
 
     @Inject
-    protected TestService0(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor) {
-        super(translate, globalBusProvider, servicesExecutor)
+    protected TestService0(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, servicesExecutor, serializationSupport)
     }
 
     @Override

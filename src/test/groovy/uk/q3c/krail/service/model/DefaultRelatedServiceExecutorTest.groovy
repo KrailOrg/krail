@@ -22,6 +22,7 @@ import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.service.*
 import uk.q3c.krail.service.test.MockService
+import uk.q3c.util.guice.SerializationSupport
 
 import static uk.q3c.krail.service.RelatedServiceExecutor.Action.*
 import static uk.q3c.krail.service.Service.*
@@ -45,21 +46,22 @@ class DefaultRelatedServiceExecutorTest extends Specification {
     ServiceKey serviceKeyA
     ServiceKey serviceKeyB
     ServiceKey serviceKeyC
+    SerializationSupport serializationSupport = Mock()
 
 
     def setup() {
 
         globalBusProvider.get() >> globalBus
         exec = new DefaultRelatedServiceExecutor(servicesModel, translate)
-        service = new MockService(translate, globalBusProvider, exec)
+        service = new MockService(translate, globalBusProvider, exec, serializationSupport)
         service.setNameKey(LabelKey.Active_Source)
         exec.setService(service)
 
-        serviceA = new MockService(translate, globalBusProvider, mockExec)
+        serviceA = new MockService(translate, globalBusProvider, mockExec, serializationSupport)
         serviceA.setNameKey(LabelKey.Alphabetic_Ascending)
-        serviceB = new MockService(translate, globalBusProvider, mockExec)
+        serviceB = new MockService(translate, globalBusProvider, mockExec, serializationSupport)
         serviceB.setNameKey(LabelKey.Breadcrumb_is_Visible)
-        serviceC = new MockService(translate, globalBusProvider, mockExec)
+        serviceC = new MockService(translate, globalBusProvider, mockExec, serializationSupport)
         serviceC.setNameKey(LabelKey.Export_complete)
 
         serviceKey = service.getServiceKey()

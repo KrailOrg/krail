@@ -16,6 +16,7 @@ package uk.q3c.krail.core.navigate.sitemap.comparator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Comparator;
  *
  * @author David Sowerby
  */
-public interface UserSitemapSorters {
+public interface UserSitemapSorters extends Serializable {
 
     void setOptionSortAscending(boolean ascending);
 

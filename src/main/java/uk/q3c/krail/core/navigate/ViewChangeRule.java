@@ -13,12 +13,14 @@ package uk.q3c.krail.core.navigate;
 
 import uk.q3c.krail.core.view.KrailView;
 
+import java.io.Serializable;
+
 /**
  * A rule which is applied before a request change to navigation state (that is, a change of view) is made.
  * <p>
  * Created by David Sowerby on 14/03/15.
  */
-public interface ViewChangeRule {
+public interface ViewChangeRule extends Serializable {
 
     /**
      * Test for whether a change of view should be allowed.

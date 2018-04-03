@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
@@ -45,6 +46,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.guice.SerializationSupport;
+import uk.q3c.util.guice.SerializationSupportModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
@@ -52,7 +54,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, InMemoryModule.class, TestVaadinSessionScopeModule.class, UtilModule.class})
+@GuiceContext({TestOptionModule.class, InMemoryModule.class, TestVaadinSessionScopeModule.class, UtilModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 public class DefaultApplicationUITest {
 
 

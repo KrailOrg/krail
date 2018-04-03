@@ -238,7 +238,8 @@ class DefaultSubjectProvider @Inject constructor(
 
     @Throws(ClassNotFoundException::class, IOException::class)
     private fun readObject(inputStream: ObjectInputStream) {
-        serializationSupport.deserialize(this, inputStream)
+        inputStream.defaultReadObject()
+        serializationSupport.deserialize(this)
     }
 }
 
