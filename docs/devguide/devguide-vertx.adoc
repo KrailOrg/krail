@@ -1,6 +1,6 @@
 = Vert.x and Guice
 
-There are a couple of libraries on Github which provide Guice integration with Vert.x, but don;t meet Krail's requirements.
+There are a couple of libraries on Github which provide Guice integration with Vert.x, but don't meet Krail's requirements.
 
 == Injector scope
 

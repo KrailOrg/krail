@@ -16,4 +16,4 @@ Environment specific bindings are defined in `ServletEnvironmentModule` and `Ver
 
 == Bootstrap file
 
-This is described in the link:userguide/userguide-bootstrap.md[User Guide]
+This is described in the link:userguide/userguide-bootstrap.adoc[User Guide]

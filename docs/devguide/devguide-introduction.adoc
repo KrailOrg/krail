@@ -1,5 +1,15 @@
 = Introduction to the Developer Guide
 
-Please note that this guide is currently a fairly random collection of notes, and unlike the Tutorial is not kept up to date with releases.
+This section is aimed at those who are developing Krail itself, or are just interested in the reasons behind some of the design choices made.
 
-Please treat its content with caution!
+= Accuracy
+
+Please note that some of this this guide is still a fairly random collection of notes, and has not kept up to date with releases.
+
+== Up to date sections
+
+These sections, however, are considered to be up to date:
+
+- link:devguide/devguide-bootstrap.adoc[Bootstrap]
+- link:devguide/devguide-serialisation.adoc[Serialization]
+- link:devguide/devguide-vertx.adoc[Vertx]
