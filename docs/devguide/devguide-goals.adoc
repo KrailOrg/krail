@@ -47,7 +47,7 @@ These goals relate only to Krail itself, not the application developed on Krail.
 
 == Spek Limitation
 
-The current version of Spek (1.1.5) does not play well with JUnit.  Specifically causes the Spek tests not to execute, when JUnit is used in the same test run.  This can lead to false positives, and the only solution is to hold Spek tests separately.
+The current version of Spek (1.1.5) does not play well with JUnit.  Specifically this causes the Spek tests not to execute, when JUnit is used in the same test run.  This can lead to false positives, and the only solution is to hold Spek tests separately.
 
 It is hoped that version 2.0 of Spek will resolve this
 
