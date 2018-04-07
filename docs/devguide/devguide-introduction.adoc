@@ -10,6 +10,7 @@ Please note that some of this this guide is still a fairly random collection of 
 
 These sections, however, are considered to be up to date:
 
+- link:devguide/devguide-goals.adoc[Goals]
 - link:devguide/devguide-bootstrap.adoc[Bootstrap]
 - link:devguide/devguide-serialisation.adoc[Serialization]
 - link:devguide/devguide-vertx.adoc[Vertx]
