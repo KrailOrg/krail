@@ -30,7 +30,7 @@ In order to meet objective 1), any potential resolution requires that the Guice 
 
 == Use of Injector.injectMembers
 
-This would be very easy to implement in a readObject - a simply call (hhoks for the developer to use before and after the injections have been ignored for this example):
+This would be very easy to implement in a readObject - a simply call (hooks for the developer to use before and after the injections have been ignored for this example):
 
 [source,java]
 ----
