@@ -18,14 +18,13 @@ import com.google.inject.Inject;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.util.guice.SerializationSupport;
 
 public class MockServiceA extends MockService {
 
     @Inject
-    protected MockServiceA(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
-        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
+    protected MockServiceA(Translate translate, MessageBus globalBusProvider, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, serializationSupport);
         setNameKey(TestLabelKey.ServiceA);
     }
 

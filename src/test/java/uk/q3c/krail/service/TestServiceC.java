@@ -26,9 +26,9 @@ public class TestServiceC extends AbstractService {
 
 
     @Inject
-    protected TestServiceC(Translate translate, ServiceModel serviceModel,
-                           MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
-        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
+    protected TestServiceC(Translate translate,
+                           MessageBus globalBusProvider, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, serializationSupport);
     }
 
     @Override

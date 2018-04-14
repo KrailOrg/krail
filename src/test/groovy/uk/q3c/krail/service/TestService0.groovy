@@ -17,8 +17,8 @@ class TestService0 extends AbstractService implements Service {
     boolean throwResetException = false
 
     @Inject
-    protected TestService0(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
-        super(translate, globalBusProvider, servicesExecutor, serializationSupport)
+    protected TestService0(Translate translate, MessageBus globalBusProvider, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, serializationSupport)
     }
 
     @Override

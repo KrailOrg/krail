@@ -28,8 +28,8 @@ public class TestServiceD extends AbstractService {
 
     @Inject
     protected TestServiceD(Translate translate,
-                           MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
-        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
+                           MessageBus globalBusProvider, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, serializationSupport);
     }
 
     @Override

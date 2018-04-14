@@ -29,7 +29,6 @@ class ServiceExceptionTests extends Specification {
 
         when:
 
-        ServiceRegistrationException sre = new ServiceRegistrationException(msg)
         ServiceKeyException ske = new ServiceKeyException(msg)
         ServiceStatusException sse = new ServiceStatusException(msg)
         ServiceException se = new ServiceException(msg)
@@ -38,7 +37,6 @@ class ServiceExceptionTests extends Specification {
 
         sse.getMessage().equals(msg)
         ske.getMessage().equals(msg)
-        sre.getMessage().equals(msg)
         se.getMessage().equals(msg)
     }
 }

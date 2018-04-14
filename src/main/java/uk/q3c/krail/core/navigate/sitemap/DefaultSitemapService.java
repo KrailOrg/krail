@@ -29,7 +29,6 @@ import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.service.AbstractService;
-import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.util.clazz.ClassNameUtils;
 import uk.q3c.util.guice.SerializationSupport;
@@ -66,8 +65,8 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
             directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Provider<MasterSitemap> sitemapProvider,
                                     SitemapFinisher sitemapFinisher, MasterSitemapQueue masterSitemapQueue, ApplicationConfiguration configuration,
                                     MessageBus globalBusProvider, ResourceUtils resourceUtils, ClassNameUtils
-                                            classNameUtils, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
-        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
+                                            classNameUtils, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, serializationSupport);
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
         this.sitemapProvider = sitemapProvider;

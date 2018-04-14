@@ -24,13 +24,12 @@ import uk.q3c.util.guice.SerializationSupport;
 @Singleton
 public class TestServiceA extends AbstractService {
 
-    @Dependency
     private TestServiceB serviceB;
 
     @Inject
     protected TestServiceA(Translate translate,
-                           MessageBus globalBusProvider, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
-        super(translate, globalBusProvider, servicesExecutor, serializationSupport);
+                           MessageBus globalBusProvider, SerializationSupport serializationSupport) {
+        super(translate, globalBusProvider, serializationSupport);
     }
 
     @Override

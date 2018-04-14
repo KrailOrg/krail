@@ -16,37 +16,34 @@ package uk.q3c.krail.service.monitor
 import spock.lang.Specification
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.krail.service.*
 import uk.q3c.util.guice.SerializationSupport
 
 import java.time.LocalDateTime
 
-import static uk.q3c.krail.service.Service.State.*
+import static uk.q3c.krail.service.State.*
 
 class DefaultServiceMonitorTest extends Specification {
 
     MessageBus globalBus = Mock(MessageBus)
-    MessageBus globalBusProvider = Mock(MessageBus)
-    Translate translate = Mock(Translate)
-    RelatedServiceExecutor servicesExecutor = Mock(RelatedServiceExecutor)
+    Translate translate = new MockTranslate()
     Service serviceA
     SerializationSupport serializationSupport = Mock()
 
     def setup() {
-        servicesExecutor.execute(_, _) >> true
-        globalBusProvider.get() >> globalBus
-        serviceA = new TestService0(translate, globalBusProvider, servicesExecutor, serializationSupport)
+        serviceA = new TestService0(translate, globalBus, serializationSupport)
     }
 
 
     def "initial message, 'registers' service, records state, then change reflected correctly, then clear()"() {
         given:
-        DefaultServiceMonitor monitor = new DefaultServiceMonitor(globalBusProvider)
+        DefaultServiceMonitor monitor = new DefaultServiceMonitor(globalBus)
         serviceA.start()
 
         when:
 
-        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, INITIAL, RUNNING, Service.Cause.STARTED))
+        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, INITIAL, RUNNING, Cause.STARTED))
 
         then:
 
@@ -57,10 +54,11 @@ class DefaultServiceMonitorTest extends Specification {
         LocalDateTime startTime = status.getLastStartTime()
         status.getLastStartTime() != null
         status.getLastStartTime().equals(status.getStatusChangeTime())
+        status.getLastStopTime().equals(LocalDateTime.MIN)
 
         when:
         serviceA.stop()
-        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, RUNNING, STOPPED, Service.Cause.STOPPED))
+        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, RUNNING, STOPPED, Cause.STOPPED))
         status = monitor.getServiceStatus(serviceA)
 
         then:

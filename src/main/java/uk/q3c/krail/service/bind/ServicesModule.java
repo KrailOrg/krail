@@ -12,108 +12,29 @@
  */
 package uk.q3c.krail.service.bind;
 
-import com.google.inject.Provider;
+import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
-import com.google.inject.spi.InjectionListener;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import uk.q3c.krail.service.*;
-import uk.q3c.krail.service.model.*;
+import uk.q3c.krail.service.Service;
 import uk.q3c.util.reflect.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
 /**
- * Provides bindings and AOP in support of {@link Service}s.  Inherits from {@link AbstractServiceModule} to ensure there is always a map binding for
- * registered service, even if it is empty
+ * Provides bindings and AOP in support of {@link Service}s.
  * <p>
- * <p>
- * Acknowledgement: developed originally from code contributed by https://github.com/lelmarir
  *
  * @author David Sowerby
  */
-public class ServicesModule extends AbstractServiceModule {
+public class ServicesModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        super.configure();
-        bindServicesModel();
-        bindServiceDependencyScanner();
-        bindServicesExecutor();
-
-        final Provider<ServiceModel> servicesModelProvider = this.getProvider(ServiceModel.class);
-        final Provider<ServiceDependencyScanner> scannerProvider = this.getProvider(ServiceDependencyScanner.class);
-
-        bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesModelProvider, scannerProvider));
         bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(), new FinalizeMethodInterceptor());
-
-    }
-
-    protected void bindServicesExecutor() {
-        bind(RelatedServiceExecutor.class).to(DefaultRelatedServiceExecutor.class);
-    }
-
-    @Override
-    protected void registerServices() {
-        // There are none
-    }
-
-    @Override
-    protected void defineDependencies() {
-        // There are none
-    }
-
-    protected void bindServicesModel() {
-        bind(ServiceModel.class).to(DefaultServiceModel.class);
-        bind(ServiceClassGraph.class).to(DefaultServiceClassGraph.class);
-        bind(ServiceInstanceGraph.class).to(DefaultServiceInstanceGraph.class);
-    }
-
-
-    protected void bindServiceDependencyScanner() {
-        bind(ServiceDependencyScanner.class).to(DefaultServiceDependencyScanner.class
-        );
-    }
-
-    /**
-     * This listener is matched using the {@link Service} interface.  It registers the service with ServiceGraph, and
-     * passes the global event bus to the service through the init() method
-     *
-     * @author David Sowerby
-     */
-    private static class ServicesListener implements TypeListener {
-        private Provider<ServiceDependencyScanner> scannerProvider;
-        private Provider<ServiceModel> servicesModelProvider;
-
-        public ServicesListener(Provider<ServiceModel> servicesModelProvider,
-                                Provider<ServiceDependencyScanner> scannerProvider) {
-            this.servicesModelProvider = servicesModelProvider;
-            this.scannerProvider = scannerProvider;
-        }
-
-
-        @Override
-        public <I> void hear(final TypeLiteral<I> type, TypeEncounter<I> encounter) {
-            InjectionListener<Object> listener = new InjectionListener<Object>() {
-                @Override
-                public void afterInjection(Object injectee) {
-                    // cast is safe - if not, the matcher is wrong
-                    Service service = (Service) injectee;
-                    //get dependencies from annotations
-                    scannerProvider.get()
-                                   .scan((Service) injectee);
-                    ServiceModel serviceModel = servicesModelProvider.get();
-                    serviceModel.addService(service);
-
-                }
-            };
-            encounter.register(listener);
-        }
 
     }
 

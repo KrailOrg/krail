@@ -12,20 +12,16 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.krail.config.i18n.ConfigurationLabelKey;
-import uk.q3c.krail.core.i18n.LabelKey;
+import com.google.inject.AbstractModule;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.set.DefaultMasterSitemapQueue;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
-import uk.q3c.krail.service.AbstractServiceModule;
-import uk.q3c.krail.service.Dependency;
 
-public class SitemapModule extends AbstractServiceModule {
+public class SitemapModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        super.configure();
         bindMasterSitemap();
         bindUserSitemap();
         bindService();
@@ -36,16 +32,6 @@ public class SitemapModule extends AbstractServiceModule {
 
     protected void bindMasterSitemapQueue() {
         bind(MasterSitemapQueue.class).to(DefaultMasterSitemapQueue.class);
-    }
-
-    @Override
-    protected void registerServices() {
-        registerService(LabelKey.Sitemap_Service, SitemapService.class);
-    }
-
-    @Override
-    protected void defineDependencies() {
-        addDependency(LabelKey.Sitemap_Service, ConfigurationLabelKey.Application_Configuration_Service, Dependency.Type.REQUIRED_ONLY_AT_START);
     }
 
     protected void bindMasterSitemap() {

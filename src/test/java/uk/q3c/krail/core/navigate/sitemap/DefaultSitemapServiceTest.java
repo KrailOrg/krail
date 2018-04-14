@@ -49,9 +49,9 @@ import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
-import uk.q3c.krail.service.Service;
-import uk.q3c.krail.service.ServiceModel;
+import uk.q3c.krail.service.Cause;
 import uk.q3c.krail.service.ServiceStatus;
+import uk.q3c.krail.service.State;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.DefaultResourceUtils;
 import uk.q3c.krail.util.ResourceUtils;
@@ -85,8 +85,7 @@ public class DefaultSitemapServiceTest {
     private final int STANDARD_NODE_COUNT = 5;
     @Inject
     DefaultSitemapService service;
-    @Inject
-    ServiceModel serviceModel;
+
     @Inject
     MasterSitemapQueue masterSitemapQueue;
     HierarchicalINIConfiguration iniConfig;
@@ -109,7 +108,6 @@ public class DefaultSitemapServiceTest {
         iniConfig = new HierarchicalINIConfiguration(inifile);
         iniConfig.clear();
         iniConfig.save();
-        serviceModel.addService(service.getServiceKey());
     }
 
     @After
@@ -227,8 +225,8 @@ public class DefaultSitemapServiceTest {
         // when
         ServiceStatus status = service.start();
         // then
-        assertThat(status.getState()).isEqualTo(Service.State.STOPPED);
-        assertThat(status.getCause()).isEqualTo(Service.Cause.FAILED_TO_START);
+        assertThat(status.getState()).isEqualTo(State.STOPPED);
+        assertThat(status.getCause()).isEqualTo(Cause.FAILED_TO_START);
 
     }
 

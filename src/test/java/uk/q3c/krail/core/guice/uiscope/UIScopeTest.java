@@ -67,7 +67,6 @@ import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.AbstractService;
-import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.UtilsModule;
@@ -182,9 +181,8 @@ public class UIScopeTest {
     static class MockSitemapService extends AbstractService implements SitemapService {
 
         @Inject
-        protected MockSitemapService(Translate translate, MessageBus globalBusProvider, RelatedServiceExecutor
-                servicesExecutor, SerializationSupport serializationSupport) {
-            super(translate, globalBusProvider, servicesExecutor, serializationSupport);
+        protected MockSitemapService(Translate translate, MessageBus globalBusProvider, SerializationSupport serializationSupport) {
+            super(translate, globalBusProvider, serializationSupport);
         }
 
         @Override

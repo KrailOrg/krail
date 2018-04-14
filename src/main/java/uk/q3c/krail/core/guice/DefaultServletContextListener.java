@@ -16,7 +16,7 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.service.ServiceModel;
+import uk.q3c.krail.service.ServiceMonitor;
 
 import javax.servlet.ServletContextEvent;
 
@@ -43,7 +43,7 @@ public class DefaultServletContextListener extends GuiceServletContextListener {
         log.info("Stopping service");
         try {
             if (InjectorHolder.hasInjector()) {
-                InjectorHolder.getInjector().getInstance(ServiceModel.class)
+                InjectorHolder.getInjector().getInstance(ServiceMonitor.class)
                         .stopAllServices();
             } else {
                 log.debug("Injector has not been constructed, no call made to stop service");
