@@ -43,7 +43,6 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
-import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.guice.SerializationSupportModule;
@@ -53,7 +52,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ServicesModule.class, TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
+@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
         ShiroVaadinModule.class, KrailI18NModule.class, SitemapModule.class, UserModule.class, InMemoryModule.class, TestOptionModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class,
         VaadinEventBusModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class,})

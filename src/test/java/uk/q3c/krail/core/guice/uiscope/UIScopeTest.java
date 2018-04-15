@@ -67,7 +67,6 @@ import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.AbstractService;
-import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
@@ -130,7 +129,7 @@ public class UIScopeTest {
         // when
 
         injector = Guice.createInjector(new PushModule(), new TestModule(), new KrailApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(),
-                new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
+                new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestKrailI18NModule(),
                 new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(),
                 new NavigationModule(), new VaadinEventBusModule(), new EventBusModule(), new UtilModule(), new DataModule(),
                 new DataTypeModule(), new UtilsModule(), new InMemoryModule().provideOptionDao(), new ServletEnvironmentModule(), new SerializationSupportModule());

@@ -51,7 +51,6 @@ import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
-import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.startup.DefaultStartupModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
@@ -93,8 +92,6 @@ public class CoreBindingsCollator implements BindingsCollator {
         modules.add(new UIScopeModule());
         modules.add(new VaadinSessionScopeModule());
 
-        modules.add(servicesModule());
-
         modules.add(shiroModule());
         modules.add(shiroVaadinModule());
         modules.add(shiroAopModule());
@@ -133,9 +130,6 @@ public class CoreBindingsCollator implements BindingsCollator {
         modules.add(new SerializationSupportModule());
     }
 
-    protected Module servicesModule() {
-        return new ServicesModule();
-    }
 
     protected Module sitemapModule() {
         return new SitemapModule();

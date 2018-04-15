@@ -41,7 +41,6 @@ import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
-import uk.q3c.krail.service.bind.ServicesModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.guice.SerializationSupportModule;
@@ -53,7 +52,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class,
-        UIScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, EventBusModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class, UtilModule.class, KrailApplicationConfigurationModule.class})
+        UIScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, EventBusModule.class, SitemapModule.class, UtilsModule.class, UtilModule.class, KrailApplicationConfigurationModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 
 
