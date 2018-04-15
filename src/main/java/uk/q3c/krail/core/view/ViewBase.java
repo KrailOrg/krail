@@ -223,11 +223,13 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     /**
      * By default does nothing but can be overridden to execute code before any other action is taken for deserialization.
-     * It could be used to set exclusions for {@link #serializationSupport}
+     * It cannot be used to set exclusions for [serializationSupport], as [serializationSupport] will be deserialized
+     * after this call
      */
     protected void beforeDeserialization() {
 
     }
+
 
     /**
      * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
