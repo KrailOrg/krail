@@ -16,6 +16,7 @@ package uk.q3c.krail.core.navigate;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -38,6 +39,7 @@ import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.guice.InjectorHolder;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;
@@ -168,9 +170,12 @@ public class DefaultNavigatorTest {
     @Inject
     private ComponentIdGenerator componentIdGenerator;
 
+    @Inject
+    Injector injector;
+
     @Before
     public void setup() {
-
+        InjectorHolder.setInjector(injector);
         userSitemap.populate();
         when(builder.getUserSitemap()).thenReturn(userSitemap);
         when(uiProvider.get()).thenReturn(scopedUI);

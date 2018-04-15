@@ -41,6 +41,9 @@ class ServletInjectorLocator : InjectorLocator {
     }
 
     override fun get(): Injector {
+        if (!InjectorHolder.hasInjector()) {
+            InjectorHolder.setInjector(InjectorFactory().createInjector(SERVLET))
+        }
         return InjectorHolder.getInjector()
     }
 }

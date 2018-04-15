@@ -65,9 +65,12 @@ public class DefaultServletContextListener extends GuiceServletContextListener {
      */
     @Override
     public Injector getInjector() {
-        InjectorFactory factory = new InjectorFactory();
-        return factory.createInjector(RuntimeEnvironment.SERVLET);
-
+        if (!InjectorHolder.hasInjector()) {
+            InjectorFactory factory = new InjectorFactory();
+            // this creates the injector and puts it in InjectorHolder via InjectorLocator
+            factory.createInjector(RuntimeEnvironment.SERVLET);
+        }
+        return InjectorHolder.getInjector();
     }
 
 
