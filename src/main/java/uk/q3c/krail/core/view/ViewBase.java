@@ -230,17 +230,16 @@ public abstract class ViewBase implements KrailView, Serializable {
     }
 
     /**
-     * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
-     * has injected Guice dependencies. It could be used to set exclusions for {@link #serializationSupport}
+     * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
+     * injects Guice dependencies. It could be used to set exclusions for {@link #serializationSupport}
      */
     protected void beforeTransientInjection() {
 
     }
 
-
     /**
-     * By default does nothing but can be overridden to populate transient fields before {@link #serializationSupport}
-     * injects Guice dependencies
+     * By default does nothing but can be overridden to populate transient fields after {@link #serializationSupport}
+     * has injected Guice dependencies.
      */
     protected void afterTransientInjection() {
 
