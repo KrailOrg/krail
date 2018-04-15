@@ -43,7 +43,6 @@ public class VaadinSessionScope implements Scope {
 
     public VaadinSessionScope() {
         super();
-        log.debug("creating VaadinSessionScope {}", this);
     }
 
     public static VaadinSessionScope getCurrent() {
@@ -54,7 +53,9 @@ public class VaadinSessionScope implements Scope {
                 scope = current;
                 if (scope == null) {
                     current = new VaadinSessionScope();
+                    log.debug("created new VaadinSessionScope");
                     scope = current;
+                    log.debug("new VaadinSessionScope is current");
                 }
             }
         }

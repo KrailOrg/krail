@@ -170,7 +170,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
      */
     @Override
     protected void init(VaadinRequest request) {
-
+        log.debug("initialising ScopedUI");
         VaadinSession session = getSession();
 //        session.setConverterFactory(converterFactory);
 

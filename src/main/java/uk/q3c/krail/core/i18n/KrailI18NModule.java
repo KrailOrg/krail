@@ -13,6 +13,8 @@
 package uk.q3c.krail.core.i18n;
 
 import com.google.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.view.component.DefaultLocaleContainer;
@@ -40,10 +42,12 @@ import uk.q3c.krail.i18n.util.DefaultPatternUtility;
  */
 
 public class KrailI18NModule extends I18NModule {
-
+    private static Logger log = LoggerFactory.getLogger(KrailI18NModule.class);
     @Override
     protected void configure() {
+        log.debug("configure() in I18NModule");
         super.configure();
+        log.debug("configure() in KrailI18NModule");
         bindFieldScanner();
         bindProcessor();
         bindPatternUtility();

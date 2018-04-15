@@ -36,6 +36,9 @@ public class DefaultServletContextListener extends GuiceServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
+        log.debug("Servlet context listener initialised");
+//        ApplicationStartup startup = InjectorHolder.getInjector().getInstance(ApplicationStartup.class);
+//        startup.invoke();
     }
 
     @Override
@@ -62,7 +65,9 @@ public class DefaultServletContextListener extends GuiceServletContextListener {
      */
     @Override
     public Injector getInjector() {
-        return InjectorHolder.getInjector();
+        InjectorFactory factory = new InjectorFactory();
+        return factory.createInjector(RuntimeEnvironment.SERVLET);
+
     }
 
 

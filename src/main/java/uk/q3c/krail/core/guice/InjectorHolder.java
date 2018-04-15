@@ -1,6 +1,7 @@
 package uk.q3c.krail.core.guice;
 
 import com.google.inject.Injector;
+import uk.q3c.krail.config.ConfigurationException;
 
 /**
  *
@@ -14,7 +15,7 @@ public class InjectorHolder {
 
     public static Injector getInjector() {
         if (injector == null) {
-            new InjectorFactory().createInjector(RuntimeEnvironment.SERVLET);
+            throw new ConfigurationException("Injector should have been created before this method is called");
         }
         return injector;
     }

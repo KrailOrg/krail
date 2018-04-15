@@ -50,31 +50,48 @@ enum class RuntimeEnvironment { SERVLET, VERTX }
 
 class InjectorFactory {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    fun createInjector(runtimeEnvironment: RuntimeEnvironment) {
+
+
+    /**
+     * Selects the correct environment module propagates call to other [createInjector]
+     */
+    fun createInjector(runtimeEnvironment: RuntimeEnvironment): Injector {
         val bootstrapModule = if (runtimeEnvironment == SERVLET) {
             KrailServletBootstrapModule()
         } else {
             KrailVertxBootstrapModule()
         }
-        createInjector(runtimeEnvironment, bootstrapModule)
+        return createInjector(runtimeEnvironment, bootstrapModule)
     }
 
+    /**
+     * Creates a bootstrap injector first, so that the location for the Injector can be established.
+     *
+     * Then creates the real injector and puts it in the correct place for the environment (determined by the
+     * environment specific implementation of [InjectorLocator])
+     */
 
-    fun createInjector(runtimeEnvironment: RuntimeEnvironment, bootstrapModule: Module) {
+    fun createInjector(runtimeEnvironment: RuntimeEnvironment, bootstrapModule: Module): Injector {
         val bootstrapInjector = Guice.createInjector(bootstrapModule)
+        log.debug("bootstrap injector created")
         val bootstrapLoader = bootstrapInjector.getInstance(BootstrapLoader::class.java)
         val bootstrapConfig = bootstrapLoader.load()
+        log.debug("bootstrap config loaded: $bootstrapConfig")
         val environmentConfig =
                 when (runtimeEnvironment) {
                     SERVLET -> bootstrapConfig.servletConfig
                     VERTX -> bootstrapConfig.vertxConfig
                 }
+        log.debug("environment config is: $environmentConfig")
         val collatorClass = Class.forName(bootstrapConfig.collator)
+        log.debug("collator class identified, $collatorClass")
         val collator = bootstrapInjector.getInstance(collatorClass) as BindingsCollator
+        log.debug("collator instantiated")
         val additionalModuleNames = environmentConfig.additionalModules
         val additionalModules: MutableList<Module> = mutableListOf()
         for (moduleName in additionalModuleNames) {
             val moduleClass = Class.forName(moduleName)
+            log.debug("instantiating additional module: $moduleName")
             val module = bootstrapInjector.getInstance(moduleClass) as Module
             additionalModules.add(module)
         }
@@ -82,13 +99,16 @@ class InjectorFactory {
         allModules.addAll(collator.allModules())
         allModules.addAll(additionalModules)
         allModules.add(bootstrapModule) // we need the InjectorLocator binding
+        log.debug("module list composed for real injector")
         val injectorLocator = bootstrapInjector.getInstance(InjectorLocator::class.java)
+        log.debug("injectorLocator is a ${injectorLocator.javaClass}")
         val realInjector = Guice.createInjector(allModules)
-        log.debug("injector created")
+        log.debug("application injector created")
         val securityManager: SecurityManager = realInjector.getInstance(SecurityManager::class.java)
         SecurityUtils.setSecurityManager(securityManager)
         log.debug("Security manager set")
         injectorLocator.put(realInjector)
+        return realInjector
     }
 }
 
@@ -101,7 +121,6 @@ interface BootstrapLoader {
 
 class VertxBootstrapLoader : BootstrapLoader {
     override fun load(): BootstrapConfig {
-        val filesystem = Vertx.vertx().fileSystem()
         val content = this.javaClass.getResourceAsStream("/$bootstrapYml")
         return BootstrapYAMLReader().read(content)
     }
@@ -172,8 +191,8 @@ class BootstrapYAMLReader {
     }
 }
 
-class BootstrapConfig(val version: Int = 1, val collator: String, val modules: List<String>, val servletConfig: EnvironmentConfig, val vertxConfig: EnvironmentConfig)
-class EnvironmentConfig(val additionalModules: List<String> = listOf())
+data class BootstrapConfig(val version: Int = 1, val collator: String, val modules: List<String>, val servletConfig: EnvironmentConfig, val vertxConfig: EnvironmentConfig)
+data class EnvironmentConfig(val additionalModules: List<String> = listOf())
 
 class BootstrapConfigurationException(msg: String) : RuntimeException(msg)
 

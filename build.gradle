@@ -92,11 +92,8 @@ dependencies {
     // EasyBinder
     compile 'org.vaadin:easybinder:0.5'
 
-
     // JWT
     compile 'io.jsonwebtoken:jjwt:0.9.0'
-
-
 
     //Krail
     compile 'uk.q3c.krail:krail-option:0.16.0.0'
@@ -137,7 +134,10 @@ dependencies {
     compile 'org.reflections:reflections:0.9.10'
 
     //Validation
-    compile 'org.apache.bval:bval-jsr303:0.5'
+    compile('org.apache.bval:bval-jsr303:0.5') {
+        exclude group: 'org.apache.commons'
+        exclude group: 'commons-beanutils'
+    }
     compile 'org.apache.bval:bval-guice:0.5'
     compile 'javax.validation:validation-api:1.0.0.GA'
 
@@ -176,6 +176,35 @@ dependencies {
     testCompile 'uk.q3c.util:q3c-testutils:0.11.0.4'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
+}
+
+configurations.all {
+    resolutionStrategy {
+        failOnVersionConflict()
+
+        force 'org.slf4j:slf4j-api:1.7.21'
+        force 'com.google.inject:guice:4.1.0'
+        force 'commons-beanutils:commons-beanutils:1.9.3'
+        force 'com.vaadin:vaadin-server:8.3.1'
+        force 'org.codehaus.groovy:groovy-all:2.4.9'
+        force 'com.google.guava:guava:22.0'
+        force 'com.fasterxml.jackson.core:jackson-core:2.9.3'
+        force 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+        force 'com.google.inject.extensions:guice-multibindings:4.1.0'
+        force 'com.google.code.findbugs:annotations:3.0.0'
+        force 'uk.q3c.krail:krail-i18n-api:0.15.7.0'
+        force 'commons-logging:commons-logging:1.2'
+        force 'org.apache.commons:commons-lang3:3.3.2'
+        force 'org.assertj:assertj-core:3.8.0'
+        force 'org.jetbrains.kotlin:kotlin-stdlib:1.2.31'
+        force 'org.jetbrains.kotlin:kotlin-reflect:1.2.31'
+        force 'org.mockito:mockito-core:2.8.9'
+        force 'com.mycila:mycila-log:2.12'
+
+        dependencySubstitution {
+            substitute module ('commons-beanutils:commons-beanutils-core') with module ('commons-beanutils:commons-beanutils:1.9.3')
+        }
+    }
 }
 
 

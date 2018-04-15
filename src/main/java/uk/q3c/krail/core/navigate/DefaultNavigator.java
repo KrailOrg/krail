@@ -129,6 +129,7 @@ public class DefaultNavigator implements Navigator {
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
     @Override
     public void init() {
+        log.debug("initialising DefaultNavigator");
         try {
             sitemapService.start();
             //take a reference and keep it in case current model changes

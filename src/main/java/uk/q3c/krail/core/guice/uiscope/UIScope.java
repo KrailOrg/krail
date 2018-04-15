@@ -40,7 +40,6 @@ public class UIScope implements Scope {
 
     public UIScope() {
         super();
-        log.debug("creating UIScope {}", this);
     }
 
     public static UIScope getCurrent() {
@@ -51,7 +50,9 @@ public class UIScope implements Scope {
                 scope = current;
                 if (scope == null) {
                     current = new UIScope();
+                    log.debug("created new UIScope");
                     scope = current;
+                    log.debug("new UIScope is set as current");
                 }
             }
         }

@@ -52,6 +52,7 @@ import uk.q3c.krail.option.bind.OptionModule;
 import uk.q3c.krail.persist.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.service.bind.ServicesModule;
+import uk.q3c.krail.startup.DefaultStartupModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.guice.SerializationSupportModule;
@@ -81,6 +82,8 @@ public class CoreBindingsCollator implements BindingsCollator {
         List<Module> modules = new ArrayList<>(30);
         modules.addAll(additionalModules);
 
+
+        modules.add(startupModule());
         modules.add(uiModule());
         modules.add(i18NModule());
         modules.add(applicationConfigurationModule());
@@ -331,5 +334,13 @@ public class CoreBindingsCollator implements BindingsCollator {
                 .providePatternDao());
     }
 
+    /**
+     * Override this if you have provided your own Startup module
+     *
+     * @return a Module for application startup
+     */
+    protected Module startupModule() {
+        return new DefaultStartupModule();
+    }
 
 }
