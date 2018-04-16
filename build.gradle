@@ -117,8 +117,8 @@ dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.2'
     compile 'ch.qos.logback:logback-core:1.1.2'
 
-    //servlet // switching to providedCompile broke mock for VaadinSession
-    compile "javax.servlet:javax.servlet-api:3.+"
+    //servlet
+    compileOnly "javax.servlet:javax.servlet-api:3.+"
 
     //Utility
     //the easiest way to all the Jung parts
