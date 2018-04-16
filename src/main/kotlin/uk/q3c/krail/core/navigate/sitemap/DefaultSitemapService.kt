@@ -16,14 +16,12 @@ import com.google.common.collect.ImmutableList
 import com.google.inject.Inject
 import com.google.inject.Provider
 import com.google.inject.Singleton
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.config.ApplicationConfiguration
 import uk.q3c.krail.config.InheritingConfiguration
 import uk.q3c.krail.config.config.ConfigKeys
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
@@ -33,10 +31,10 @@ import uk.q3c.util.guice.SerializationSupport
 import java.util.*
 
 @Singleton
-class DefaultSitemapService @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")  // ResourceUtils have to be injected
+class DefaultSitemapService
 @Inject
 protected constructor(translate: Translate, @field:Transient private val directSitemapLoaderProvider: Provider<DirectSitemapLoader>, @field:Transient private val annotationSitemapLoaderProvider: Provider<AnnotationSitemapLoader>, @field:Transient private val sitemapProvider: Provider<MasterSitemap>,
-                      private val sitemapFinisher: SitemapFinisher, private val masterSitemapQueue: MasterSitemapQueue, private val configuration: ApplicationConfiguration,
+                      private val sitemapFinisher: SitemapFinisher, private val configuration: ApplicationConfiguration,
                       globalBusProvider: MessageBus, private val classNameUtils: ClassNameUtils, serializationSupport: SerializationSupport) : AbstractService(translate, globalBusProvider, serializationSupport), SitemapService {
     private val lock = arrayOfNulls<Any>(0)
     private var log = LoggerFactory.getLogger(this.javaClass.name)
@@ -69,7 +67,6 @@ protected constructor(translate: Translate, @field:Transient private val directS
             throw SitemapException("No valid sources found")
         }
         sitemap.lock()
-        masterSitemapQueue.addModel(sitemap)
         log.info("{}", report.toString())
     }
 

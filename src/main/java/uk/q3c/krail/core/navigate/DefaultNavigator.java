@@ -35,7 +35,6 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilder;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.shiro.UnauthorizedExceptionHandler;
@@ -89,7 +88,6 @@ public class DefaultNavigator implements Navigator {
     private final LoginNavigationRule loginNavigationRule;
     private final LogoutNavigationRule logoutNavigationRule;
     private final InvalidURIHandler invalidURIHandler;
-    private MasterSitemapQueue masterSitemapQueue;
     private MasterSitemap masterSitemap;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
@@ -104,7 +102,7 @@ public class DefaultNavigator implements Navigator {
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
             pageAccessController, ScopedUIProvider uiProvider, ViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
                                     loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider uiBusProvider, ViewChangeRule
-                                    viewChangeRule, InvalidURIHandler invalidURIHandler, MasterSitemapQueue masterSitemapQueue, ComponentIdGenerator idGenerator) {
+                                    viewChangeRule, InvalidURIHandler invalidURIHandler, ComponentIdGenerator idGenerator, MasterSitemap masterSitemap) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -117,7 +115,7 @@ public class DefaultNavigator implements Navigator {
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
         this.invalidURIHandler = invalidURIHandler;
-        this.masterSitemapQueue = masterSitemapQueue;
+        this.masterSitemap = masterSitemap;
 
         this.uiBusProvider = uiBusProvider;
         this.viewChangeRule = viewChangeRule;
@@ -133,7 +131,6 @@ public class DefaultNavigator implements Navigator {
         try {
             sitemapService.start();
             //take a reference and keep it in case current model changes
-            this.masterSitemap = masterSitemapQueue.getCurrentModel();
             userSitemapBuilder.setMasterSitemap(masterSitemap);
             userSitemapBuilder.build();
             userSitemap = userSitemapBuilder.getUserSitemap();

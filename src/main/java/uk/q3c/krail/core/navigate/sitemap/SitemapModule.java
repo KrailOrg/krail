@@ -13,10 +13,9 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.navigate.sitemap.set.DefaultMasterSitemapQueue;
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 
 public class SitemapModule extends AbstractModule {
 
@@ -27,15 +26,11 @@ public class SitemapModule extends AbstractModule {
         bindService();
         bindLoaders();
         bindChecker();
-        bindMasterSitemapQueue();
     }
 
-    protected void bindMasterSitemapQueue() {
-        bind(MasterSitemapQueue.class).to(DefaultMasterSitemapQueue.class);
-    }
 
     protected void bindMasterSitemap() {
-        bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+        bind(MasterSitemap.class).to(DefaultMasterSitemap.class).in(Singleton.class);
     }
 
     protected void bindUserSitemap() {

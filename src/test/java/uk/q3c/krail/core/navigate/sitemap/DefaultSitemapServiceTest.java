@@ -35,7 +35,6 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.TestKrailI18NModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -86,7 +85,7 @@ public class DefaultSitemapServiceTest {
     DefaultSitemapService service;
 
     @Inject
-    MasterSitemapQueue masterSitemapQueue;
+    MasterSitemap masterSitemap;
     HierarchicalINIConfiguration iniConfig;
 
     @BeforeClass
@@ -117,9 +116,6 @@ public class DefaultSitemapServiceTest {
     }
 
 
-
-
-
     @Test
     public void nameAndDescription() {
 
@@ -146,8 +142,7 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(masterSitemapQueue.getCurrentModel()
-                                     .getNodeCount()).isEqualTo(13);
+        assertThat(masterSitemap.getNodeCount()).isEqualTo(13);
         assertThat(service.getSourceTypes()).containsOnly();
     }
 
@@ -170,8 +165,7 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(masterSitemapQueue.getCurrentModel()
-                                     .getNodeCount()).isEqualTo(13);
+        assertThat(masterSitemap.getNodeCount()).isEqualTo(13);
         assertThat(service.getSourceTypes()).containsOnly();
     }
 
@@ -191,8 +185,7 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(masterSitemapQueue.getCurrentModel()
-                                     .getNodeCount()).isEqualTo(7);
+        assertThat(masterSitemap.getNodeCount()).isEqualTo(7);
     }
 
     @Test
@@ -240,7 +233,6 @@ public class DefaultSitemapServiceTest {
         }
 
     }
-
 
 
 }

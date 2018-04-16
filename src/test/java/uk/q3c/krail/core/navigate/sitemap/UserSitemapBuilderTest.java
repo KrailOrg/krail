@@ -240,7 +240,6 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
             @Override
             protected void configure() {
                 bind(VaadinSessionProvider.class).toInstance(mockVaadinSessionProvider);
-                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
             }
 

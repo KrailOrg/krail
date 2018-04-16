@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
-
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by {@link MasterSitemapNode} instances.
  * This
@@ -23,9 +21,7 @@ import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
  * <p>
  * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
  * application start up process. To avoid complex logic and dependencies within Guice modules, the building of the
- * {@link MasterSitemap} is managed by the {@link SitemapService}, and then transferred to {@link MasterSitemapQueue} to
- * enable the sitemap to be changed
- * dynamically.
+ * {@link MasterSitemap} is managed by the {@link SitemapService}
  * <p>
  * Simple URI redirects can be added using {@link #addRedirect(String, String)}
  * <p>

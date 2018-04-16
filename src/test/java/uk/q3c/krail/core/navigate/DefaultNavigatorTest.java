@@ -43,7 +43,6 @@ import uk.q3c.krail.core.guice.InjectorHolder;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;
-import uk.q3c.krail.core.navigate.sitemap.DefaultMasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
@@ -52,7 +51,6 @@ import uk.q3c.krail.core.navigate.sitemap.SitemapService;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilder;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.PagePermission;
@@ -114,8 +112,6 @@ public class DefaultNavigatorTest {
     @Mock
     UserNotifier userNotifier;
     InvalidURIHandler invalidURIHandler;
-    @Mock
-    MasterSitemapQueue masterSitemapQueue;
     @Inject
     MasterSitemap masterSitemap;
     @Mock
@@ -183,7 +179,6 @@ public class DefaultNavigatorTest {
         when(errorViewProvider.get()).thenReturn(errorView);
         when(subjectProvider.get()).thenReturn(subject);
         when(userSitemapProvider.get()).thenReturn(userSitemap);
-        when(masterSitemapQueue.getCurrentModel()).thenReturn(masterSitemap);
         invalidURIHandler = new DefaultInvalidURIHandler(userNotifier);
 
 
@@ -208,7 +203,7 @@ public class DefaultNavigatorTest {
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, masterSitemapQueue, componentIdGenerator);
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, componentIdGenerator, masterSitemap);
         navigator.init();
         return navigator;
     }
@@ -857,7 +852,6 @@ public class DefaultNavigatorTest {
             protected void configure() {
                 bind(ErrorView.class).to(DefaultErrorView.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
             }
 
