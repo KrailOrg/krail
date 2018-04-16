@@ -13,7 +13,6 @@
 package uk.q3c.krail.core.navigate;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.HasComponents;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -79,7 +78,7 @@ public class DefaultNavigator implements Navigator {
     private static Logger log = LoggerFactory.getLogger(DefaultNavigator.class);
 
     private final URIFragmentHandler uriHandler;
-    private final Provider<Subject> subjectProvider;
+    private final SubjectProvider subjectProvider;
     private final PageAccessController pageAccessController;
     private final ScopedUIProvider uiProvider;
     private final ViewFactory viewFactory;
@@ -88,14 +87,14 @@ public class DefaultNavigator implements Navigator {
     private final LoginNavigationRule loginNavigationRule;
     private final LogoutNavigationRule logoutNavigationRule;
     private final InvalidURIHandler invalidURIHandler;
-    private MasterSitemap masterSitemap;
+    private final MasterSitemap masterSitemap;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
-    private UIBusProvider uiBusProvider;
+    private final UIBusProvider uiBusProvider;
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
-    private ViewChangeRule viewChangeRule;
-    private ComponentIdGenerator idGenerator;
+    private final ViewChangeRule viewChangeRule;
+    private final ComponentIdGenerator idGenerator;
 
 
     @Inject

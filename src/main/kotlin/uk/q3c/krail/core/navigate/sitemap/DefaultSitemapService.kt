@@ -33,10 +33,21 @@ import java.util.*
 @Singleton
 class DefaultSitemapService
 @Inject
-protected constructor(translate: Translate, @field:Transient private val directSitemapLoaderProvider: Provider<DirectSitemapLoader>, @field:Transient private val annotationSitemapLoaderProvider: Provider<AnnotationSitemapLoader>, @field:Transient private val sitemapProvider: Provider<MasterSitemap>,
-                      private val sitemapFinisher: SitemapFinisher, private val configuration: ApplicationConfiguration,
-                      globalBusProvider: MessageBus, private val classNameUtils: ClassNameUtils, serializationSupport: SerializationSupport) : AbstractService(translate, globalBusProvider, serializationSupport), SitemapService {
+protected constructor(translate: Translate,
+                      @field:Transient private val directSitemapLoaderProvider: Provider<DirectSitemapLoader>,
+                      @field:Transient private val annotationSitemapLoaderProvider: Provider<AnnotationSitemapLoader>,
+                      @field:Transient private val sitemapProvider: Provider<MasterSitemap>,
+                      @field:Transient private val sitemapFinisher: SitemapFinisher,
+                      private val configuration: ApplicationConfiguration,
+                      globalBusProvider: MessageBus,
+                      private val classNameUtils: ClassNameUtils,
+                      serializationSupport: SerializationSupport)
+
+    : AbstractService(translate, globalBusProvider, serializationSupport), SitemapService {
+
+
     private val lock = arrayOfNulls<Any>(0)
+    @Transient
     private var log = LoggerFactory.getLogger(this.javaClass.name)
     @Transient
     private var loaders: MutableList<SitemapLoader> = mutableListOf()
