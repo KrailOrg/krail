@@ -23,6 +23,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.Page;
+import com.vaadin.ui.UI;
 import fixture.ReferenceUserSitemap;
 import fixture.testviews2.ViewB;
 import net.engio.mbassy.bus.common.PubSubSupport;
@@ -89,6 +90,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -175,6 +177,7 @@ public class DefaultNavigatorTest {
         userSitemap.populate();
         when(builder.getUserSitemap()).thenReturn(userSitemap);
         when(uiProvider.get()).thenReturn(scopedUI);
+        UI.setCurrent(scopedUI);
         when(scopedUI.getPage()).thenReturn(browserPage);
         when(errorViewProvider.get()).thenReturn(errorView);
         when(subjectProvider.get()).thenReturn(subject);
@@ -216,7 +219,6 @@ public class DefaultNavigatorTest {
         // when
         navigator.navigateTo(userSitemap.loginFragment);
         // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.loginViewClass);
         verify(scopedUI).changeView(any(LoginView.class));
     }
 
@@ -257,7 +259,7 @@ public class DefaultNavigatorTest {
         // when
         navigator.navigateTo(userSitemap.a11Fragment);
         // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
+        verify(scopedUI).changeView(any(userSitemap.a11ViewClass));
         assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.a11Node());
         assertThat(navigator.getCurrentNavigationState()
                 .getFragment()).isEqualTo(userSitemap.a11Fragment);
@@ -388,7 +390,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(fragment1);
 
         // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a1ViewClass);
+        verify(scopedUI).changeView(any(userSitemap.a1ViewClass));
         assertThat(navigator.getCurrentNavigationState()
                             .getFragment()).isEqualTo(fragment1);
 
@@ -398,7 +400,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(fragment2);
 
         // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
+        verify(scopedUI, times(2)).changeView(any(userSitemap.a11ViewClass));
         assertThat(navigator.getCurrentNavigationState()
                             .getFragment()).isEqualTo(fragment2);
 
@@ -409,7 +411,7 @@ public class DefaultNavigatorTest {
         navigator.clearHistory();
 
         // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
+        verify(scopedUI, times(2)).changeView(any(userSitemap.a11ViewClass));
         assertThat(navigator.getCurrentNavigationState()
                             .getFragment()).isEqualTo(fragment2);
 
@@ -479,7 +481,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(navigationState);
         // then
         assertThat(navigator.getCurrentNavigationState()).isEqualTo(navigationState);
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a1ViewClass);
+        verify(scopedUI).changeView(any(userSitemap.a1ViewClass));
     }
 
     @Test
@@ -490,7 +492,7 @@ public class DefaultNavigatorTest {
         // when
         navigator.error(new NullPointerException("test"));
         // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(ErrorView.class);
+        verify(scopedUI).changeView(any(ErrorView.class));
     }
 
     @Test
@@ -771,8 +773,7 @@ public class DefaultNavigatorTest {
         //when
         navigator.navigateTo(page);
         //then
-        assertThat(navigator.getCurrentView()).isInstanceOf(ViewB.class);
-        ViewB view = (ViewB) navigator.getCurrentView();
+        verify(scopedUI).changeView(any(ViewB.class));
         assertThat(changeListener.getCalls()).containsExactly("beforeViewChange", "readFromEnvironment",
                 "beforeBuild", "buildView", "afterBuild", "afterViewChange");
 

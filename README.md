@@ -36,7 +36,11 @@ The [User Guide](https://www.gitbook.com/book/davidsowerby/krail-user-guide/deta
 
 ---
 
-Krail has now been updated to Vaadin 8.  The next step is to try migrating to [Eclipse Vert](http://vertx.io/).  If that is successful, from that point, the emphasis will be on providing user interface platform designed for use within a distributed environment, and specifically on vertx.
+Krail has now been updated to Vaadin 8, and Serialization implement to enable use in a clustered environment.
+
+Vaadin Push is temporarily broken
+
+The next step is to try migrating to [Eclipse Vert.x](http://vertx.io/).  If that is successful, from that point, the emphasis will be on providing user interface platform designed for use within a distributed environment, and specifically on vertx.
 
 Normally the versions of the various libraries are independent, but to simplify the transition to Vaadin 8, they are being brought temporarily into line:
 
@@ -62,7 +66,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail:0.14.0.0'
+'uk.q3c.krail:krail:0.16.0.0'
 ```
 ## Maven
 
@@ -78,7 +82,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail</artifactId>
-	<version>0.14.0.0</version>
+	<version>0.16.0.0</version>
 </dependency>
 ```
 ## Direct
@@ -91,15 +95,12 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 # Status
 
-* Vaadin 8.2.0 is integrated with:
+* Vaadin 8.3.1 is integrated with:
 * Guice 4.1.0
 * Shiro 1.4.0,
 * MBassador (Event Bus)
 * Apache Commons Configuration
 * Guava cache
-
-
-Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.
 
 
 ## testApp
@@ -114,11 +115,12 @@ Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://g
 # Acknowledgements
 
 Thanks to:
- 
+
+[Marco Collovati](https://github.com/mcollovati) for his work on Vaadin - Vertx integration, and support for core Krail development<br>
 [Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial<br>
 [Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration<br>
 
-[EasyBinder](https://github.com/ljessendk/easybinder)
+[EasyBinder](https://github.com/ljessendk/easybinder)<br>
 [ej technologies](http://www.ej-technologies.com/index.html) for an open source licence of [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
 [Vaadin](https://vaadin.com/home)<br>
 [Guice](https://github.com/google/guice)<br>
@@ -139,6 +141,7 @@ Thanks to:
 [AssertJ](http://joel-costigliola.github.io/assertj/)<br>
 [Mycila](https://github.com/mycila)<br>
 [Mockito](https://github.com/mockito/mockito)<br>
-[spock](https://github.com/spockframework/spock)
+[spock](https://github.com/spockframework/spock)<br>
+[Spek](http://spekframework.org/)<br>
 [FindBugs](http://findbugs.sourceforge.net/)
 

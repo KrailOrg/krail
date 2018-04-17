@@ -3,7 +3,7 @@
 The release has two purposes:
 
 - make correct use of VaadinSession by ensuring that anything which may need to be stored in the session is Serializable. This is needed in any environment where a session could be moved, for example in a clustered environment, and depending on how integration with Vert.x is implemented, may also be used in Vert.x local sessions.
-- enable the same application code to run on Vertx or a Servlet container with minimal (see the Bootstrap section) 
+- enable the same application code to run on Vertx or a Servlet container with minimal (see the Bootstrap section).  The bootstrap code has been developed, but Vertx is not yet supported
 
 
 # Language Change
@@ -12,7 +12,7 @@ A number of classes, and test classes have been converted to Kotlin.
 
 # Unit Tests
 
-New unit tests, or thoses that have been modified significantly, are written in Spek, and are held in a separate repo, krail-kotlin, pending update of Spek to 2.0, (which will hopefully resolve clashes between Spek and JUnit)
+New unit tests, or those that have been modified significantly, are written in Spek, and are held in a separate repo, krail-kotlin, pending update of Spek to 2.0, (which will hopefully resolve clashes between Spek and JUnit)
 
 
 # Subject and Sessions
@@ -34,7 +34,11 @@ Has been removed.  Login success and failures messages are sent via the `Session
 
 ## DescriptionKey
 
-Login related I18NKeys have moved to `LoginDescriptionKey` 
+Login related I18NKeys have moved to `LoginDescriptionKey`
+
+## Implementing Serializable
+
+As Vaadin stores a complete UI in the session, there is a lot which gets serialised.  `SerializationSupport` has been added to provide support to reconstructing dependencies with Guice.  Many classes are now Serializable 
 
 
 # Bootstrap

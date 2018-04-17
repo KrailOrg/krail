@@ -83,7 +83,6 @@ compileKotlin {
 }
 
 dependencies {
-    compile 'uk.q3c.krail:krail-service-api:0.15.3.0' // temporary - REMOVE FROM ResoultionStrategy as well
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -98,7 +97,7 @@ dependencies {
     //Krail
     compile 'uk.q3c.krail:krail-option:0.16.0.0'
     compile 'uk.q3c.krail:eventbus-mbassador:0.6.0.0'
-    compile 'uk.q3c.krail:krail-config:0.10.8.0'
+    compile 'uk.q3c.krail:krail-config:0.10.9.0'
 
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.20'
     compile 'com.github.mcollovati.vertx:vertx-vaadin8:0.4.0'
