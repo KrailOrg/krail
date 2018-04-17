@@ -4,6 +4,30 @@ When Vaadin serialises to the session, it serialises the entire UI. This means a
 
 This clearly could affect the amount that needs to be serialized/deserialized - you may want to reduce that by making dependencies *transient* (or you may just have dependencies which cannot be serialized), but that in turn means you need a way to reconstruct the *transient* fields.
 
+== Serialization and Shiro / JPA
+
+Anything which uses Guice AOP generates a byte enhanced class produced by cglib.  This causes serialization problems, and is a feature of anything which uses cglib.  At the moment the only way round this is to use manual coding instead of AOP supported annotations.  For example, instead of using:
+
+[source,java]
+----
+@RequiresPermission()
+public void doSomething(){
+
+}
+----
+
+use
+
+[source,java]
+----
+if (subjectProvider.get().isPermitted("page:view:private")) {
+    userNotifier.notifyInformation(LabelKey.Yes);
+}
+----
+
+There is an https://github.com/KrailOrg/krail/issues/686[open issue] to provide more support.
+
+
 == Guice Deserialization for View and UI instances
 
 `ViewBase` and `ScopedUI` use `SerializationSupport` to make the management of this situation simpler, designed in a way for sub-classes to make use of this facility.

@@ -39,11 +39,11 @@ protected constructor(translate: Translate,
                       @field:Transient private val sitemapProvider: Provider<MasterSitemap>,
                       @field:Transient private val sitemapFinisher: SitemapFinisher,
                       private val configuration: ApplicationConfiguration,
-                      globalBusProvider: MessageBus,
+                      messageBus: MessageBus,
                       private val classNameUtils: ClassNameUtils,
                       serializationSupport: SerializationSupport)
 
-    : AbstractService(translate, globalBusProvider, serializationSupport), SitemapService {
+    : AbstractService(translate, messageBus, serializationSupport), SitemapService {
 
 
     private val lock = arrayOfNulls<Any>(0)

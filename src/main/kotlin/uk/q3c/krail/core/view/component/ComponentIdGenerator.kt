@@ -171,6 +171,7 @@ class DefaultComponentIdGenerator @Inject constructor(private val realClassIdent
 
     private val assignmentFilter = ComponentIDAssignmentFilter(realClassIdentifier)
     private val drilldownFilter = ComponentIDDrilldownFilter(realClassIdentifier)
+    @Transient
     lateinit var graph: MutableGraph<ComponentIdEntry>
 
 

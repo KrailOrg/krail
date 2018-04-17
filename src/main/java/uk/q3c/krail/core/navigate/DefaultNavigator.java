@@ -15,6 +15,7 @@ package uk.q3c.krail.core.navigate;
 import com.google.inject.Inject;
 import com.vaadin.server.Page;
 import com.vaadin.ui.HasComponents;
+import com.vaadin.ui.UI;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -89,7 +90,6 @@ public class DefaultNavigator implements Navigator {
     private final InvalidURIHandler invalidURIHandler;
     private final MasterSitemap masterSitemap;
     private NavigationState currentNavigationState;
-    private KrailView currentView = null;
     private final UIBusProvider uiBusProvider;
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
@@ -170,7 +170,7 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     * Navigates to a the location represented by {@code navigationState}. If the {@link Sitemap} holds a redirect for
+     * Navigates to the location represented by {@code navigationState}. If the {@link Sitemap} holds a redirect for
      * the URI represented by {@code navigationState}, navigation will be directed to the redirect target. An
      * unrecognised URI will throw a {@link SitemapException}. If the view for the URI is found, the user's
      * authorisation is checked. If the user is not authorised, a {@link AuthorizationException} is thrown. This would
@@ -188,7 +188,7 @@ public class DefaultNavigator implements Navigator {
     public void navigateTo(NavigationState navigationState) {
         checkNotNull(navigationState);
         //computer says no
-        if (!viewChangeRule.changeIsAllowed(this, currentView)) {
+        if (!viewChangeRule.changeIsAllowed(this, getCurrentView())) {
             return;
         }
         //makes sure the navigation state is up to date, removes the need to do this externally
@@ -293,7 +293,6 @@ public class DefaultNavigator implements Navigator {
         generateAndApplyComponentIds(view);
         generateAndApplyComponentIds(ui);
         view.afterBuild(new AfterViewChangeBusMessage(busMessage));
-        currentView = view;
         HasComponents g;
     }
 
@@ -345,7 +344,7 @@ public class DefaultNavigator implements Navigator {
 
     @Override
     public KrailView getCurrentView() {
-        return currentView;
+        return ((ScopedUI) UI.getCurrent()).getView();
     }
 
     /**
