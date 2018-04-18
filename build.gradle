@@ -32,7 +32,7 @@ plugins {
 
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
-ext.vaadinVersion = '8.3.1'
+ext.vaadinVersion = '8.3.3'
 ext.assertjVersion = '3.8.0'
 ext.commonsLangVersion = '3.3.2'
 ext.groovyVersion = '2.4.1'
@@ -67,7 +67,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.16.0.0"
+        number = "0.16.1.0"
     }
 
 }

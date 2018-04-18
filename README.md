@@ -66,7 +66,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail:0.16.0.0'
+'uk.q3c.krail:krail:0.16.1.0'
 ```
 ## Maven
 
@@ -82,7 +82,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail</artifactId>
-	<version>0.16.0.0</version>
+	<version>0.16.1.0</version>
 </dependency>
 ```
 ## Direct
@@ -95,7 +95,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 # Status
 
-* Vaadin 8.3.1 is integrated with:
+* Vaadin 8.3.3 is integrated with:
 * Guice 4.1.0
 * Shiro 1.4.0,
 * MBassador (Event Bus)
