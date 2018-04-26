@@ -45,7 +45,7 @@ class SystemAdminView @Inject constructor(
     override fun doBuild(busMessage: ViewChangeBusMessage) {
         super.doBuild(busMessage)
         buildReportBtn = Button()
-        buildReportBtn.addClickListener { c -> navigator.navigateTo("system-admin/sitemap-build-report") }
+        buildReportBtn.addClickListener { _ -> navigator.navigateTo("system-admin/sitemap-build-report") }
         setCentreCell(VerticalLayout(buildReportBtn))
     }
 

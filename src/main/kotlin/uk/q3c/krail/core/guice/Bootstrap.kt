@@ -168,7 +168,8 @@ class BootstrapYAMLReader {
 
     private fun processInput(result: LinkedHashMap<String, Any>): BootstrapConfig {
         val filename = "krail-bootstrap.yml"
-        val version = result["version"] ?: 1
+        @Suppress("UNUSED_VARIABLE")
+        val version = result["version"] ?: 1  // leave here, we may need it one day
         val collator = result["collator"] as String?
                 ?: throw BootstrapConfigurationException("$filename must contain a 'collator' property")
         val modules = result["modules"] as List<String>? ?: listOf<String>()

@@ -92,7 +92,7 @@ constructor(private val navigator: Navigator, private val subjectProvider: Subje
     }
 
     @Handler
-    fun handleUserHasLoggedOut(event: UserHasLoggedOut) {
+    fun handleUserHasLoggedOut(@Suppress("UNUSED_PARAMETER") event: UserHasLoggedOut) {
         log.debug("user has logged out")
         loggedIn = false
         configureDisplay()

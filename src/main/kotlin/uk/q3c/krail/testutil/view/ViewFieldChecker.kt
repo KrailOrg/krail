@@ -46,7 +46,6 @@ class ViewFieldChecker(private val view: ViewBase, private val fieldsWithoutI18N
     fun check(): Boolean {
         val cut = view.javaClass
         println("Checking $cut for I18N annotated component fields")
-        val allI18N = true
         val declaredFields = cut.declaredFields
         for (i in declaredFields.indices) {
             val field = declaredFields[i]
@@ -55,7 +54,7 @@ class ViewFieldChecker(private val view: ViewBase, private val fieldsWithoutI18N
                     annotationMissing(field)
                 }
                 field.isAccessible = true
-                val component = field.get(view) as Component
+                val component = field.get(view) as Component?
                 if (component == null) {
                     println(field.name + "has not been constructed")
                     fieldsNotConstructed.add(field.name)
