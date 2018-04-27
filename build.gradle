@@ -67,6 +67,9 @@ kaytee {
     version {
         number = "0.16.3.0"
     }
+    changelog {
+        maxVersions = 10
+    }
 
 }
 
