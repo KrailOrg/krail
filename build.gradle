@@ -23,11 +23,8 @@ buildscript {
         classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
-}
-
-plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.2.40"
 }
 
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
@@ -50,6 +47,7 @@ group = 'uk.q3c.krail'
 
 apply plugin: 'uk.q3c.kaytee'
 apply plugin: 'kotlin'
+apply plugin: "org.jetbrains.kotlin.jvm"
 
 sourceCompatibility = '1.8'
 
