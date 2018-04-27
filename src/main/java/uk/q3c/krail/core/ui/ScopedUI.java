@@ -107,6 +107,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     protected void setScope(UIScope uiScope) {
         checkNotNull(uiScope);
         this.uiScope = uiScope;
+        uiScope.setSerializationSupport(serializationSupport);
     }
 
     @Override

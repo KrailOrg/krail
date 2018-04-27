@@ -170,7 +170,7 @@ dependencies {
     testCompile "org.amshove.kluent:kluent:1.34"
 
     testCompile 'uk.q3c.util:q3c-testutils:0.11.0.4'
-
+    testCompile 'uk.q3c.util:serialisation-tracer:0.2.0.0'
 
 
 }

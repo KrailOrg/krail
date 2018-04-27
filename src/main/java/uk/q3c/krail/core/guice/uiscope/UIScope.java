@@ -16,10 +16,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
+import uk.q3c.util.guice.GuiceKeyProxy;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,13 +37,14 @@ import java.util.TreeMap;
  * @author Will Temperley 2014
  * @author David Sowerby 2013
  */
-public class UIScope implements Scope {
+public class UIScope implements Scope, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(UIScope.class);
 
     private static volatile UIScope current;
 
-    private final Map<UIKey, Map<Key<?>, Object>> cache = new TreeMap<UIKey, Map<Key<?>, Object>>();
+    private transient Map<UIKey, Map<Key<?>, Object>> cache = new TreeMap<UIKey, Map<Key<?>, Object>>();
+    private SerializationSupport serializationSupport;
 
     public UIScope() {
         super();
@@ -115,5 +123,65 @@ public class UIScope implements Scope {
     public boolean containsInstance(UIKey uiKey, Object containedInstance) {
         return cache.get(uiKey)
                     .containsValue(containedInstance);
+    }
+
+    /**
+     * Writes out the cache by using {@link GuiceKeyProxy} to replace {@link Key}.  It also
+     *
+     * @param out
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        Map<UIKey, Map<GuiceKeyProxy, Serializable>> proxyMap = new HashMap<>();
+        for (Map.Entry<UIKey, Map<Key<?>, Object>> entry : cache.entrySet()) {
+            Map<GuiceKeyProxy, Serializable> targetDetail = new HashMap<>();
+            proxyMap.put(entry.getKey(), targetDetail);
+            Map<Key<?>, Object> sourceDetail = entry.getValue();
+            for (Map.Entry<Key<?>, Object> detailEntry : sourceDetail.entrySet()) {
+                GuiceKeyProxy proxy = new GuiceKeyProxy(detailEntry.getKey());
+                Object detailValue = detailEntry.getValue();
+                if (Serializable.class.isAssignableFrom(detailValue.getClass())) {
+                    byte[] serValue = SerializationUtils.serialize(detailValue.getClass());
+                    targetDetail.put(proxy, serValue);
+                } else {
+                    targetDetail.put(proxy, proxy);
+                }
+
+            }
+        }
+        out.writeObject(proxyMap);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        cache = new TreeMap<>();
+        @SuppressWarnings("unchecked")
+        Map<UIKey, Map<GuiceKeyProxy, Serializable>> proxyMap = (Map<UIKey, Map<GuiceKeyProxy, Serializable>>) in.readObject();
+        for (Map.Entry<UIKey, Map<GuiceKeyProxy, Serializable>> entry : proxyMap.entrySet()) {
+            Map<Key<?>, Object> cacheDetail = new HashMap<Key<?>, Object>();
+            cache.put(entry.getKey(), cacheDetail);
+            Map<GuiceKeyProxy, Serializable> sourceDetail = entry.getValue();
+            for (Map.Entry<GuiceKeyProxy, Serializable> sourceDetailEntry : sourceDetail.entrySet()) {
+                Object sourceDetailValue = sourceDetailEntry.getValue();
+                Key<?> guiceKey = sourceDetailEntry.getKey().getKey();
+                if (sourceDetailValue instanceof GuiceKeyProxy) {
+                    GuiceKeyProxy proxy = (GuiceKeyProxy) sourceDetailValue;
+                    cacheDetail.put(guiceKey, serializationSupport.getInjector().getInstance(proxy.getKey()));
+                } else {
+                    Object value = SerializationUtils.deserialize((byte[]) sourceDetailEntry.getValue());
+                    cacheDetail.put(guiceKey, value);
+                }
+
+            }
+        }
+    }
+
+    /**
+     * This class is not instantiated through Guice, so we set {@link #serializationSupport} directly, usually from the UI
+     * that owns this scope.  We need it for deserialisation
+     */
+    public void setSerializationSupport(SerializationSupport serializationSupport) {
+        this.serializationSupport = serializationSupport;
     }
 }
