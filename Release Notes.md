@@ -1,3 +1,4 @@
-# Updates
+# Release notes for 0.16.3.0
 
-Vaadin to 8.3.3. No other changes
+Fixing UIScope serialisation
+
