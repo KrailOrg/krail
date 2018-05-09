@@ -16,10 +16,12 @@ import net.engio.mbassy.bus.error.PublicationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
+
 /**
  * Created by David Sowerby on 10/03/15.
  */
-public class DefaultEventBusErrorHandler implements IPublicationErrorHandler {
+public class DefaultEventBusErrorHandler implements IPublicationErrorHandler, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(DefaultEventBusErrorHandler.class);
     /**

@@ -14,6 +14,7 @@ package uk.q3c.krail.core.view.component;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -31,6 +32,7 @@ import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
@@ -39,13 +41,14 @@ import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.mock.MockOption;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupport;
 import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.ArrayList;
@@ -56,7 +59,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, TestOptionModule.class, InMemoryModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class,
+@GuiceContext({TestKrailI18NModule2.class, DefaultShiroModule.class, InMemoryModule.class, DefaultSubPagePanelTest.LocalOptionModule.class, VaadinSessionScopeModule.class, VaadinEventBusModule.class,
         TestUIScopeModule.class, UtilModule.class, UserModule.class, UtilsModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class})
 public class DefaultSubPagePanelTest {
 
@@ -66,13 +69,19 @@ public class DefaultSubPagePanelTest {
     ReferenceUserSitemap userSitemap;
 
     @Mock
+    Provider<UserSitemap> userSitemapProvider;
+
+    @Mock
     Navigator navigator;
+
+    @Mock
+    Provider<Navigator> navigatorProvider;
 
     @Inject
     CurrentLocale currentLocale;
 
     @Inject
-    Option option;
+    Provider<Option> optionProvider;
 
     @Inject
     DefaultUserSitemapSorters sorters;
@@ -86,42 +95,22 @@ public class DefaultSubPagePanelTest {
     @Mock
     NavigationState currentNavigationState;
 
+    @Mock
+    SerializationSupport serializationSupport;
+
 
     @Before
     public void setup() {
+        when(navigatorProvider.get()).thenReturn(navigator);
         when(navigator.getCurrentNavigationState()).thenReturn(currentNavigationState);
+        when(userSitemapProvider.get()).thenReturn(userSitemap);
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();
-        panel = new DefaultSubPagePanel(navigator, userSitemap, option, sorters);
+
+        panel = new DefaultSubPagePanel(navigatorProvider, userSitemapProvider, optionProvider, sorters, serializationSupport);
     }
 
-    @Test
-    public void leaf() {
-
-        // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node());
-        // when
-        panel.moveToNavigationState();
-        // then
-        List<NavigationButton> buttons = panel.getButtons();
-        assertThat(buttons).hasSize(0);
-    }
-
-    @Test
-    public void multi() {
-
-        // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
-        // when
-        panel.moveToNavigationState();
-        // then
-        List<UserSitemapNode> nodes = nodesFromButtons(panel.getButtons());
-        List<UserSitemapNode> expected = userSitemap.publicSortedAlphaAscending();
-        expected.add(userSitemap.logoutNode()); // not filtered
-        assertThat(nodes).containsAll(expected);
-        assertThat(nodes).hasSameSizeAs(expected);
-    }
 
     /**
      * There may be more buttons than nodes, as buttons are re-used and just made not visible if not needed, so only
@@ -141,63 +130,6 @@ public class DefaultSubPagePanelTest {
         return nodes;
     }
 
-    @Test
-    public void options() {
-
-        // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
-        panel.moveToNavigationState();
-        // when
-        panel.setOptionKeySortType(SortType.INSERTION);
-        panel.setOptionSortAscending(true);
-        // then
-        assertThat(panel.getOptionSortAscending()).isTrue();
-        assertThat(panel.getOptionSortType()).isEqualTo(SortType.INSERTION);
-    }
-
-    @Test
-    public void multi_filtered() {
-
-        // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
-        LogoutPageFilter filter = new LogoutPageFilter();
-        panel.addFilter(filter);
-        // when
-        panel.moveToNavigationState();
-        // then
-        List<UserSitemapNode> nodes = nodesFromButtons(panel.getButtons());
-        assertThat(nodes).containsOnly(userSitemap.loginNode(), userSitemap.aNode(), userSitemap.publicHomeNode());
-        // when
-        panel.removeFilter(filter);
-        panel.moveToNavigationState();
-        // then
-        nodes = nodesFromButtons(panel.getButtons());
-        assertThat(nodes).containsOnly(userSitemap.loginNode(), userSitemap.aNode(), userSitemap.publicHomeNode(), userSitemap.logoutNode());
-    }
-
-    @Test
-    public void localeChanged() {
-
-        // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
-        LogoutPageFilter filter = new LogoutPageFilter();
-        panel.addFilter(filter);
-
-        // when
-        panel.moveToNavigationState();
-        // then
-        assertThat(panel.getButtons()
-                        .get(0)
-                        .getCaption()).isEqualTo("Log In");
-
-        // when
-        currentLocale.setLocale(Locale.GERMANY);
-        panel.localeChanged(new LocaleChangeBusMessage(this, Locale.GERMANY));
-        // then
-        assertThat(panel.getButtons()
-                        .get(0)
-                        .getCaption()).isEqualTo("Einloggen");
-    }
 
     @Test
     public void sortSelection() {
@@ -253,13 +185,13 @@ public class DefaultSubPagePanelTest {
         // when
         panel.setOptionSortAscending(false);
         // then build has happened
-        assertThat(panel.isRebuildRequired()).isFalse();
+        assertThat(panel.getRebuildRequired()).isFalse();
 
         // when
         panel.setSortAscending(true, false);
         panel.setOptionSortType(SortType.INSERTION, false);
         // then build has not happened
-        assertThat(panel.isRebuildRequired()).isTrue();
+        assertThat(panel.getRebuildRequired()).isTrue();
     }
 
     @Test
@@ -273,7 +205,7 @@ public class DefaultSubPagePanelTest {
         // when
         panel.structureChanged(new UserSitemapStructureChangeMessage());
         // then make sure build has been called
-        assertThat(panel.isRebuildRequired()).isFalse();
+        assertThat(panel.getRebuildRequired()).isFalse();
     }
 
     @Test
@@ -287,7 +219,7 @@ public class DefaultSubPagePanelTest {
         // when
         panel.afterViewChange(event);
         // then
-        assertThat(panel.rebuildRequired).isFalse();
+        assertThat(panel.isRebuildRequired()).isFalse();
     }
 
     @Test
@@ -300,7 +232,7 @@ public class DefaultSubPagePanelTest {
         //when
         panel.structureChanged(new UserSitemapStructureChangeMessage());
         //then
-        assertThat(panel.rebuildRequired).isFalse(); // we just want to make sure there is no NPE
+        assertThat(panel.isRebuildRequired()).isFalse(); // we just want to make sure there is no NPE
     }
 
     @ModuleProvider
@@ -310,8 +242,18 @@ public class DefaultSubPagePanelTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+
             }
 
         };
     }
+
+    public static class LocalOptionModule extends TestOptionModule {
+        @Override
+        protected void bindOption() {
+            bind(Option.class).toInstance(new MockOption());
+        }
+
+    }
+
 }

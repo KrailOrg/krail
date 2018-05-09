@@ -13,12 +13,10 @@
 package uk.q3c.krail.core.push;
 
 import com.google.inject.Inject;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.slf4j.Logger;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
-import uk.q3c.krail.eventbus.BusMessage;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -26,17 +24,17 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class DefaultPushMessageRouter implements PushMessageRouter {
     public static final String ALL_MESSAGES = "all";
     private static Logger log = getLogger(DefaultPushMessageRouter.class);
-    private PubSubSupport<BusMessage> uiBus;
+    private UIBusProvider uiBusProvider;
 
     @Inject
     public DefaultPushMessageRouter(UIBusProvider uiBusProvider) {
-        this.uiBus = uiBusProvider.get();
+        this.uiBusProvider = uiBusProvider;
     }
 
     @Override
     public void messageIn(String group, String message, UIKey sender, int messageId) {
         log.debug("publishing message from {}, with message id: {}", sender, messageId);
-        uiBus.publish(new PushMessage(group, message));
+        uiBusProvider.get().publish(new PushMessage(group, message));
     }
 
 

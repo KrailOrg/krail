@@ -13,7 +13,7 @@
 
 
 buildscript {
-    ext.kotlin_version = '1.2.40'
+    ext.kotlin_version = '1.2.41'
     ext.kaytee_plugin_version = "0.20.1.0"
     repositories {
         jcenter()
@@ -65,7 +65,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.16.3.0"
+        number = "0.16.4.0"
     }
     changelog {
         maxVersions = 10
@@ -97,9 +97,9 @@ dependencies {
     compile 'io.jsonwebtoken:jjwt:0.9.0'
 
     //Krail
-    compile 'uk.q3c.krail:krail-option:0.16.0.0'
+    compile 'uk.q3c.krail:krail-option:0.16.1.0'
     compile 'uk.q3c.krail:eventbus-mbassador:0.6.0.0'
-    compile 'uk.q3c.krail:krail-config:0.10.9.0'
+    compile 'uk.q3c.krail:krail-config:0.11.0.0'
 
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.20'
     compile 'com.github.mcollovati.vertx:vertx-vaadin8:0.4.0'

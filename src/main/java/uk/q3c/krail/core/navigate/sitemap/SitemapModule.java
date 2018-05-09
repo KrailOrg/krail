@@ -26,6 +26,11 @@ public class SitemapModule extends AbstractModule {
         bindService();
         bindLoaders();
         bindChecker();
+        bindEmptyView();
+    }
+
+    protected void bindEmptyView() {
+        bind(EmptyView.class).to(DefaultEmptyView.class);
     }
 
 
