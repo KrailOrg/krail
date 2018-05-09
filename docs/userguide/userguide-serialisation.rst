@@ -2,8 +2,6 @@
 Serialization
 =============
 
-:Date:   2018-05-09
-
 When Vaadin serialises to the session, it serialises the entire UI. This
 means anything contained within the UI is also serialized. If you follow
 the Krail approach of constructor injection for Views and UIs, it will

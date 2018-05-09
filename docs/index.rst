@@ -4,16 +4,50 @@
    contain the root `toctree` directive.
 
 Krail documentation
-=================================
+===================
 
 Contents:
 
+
 .. toctree::
-   :glob:
    :maxdepth: 3
+   :caption: User Guide
 
    userguide/userguide-intro
-   userguide/userguide-*
+   userguide/userguide-bootstrap
+   userguide/userguide-injector-scope
+   userguide/userguide-serialisation
+   userguide/license
+
+
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Developer Guide
+
+   devguide/devguide-introduction
+   devguide/devguide-goals
+   devguide/devguide-bootstrap
+   devguide/devguide-configuration-overview
+   devguide/devguide-eventbus
+   devguide/devguide-functional-test
+   devguide/devguide-guice-scopes
+   devguide/devguide-i18n
+   devguide/devguide-options-hierarchies
+   devguide/devguide-pages-navigation
+   devguide/devguide-persistence
+   devguide/devguide-serialisation
+   devguide/devguide-services
+   devguide/devguide-testing
+   devguide/devguide-uac
+   devguide/devguide-validation
+   devguide/devguide-vertx
+   devguide/license
+   
+
+
+
+
 
 
 

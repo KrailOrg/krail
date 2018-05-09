@@ -29,7 +29,7 @@ Deserialisation
 ---------------
 
 ``SerializationSupport`` is used to `re-inject Guice
-supplied <userguide/serialisation.md>`__, **transient** dependencies
+supplied <userguide/serialisation>`__, **transient** dependencies
 following deserialisation. Deserialisation occurs without any reference
 to Guice of course, so without this intervention, transient dependencies
 would be **null**.
@@ -42,9 +42,8 @@ KrailView classes as part of the site definition. At the moment, the
 most practical way to deal with this is to instantiate these views with
 the injector, when they are needed.
 
-When support for multiple views and UIs per route is implemented (issues
-`664 <https://github.com/davidsowerby/krail/issues/664>`__ and
-`665 <https://github.com/davidsowerby/krail/issues/665>`__, dynamic
-construction based on potentially any selection criteria, will be
+When support for multiple views and UIs per route is implemented, dynamic
+construction based on potentially any selection criteria will be
 required. There may be a better way, but currently it is looking like
-this will coninute to need access to the injector as well.
+this will continue to need access to the injector as well.
+( See issues `664 <https://github.com/davidsowerby/krail/issues/664>`__ and `665 <https://github.com/davidsowerby/krail/issues/665>`__)

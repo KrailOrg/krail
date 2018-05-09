@@ -2,8 +2,6 @@
 Bootstrap
 =========
 
-:Date:   2018-05-09
-
 In order to allow the same application code to run in both Vertx and
 Servlet environments, a bootstrap sequence is used. This is only really
 needed so that the Guice Injector can be held in a location suitable for
