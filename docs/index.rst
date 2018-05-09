@@ -8,6 +8,30 @@ Krail documentation
 
 Contents:
 
+.. toctree::
+   :maxdepth: 3
+   :caption: Tutorial
+
+   tutorial/tutorial-intro
+   tutorial/tutorial-getting-started
+   tutorial/tutorial-pages-navigation
+   tutorial/tutorial-ui-theme
+   tutorial/tutorial-user-notification
+   tutorial/tutorial-options
+   tutorial/tutorial-configuration-from-ini
+   tutorial/tutorial-uac
+   tutorial/tutorial-i18n
+   tutorial/tutorial-i18n-components-validation
+   tutorial/tutorial-persistence-jpa
+   tutorial/tutorial-guice-scopes
+   tutorial/tutorial-event-bus
+   tutorial/tutorial-services
+   tutorial/tutorial-push
+   tutorial/tutorial-eclipse
+   tutorial/tutorial-create-hierarchy
+   tutorial/tutorial-functional-test
+
+
 
 .. toctree::
    :maxdepth: 3
