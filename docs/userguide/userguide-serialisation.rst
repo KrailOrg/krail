@@ -55,10 +55,9 @@ deserialized, a standard Java ``readObject()`` is invoked method, and
 the Guice Injector. Hooks are also provided to allow you to intervene
 with your own logic at various points.
 
-    **Caution**
 
-    To enable this to work, certain conditions apply. Sub-classes of
-    ``ViewBase`` and ``ScopedUI`` :
+
+.. caution::    To enable this to work, certain conditions apply. Sub-classes of ``ViewBase`` and ``ScopedUI`` :
 
     -  must have non-Serializable fields must be marked **transient**,
        as normal
@@ -157,9 +156,9 @@ exclusions
        serializationSupport.setExcludedFieldNames(ImmutableList.of("thisField"));
     }
 
-    **Tip**
 
-    **Guice, Binding Annotations and Inheritance**. There is an
+
+.. tip::    **Guice, Binding Annotations and Inheritance**. There is an
     "interesting" side effect from using Guice binding annotations. It
     is very easy to provide the binding on a superclass constructor
     parameter, and then forget to put it on the equivalent sub-class
@@ -175,16 +174,14 @@ This list is not exhaustive, but identifies some of the commonly used
 Krail classes which cannot be made Serializable. For these, use the
 method described above to re-inject them.
 
--  ``BusProvider`` implementations which use MBassador. This currently
-   applies to all ``BusProvider`` implementations.
+-  ``BusProvider`` implementations which use MBassador. This currently  applies to all ``BusProvider`` implementations.
 
 -  ``PubSubSupport`` from MBassador
 
 Making your classes 'Guice Serializable'
 ========================================
 
-To implement a simpler process for your own classes (that is, those
-which are not Views or UIs), you can still use ``SerializationSupport``,
+To implement a simpler process for your own classes (that is, those which are not Views or UIs), you can still use ``SerializationSupport``,
 using the standard ``readObject()`` deserialization method:
 
 .. code:: java
@@ -194,7 +191,4 @@ using the standard ``readObject()`` deserialization method:
         serializationSupport.deserialize(this);
     }
 
-This combines the calls above, and invokes ``defaultReadObject()``,
-``injectTransients()`` and ``checkForNullTransients()`` If yuo want to
-exclude any fields, just set ``serializationSupport.excludedFieldNames``
-before invoking ``deserialize()``
+This combines the calls above, and invokes ``defaultReadObject()``, ``injectTransients()`` and ``checkForNullTransients()`` If you want to exclude any fields, just set ``serializationSupport.excludedFieldNames`` before invoking ``deserialize()``

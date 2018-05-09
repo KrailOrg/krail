@@ -5,16 +5,14 @@ Bootstrap
 In order to allow the same application code to run in both Vertx and
 Servlet environments, a bootstrap sequence is used. This is only really
 needed so that the Guice Injector can be held in a location suitable for
-the environment, so that it can be retrieved during
-`deserialisation </userguide/userguide-serialisation.html>`__ As a side
-effect, it has the additional benefit of simplifying basic application
-configuration.
+the environment, so that it can be retrieved during :doc:`deserialisation. <../userguide/userguide-serialisation>` As a side
+effect, it has the additional benefit of simplifying basic application configuration.
+
 
 Bootstrap File
 ==============
 
-A file called 'krail-bootstrap.yml' should be placed in
-*src/main/resources*.
+A file called 'krail-bootstrap.yml' should be placed in *src/main/resources*.
 
 Sample File
 -----------
@@ -45,10 +43,8 @@ Optional, defaults to 1.
 collator
 ~~~~~~~~
 
-Required. A fully qualified reference to your implementation of
-``BindingsCollator``, or you could even leave it as
-*uk.q3c.krail.core.guice.CoreBindingsCollator* and add your own modules
-as below.
+Required. A fully qualified reference to your implementation of ``BindingsCollator``, or you could even leave it as
+*uk.q3c.krail.core.guice.CoreBindingsCollator* and add your own modules as below.
 
 modules
 ~~~~~~~

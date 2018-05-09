@@ -6,6 +6,18 @@
 Krail documentation
 ===================
 
+This documentation is in 3 parts
+
+* :doc:`Tutorial. <tutorial/tutorial-intro>` As you would expect, this is a step by step tutorial.
+* :doc:`User Guide. <userguide/userguide-intro>` Notes on how to do things, collated by feature
+* :doc:`Developer Guide. <devguide/devguide-introduction>` Notes on why things are done the way they are. In truth, this is really a loose collection of technical notes optimistically called a "developer guide"
+
+Please do give feedback, whether it is something you do like or something you do not like.
+
+Enjoy
+
+*David Sowerby*
+
 Contents:
 
 .. toctree::

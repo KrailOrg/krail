@@ -2,8 +2,6 @@
 Injector Scope
 ==============
 
-:Date:   2018-05-09
-
 The scope of the Guice Injector can be significant. A **@Singleton** is
 described by Guice as "per application", and is therefore per Injector.
 
@@ -28,19 +26,15 @@ access the injector directly:
 Deserialisation
 ---------------
 
-``SerializationSupport`` is used to `re-inject Guice
-supplied <userguide/serialisation>`__, **transient** dependencies
-following deserialisation. Deserialisation occurs without any reference
-to Guice of course, so without this intervention, transient dependencies
+``SerializationSupport`` is used to re-inject Guice supplied :doc:`transient dependencies <../userguide/userguide-serialisation>`,
+following deserialisation. Deserialisation occurs without any reference to Guice of course, so without this intervention, transient dependencies
 would be **null**.
 
 View and UI Factory
 -------------------
 
-The ``MasterSitemap`` is a central component of Krail, and it uses
-KrailView classes as part of the site definition. At the moment, the
-most practical way to deal with this is to instantiate these views with
-the injector, when they are needed.
+The ``MasterSitemap`` is a central component of Krail, and it uses ``KrailView`` classes as part of the site definition. At the moment, the
+most practical way to deal with this is to instantiate these views with the injector, when they are needed.
 
 When support for multiple views and UIs per route is implemented, dynamic
 construction based on potentially any selection criteria will be
