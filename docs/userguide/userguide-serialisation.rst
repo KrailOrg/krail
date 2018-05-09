@@ -135,7 +135,7 @@ Kotlin example
 
 Because Kotlin declares a property rather than a separate constructor
 parameter and field, the property needs to be annotated in a way that
-causes Kotlin’s code generator to properly annotated its Java output:
+causes Kotlin’s code generator to correctly annotate its Java output:
 
 .. code:: kotlin
 
