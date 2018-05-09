@@ -5,6 +5,7 @@ bin
 build
 logs
 out
+docs/_build
 
 *.iml
 *.ipr
