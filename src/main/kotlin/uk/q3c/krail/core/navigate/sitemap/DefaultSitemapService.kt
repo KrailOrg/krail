@@ -19,7 +19,6 @@ import com.google.inject.Singleton
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.config.ApplicationConfiguration
 import uk.q3c.krail.config.InheritingConfiguration
-import uk.q3c.krail.config.config.ConfigKeys
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.eventbus.MessageBus
@@ -136,7 +135,7 @@ protected constructor(translate: Translate,
         val defaultValues = ArrayList<String>()
         defaultValues.add(SitemapSourceType.DIRECT.name)
         defaultValues.add(SitemapSourceType.ANNOTATION.name)
-        val list = configuration.getList(ConfigKeys.SITEMAP_SOURCES, defaultValues)
+        val list = configuration.getPropertyValue(SITEMAP_SOURCES, defaultValues)
         sourceTypes = ArrayList()
         for (o in list) {
             try {
@@ -192,3 +191,5 @@ protected constructor(translate: Translate,
     }
 
 }
+
+const val SITEMAP_SOURCES = "sitemap.sources"

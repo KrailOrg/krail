@@ -20,7 +20,6 @@ import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ApplicationConfiguration;
-import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.ui.ScopedUI;
 
@@ -34,7 +33,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 @ThreadSafe
@@ -103,7 +103,7 @@ public class DefaultBroadcaster implements Broadcaster {
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
         int messageId = messageCount.incrementAndGet();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        if (applicationConfiguration.getBoolean(ConfigKeys.SERVER_PUSH_ENABLED, true)) {
+        if (applicationConfiguration.getPropertyValue("server.push.enabled", true)) {
             log.debug("broadcasting message: {} from: {}", messageId, sender);
             List<BroadcastListener> listenerGroup = groups.get(group);
             if (listenerGroup != null) {

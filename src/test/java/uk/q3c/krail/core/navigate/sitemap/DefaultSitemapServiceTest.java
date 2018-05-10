@@ -16,15 +16,12 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
@@ -63,6 +60,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceKt.SITEMAP_SOURCES;
 
 /**
  * This test uses all standard implementations to inject into {@link DefaultSitemapService}.
@@ -100,7 +98,7 @@ public class DefaultSitemapServiceTest {
     }
 
     @Before
-    public void setup() throws ConfigurationException {
+    public void setup() {
 
         File inifile = new File(resourceUtils.userTempDirectory(), "WEB-INF/krail.ini");
         iniConfig = new HierarchicalINIConfiguration(inifile);
@@ -109,7 +107,7 @@ public class DefaultSitemapServiceTest {
     }
 
     @After
-    public void teardown() throws Exception {
+    public void teardown() {
         service.stop();
         iniConfig.clear();
         iniConfig.save();
@@ -131,7 +129,7 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getDescription()).isEqualTo("This service creates the Sitemap using options from the " + "application configuration");
     }
 
-    public void sourcesPropertyMissing() throws Exception {
+    public void sourcesPropertyMissing() {
 
         // given
         iniConfig.clear();
@@ -149,9 +147,8 @@ public class DefaultSitemapServiceTest {
     /**
      * Key is there but value is not
      *
-     * @throws Exception
      */
-    public void sourcesPropertyEmpty() throws Exception {
+    public void sourcesPropertyEmpty() {
 
         // given
         List<String> sources = new ArrayList<>();
@@ -170,7 +167,7 @@ public class DefaultSitemapServiceTest {
     }
 
     @Test
-    public void invalidSource_butValidOnePresent() throws Exception {
+    public void invalidSource_butValidOnePresent() {
         // given
         List<String> sources = new ArrayList<>();
         sources.add("wiggly");
@@ -202,14 +199,14 @@ public class DefaultSitemapServiceTest {
 
 //
 
-    public void invalidSource_noGoodOnes() throws Exception {
+    public void invalidSource_noGoodOnes() {
 
         // given
         List<String> sources = new ArrayList<>();
         sources.add("wiggly");
         sources.add("wobbly");
         iniConfig.setDelimiterParsingDisabled(true);
-        iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES, sources);
+        iniConfig.setProperty(SITEMAP_SOURCES, sources);
         iniConfig.setDelimiterParsingDisabled(false);
         iniConfig.save();
         System.out.println(iniConfig.getProperty(ConfigKeys.SITEMAP_SOURCES));

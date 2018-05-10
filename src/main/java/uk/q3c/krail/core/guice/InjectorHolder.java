@@ -1,7 +1,7 @@
 package uk.q3c.krail.core.guice;
 
 import com.google.inject.Injector;
-import uk.q3c.krail.config.ConfigurationException;
+import uk.q3c.krail.core.ConfigurationException;
 
 /**
  *

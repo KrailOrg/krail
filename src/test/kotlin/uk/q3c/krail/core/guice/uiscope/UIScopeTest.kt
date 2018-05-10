@@ -28,7 +28,7 @@ import com.vaadin.server.VaadinSession
 import com.vaadin.ui.UI
 import com.vaadin.util.CurrentInstance
 import net.engio.mbassy.bus.common.PubSubSupport
-import org.apache.commons.lang.SerializationUtils
+import org.apache.commons.lang3.SerializationUtils
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authz.Permission
 import org.apache.shiro.cache.CacheManager
@@ -162,7 +162,7 @@ class UIScopeTest {
 
         val uiScope = UIScope.getCurrent()
         val output = SerializationUtils.serialize(uiScope)
-        SerializationUtils.deserialize(output)
+        SerializationUtils.deserialize<UIScope>(output)
         val tracer = SerializationTracer()
         tracer.trace(uiScope)
         tracer.shouldNotHaveAny(SerializationOutcome.FAIL)
