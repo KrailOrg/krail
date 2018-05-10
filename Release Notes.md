@@ -1,4 +1,4 @@
-# Release notes for 0.16.3.0
+# Release notes for 0.16.4.3
 
-Fixing UIScope serialisation
+Documentation has been converted into ReST, and the hosting of it moved back to ReadTheDocs
 

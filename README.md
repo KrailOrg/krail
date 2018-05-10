@@ -27,7 +27,7 @@ Additional libraries, integrated and configured through Guice, provide:
 * Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
 
 
-The [User Guide](https://www.gitbook.com/book/davidsowerby/krail-user-guide/details) provides more information (regrettably, the absence of a working search facility in ReadTheDocs forced a move to GitBook).
+The [Documentation](http://krail.readthedocs.io/en/master/), which includes a Tutorial, user Guide and Developer Guide, provides more information
  
 
 ---
@@ -36,7 +36,7 @@ The [User Guide](https://www.gitbook.com/book/davidsowerby/krail-user-guide/deta
 
 ---
 
-Krail has now been updated to Vaadin 8, and Serialization implement to enable use in a clustered environment.
+Krail has now been updated to Vaadin 8, and Serialization implemented (though with some fixes still required) to enable use in a clustered environment.
 
 Vaadin Push is temporarily broken
 
