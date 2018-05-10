@@ -80,7 +80,11 @@ Contents:
    devguide/devguide-vertx
    devguide/license
    
+.. toctree::
+   :maxdepth: 3
+   :caption: Glossary
 
+   glossary
 
 
 
