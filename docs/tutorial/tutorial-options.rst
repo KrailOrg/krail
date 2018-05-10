@@ -207,6 +207,8 @@ example, and are only really necessary if you want something like "Push
 Button 1", "Push Button 2" - you can use the qualifier for the final
 digit.
 
+.. note:: An option value is just an object to Krail. Supported data types will be determined by your choice of persistence. However, the core provides a utility class ``DataConverter``,  to help with the process of translating to String for persistence.
+
 We will make use of these keys in the ``optionValueChanged`` method, to
 hide or show the news channels:
 
@@ -215,7 +217,7 @@ hide or show the news channels:
 -  add the code to make the channels visible or hidden depending on the
    option value
 
-::
+.. sourcecode:: java
 
         @Override
         public void optionValueChanged(Property.ValueChangeEvent event) {
@@ -224,32 +226,43 @@ hide or show the news channels:
             vacancies.setVisible(option.get(vacanciesVisible));
         }
 
-\*
 
-Finally, we need to make sure these options are processed as part of the
-build, so we call ``optionValueChanged`` from ``doBuild`` \` @Override
-protected void doBuild(ViewChangeBusMessage busMessage) {
-super.doBuild(busMessage); ceoNews = new Label("CEO News"); itemsForSale
-= new Label("Items for Sale"); vacancies = new Label("Vacancies");
-ceoNews.setSizeFull(); itemsForSale.setSizeFull();
-vacancies.setSizeFull(); setMiddleLeft(itemsForSale);
-setCentreCell(ceoNews); setMiddleRight(vacancies);
-optionValueChanged(null); } \` Now we have options but we do not have
-any way of changing them. We will use ``OptionPopup`` to enable that …
+Finally, we need to make sure these options are processed as part of the build, so we call ``optionValueChanged`` from ``doBuild``
 
-\*
+.. sourcecode:: java
 
-Inject ``OptionPopup`` into the constructor \` @Inject public
-MyNews(Option option, OptionPopup optionPopup) { this.option = option;
-this.optionPopup = optionPopup; } \`
+   @Override
+   protected void doBuild(ViewChangeBusMessage busMessage) {
+      super.doBuild(busMessage); ceoNews = new Label("CEO News");
+      itemsForSale = new Label("Items for Sale"); vacancies = new Label("Vacancies");
+      ceoNews.setSizeFull(); itemsForSale.setSizeFull();
+      vacancies.setSizeFull(); setMiddleLeft(itemsForSale);
+      setCentreCell(ceoNews); setMiddleRight(vacancies);
+      optionValueChanged(null); }
 
--  Add a button in ``doBuild()`` to invoke the popup \` popupButton=new
-   Button ("options");
+
+Now we have options but we do not have any way of changing them. We will use ``OptionPopup`` to enable that …
+
+Inject ``OptionPopup`` into the constructor
+
+.. sourcecode:: java
+
+   @Inject public MyNews(Option option, OptionPopup optionPopup) {
+      this.option = option;
+      this.optionPopup = optionPopup;
+   }
+
+-  Add a button in ``doBuild()`` to invoke the popup
+
+.. sourcecode:: java
+
+   popupButton=new Button ("options");
    popupButton.addClickListener(event->optionPopup.popup(this,LabelKey.News\_Options));
-   setBottomCentre(popupButton); \` This is how the whole class should
-   look now:
+   setBottomCentre(popupButton);
 
-::
+This is how the whole class should look now:
+
+.. sourcecode:: java
 
     package com.example.tutorial.pages;
 
@@ -366,7 +379,7 @@ the ``OptionKey``. Now to demonstrate changing the system level value:
 
 -  and of course we need to put the button on the page
 
-::
+.. sourcecode:: java
 
         systemOptionButton = new Button("system option");
         systemOptionButton.addClickListener(event -> {
@@ -427,36 +440,35 @@ hierarchies as you wish, and we will come back to this subject later to
 Option Data Types
 =================
 
-When using the default in memory store, Krail can use any data type for
-an option. However, most persistence providers will want to confine
-Option values to a single table, and ``DataConverter`` provides support
-for that, by translating ``Option`` values to ``String`` and back again.
+When using the default in memory store, Krail can use any data type for an option. However, most persistence providers will want to confine
+Option values to a single table, and ``DataConverter`` provides support for that, by translating ``Option`` values to ``String`` and back again.
 
-This supports most primitive data types , ``Enum`` and ``I18NKey``.
-Collections cannot be used directly, but are supported through
-``uk.q3c.util.data.collection.DataList``.
+This supports most primitive data types , ``Enum`` and ``I18NKey``. Collections cannot be used directly, but are supported through ``uk.q3c.util.data.collection.DataList``.
 
-.. code:: AnnotationOptionList``` enables the use of a list of ```Annotation``` classes.
+``AnnotationOptionList`` enables the use of a list of ``Annotation`` classes.
 
-    See ```uk.q3c.util.DefaultDataConverter``` for the complete list of supported types.
+See ``uk.q3c.util.DefaultDataConverter`` for the complete list of supported types.
 
 
-    #Summary
+Summary
+=======
 
-    We have:
+We have:
 
-    - introduced options, and their purpose
-    - demonstrated their hierarchical nature
-    - seen that user access control is applied to options
-    - shown that ```OptionKey``` provides a full key definition, enabling the ```OptionPopup``` to populate without any further coding
+   - introduced options, and their purpose
+   - demonstrated their hierarchical nature
+   - seen that user access control is applied to options
+   - shown that ``OptionKey`` provides a full key definition, enabling the ``OptionPopup`` to populate without any further coding
 
 
-    #Download from GitHub
-    To get to this point straight from GitHub:
+Download from GitHub
+====================
 
-git clone https://github.com/davidsowerby/krail-tutorial.git cd
-krail-tutorial git checkout –track origin/krail\_0.10.0.0
+To get to this point straight from GitHub:
 
-::
+   - git clone https://github.com/davidsowerby/krail-tutorial.git
+   - cd krail-tutorial
+   - git checkout –track origin/krail\_0.10.0.0
 
-    Revert to commit _Options and UserHierarchies Complete_
+
+Revert to commit *Options and UserHierarchies Complete*
