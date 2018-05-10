@@ -1,12 +1,11 @@
-=====
-Goals
-=====
+====================
+Goals and Objectives
+====================
 
 Terminology
 ===========
 
--  **Krail developer** - someone developing an application based on
-   Krail
+-  **Krail developer** - someone developing an application based on Krail
 
 -  **Krail team** - the team which writes Krail itself
 
@@ -67,8 +66,7 @@ on Krail. They are still goals, but considered less important than the
    assessed before making a switch
 
 4. A single development lifecycle, but with optional steps. This is
-   currently provided by the `KayTee
-   plugin <https://github.com/davidsowerby/kaytee-plugin>`__, but that
+   currently provided by the `KayTee plugin <https://github.com/davidsowerby/kaytee-plugin>`__, but that
    is not at production standard. It is, however, a companion product to
    Krail
 
@@ -101,8 +99,7 @@ Documentation
 1. Documentation should be kept with and maintained at the same time as
    its associated code. This is not currently achieved because all the
    documentation is in the main Krail repository. Since the move to
-   GitBook, it may be achievable using an
-   `include <https://www.npmjs.com/package/gitbook-plugin-include>`__
+   Sphinx / ReST, it may be achievable using an `include <http://docutils.sourceforge.net/docs/ref/rst/directives.html#include>`__
 
 2. Javadoc (or Kotlin equivalent) does not need to state the obvious.
    But, if you think you would benefit from some notes when you come

@@ -23,7 +23,7 @@ anything which uses cglib. At the moment the only way round this is to
 use manual coding instead of AOP supported annotations. For example,
 instead of using:
 
-.. code:: java
+.. sourcecode:: java
 
     @RequiresPermission()
     public void doSomething(){
@@ -32,7 +32,7 @@ instead of using:
 
 use
 
-.. code:: java
+.. sourcecode:: java
 
     if (subjectProvider.get().isPermitted("page:view:private")) {
         userNotifier.notifyInformation(LabelKey.Yes);
@@ -115,9 +115,9 @@ suppressed. If you do annotate the field with @Inject, then outside of
 deserialization, Guice will inject the field twice, once via the
 constructor, and once directly to the field.
 
-.. code:: java
+.. sourcecode:: java
 
-    public class MyView extends ViewBase{
+    public class MyView extends ViewBase {
 
        @Named("1)  // to match its constructor parameter
        private transient Widget widget1;
@@ -137,7 +137,7 @@ Because Kotlin declares a property rather than a separate constructor
 parameter and field, the property needs to be annotated in a way that
 causes Kotlin’s code generator to correctly annotate its Java output:
 
-.. code:: kotlin
+.. sourcecode:: kotlin
 
     class MyView @Inject constructor(translate:Translate, serializationSupport:SerializationSupport, @field:Named("1") @param:Named("1") @Transient val widget1:Widget) : ViewBase(translate,serializationSupport)
 
@@ -150,7 +150,7 @@ the final check, by overriding the ``ViewBase`` or ``ScopedUI`` method
 ``beforeDeserialization()`` or ``beforeTransientInjection()`` to set the
 exclusions
 
-.. code:: java
+.. sourcecode:: java
 
     protected void beforeTransientInjection(){
        serializationSupport.setExcludedFieldNames(ImmutableList.of("thisField"));
@@ -184,7 +184,7 @@ Making your classes 'Guice Serializable'
 To implement a simpler process for your own classes (that is, those which are not Views or UIs), you can still use ``SerializationSupport``,
 using the standard ``readObject()`` deserialization method:
 
-.. code:: java
+.. sourcecode:: java
 
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
         inputStream.defaultReadObject();

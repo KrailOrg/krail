@@ -16,10 +16,10 @@ Up to date sections
 
 These sections, however, are considered to be up to date:
 
--  `Goals <devguide/devguide-goals.adoc>`__
+-  :doc:`Goals <../devguide/devguide-goals>`
 
--  `Bootstrap <devguide/devguide-bootstrap.adoc>`__
+-  :doc:`Bootstrap <../devguide/devguide-bootstrap>`
 
--  `Serialization <devguide/devguide-serialisation.adoc>`__
+-  :doc:`Serialisation <../devguide/devguide-serialisation>`
 
--  `Vertx <devguide/devguide-vertx.adoc>`__
+-  :doc:`Vertx <../devguide/devguide-vertx>`

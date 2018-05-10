@@ -33,7 +33,7 @@ defined by your views and components. By default, anything which
 implements [Layout] is ignored, as these do not usually declare any
 components, and are not usually required for functional testing.
 
-You can, however, use an [AssignComponentId] annotation to change this
+You can, however, use an **@AssignComponentId** annotation to change this
 
 Affect on Performance
 ---------------------
@@ -43,8 +43,7 @@ but does have the penalty of incurring additional network traffic for
 all the extra labels, which you might not want in a production
 environment.
 
-There is an outstanding
-`issue <https://github.com/davidsowerby/krail/issues/662>`__ to make it
+There is an outstanding `issue <https://github.com/davidsowerby/krail/issues/662>`__ to make it
 possible to switch this feature off via configuration.
 
 Functional Test Support
@@ -68,8 +67,7 @@ the objective it to enable the use of different test tools without
 changing the tests
 
 See ``KotlinPageObjectGenerator`` and the other classes in
-uk.q3c.krail.functest, in the
-`test-app <https://github.com/davidsowerby/krail-testApp>`__ project
+uk.q3c.krail.functest, in the `test-app <https://github.com/davidsowerby/krail-testApp>`__ project
 
 Functional Test Support This will become a separate library in the near
 future.

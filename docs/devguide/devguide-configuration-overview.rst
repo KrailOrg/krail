@@ -59,5 +59,4 @@ hierarchy, as that it application dependent, it simply provides a
 mechanism to enable it). Option is typically used to allow users to make
 their own choices, but also provide typical defaults based on one or
 more hierarchies they are a member of. This is quite a large subject and
-therefore has its own section, `Option and
-UserHierarchy <../tutorial/tutorial-options.md>`__.
+therefore has its own section, :doc:`Option and UserHierarchy <../tutorial/tutorial-options>`.

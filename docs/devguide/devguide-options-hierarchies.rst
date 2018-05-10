@@ -7,8 +7,7 @@ many applications, whether it is just letting them decide what they see
 on a page, or maybe the news feed they get. Krail provides an
 implementation which should be flexible enough for any application, with
 a minimum of effort. This guide describes the structure and principles
-behind Options - for detail of how to use them, please refer to the
-`Tutorial <../tutorial/tutorial-options.md>`__.
+behind Options - for detail of how to use them, please refer to the :doc:`Tutorial <../tutorial/tutorial-options>`.
 
 Relationship to Configuration
 =============================
@@ -55,7 +54,7 @@ Of course, you don’t have to give all users the facility to change all
 options - you may restrict changing some options values, for example, to
 sys admins, to provide consistency across the whole system.
 
-Accessing options is always through the Option interface. This enables a
+Accessing options is always through the ``Option`` interface. This enables a
 simple, consistent API for storing and retrieving options.
 
 Hierarchies

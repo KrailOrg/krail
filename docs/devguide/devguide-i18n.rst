@@ -32,13 +32,14 @@ variable values and provide the result.
 The Pattern
 -----------
 
-The pattern needs to be of the form: \` The {1} task completed {0}
-iterations in {2} seconds \` Different languages may require the
-parameters to be in a different order - the number in the {0} represents
-the order in which the values should be assigned, so for this example
-values of 5, "last", 20 will become:
+The pattern needs to be of the form::
 
-The last task completed 5 iterations in 20 seconds
+   The {1} task completed {0} iterations in {2} seconds
+
+Different languages may require the parameters to be in a different order - the number in the {0} represents
+the order in which the values should be assigned, so for this example values of 5, "last", 20 will become::
+
+   The last task completed 5 iterations in 20 seconds
 
 The Key
 -------
@@ -47,8 +48,14 @@ A key in Krail is an enum. This has many advantages over the usual
 approach of using String constants, especially when combining modules
 which may need to define their own keys in isolation from each other.
 They are also more refactor-friendly. An I18N key class must implement
-the I18NKey interface: \` public enum LabelKey implements I18NKey { Yes,
-No, Cancel } \` A key class represents a "bundle".
+the I18NKey interface:
+
+.. sourcecode:: java
+
+   public enum LabelKey implements I18NKey { Yes, No, Cancel }
+
+
+A key class represents a "bundle".
 
 The Bundle
 ----------
@@ -83,27 +90,29 @@ another.
 Translate
 ---------
 
-The Translate class is the final step in bringing the pieces together.
+The ``Translate`` class is the final step in bringing the pieces together.
 It looks up the pattern for a ``Locale``, via the ``PatternSource``, and
 combines that with the parameter values it is given. For the example
 above the call would be:
 
-translate.from (MessageKey.Task\_Completion, Locale.UK, 5, "last", 20)
+.. sourcecode:: java
 
-If Translate cannot find a pattern, it will default to using the key
+   translate.from (MessageKey.Task_Completion, Locale.UK, 5, "last", 20)
+
+If ``Translate`` cannot find a pattern, it will default to using the key
 name (with underscores replaced with spaces). This is useful when
 prototyping, as the pattern can still be meaningful even if not strictly
 accurate. That’s why you will find many of the Krail examples break with
 the convention of using all uppercase for the I18NKey enum constants.
 
-Note that if "last" also need to be translated, Translate will accept
+Note that if "last" also need to be translated, ``Translate`` will accept
 and perform a nested translation on an I18NKey (though the nested value
 cannot have parameters - if that is required, two calls to Translate
 will be needed)
 
-.. code:: java
+.. sourcecode:: java
 
-    translate.from (MessageKey.Task_Completion, Locale.UK, 5, LabelKey.last, 20)
+   translate.from (MessageKey.Task_Completion, Locale.UK, 5, LabelKey.last, 20)
 
 You do not always have to specify the Locale - the default is to use
 CurrentLocale.
@@ -166,52 +175,57 @@ Managing Locale
 CurrentLocale
 -------------
 
-.. code:: CurrentLocale``` holds the locale setting for the current ```VaadinSession```.  Once a user has logged in
+```CurrentLocale``` holds the locale setting for the current ```VaadinSession```.  Once a user has logged in, it is also possible to set the locale for a specific component, using the annotations described below.
 
-    It is also possible to set  the locale for a specific component, using the annotations described below.
+Using I18N with Components
+--------------------------
 
-    #Using I18N with Components
+A typical component will need a caption, description (tooltip) and potentially a value.   These need to be set in a way which recognises the correct locale, and potentially to update if a change of locale occurs.
 
-    A typical component will need a caption, description (tooltip) and potentially a value.   These need to be set in a way which recognises the correct locale, and potentially to update if a change of locale occurs.
+@Caption
+~~~~~~~~
 
-    **@Caption**
+The **@Caption** annotation marks a component as requiring translation, and can provide caption and description
 
-    The @Caption annotation marks a component as requiring translation, and can provide caption and description
+.. sourcecode:: java
 
-@Caption(caption=LabelKey.Yes, description=DescriptionKey.Confirm\_Ok)
+   @Caption(caption=LabelKey.Yes, description=DescriptionKey.Confirm_Ok)
 
-::
 
-    The application UI invokes the `I18NProcessor` to perform the translation during initialisation of any components it contains directly. When a view becomes current, its components are also scanned for *@18N* annotations and translated. `I18NProcessor` also updates the component's locale, so that values are displayed in the correct format.
+The application UI invokes the `I18NProcessor` to perform the translation during initialisation of any components it contains directly. When a view becomes current, its components are also scanned for *@18N* annotations and translated. `I18NProcessor` also updates the component's locale, so that values are displayed in the correct format.
 
-    When `CurrentLocale` is changed, any UIs associated with the same VaadinSession are informed, and they each update their own components, and their current view. When a view is changed, if the current locale is different to that previously used by the view, then the View and its components are updated with the correct translation.
+When ``CurrentLocale`` is changed, any UIs associated with the same VaadinSession are informed, and they each update their own components, and their current view. When a view is changed, if the current locale is different to that previously used by the view, then the View and its components are updated with the correct translation.
 
-    When a field or class is annotated with *@I18N*, the scan drills down to check for more annotations, unless the annotation is on a core Vaadin component (something with a class name starting with 'com.Vaadin') - these clearly cannot contain I18N annotations. and therefore no drill down occurs.
+When a field or class is annotated with *@I18N*, the scan drills down to check for more annotations, unless the annotation is on a core Vaadin component (something with a class name starting with 'com.Vaadin') - these clearly cannot contain I18N annotations. and therefore no drill down occurs.
 
-    *@Description*
+@Description
+~~~~~~~~~~~~
 
-    Similar to *@Caption*, but without the caption !
+Similar to *@Caption*, but without the caption !
 
-    *@Value*
+@Value
+~~~~~~
 
-    Usually, it is the caption and description which would be subject to internationalisation, but there are occasions when it is a component's value which should be handled this way - a `Label` is commonly an example of this. Because the use of value is a little inconsistent in this context it has its own annotation.
+Usually, it is the caption and description which would be subject to internationalisation, but there are occasions when it is a component's value which should be handled this way - a `Label` is commonly an example of this. Because the use of value is a little inconsistent in this context it has its own annotation.
 
-    == Multiple annotations
+Multiple annotations
+~~~~~~~~~~~~~~~~~~~~
 
-    You can apply multiple annotations - but note that if you define the locale differently in the two annotations, the result is indeterminate (that is, it could be either of the two locales that have been set).
+You can apply multiple annotations - but note that if you define the locale differently in the two annotations, the result is indeterminate (that is, it could be either of the two locales that have been set).
 
-    == Composite Components and Containers
+Composite Components and Containers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    There are occasions when an object contains components, and may not be a component itself, or possibly just not need translation.
+There are occasions when an object contains components, and may not be a component itself, or possibly just not need translation.
 
-    For example, you have a composite component `MyComposite` which itself does not need a caption or description - but it contains components which do. For these cases, simply annotate it with @18N without any parameters, and `I18NProcessor` will scan `MyComposite` for any fields which need processing.
+For example, you have a composite component ``MyComposite`` which itself does not need a caption or description - but it contains components which do. For these cases, simply annotate it with @18N without any parameters, and ``I18NProcessor`` will scan ``MyComposite`` for any fields which need processing.
 
-    If `MyComposite` is intended to be re-usable, it would probably be better to annotate the class with *@I18N*, so that it does not need to be annotated each time it is used.
+If ```MyComposite`` is intended to be re-usable, it would probably be better to annotate the class with *@I18N*, so that it does not need to be annotated each time it is used.
 
-    = Extending I18N
+Extending I18N
+--------------
+Annotation parameters cannot be generics, so will need to provide your own equivalent of *@Caption*, *@Description* and *@Value* to use your keys for annotating components for translation. The method for doing this is described in the Tutorial - Extending I18N.
 
-    Annotation parameters cannot be generics, so will need to provide your own equivalent of *@Caption*, *@Description* and *@Value* to use your keys for annotating components for translation. The method for doing this is described in the Tutorial - Extending I18N.
-
-    = Validation
-
-    The messages used in validation can be supported in the same way .. see the Validation section for details.
+Validation
+----------
+The messages used in validation can be supported in the same way .. see the Validation section for details.

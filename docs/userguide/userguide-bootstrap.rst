@@ -19,7 +19,7 @@ Sample File
 
 A minimal example file.
 
-.. code:: yaml
+.. sourcecode:: yaml
 
     version: 1
     collator: uk.q3c.krail.core.guice.CoreBindingsCollator

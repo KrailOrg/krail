@@ -19,8 +19,7 @@ Overview
 ========
 
 Most of the work is done in the ``EventBusModule``, which binds bus
-instances to match the `Krail
-scopes <../tutorial/tutorial-guice-scopes.md>`__ of **@Singleton**,
+instances to match the :doc:`Krail scopes <../tutorial/tutorial-guice-scopes>` of **@Singleton**,
 **@VaadinSessionScope** and **@UIScope**. You don’t have to use all
 three, but there is a natural correlation between a bus and a scope.
 
@@ -52,19 +51,16 @@ Publishing Messages
 Simply inject the **@GlobalMessageBus**, **@SessionBus** or **@UIBus**
 you want:
 
-::
+.. sourcecode:: java
 
     public class MyClassWithPublish {
 
-    [source]
-    ----
     private final eventBus;
 
-    @Inject
-    protected MyClassWithPublish(@SessionBus PubSubSupport eventBus){
-        this.eventBus=eventBus;
-    }
-    ----
+        @Inject
+        protected MyClassWithPublish(@SessionBus PubSubSupport eventBus){
+            this.eventBus=eventBus;
+        }
 
     }
 
@@ -86,22 +82,17 @@ Annotate the method within the listener class which will handle the
 message with **@Handler**. The method must have a single parameter of
 the type of message you want to receive
 
-::
+.. sourcecode:: java
 
+    @Handler
     public void MyMessageHandlerMethod(MyBusMessage busMessage){
 
-    [source]
-    ----
-    MyClassWithPublish sender = busMessage.getSender();
-
-    .... etc ...
-    ----
+        MyClassWithPublish sender = busMessage.getSender();
 
     }
 
 There are some other very useful features such as Filters and Priority
-.. see the `MBassador
-documentation <https://github.com/bennidi/mbassador>`__.
+.. see the `MBassador documentation <https://github.com/bennidi/mbassador>`__.
 
 Automatic Subscription
 ======================

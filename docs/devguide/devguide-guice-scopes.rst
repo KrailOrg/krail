@@ -2,13 +2,10 @@
 Guice Scopes
 ============
 
-This section considers Guice and in particular its relationship with
-Vaadin
+This section considers Guice and in particular its relationship with Vaadin
 
-To understand Guice itself, the `Guice
-documentation <https://github.com/google/guice/wiki>`__ is a good place
-to start. This documentation only addresses points which relate to its
-use in Krail
+To understand Guice itself, the `Guice documentation <https://github.com/google/guice/wiki>`__ is a good place
+to start. This documentation only addresses points which relate to its use in Krail
 
 
 If you think you are not are not familiar with the idea of scopes,
@@ -18,10 +15,8 @@ different to thinking of variables having scope.
 Vaadin Environment
 ==================
 
-The `Vaadin
-architecture <https://vaadin.com/book/vaadin7/-/page/architecture.html>`__
-is significantly different to a typical Web environment. There are three
-scopes used by Krail to reflect Vaadin’s design:
+The `Vaadin architecture <https://vaadin.com/book/vaadin7/-/page/architecture.html>`__
+is significantly different to a typical Web environment. There are three scopes used by Krail to reflect Vaadin’s design:
 
 UI Scope
 --------
