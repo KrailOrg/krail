@@ -17,6 +17,8 @@ import com.google.inject.AbstractModule;
  * Created by David Sowerby on 27/05/15.
  */
 public class PushModule extends AbstractModule {
+    public static final String SERVER_PUSH_ENABLED = "server.push.enabled";
+
     /**
      * {@inheritDoc}
      */

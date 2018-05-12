@@ -1,4 +1,8 @@
-# Release notes for 0.16.4.3
+# Release notes for 0.16.5.0
 
-Documentation has been converted into ReST, and the hosting of it moved back to ReadTheDocs
+Updated krail-config to fix serialization of ``ApplicationConfiguration``
+Fixed various other serialisation issues
+``ConfigurationException`` moved from config to core
+``ConfigKeys`` has been removed, keys are defined where they originate
+SERVER_PUSH_ENABLED is defined in PushModule
 

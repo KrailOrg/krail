@@ -28,7 +28,7 @@ import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestI18NModule;
-import uk.q3c.krail.option.mock.MockOption;
+import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
@@ -52,7 +52,7 @@ public class DescriptionKeyTest {
     Translate translate;
 
     @Inject
-    MockOption option;
+    Option option;
 
     @Before
     public void setup() {

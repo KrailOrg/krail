@@ -23,7 +23,7 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
+import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
@@ -85,7 +85,7 @@ public class CoreBindingsCollator implements BindingsCollator {
         modules.add(startupModule());
         modules.add(uiModule());
         modules.add(i18NModule());
-        modules.add(applicationConfigurationModule());
+
         modules.add(sitemapModule());
 
         modules.add(new ThreadScopeModule());
@@ -120,6 +120,7 @@ public class CoreBindingsCollator implements BindingsCollator {
         addValidationModules(modules);
 
         addAppModules(modules);
+        addApplicationConfigurationModules(modules);
         addSitemapModules(modules);
         addPersistenceModules(modules);
         addSerializationSupport(modules);
@@ -231,15 +232,6 @@ public class CoreBindingsCollator implements BindingsCollator {
         return new KrailI18NModule();
     }
 
-    /**
-     * Override this if you have provided your own {@link ApplicationConfigurationModule}
-     *
-     * @return new instance of ApplicationConfigurationModule
-     */
-
-    protected Module applicationConfigurationModule() {
-        return new KrailApplicationConfigurationModule();
-    }
 
     /**
      * Modules used in the creation of the {@link MasterSitemap} do not actually need to be separated, this just makes a convenient way of seeing them as a
@@ -317,6 +309,14 @@ public class CoreBindingsCollator implements BindingsCollator {
      */
     protected void addAppModules(List<Module> modules) {
     }
+
+    protected void addApplicationConfigurationModules(List<Module> modules) {
+        modules.add(new KrailApplicationConfigurationModule());
+        modules.add(new ConfigurationFileModule());
+    }
+
+
+
 
     /**
      * Add as many persistence related modules as needed.  These modules do not need to be separated, this just forms a convenient grouping for clarity

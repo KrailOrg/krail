@@ -20,6 +20,7 @@ import fixture.testviews2.ViewA;
 import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
@@ -52,7 +53,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
+@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class, ConfigurationFileModule.class,
         ShiroVaadinModule.class, KrailI18NModule.class, SitemapModule.class, UserModule.class, InMemoryModule.class, TestOptionModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class,
         VaadinEventBusModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class, UtilModule.class,})

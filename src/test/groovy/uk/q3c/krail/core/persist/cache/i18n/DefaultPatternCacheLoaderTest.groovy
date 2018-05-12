@@ -23,6 +23,7 @@ import uk.q3c.krail.i18n.persist.PatternSourceProvider
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
 import uk.q3c.krail.option.Option
+import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.testutil.LogMonitor
 
 /**
@@ -35,13 +36,14 @@ class DefaultPatternCacheLoaderTest extends Specification {
     DefaultPatternCacheLoader loader
     def option = Mock(Option)
     def sourceProvider = Mock(PatternSourceProvider)
+    SerializationSupport serializationSupport = Mock(SerializationSupport)
 
     LogMonitor logMonitor
 
     def setup() {
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(this.getClass())
-        loader = new DefaultPatternCacheLoader(sourceProvider, option)
+        loader = new DefaultPatternCacheLoader(sourceProvider, option, serializationSupport)
     }
 
     def cleanup() {

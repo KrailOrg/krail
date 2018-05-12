@@ -28,7 +28,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.test.TestI18NModule;
-import uk.q3c.krail.option.mock.MockOption;
+import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.util.UtilModule;
@@ -61,7 +61,7 @@ public class DefaultI18NFieldScannerTest {
     CurrentLocale currentLocale;
 
     @Inject
-    MockOption option;
+    Option option;
 
     DefaultI18NFieldScanner scanner;
 

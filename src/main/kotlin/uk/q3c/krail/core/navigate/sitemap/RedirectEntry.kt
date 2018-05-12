@@ -10,17 +10,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.q3c.krail.core.navigate.sitemap;
+package uk.q3c.krail.core.navigate.sitemap
 
-public class RedirectEntry {
-    private final String redirectTarget;
+import java.io.Serializable
 
-    protected RedirectEntry(String redirectTarget) {
-        super();
-        this.redirectTarget = redirectTarget;
-    }
-
-    public String getRedirectTarget() {
-        return redirectTarget;
-    }
-}
+data class RedirectEntry(val redirectTarget: String) : Serializable

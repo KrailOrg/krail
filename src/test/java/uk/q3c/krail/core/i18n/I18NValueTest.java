@@ -29,7 +29,7 @@ import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.option.mock.MockOption;
+import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryOptionStore;
@@ -46,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class I18NValueTest {
 
     @Inject
-    MockOption option;
+    Option option;
 
     @Inject
     Translate i18NValue;

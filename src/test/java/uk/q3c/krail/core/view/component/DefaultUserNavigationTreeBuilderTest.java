@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view.component;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -41,6 +42,7 @@ import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupport;
 import uk.q3c.util.guice.SerializationSupportModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,15 +61,18 @@ public class DefaultUserNavigationTreeBuilderTest {
     @Inject
     DefaultUserSitemapSorters sorters;
     @Inject
-    Option option;
+    Provider<Option> optionProvider;
     @Mock
     Navigator navigator;
     private DefaultUserNavigationTree userNavigationTree;
 
+    @Mock
+    SerializationSupport serialisationSupport;
+
     @Before
     public void setUp() {
         builder = new DefaultUserNavigationTreeBuilder(userSitemap);
-        userNavigationTree = new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
+        userNavigationTree = new DefaultUserNavigationTree(userSitemap, navigator, optionProvider, builder, sorters, serialisationSupport);
     }
 
     @Test

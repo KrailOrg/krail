@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.vaadin.data.TreeData;
 import com.vaadin.event.selection.SelectionEvent;
 import com.vaadin.event.selection.SelectionListener;
@@ -43,7 +44,10 @@ import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionChangeMessage;
 import uk.q3c.krail.option.OptionKey;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Comparator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -71,23 +75,25 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
     private final Navigator navigator;
-    private final Option option;
+    private final transient Provider<Option> option;
     private final UserNavigationTreeBuilder builder;
     private final UserSitemapSorters sorters;
+    private SerializationSupport serializationSupport;
 
     private boolean rebuildRequired = true;
     private boolean suppressValueChangeEvents;
 
 
     @Inject
-    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, Option option, UserNavigationTreeBuilder builder, UserSitemapSorters
-            sorters) {
+    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, Provider<Option> option, UserNavigationTreeBuilder builder, UserSitemapSorters
+            sorters, SerializationSupport serializationSupport) {
         super();
         this.userSitemap = userSitemap;
         this.navigator = navigator;
         this.option = option;
         this.builder = builder;
         this.sorters = sorters;
+        this.serializationSupport = serializationSupport;
 
         builder.setUserNavigationTree(this);
         // set selection mode before addSelectionListener - the listener is actually added to the SelectionModel, which
@@ -101,7 +107,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
     }
 
     public final boolean getOptionSortAscending() {
-        return option.get(optionKeySortAscending);
+        return option.get().get(optionKeySortAscending);
     }
 
     @Override
@@ -112,7 +118,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
     @Override
     public void setOptionSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        option.set(optionKeySortAscending, ascending);
+        option.get().set(optionKeySortAscending, ascending);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -153,7 +159,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
     }
 
     public SortType getOptionSortType() {
-        return option.get(optionKeySortType);
+        return option.get().get(optionKeySortType);
     }
 
     @Override
@@ -165,7 +171,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
         sorters.setOptionKeySortType(sortType);
-        option.set(optionKeySortType, sortType);
+        option.get().set(optionKeySortType, sortType);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -193,7 +199,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
 
     @Override
     public int getOptionMaxDepth() {
-        return option.get(optionKeyMaximumDepth);
+        return option.get().get(optionKeyMaximumDepth);
     }
 
     /**
@@ -210,7 +216,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
     @Override
     public void setOptionMaxDepth(int maxDepth, boolean rebuild) {
         if (maxDepth > 0) {
-            option.set(optionKeyMaximumDepth, maxDepth);
+            option.get().set(optionKeyMaximumDepth, maxDepth);
             build();
         } else {
             log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
@@ -280,7 +286,7 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
 
     @Override
     public Option optionInstance() {
-        return option;
+        return option.get();
     }
 
     @Handler
@@ -299,5 +305,10 @@ public class DefaultUserNavigationTree extends Tree<UserSitemapNode> implements 
                 navigator.navigateTo(url);
             }
         }
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
     }
 }

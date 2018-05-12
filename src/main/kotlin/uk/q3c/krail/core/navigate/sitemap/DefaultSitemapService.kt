@@ -50,7 +50,7 @@ protected constructor(translate: Translate,
     private var log = LoggerFactory.getLogger(this.javaClass.name)
     @Transient
     private var loaders: MutableList<SitemapLoader> = mutableListOf()
-    private var sourceTypes: MutableList<SitemapSourceType> = mutableListOf()
+    override var sourceTypes: MutableList<SitemapSourceType> = mutableListOf()
     private var loaded: Boolean = false
     @Transient
     private var report: StringBuilder = StringBuilder()
@@ -135,7 +135,14 @@ protected constructor(translate: Translate,
         val defaultValues = ArrayList<String>()
         defaultValues.add(SitemapSourceType.DIRECT.name)
         defaultValues.add(SitemapSourceType.ANNOTATION.name)
-        val list = configuration.getPropertyValue(SITEMAP_SOURCES, defaultValues)
+        var list = configuration.getPropertyValue(SITEMAP_SOURCES, defaultValues)
+
+        // workaround for https://github.com/KrailOrg/krail-config/issues/4
+        if (list.isEmpty()) {
+            list = defaultValues
+        }
+        // end workaround
+
         sourceTypes = ArrayList()
         for (o in list) {
             try {

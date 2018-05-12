@@ -10,11 +10,10 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.navigate.sitemap;
+package uk.q3c.krail.core.navigate.sitemap
 
-import uk.q3c.krail.service.Service;
+import uk.q3c.krail.service.Service
 
-public interface SitemapService extends Service {
-
-
+interface SitemapService : Service {
+    val sourceTypes: MutableList<SitemapSourceType>
 }

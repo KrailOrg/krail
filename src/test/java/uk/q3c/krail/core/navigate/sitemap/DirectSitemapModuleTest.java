@@ -17,6 +17,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
@@ -52,8 +53,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule
-        .class, VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
+@GuiceContext({TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule.class, ConfigurationFileModule.class,
+        VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, InMemoryModule.class, TestOptionModule.class,
         VaadinSessionScopeModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, NavigationModule.class, UtilModule.class, DefaultUIModule.class, UtilsModule.class})
 public class DirectSitemapModuleTest {

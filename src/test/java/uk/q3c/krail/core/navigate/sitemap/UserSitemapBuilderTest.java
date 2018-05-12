@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.SessionBusListener;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
@@ -51,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class,
+@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, InMemoryModule.class, VaadinEventBusModule.class, ConfigurationFileModule.class,
         UIScopeModule.class, SerializationSupportModule.class, ServletEnvironmentModule.class, EventBusModule.class, SitemapModule.class, UtilsModule.class, UtilModule.class, KrailApplicationConfigurationModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 

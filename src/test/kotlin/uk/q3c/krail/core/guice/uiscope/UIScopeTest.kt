@@ -44,6 +44,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
+import uk.q3c.krail.config.ConfigurationFileModule
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
 import uk.q3c.krail.core.eventbus.UIBus
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
@@ -54,6 +55,7 @@ import uk.q3c.krail.core.i18n.TestKrailI18NModule
 import uk.q3c.krail.core.navigate.NavigationModule
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule
 import uk.q3c.krail.core.navigate.sitemap.SitemapService
+import uk.q3c.krail.core.navigate.sitemap.SitemapSourceType
 import uk.q3c.krail.core.push.PushModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.DefaultVaadinSessionProvider
@@ -136,7 +138,7 @@ class UIScopeTest {
 
         // when
 
-        val injector = Guice.createInjector(PushModule(), TestModule(), KrailApplicationConfigurationModule(), ViewModule(), UIScopeModule(),
+        val injector = Guice.createInjector(PushModule(), TestModule(), KrailApplicationConfigurationModule(), ViewModule(), UIScopeModule(), ConfigurationFileModule(),
                 OptionModule().activeSource(InMemory::class.java), UserModule(), DefaultComponentModule(), TestKrailI18NModule(),
                 DefaultShiroModule(), ShiroVaadinModule(), VaadinSessionScopeModule(), SitemapModule(), TestUIModule(),
                 NavigationModule(), VaadinEventBusModule(), EventBusModule(), UtilModule(), DataModule(),
@@ -191,6 +193,8 @@ class UIScopeTest {
 
     internal class MockSitemapService @Inject
     protected constructor(translate: Translate, globalBusProvider: MessageBus, serializationSupport: SerializationSupport) : AbstractService(translate, globalBusProvider, serializationSupport), SitemapService {
+        override val sourceTypes: MutableList<SitemapSourceType>
+            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
         public override fun doStart() {
 

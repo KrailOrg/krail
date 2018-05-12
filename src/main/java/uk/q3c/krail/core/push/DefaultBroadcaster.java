@@ -103,7 +103,7 @@ public class DefaultBroadcaster implements Broadcaster {
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
         int messageId = messageCount.incrementAndGet();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        if (applicationConfiguration.getPropertyValue("server.push.enabled", true)) {
+        if (applicationConfiguration.getPropertyValue(PushModule.SERVER_PUSH_ENABLED, true)) {
             log.debug("broadcasting message: {} from: {}", messageId, sender);
             List<BroadcastListener> listenerGroup = groups.get(group);
             if (listenerGroup != null) {

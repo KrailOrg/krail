@@ -15,7 +15,9 @@ package uk.q3c.krail.core.vaadin;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.forest.CaptionReader;
 
-public class UserSitemapNodeCaption implements CaptionReader<UserSitemapNode> {
+import java.io.Serializable;
+
+public class UserSitemapNodeCaption implements CaptionReader<UserSitemapNode>, Serializable {
 
     @Override
     public String getCaption(UserSitemapNode sourceNode) {

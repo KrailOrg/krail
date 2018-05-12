@@ -18,6 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.ServletEnvironmentModule;
@@ -48,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({StandardPagesModule.class, UIScopeModule.class, VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class,
+@GuiceContext({StandardPagesModule.class, UIScopeModule.class, VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class, ConfigurationFileModule.class,
         TestKrailI18NModule.class, SitemapModule.class, UserModule.class, KrailApplicationConfigurationModule.class, InMemoryModule.class, TestOptionModule
         .class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule.class,
         DataTypeModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})

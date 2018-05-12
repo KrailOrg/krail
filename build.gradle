@@ -65,7 +65,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.16.4.4"
+        number = "0.16.5.0"
     }
     changelog {
         maxVersions = 10
@@ -84,7 +84,6 @@ compileKotlin {
 }
 
 dependencies {
-    compile 'uk.q3c.util:q3c-util:1.3.0.0'
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -97,11 +96,11 @@ dependencies {
     compile 'io.jsonwebtoken:jjwt:0.9.0'
 
     //Krail
-    compile 'uk.q3c.krail:krail-option:0.16.1.0'
+    compile 'uk.q3c.krail:krail-option:0.17.0.0'
     compile 'uk.q3c.krail:eventbus-mbassador:0.6.0.0'
-    compile 'uk.q3c.krail:krail-config:0.12.0.0'
+    compile 'uk.q3c.krail:krail-config:0.12.1.0'
 
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.20'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
     compile 'com.github.mcollovati.vertx:vertx-vaadin8:0.4.0'
 
     compile 'commons-beanutils:commons-beanutils:1.9.3'
@@ -173,7 +172,7 @@ dependencies {
     testCompile "org.amshove.kluent:kluent:1.34"
 
     testCompile 'uk.q3c.util:q3c-testutils:0.11.0.4'
-    testCompile 'uk.q3c.util:serialisation-tracer:0.2.0.0'
+    testCompile 'uk.q3c.util:serialisation-tracer:0.5.0.0'
 
 
 }
@@ -192,18 +191,16 @@ configurations.all {
         force 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
         force "com.google.inject.extensions:guice-multibindings:$guiceVersion"
         force 'com.google.code.findbugs:annotations:3.0.0'
-        force 'uk.q3c.krail:krail-i18n-api:0.15.7.0'
         force 'commons-logging:commons-logging:1.2'
         force 'org.apache.commons:commons-lang3:3.3.2'
         force 'org.assertj:assertj-core:3.8.0'
         force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         force 'org.mockito:mockito-core:2.8.9'
-        force 'uk.q3c.krail:krail-service-api:0.15.3.0'
         force 'com.mycila:mycila-log:2.12'
-        force 'uk.q3c.util:q3c-util:1.3.0.0'
         force 'org.yaml:snakeyaml:1.21'
         force 'commons-io:commons-io:2.6'
+        force 'uk.q3c.krail:krail-i18n-api:0.15.10.0'
 
         dependencySubstitution {
             substitute module ('commons-beanutils:commons-beanutils-core') with module ('commons-beanutils:commons-beanutils:1.9.3')
