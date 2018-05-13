@@ -16,6 +16,7 @@ package uk.q3c.krail.core.option;
 import com.google.common.cache.CacheStats;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -44,6 +45,7 @@ import uk.q3c.krail.option.UserHierarchy;
 import uk.q3c.krail.option.mock.TestOptionModule;
 import uk.q3c.krail.option.option.DefaultOption;
 import uk.q3c.krail.option.persist.ActiveOptionSourceDefault;
+import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.persist.OptionDao;
 import uk.q3c.krail.option.persist.OptionDaoDelegate;
@@ -95,6 +97,9 @@ public class Option_IntegrationTest {
     @Inject
     OptionDao optionDao;
 
+    @Inject
+    Injector injector;
+
     @Mock
     LocaleContainer localeContainer;
     @Mock
@@ -134,7 +139,8 @@ public class Option_IntegrationTest {
 
         cacheLoader = new DefaultOptionCacheLoader(optionDao);
         optionCache = new DefaultOptionCache(optionDao, cacheProvider);
-        option = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBus, serializationSupport);
+
+        option = new TestDefaultOption(optionCache, hierarchy, permissionVerifier, globalBus, serializationSupport);
     }
 
 
@@ -210,7 +216,7 @@ public class Option_IntegrationTest {
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, permissionVerifier, globalBus, serializationSupport);
+        DefaultOption option2 = new TestDefaultOption(optionCache, hierarchy, permissionVerifier, globalBus, serializationSupport);
         //when
         option2.set(key1, 3);
         Integer actual = option2.get(key1);
@@ -300,4 +306,10 @@ public class Option_IntegrationTest {
     }
 
 
+    public static class TestDefaultOption extends DefaultOption {
+
+        protected TestDefaultOption(OptionCache optionCache, UserHierarchy hierarchy, OptionPermissionVerifier permissionVerifier, MessageBus messageBus, SerializationSupport serializationSupport) {
+            super(optionCache, hierarchy, permissionVerifier, messageBus, serializationSupport);
+        }
+    }
 }
