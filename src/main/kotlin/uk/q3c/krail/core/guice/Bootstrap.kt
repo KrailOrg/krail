@@ -6,6 +6,8 @@ import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.Module
+import com.vaadin.server.SessionInitEvent
+import com.vaadin.server.SessionInitListener
 import io.vertx.core.Vertx
 import io.vertx.ext.web.Router
 import org.apache.shiro.SecurityUtils
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
 import uk.q3c.krail.core.guice.RuntimeEnvironment.SERVLET
 import uk.q3c.krail.core.guice.RuntimeEnvironment.VERTX
+import uk.q3c.krail.core.ui.ScopedUIProvider
 import uk.q3c.util.guice.InjectorLocator
 import java.io.InputStream
 import java.nio.file.Paths
@@ -127,15 +130,26 @@ class InjectorFactory {
 }
 
 
-open class KrailVerticle : VaadinVerticle() {
-
-    private lateinit var injectorLocator: InjectorLocator
+open class KrailVerticle : VaadinVerticle(), SessionInitListener {
 
     /**
-     * When service has been initialised, create the Guice injector.  See [InjectorLocator] for its location
+     * The first call creates the Guice injector if it hasn't been created already.  See [InjectorLocator] for its location
+     * The UIProvider also needs to be registered with the session
+     *
+     */
+    override fun sessionInit(event: SessionInitEvent) {
+        val injector = getInjector()
+        val uiProvider = injector.getInstance(ScopedUIProvider::class.java)
+        event.session.addUIProvider(uiProvider)
+    }
+
+    private var injectorLocator = VertxInjectorLocator()
+
+    /**
+     * When service has been initialised
      */
     override fun serviceInitialized(service: VertxVaadinService, router: Router) {
-        getInjector() // just to pre-load the Injector
+        service.addSessionInitListener(this)
     }
 
     fun getInjector(): Injector {
