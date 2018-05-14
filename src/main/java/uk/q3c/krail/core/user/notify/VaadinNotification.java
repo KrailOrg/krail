@@ -13,10 +13,12 @@ package uk.q3c.krail.core.user.notify;
 
 import net.engio.mbassy.listener.Handler;
 
+import java.io.Serializable;
+
 /**
  * Created by David Sowerby on 26/05/15.
  */
-public interface VaadinNotification {
+public interface VaadinNotification extends Serializable {
 
 
     @Handler

@@ -25,7 +25,10 @@ import uk.q3c.krail.i18n.I18NException;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.I18NKeyConverter;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -54,14 +57,16 @@ public class DefaultI18NProcessor implements I18NProcessor {
     private static Logger log = LoggerFactory.getLogger(DefaultI18NProcessor.class);
     private final Translate translate;
     private CurrentLocale currentLocale;
-    private Provider<I18NFieldScanner> i18NFieldScannerProvider;
+    private transient Provider<I18NFieldScanner> i18NFieldScannerProvider;
+    private SerializationSupport serializationSupport;
 
     @Inject
-    protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate, Provider<I18NFieldScanner> i18NFieldScannerProvider) {
+    protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate, Provider<I18NFieldScanner> i18NFieldScannerProvider, SerializationSupport serializationSupport) {
         super();
         this.currentLocale = currentLocale;
         this.translate = translate;
         this.i18NFieldScannerProvider = i18NFieldScannerProvider;
+        this.serializationSupport = serializationSupport;
     }
 
     /**
@@ -109,8 +114,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
         }
     }
 
-    protected void processComponents(Map<AbstractComponent, AnnotationInfo> componentAnnotations, Object target) throws NoSuchFieldException,
-            IllegalAccessException {
+    protected void processComponents(Map<AbstractComponent, AnnotationInfo> componentAnnotations, Object target) {
         for (Map.Entry<AbstractComponent, AnnotationInfo> entry : componentAnnotations.entrySet()) {
             AbstractComponent component = entry.getKey();
             AnnotationInfo annotationInfo = entry.getValue();
@@ -289,4 +293,8 @@ public class DefaultI18NProcessor implements I18NProcessor {
         Optional<Locale> locale = Optional.empty();
     }
 
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
+    }
 }

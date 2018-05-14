@@ -10,7 +10,9 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.i18n;
+package uk.q3c.krail.core.i18n
+
+import java.io.Serializable
 
 /**
  * Translate the captions, descriptions and values to the current Locale, depending on criteria set by the
@@ -18,14 +20,14 @@ package uk.q3c.krail.core.i18n;
  *
  * @author David Sowerby 10 Feb 2013
  */
-public interface I18NProcessor {
+interface I18NProcessor : Serializable {
 
     /**
-     * Translate the captions, descriptions and values of {@code target} to the current Locale. This should only be
-     * called with a {@code target} which is annotated with {@link I18N}, but no errors occur if it hasn't
+     * Translate the captions, descriptions and values of `target` to the current Locale. This should only be
+     * called with a `target` which is annotated with [I18N], but no errors occur if it hasn't
      *
      * @param target
      */
-    void translate(Object target);
+    fun translate(target: Any)
 
 }
