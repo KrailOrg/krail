@@ -1,11 +1,13 @@
 package uk.q3c.krail.core.guice
 
 import com.github.mcollovati.vertx.vaadin.VaadinVerticle
+import com.github.mcollovati.vertx.vaadin.VertxVaadinService
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.Module
 import io.vertx.core.Vertx
+import io.vertx.ext.web.Router
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.mgt.SecurityManager
 import org.slf4j.LoggerFactory
@@ -29,7 +31,16 @@ class VertxInjectorLocator : InjectorLocator {
 
 
     override fun get(): Injector {
-        return Vertx.currentContext().get(injectorKey)
+
+        val injector: Injector? = Vertx.currentContext().get(injectorKey)
+        if (injector == null) {
+            val injectorFactory = InjectorFactory()
+            val newInjector = injectorFactory.createInjector(VERTX)
+            put(newInjector)
+            return newInjector
+        } else {
+            return injector
+        }
     }
 
 }
@@ -116,7 +127,21 @@ class InjectorFactory {
 }
 
 
-class KrailVerticle : VaadinVerticle()
+open class KrailVerticle : VaadinVerticle() {
+
+    private lateinit var injectorLocator: InjectorLocator
+
+    /**
+     * When service has been initialised, create the Guice injector.  See [InjectorLocator] for its location
+     */
+    override fun serviceInitialized(service: VertxVaadinService, router: Router) {
+        getInjector() // just to pre-load the Injector
+    }
+
+    fun getInjector(): Injector {
+        return injectorLocator.get()
+    }
+}
 
 interface BootstrapLoader {
     fun load(): BootstrapConfig
@@ -124,6 +149,7 @@ interface BootstrapLoader {
 
 class VertxBootstrapLoader : BootstrapLoader {
     override fun load(): BootstrapConfig {
+        // https@ //stackoverflow.com/questions/1900154/classpath-resource-within-jar
         val content = this.javaClass.getResourceAsStream("/$bootstrapYml")
         return BootstrapYAMLReader().read(content)
     }
