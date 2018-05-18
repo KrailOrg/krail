@@ -5,9 +5,9 @@ Push
 Background
 ==========
 
-The Vaadin-provided 'push to browser' mechanism uses `Atmosphere <https://github.com/Atmosphere/atmosphere>`_, and this proved to be challenging for the author of the `vertx-vaadin <https://github.com/mcollovati/vertx-vaadin>`_ that enables Krail to run on Vertx.
+The Vaadin-provided 'push to browser' mechanism uses `Atmosphere <https://github.com/Atmosphere/atmosphere>`_, and this proved to be challenging for the author of the `vertx-vaadin <https://github.com/mcollovati/vertx-vaadin>`_ library, which Krail uses to run on Vertx.
 
-Vertx also provides a push to browser facility, but one which is an integral part of the `Vertx Event Bus <https://vertx.io/docs/vertx-core/js/#event_bus>`_, with much greater functionality.  In the words of the Vertx documentation::
+Vertx also provides a 'push to browser' facility, but one which is an integral part of the `Vertx Event Bus <https://vertx.io/docs/vertx-core/js/#event_bus>`_, with much greater functionality.  In the words of the Vertx documentation::
 
    The event bus forms a distributed peer-to-peer messaging system spanning multiple server nodes and multiple browsers.
 
@@ -35,30 +35,6 @@ Various methods of getting round these restrictions were considered, and all hav
 
 This change is complemented by a new ``PushConfiguration`` implementation , ``KrailPushConfiguration``, which is a direct lift of Vaadin code with the ``setPushMode()`` method changed to allow the construction of the correct push connection.
 
-
 Detecting the Environment
 =========================
-The :doc:`Bootstrap <../devguide/devguide-bootstrap>` process provides detection of the runtime environment, which can be accessed by Guice injection
-
-
-.. sourcecode:: java
-   :caption: Java
-
-   public class MyClass {
-
-      @Inject
-      protected MyClass(@RunningOn RuntimeEnvironment runtimeEnvironment){
-
-      }
-   }
-
-
-
-
-.. sourcecode:: kotlin
-   :caption: Kotlin
-
-   class MyClass @Inject constructor(@RunningOn runtimeEnvironment:RuntimeEnvironment)
-
-
-
+``KrailPushConfiguration`` needs to know which environment (Servlet or Vertx) it is running in.  The :doc:`Bootstrap <../devguide/devguide-bootstrap#detecting-the-environment>` process provides detection of the runtime environment, which is accessed by Guice injection.

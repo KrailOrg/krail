@@ -33,3 +33,28 @@ Bootstrap file
 ==============
 
 This is described in the :doc:`User Guide <../userguide/userguide-bootstrap>``
+
+
+Detecting the Environment
+=========================
+The :doc:`Bootstrap <../devguide/devguide-bootstrap>` process provides detection of the runtime environment, which can be accessed by Guice injection
+
+
+.. sourcecode:: java
+   :caption: Java
+
+   public class MyClass {
+
+      @Inject
+      protected MyClass(@RunningOn RuntimeEnvironment runtimeEnvironment){
+
+      }
+   }
+
+
+
+
+.. sourcecode:: kotlin
+   :caption: Kotlin
+
+   class MyClass @Inject constructor(@RunningOn runtimeEnvironment:RuntimeEnvironment)
