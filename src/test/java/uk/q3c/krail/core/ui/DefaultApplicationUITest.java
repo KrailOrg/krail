@@ -23,11 +23,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.guice.ServletEnvironmentModule;
+import uk.q3c.krail.core.env.ServletEnvironmentModule;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
 import uk.q3c.krail.core.push.DefaultPushMessageRouter;
+import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.ApplicationHeader;
 import uk.q3c.krail.core.view.component.ApplicationLogo;
@@ -104,12 +105,14 @@ public class DefaultApplicationUITest {
     private VaadinNotification vaadinNotification;
     @Mock
     private SerializationSupport serializationSupport;
+    @Mock
+    private KrailPushConfiguration pushConfiguration;
 
     @Before
     public void setup() {
         when(navTree.getTree()).thenReturn(tree);
         when(menu.getMenuBar()).thenReturn(menuBar);
-        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option, serializationSupport);
+        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option, serializationSupport, pushConfiguration);
     }
 
     @Test

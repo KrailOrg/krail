@@ -18,7 +18,7 @@ import com.google.inject.Injector
 import spock.lang.Specification
 import uk.q3c.krail.config.ConfigurationFileModule
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
-import uk.q3c.krail.core.guice.ServletEnvironmentModule
+import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.eventbus.mbassador.EventBusModule
 import uk.q3c.krail.i18n.test.TestI18NModule
 import uk.q3c.krail.option.mock.TestOptionModule

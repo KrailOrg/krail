@@ -27,10 +27,10 @@ A minimal example file.
       - com.example.myapp.MyAppModule1
     servlet:
      modules:
-      - uk.q3c.krail.core.guice.ServletEnvironmentModule
+      - uk.q3c.krail.core.env.ServletEnvironmentModule
     vertx:
       modules:
-       - uk.q3c.krail.core.guice.VertxEnvironmentModule
+       - uk.q3c.krail.core.env.VertxEnvironmentModule
 
 File Content
 ------------

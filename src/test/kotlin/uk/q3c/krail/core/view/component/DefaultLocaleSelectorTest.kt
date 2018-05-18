@@ -26,8 +26,8 @@ import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
-import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.TestKrailI18NModule

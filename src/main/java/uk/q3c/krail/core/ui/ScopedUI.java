@@ -17,12 +17,14 @@ import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.ui.UIState;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ConfigurationException;
@@ -33,6 +35,7 @@ import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.Broadcaster.BroadcastListener;
+import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewHolder;
@@ -43,15 +46,18 @@ import uk.q3c.util.guice.SerializationSupport;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Field;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
- * messages in {@link #processBroadcastMessage(String, String, UIKey, int)} and passing them to the {@link PushMessageRouter}. For
- * a
- * full description of the Krail server push implementation see: https://sites.google.com/site/q3cjava/server-push
+ * messages in {@link #processBroadcastMessage(String, String, UIKey, int)} and passing them to the {@link PushMessageRouter}.
+ *
+ * For a description of the Krail server push implementation see: http://krail.readthedocs.io/en/develop/tutorial/tutorial-push.html
+ *
+ * The devloper guide provides more information on the changes for Vertx: See http://krail.readthedocs.io/en/develop/devguide/devguide-push.html
  *
  * @author David Sowerby
  */
@@ -59,7 +65,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener {
     private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
     protected final CurrentLocale currentLocale;
-    private SerializationSupport serializationSupport;
     private final ErrorHandler errorHandler;
     //    private final ConverterFactory converterFactory;
     private final PushMessageRouter pushMessageRouter;
@@ -67,6 +72,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final ApplicationTitle applicationTitle;
     private final Translate translate;
     private final I18NProcessor translator;
+    private SerializationSupport serializationSupport;
     private Broadcaster broadcaster;
     private UIKey instanceKey;
     private AbstractOrderedLayout screenLayout;
@@ -75,7 +81,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private Panel viewDisplayPanel;
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
-            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport) {
+            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
         super();
         this.errorHandler = errorHandler;
         this.navigator = navigator;
@@ -88,7 +94,23 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         this.currentLocale = currentLocale;
         this.serializationSupport = serializationSupport;
         registerWithBroadcaster();
+        overridePushConfiguration(pushConfig);
+    }
 
+    /**
+     * A rather horrible way of setting the value of private field from parent class.  See http://krail.readthedocs.io/en/develop/devguide/devguide-push.html
+     *
+     * @param pushConfig
+     */
+    private void overridePushConfiguration(KrailPushConfiguration pushConfig) {
+        try {
+            pushConfig.setUi(this);
+            Field pushConfigField = FieldUtils.getField(this.getClass(), "pushConfiguration", true);
+            pushConfigField.set(this, pushConfig);
+
+        } catch (Exception e) {
+            throw new ConfigurationException("Unable to set up push for the UI", e);
+        }
     }
 
     protected final void registerWithBroadcaster() {
@@ -317,4 +339,19 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     }
 
 
+    /**
+     * Made public to enable integration with VertxPushConfiguration
+     */
+    @Override
+    public UIState getState(boolean markAsDirty) {
+        return super.getState(markAsDirty);
+    }
+
+    /**
+     * Made public to enable integration with VertxPushConfiguration
+     */
+    @Override
+    public UIState getState() {
+        return super.getState();
+    }
 }

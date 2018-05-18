@@ -1,4 +1,4 @@
-package uk.q3c.krail.core.guice
+package uk.q3c.krail.core.env
 
 import com.google.inject.AbstractModule
 import org.slf4j.LoggerFactory
@@ -12,6 +12,7 @@ class ServletEnvironmentModule : AbstractModule() {
     override fun configure() {
         log.debug("ServletEnvironmentModule configure()")
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
+        bind(RuntimeEnvironment::class.java).annotatedWith(RunningOn::class.java).toInstance(RuntimeEnvironment.SERVLET)
     }
 }
 
@@ -19,6 +20,7 @@ class ServletEnvironmentModule : AbstractModule() {
 class VertxEnvironmentModule : AbstractModule() {
     override fun configure() {
         bind(InjectorLocator::class.java).to(VertxInjectorLocator::class.java)
+        bind(RuntimeEnvironment::class.java).annotatedWith(RunningOn::class.java).toInstance(RuntimeEnvironment.VERTX)
     }
 }
 

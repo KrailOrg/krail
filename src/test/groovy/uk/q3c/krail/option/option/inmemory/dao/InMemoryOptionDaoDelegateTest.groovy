@@ -15,7 +15,7 @@ package uk.q3c.krail.option.option.inmemory.dao
 
 import com.google.inject.Guice
 import com.google.inject.Injector
-import uk.q3c.krail.core.guice.ServletEnvironmentModule
+import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.option.mock.TestOptionModule
 import uk.q3c.krail.option.persist.dao.DefaultOptionDao

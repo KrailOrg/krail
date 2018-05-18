@@ -30,6 +30,7 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.push.Broadcaster;
+import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.ApplicationHeader;
@@ -103,8 +104,8 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ApplicationLogo logo, ApplicationHeader
-            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option, SerializationSupport serializationSupport) {
-        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
+            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
+        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfig);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
         this.userStatus = userStatusPanel;

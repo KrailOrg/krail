@@ -21,6 +21,7 @@ import com.vaadin.ui.VerticalLayout;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
+import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -32,8 +33,8 @@ public class BasicUI extends ScopedUI {
 
     @Inject
     protected BasicUI(Navigator navigator, ErrorHandler errorHandler,
-                      Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport) {
-        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
+                      Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
+        super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfig);
 
     }
 

@@ -12,12 +12,15 @@
  */
 package uk.q3c.krail.core.ui;
 
+import com.github.mcollovati.vertx.vaadin.communication.SockJSPushConnection;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
@@ -32,6 +35,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.ConfigurationException;
+import uk.q3c.krail.core.env.RuntimeEnvironment;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
@@ -40,7 +44,9 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
+import uk.q3c.krail.core.push.DefaultKrailPushConfiguration;
 import uk.q3c.krail.core.push.DefaultPushMessageRouter;
+import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.eventbus.BusMessage;
@@ -53,6 +59,7 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -101,6 +108,8 @@ public class ScopedUITest {
     @Mock
     private MBassador<BusMessage> eventBus;
 
+    private KrailPushConfiguration pushConfiguration;
+
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
@@ -109,7 +118,8 @@ public class ScopedUITest {
         logMonitor = new LogMonitor();
         logMonitor.addClassFilter(ScopedUI.class);
         uiKey = new UIKey(33);
-        ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
+        pushConfiguration = new DefaultKrailPushConfiguration(RuntimeEnvironment.VERTX);
+        ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfiguration);
         ui.setInstanceKey(uiKey);
     }
 
@@ -137,6 +147,34 @@ public class ScopedUITest {
         ui.detach();
         // then
         // no exception
+    }
+
+    @Test
+    public void push_config() {
+        // given
+        prepAttach();
+        ui.attach();
+        VaadinService service = mock(VaadinService.class);
+        when(service.ensurePushAvailable()).thenReturn(true);
+        when(session.getService()).thenReturn(service);
+
+        // when
+
+        // then
+        assertThat(ui.getPushConfiguration()).isInstanceOf(DefaultKrailPushConfiguration.class);
+        assertThat(ui.getPushConnection()).isNull(); // push mode not enabled yet
+
+        // when
+        ui.getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
+        assertThat(ui.getPushConnection()).isInstanceOf(SockJSPushConnection.class);
+
+        //when disable and re-enabled push, connection type is still correct
+        ui.getPushConfiguration().setPushMode(PushMode.DISABLED);
+        ui.getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
+
+        //then
+        assertThat(ui.getPushConnection()).isInstanceOf(SockJSPushConnection.class);
+
     }
 
     @SuppressWarnings("deprecation")
@@ -205,7 +243,7 @@ public class ScopedUITest {
     @Test(expected = ConfigurationException.class)
     public void init_with_viewDisplayPanel_parent_null() {
         // given
-        ui = new DuffUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
+        ui = new DuffUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfiguration);
         prepAttach();
         // when
         ui.init(request);
@@ -258,8 +296,8 @@ public class ScopedUITest {
 
     class DuffUI extends ScopedUI {
         protected DuffUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
-                pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport) {
-            super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport);
+                pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport, KrailPushConfiguration pushConfiguration) {
+            super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfiguration);
         }
 
         @Override

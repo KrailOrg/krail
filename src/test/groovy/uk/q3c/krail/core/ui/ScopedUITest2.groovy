@@ -15,10 +15,13 @@ package uk.q3c.krail.core.ui
 
 import com.vaadin.server.ErrorHandler
 import spock.lang.Specification
+import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.push.Broadcaster
+import uk.q3c.krail.core.push.DefaultKrailPushConfiguration
+import uk.q3c.krail.core.push.KrailPushConfiguration
 import uk.q3c.krail.core.push.PushMessageRouter
 import uk.q3c.krail.core.view.DefaultPublicHomeView
 import uk.q3c.krail.i18n.CurrentLocale
@@ -44,13 +47,14 @@ class ScopedUITest2 extends Specification {
     Option option = Mock()
     LogMonitor logMonitor
     SerializationSupport serializationSupport = Mock()
+    KrailPushConfiguration pushConfiguration = new DefaultKrailPushConfiguration(RuntimeEnvironment.SERVLET)
 
     def setup() {
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(ScopedUI)
         applicationTitle.getTitleKey() >> LabelKey.Krail
         ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
-                serializationSupport)
+                serializationSupport, pushConfiguration)
     }
 
     def cleanup() {

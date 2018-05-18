@@ -7,10 +7,14 @@ import com.vaadin.server.UIClassSelectionEvent
 import org.amshove.kluent.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import uk.q3c.krail.core.env.RunningOn
+import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.push.Broadcaster
+import uk.q3c.krail.core.push.DefaultKrailPushConfiguration
+import uk.q3c.krail.core.push.KrailPushConfiguration
 import uk.q3c.krail.core.push.PushMessageRouter
 import uk.q3c.krail.core.user.notify.VaadinNotification
 import uk.q3c.krail.core.view.component.ApplicationHeader
@@ -73,6 +77,8 @@ class MockedModule : AbstractModule() {
         bind(Option::class.java).toInstance(mockOption)
         bind(Breadcrumb::class.java).toInstance(mockBreadcrumb)
         bind(SerializationSupport::class.java).toInstance(mockSerializationSupport)
+        bind(KrailPushConfiguration::class.java).to(DefaultKrailPushConfiguration::class.java)
+        bind(RuntimeEnvironment::class.java).annotatedWith(RunningOn::class.java).toInstance(RuntimeEnvironment.SERVLET)
     }
 }
 

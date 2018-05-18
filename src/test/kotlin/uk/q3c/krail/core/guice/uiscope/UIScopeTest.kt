@@ -46,9 +46,9 @@ import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 import uk.q3c.krail.config.ConfigurationFileModule
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
+import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.eventbus.UIBus
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
-import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.TestKrailI18NModule

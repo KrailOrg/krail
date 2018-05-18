@@ -9,30 +9,39 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.push;
+package uk.q3c.krail.core.push
 
-import com.google.inject.AbstractModule;
+import com.google.inject.AbstractModule
 
 /**
  * Created by David Sowerby on 27/05/15.
  */
-public class PushModule extends AbstractModule {
-    public static final String SERVER_PUSH_ENABLED = "server.push.enabled";
+class PushModule : AbstractModule() {
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void configure() {
-        bindPushRouter();
-        bindBroadcaster();
+    override fun configure() {
+        bindPushRouter()
+        bindBroadcaster()
+        bindPushConfiguration()
     }
 
-    protected void bindPushRouter() {
-        bind(PushMessageRouter.class).to(DefaultPushMessageRouter.class);
+    private fun bindPushConfiguration() {
+        bind(KrailPushConfiguration::class.java).to(DefaultKrailPushConfiguration::class.java)
     }
 
-    protected void bindBroadcaster() {
-        bind(Broadcaster.class).to(DefaultBroadcaster.class);
+
+    protected fun bindPushRouter() {
+        bind(PushMessageRouter::class.java).to(DefaultPushMessageRouter::class.java)
     }
+
+    protected fun bindBroadcaster() {
+        bind(Broadcaster::class.java).to(DefaultBroadcaster::class.java)
+    }
+
+
 }
+
+const val SERVER_PUSH_ENABLED = "server.push.enabled"
+

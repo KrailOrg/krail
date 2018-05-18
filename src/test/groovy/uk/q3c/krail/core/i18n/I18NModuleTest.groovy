@@ -16,9 +16,9 @@ package uk.q3c.krail.core.i18n
 import com.google.inject.Module
 import com.google.inject.Provider
 import com.google.inject.TypeLiteral
+import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
 import uk.q3c.krail.core.guice.GuiceModuleTestBase
-import uk.q3c.krail.core.guice.ServletEnvironmentModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource

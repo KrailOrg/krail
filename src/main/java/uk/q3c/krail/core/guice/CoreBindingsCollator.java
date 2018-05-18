@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
+import uk.q3c.krail.core.env.BindingsCollator;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;

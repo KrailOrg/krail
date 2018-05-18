@@ -71,6 +71,7 @@ Contents:
    devguide/devguide-i18n
    devguide/devguide-options-hierarchies
    devguide/devguide-pages-navigation
+   devguide/devguide-push
    devguide/devguide-persistence
    devguide/devguide-serialisation
    devguide/devguide-services

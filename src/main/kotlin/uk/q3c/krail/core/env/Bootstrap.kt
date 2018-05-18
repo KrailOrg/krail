@@ -1,4 +1,4 @@
-package uk.q3c.krail.core.guice
+package uk.q3c.krail.core.env
 
 import com.github.mcollovati.vertx.vaadin.VaadinVerticle
 import com.github.mcollovati.vertx.vaadin.VertxVaadinService
@@ -14,8 +14,9 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.mgt.SecurityManager
 import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
-import uk.q3c.krail.core.guice.RuntimeEnvironment.SERVLET
-import uk.q3c.krail.core.guice.RuntimeEnvironment.VERTX
+import uk.q3c.krail.core.env.RuntimeEnvironment.SERVLET
+import uk.q3c.krail.core.env.RuntimeEnvironment.VERTX
+import uk.q3c.krail.core.guice.InjectorHolder
 import uk.q3c.krail.core.ui.ScopedUIProvider
 import uk.q3c.util.guice.InjectorLocator
 import java.io.InputStream
@@ -217,7 +218,7 @@ class BootstrapYAMLReader {
 
         val servlet = result["servlet"] as Map<String, Any>?
         val servletConfig = if (servlet == null) {
-            EnvironmentConfig(listOf("uk.q3c.krail.core.guice.ServletEnvironmentModule"))
+            EnvironmentConfig(listOf("uk.q3c.krail.core.env.ServletEnvironmentModule"))
         } else {
             val servletModules = servlet["modules"] as List<String>? ?: listOf()
             EnvironmentConfig(servletModules)
@@ -225,7 +226,7 @@ class BootstrapYAMLReader {
 
         val vertx = result["vertx"] as Map<String, Any>?
         val vertxConfig = if (vertx == null) {
-            EnvironmentConfig(listOf("uk.q3c.krail.core.guice.VertxEnvironmentModule"))
+            EnvironmentConfig(listOf("uk.q3c.krail.core.env.VertxEnvironmentModule"))
         } else {
             val vertxModules = vertx["modules"] as List<String>? ?: listOf()
             EnvironmentConfig(vertxModules)

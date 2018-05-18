@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.q3c.krail.core.push.PushModuleKt.SERVER_PUSH_ENABLED;
 
 @Singleton
 @ThreadSafe
@@ -103,7 +104,7 @@ public class DefaultBroadcaster implements Broadcaster {
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
         int messageId = messageCount.incrementAndGet();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        if (applicationConfiguration.getPropertyValue(PushModule.SERVER_PUSH_ENABLED, true)) {
+        if (applicationConfiguration.getPropertyValue(SERVER_PUSH_ENABLED, true)) {
             log.debug("broadcasting message: {} from: {}", messageId, sender);
             List<BroadcastListener> listenerGroup = groups.get(group);
             if (listenerGroup != null) {

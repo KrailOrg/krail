@@ -4,6 +4,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.Key
 import spock.lang.Specification
+import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap

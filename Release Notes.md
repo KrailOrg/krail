@@ -1,8 +1,4 @@
-# Release notes for 0.16.5.0
+# Release notes for 0.16.7.0
 
-Updated krail-config to fix serialization of ``ApplicationConfiguration``
-Fixed various other serialisation issues
-``ConfigurationException`` moved from config to core
-``ConfigKeys`` has been removed, keys are defined where they originate
-SERVER_PUSH_ENABLED is defined in PushModule
-
+Changes for Push support in Vertx, see http://krail.readthedocs.io/en/develop/devguide/devguide-push.html
+Environment related classes moved to new package uk.q3c.krail.core.env - this affects the bootstrap file, see http://krail.readthedocs.io/en/develop/userguide/userguide-bootstrap.html

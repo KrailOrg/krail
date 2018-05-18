@@ -94,7 +94,7 @@ class DefaultBroadcasterTest extends Specification {
         broadcaster.broadcast("a", "msg", uiKey)
 
         then:
-        1 * applicationConfiguration.getPropertyValue(PushModule.SERVER_PUSH_ENABLED, true) >> true
+        1 * applicationConfiguration.getPropertyValue(PushModuleKt.SERVER_PUSH_ENABLED, true) >> true
         1 * listener1.receiveBroadcast("a", "msg", uiKey, 1)
         1 * listener2.receiveBroadcast("a", "msg", uiKey, 1)
         logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
@@ -111,7 +111,7 @@ class DefaultBroadcasterTest extends Specification {
         broadcaster.broadcast("a", "msg", uiKey)
 
         then:
-        1 * applicationConfiguration.getPropertyValue(PushModule.SERVER_PUSH_ENABLED, true) >> false
+        1 * applicationConfiguration.getPropertyValue(PushModuleKt.SERVER_PUSH_ENABLED, true) >> false
         0 * listener1.receiveBroadcast(_, _, _, _)
         0 * listener2.receiveBroadcast(_, _, _, _)
         !logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
@@ -132,7 +132,7 @@ class DefaultBroadcasterTest extends Specification {
         broadcaster.broadcast("a", "msg", component)
 
         then:
-        1 * applicationConfiguration.getPropertyValue(PushModule.SERVER_PUSH_ENABLED, true) >> true
+        1 * applicationConfiguration.getPropertyValue(PushModuleKt.SERVER_PUSH_ENABLED, true) >> true
         1 * listener1.receiveBroadcast("a", "msg", uiKey, 1)
         1 * listener2.receiveBroadcast("a", "msg", uiKey, 1)
         logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
@@ -153,7 +153,7 @@ class DefaultBroadcasterTest extends Specification {
         broadcaster.broadcast("a", "msg", uiKey)
 
         then:
-        1 * applicationConfiguration.getPropertyValue(PushModule.SERVER_PUSH_ENABLED, true) >> false
+        1 * applicationConfiguration.getPropertyValue(PushModuleKt.SERVER_PUSH_ENABLED, true) >> false
         0 * listener1.receiveBroadcast(_, _, _, _)
         0 * listener2.receiveBroadcast(_, _, _, _)
         !logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
