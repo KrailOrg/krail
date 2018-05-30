@@ -6,7 +6,7 @@ Configuration
 Objective
 =========
 
-As it says at the start of this Tutorial, the objective is to give you,
+As it says at the start of the Tutorial, the objective is to give you,
 the Krail developer, the best of both worlds - quick results, but still
 the freedom to modify things however you wish. Of course, as with any
 form of freedom, there is also responsibility. So if you break

@@ -63,7 +63,7 @@ both the Krail developer’s application and the Krail core.
 
 ``Option`` requires a DAO implementation to read and set ``Option``
 values. To support the presentation of ``Option`` values to the end
-user, an implementation of ``OptionContainerProvider`is required.
+user, an implementation of ``OptionContainerProvider`` is required.
 The Guice Module used to configure the PU must also provide a fluent method for the `BindingManager``
 to enable the ``Option`` support for the PU.
 
@@ -105,9 +105,8 @@ Testing Bindings
 The bindings for a PU enabled by invoking ``provideOptionDao()`` should
 return instances as defined below:
 
-\| Injecting \| Provides instance of <br> \| ——————– \|:———————<br> \|
-**@XXXX1** OptionDao \| DefaultXXXXOptionDao <br> \| **@XXXX1**
-OptionContainerProvider \| DefaultXXXXOptionContainerProvider <br>
+**@XXXX1** OptionDao should return DefaultXXXXOptionDao
+
 
 Pattern
 =======
