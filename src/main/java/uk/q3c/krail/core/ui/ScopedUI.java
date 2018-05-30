@@ -12,11 +12,13 @@
  */
 package uk.q3c.krail.core.ui;
 
+import com.github.mcollovati.vertx.vaadin.communication.SockJSPushConnection;
 import com.vaadin.annotations.Push;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.server.communication.PushConnection;
 import com.vaadin.shared.ui.ui.UIState;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
@@ -54,9 +56,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
  * messages in {@link #processBroadcastMessage(String, String, UIKey, int)} and passing them to the {@link PushMessageRouter}.
- *
+ * <p>
  * For a description of the Krail server push implementation see: http://krail.readthedocs.io/en/develop/tutorial/tutorial-push.html
- *
+ * <p>
  * The devloper guide provides more information on the changes for Vertx: See http://krail.readthedocs.io/en/develop/devguide/devguide-push.html
  *
  * @author David Sowerby
@@ -73,6 +75,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final Translate translate;
     private final I18NProcessor translator;
     private SerializationSupport serializationSupport;
+    private KrailPushConfiguration pushConfig;
     private Broadcaster broadcaster;
     private UIKey instanceKey;
     private AbstractOrderedLayout screenLayout;
@@ -194,6 +197,8 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     @Override
     protected void init(VaadinRequest request) {
         log.debug("initialising ScopedUI");
+        setConnectionUid();
+
         VaadinSession session = getSession();
 //        session.setConverterFactory(converterFactory);
 
@@ -218,6 +223,24 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         // Navigate to the correct start point
         String fragment = getPage().getUriFragment();
         getKrailNavigator().navigateTo(fragment);
+    }
+
+    /**
+     *
+     */
+    private void setConnectionUid() {
+        PushConnection pushConnection = getPushConnection();
+        if (pushConnection != null) {
+            if (pushConnection instanceof SockJSPushConnection) {
+                SockJSPushConnection sockConnection = (SockJSPushConnection) pushConnection;
+                Field uiIdField = FieldUtils.getField(SockJSPushConnection.class, "uiId", true);
+                try {
+                    uiIdField.set(sockConnection, this.getUIId());
+                } catch (IllegalAccessException e) {
+                    throw new ConfigurationException("Unable to set up push connection with correct UI Id", e);
+                }
+            }
+        }
     }
 
     public Navigator getKrailNavigator() {

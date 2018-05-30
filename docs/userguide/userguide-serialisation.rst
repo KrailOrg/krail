@@ -181,14 +181,52 @@ method described above to re-inject them.
 Making your classes 'Guice Serializable'
 ========================================
 
-To implement a simpler process for your own classes (that is, those which are not Views or UIs), you can still use ``SerializationSupport``,
-using the standard ``readObject()`` deserialization method:
+Constructed directly by Guice
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Where you need to deserialize your own classes that are constrcuted by Guice, but has non-Serializable dependencies, you can still use ``SerializationSupport``,
+within the standard ``readObject()`` deserialization method:
 
 .. sourcecode:: java
+   :caption: Java
 
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
         inputStream.defaultReadObject();
         serializationSupport.deserialize(this);
     }
 
+.. sourcecode:: kotlin
+   :caption: Kotlin
+
+   @Throws(ClassNotFoundException::class, IOException::class)
+   private fun readObject(inputStream: ObjectInputStream) {
+       inputStream.defaultReadObject()
+       serializationSupport.deserialize(this)
+   }
+
 This combines the calls above, and invokes ``defaultReadObject()``, ``injectTransients()`` and ``checkForNullTransients()`` If you want to exclude any fields, just set ``serializationSupport.excludedFieldNames`` before invoking ``deserialize()``
+
+Not constructed by Guice
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Usually this happens when an object is created by a factory which then supplies Guice-constructed dependencies and some stateful element to the constructor  - this is typical of a situation which Guice ``AssistedInject`` is used.
+
+
+.. caution:: Some tests failed when using Guice ``AssistedInject`` with Serialization - we avoid using it, and use manually coded factories instead where needed.  To be fair though, we are not completely sure there is a real problem, see `open issue <https://github.com/KrailOrg/krail/issues/705>`_
+
+.. sourcecode:: java
+   :caption: Java
+
+    public class MyObjectFactory{
+
+        public MyObjectFactory (String statefulElement, MyNonSerializableDependency dependency){
+         //etc
+        }
+
+        private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+            inputStream.defaultReadObject();
+            this.dependency = serializationSupport.getInjector().getInstance(MyNonSerializableDependency.class);
+        }
+
+    }
+

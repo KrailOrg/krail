@@ -46,7 +46,7 @@ import java.util.Optional;
  * <li>A custom annotation, which should use an I18NKey</li>
  * <p>
  * </ol>
- * see also: http://krail.readthedocs.org/en/latest/devguide-validation/
+ * see also: https://krail.readthedocs.io/en/latest/devguide/devguide-validation.html
  * <p>
  * <p>
  * <p>
@@ -94,7 +94,7 @@ public class KrailInterpolator implements MessageInterpolator {
      * used without changes, but standard javax messages can be replaced if required, and will be translated using
      * Krail
      * It is assumed that any custom validation constraints use this method:
-     * see: https://sites.google.com/site/q3cjava/validation#TOC-Create-a-Custom-Validation
+     * see: https://krail.readthedocs.io/en/latest/devguide/devguide-validation.html#create-a-custom-validation
      * <p><p>
      *
      * @param patternOrKey

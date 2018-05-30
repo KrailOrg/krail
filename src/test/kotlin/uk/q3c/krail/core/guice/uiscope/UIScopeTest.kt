@@ -90,6 +90,7 @@ import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.guice.SerializationSupportModule
 import uk.q3c.util.serial.tracer.SerializationOutcome
 import uk.q3c.util.serial.tracer.SerializationTracer
+
 import java.util.*
 
 class UIScopeTest {

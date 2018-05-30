@@ -27,6 +27,7 @@ import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.BindingsCollator;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.form.FormModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -125,6 +126,7 @@ public class CoreBindingsCollator implements BindingsCollator {
         addSitemapModules(modules);
         addPersistenceModules(modules);
         addSerializationSupport(modules);
+        addFormsModules(modules);
         return modules;
     }
 
@@ -336,6 +338,10 @@ public class CoreBindingsCollator implements BindingsCollator {
      */
     protected Module startupModule() {
         return new DefaultStartupModule();
+    }
+
+    protected void addFormsModules(List<Module> modules) {
+        modules.add(new FormModule());
     }
 
 }

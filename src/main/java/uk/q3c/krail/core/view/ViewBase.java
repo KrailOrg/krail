@@ -56,7 +56,7 @@ public abstract class ViewBase implements KrailView, Serializable {
     private Translate translate;
 
 
-    private SerializationSupport serializationSupport;
+    protected SerializationSupport serializationSupport;
     private boolean componentsConstructed;
     private boolean dirty;
     @Deprecated
@@ -142,7 +142,7 @@ public abstract class ViewBase implements KrailView, Serializable {
      * @param busMessage
      */
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
-    protected void loadData(AfterViewChangeBusMessage busMessage) {
+    public void loadData(AfterViewChangeBusMessage busMessage) {
         log.debug("====> View.loadData called");
     }
 
