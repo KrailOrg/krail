@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
+import uk.q3c.krail.core.monitor.PageLoadingMessage;
+import uk.q3c.krail.core.monitor.PageReadyMessage;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapException;
@@ -48,6 +50,7 @@ import uk.q3c.krail.core.view.ViewFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 
 import java.net.URI;
@@ -60,7 +63,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The navigator is at the heart of navigation process, and provides navigation for a number of data types (for
  * example, String, {@link NavigationState} and {@link UserSitemapNode}.
  * <p>
- * The navigator implements {@link Page.UriFragmentChangedListener}s to detect changes in URI.
+ * The navigator implements {@link Page.PopStateListener }s to detect changes in URI.
  * <p>
  * Although the {@link UserSitemap} contains only authorised pages, an additional level of security is added by checking that a user is authorised before
  * moving
@@ -95,13 +98,14 @@ public class DefaultNavigator implements Navigator {
     private UserSitemap userSitemap;
     private final ViewChangeRule viewChangeRule;
     private final ComponentIdGenerator idGenerator;
+    private MessageBus messageBus;
 
 
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
             pageAccessController, ScopedUIProvider uiProvider, ViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
                                     loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider uiBusProvider, ViewChangeRule
-                                    viewChangeRule, InvalidURIHandler invalidURIHandler, ComponentIdGenerator idGenerator, MasterSitemap masterSitemap) {
+                                    viewChangeRule, InvalidURIHandler invalidURIHandler, ComponentIdGenerator idGenerator, MasterSitemap masterSitemap, MessageBus messageBus) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -121,6 +125,7 @@ public class DefaultNavigator implements Navigator {
 
 
         this.idGenerator = idGenerator;
+        this.messageBus = messageBus;
     }
 
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
@@ -163,6 +168,7 @@ public class DefaultNavigator implements Navigator {
     @Override
     public void navigateTo(String fragment) {
         log.debug("Navigating to fragment: {}", fragment);
+        publishPageLoadingMessage();
 
         // set up the navigation state
         NavigationState navigationState = uriHandler.navigationState(fragment);
@@ -187,6 +193,7 @@ public class DefaultNavigator implements Navigator {
     @Override
     public void navigateTo(NavigationState navigationState) {
         checkNotNull(navigationState);
+        publishPageLoadingMessage();
         //computer says no
         if (!viewChangeRule.changeIsAllowed(this, getCurrentView())) {
             return;
@@ -330,6 +337,13 @@ public class DefaultNavigator implements Navigator {
      */
     protected void publishAfterViewChange(AfterViewChangeBusMessage busMessage) {
         uiBusProvider.get().publish(busMessage);
+        ScopedUI ui = uiProvider.get();
+        messageBus.publishASync(new PageReadyMessage(ui.getInstanceKey(), ui.getUIId()));
+    }
+
+    protected void publishPageLoadingMessage() {
+        ScopedUI ui = uiProvider.get();
+        messageBus.publishASync(new PageLoadingMessage(ui.getInstanceKey(), ui.getUIId()));
     }
 
     @Override

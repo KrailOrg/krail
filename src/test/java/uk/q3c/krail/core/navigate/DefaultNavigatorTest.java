@@ -43,8 +43,11 @@ import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.InjectorHolder;
+import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;
+import uk.q3c.krail.core.monitor.PageLoadingMessage;
+import uk.q3c.krail.core.monitor.PageReadyMessage;
 import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
@@ -71,6 +74,7 @@ import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
@@ -89,6 +93,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -170,6 +175,9 @@ public class DefaultNavigatorTest {
     @Inject
     Injector injector;
 
+    @Mock
+    private MessageBus messageBus;
+
     @Before
     public void setup() {
         InjectorHolder.setInjector(injector);
@@ -178,6 +186,8 @@ public class DefaultNavigatorTest {
         when(uiProvider.get()).thenReturn(scopedUI);
         UI.setCurrent(scopedUI);
         when(scopedUI.getPage()).thenReturn(browserPage);
+        when(scopedUI.getInstanceKey()).thenReturn(new UIKey(1));
+        when(scopedUI.getUIId()).thenReturn(99);
         when(errorViewProvider.get()).thenReturn(errorView);
         when(subjectProvider.get()).thenReturn(subject);
         when(userSitemapProvider.get()).thenReturn(userSitemap);
@@ -205,7 +215,7 @@ public class DefaultNavigatorTest {
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, componentIdGenerator, masterSitemap);
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, componentIdGenerator, masterSitemap, messageBus);
         navigator.init();
         return navigator;
     }
@@ -259,6 +269,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(userSitemap.a11Fragment);
         // then
         verify(scopedUI).changeView(any(userSitemap.a11ViewClass));
+        verify(messageBus, atLeast(1)).publishASync(any(PageLoadingMessage.class));
         assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.a11Node());
         assertThat(navigator.getCurrentNavigationState()
                 .getFragment()).isEqualTo(userSitemap.a11Fragment);
@@ -362,6 +373,7 @@ public class DefaultNavigatorTest {
         // then
         assertThat(navigator.getCurrentNavigationState()
                 .getFragment()).isEqualTo(userSitemap.a11Fragment);
+        verify(messageBus, atLeast(1)).publishASync(any(PageLoadingMessage.class));
 
     }
 
@@ -481,6 +493,8 @@ public class DefaultNavigatorTest {
         // then
         assertThat(navigator.getCurrentNavigationState()).isEqualTo(navigationState);
         verify(scopedUI).changeView(any(userSitemap.a1ViewClass));
+        verify(messageBus, atLeast(1)).publishASync(any(PageLoadingMessage.class));
+        verify(messageBus, atLeast(1)).publishASync(any(PageReadyMessage.class));
     }
 
     @Test
