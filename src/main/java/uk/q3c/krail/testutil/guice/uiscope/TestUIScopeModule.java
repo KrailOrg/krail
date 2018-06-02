@@ -19,6 +19,8 @@ import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.ui.BasicUI;
 
+import java.util.UUID;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +43,7 @@ public class TestUIScopeModule extends UIScopeModule {
         if (oldScope != null) {
             oldScope.flush();
         }
-        UIKey uiKey = new UIKey(index);
+        UIKey uiKey = new UIKey(UUID.randomUUID());
         BasicUI ui = mock(BasicUI.class);
         when(ui.getInstanceKey()).thenReturn(uiKey);
         UI.setCurrent(ui);

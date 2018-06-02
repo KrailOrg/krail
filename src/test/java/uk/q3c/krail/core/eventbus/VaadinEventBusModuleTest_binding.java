@@ -41,6 +41,8 @@ import uk.q3c.krail.eventbus.mbassador.MBassadorMessageBus;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 import uk.q3c.util.guice.SerializationSupportModule;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -76,7 +78,7 @@ public class VaadinEventBusModuleTest_binding {
 
     @Before
     public void setup() {
-        setUIScope(1);
+        setUIScope(UUID.randomUUID());
         uiBus = uiBusProvider.get();
         uiBus2 = uiBusProvider.get();
     }
@@ -86,7 +88,7 @@ public class VaadinEventBusModuleTest_binding {
         VaadinSession.setCurrent(null);
     }
 
-    private void setUIScope(int index) {
+    private void setUIScope(UUID index) {
         UI.setCurrent(null); // overcomes the inheritable check in CurrentInstance.set
         //flush last test if there was one
         UIScope oldScope = UIScope.getCurrent();
@@ -195,7 +197,7 @@ public class VaadinEventBusModuleTest_binding {
         assertThat(busIndex2).isEqualTo(1);
 
         //when new scope
-        setUIScope(2);
+        setUIScope(UUID.randomUUID());
         uiBus = uiBusProvider.get();
         uiBus2 = uiBusProvider.get();
 

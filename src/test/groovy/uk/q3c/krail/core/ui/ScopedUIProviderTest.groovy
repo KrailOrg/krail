@@ -19,10 +19,7 @@ import com.vaadin.server.UIClassSelectionEvent
 import com.vaadin.server.UICreateEvent
 import com.vaadin.ui.UI
 import spock.lang.Specification
-import uk.q3c.krail.core.guice.uiscope.UIKey
-import uk.q3c.krail.core.guice.uiscope.UIKeyProvider
 import uk.q3c.util.testutil.LogMonitor
-
 /**
  * Created by David Sowerby on 08 Feb 2016
  */
@@ -30,18 +27,15 @@ class ScopedUIProviderTest extends Specification {
 
     ScopedUIProvider provider
     Injector injector = Mock()
-    UIKeyProvider keyProvider = Mock()
     Map<String, Class<? extends ScopedUI>> uiMapBinder
     Map<String, Provider<ScopedUI>> uiMapBinderProvider
     LogMonitor logMonitor
-    UIKey uiKey = Mock()
 
 
     def setup() {
         provider = new ScopedUIProvider()
         logMonitor = new LogMonitor()
         logMonitor.addClassFilter(ScopedUIProvider)
-        keyProvider.get() >> uiKey
     }
 
     def cleanup() {
@@ -53,7 +47,7 @@ class ScopedUIProviderTest extends Specification {
         uiMapBinder = new HashMap<>()
         uiMapBinderProvider = new HashMap<>()
         UIClassSelectionEvent event = Mock()
-        provider.init(keyProvider, uiMapBinder, uiMapBinderProvider)
+        provider.init(uiMapBinder, uiMapBinderProvider)
 
         when:
         provider.getUIClass(event)
@@ -70,7 +64,7 @@ class ScopedUIProviderTest extends Specification {
         uiMapBinder.put("b", DefaultApplicationUI)
 
         UIClassSelectionEvent event = Mock()
-        provider.init(keyProvider, uiMapBinder, uiMapBinderProvider)
+        provider.init(uiMapBinder, uiMapBinderProvider)
 
         when:
         Class<? extends UI> result = provider.getUIClass(event)
@@ -92,7 +86,7 @@ class ScopedUIProviderTest extends Specification {
         uiMapBinder.put(BasicUI.class.getName(), BasicUI)
         UICreateEvent event = Mock()
         event.getUIClass() >> BasicUI.class
-        provider.init(keyProvider, uiMapBinder, uiMapBinderProvider)
+        provider.init(uiMapBinder, uiMapBinderProvider)
 
         when:
         ScopedUI result = provider.createInstance(event)

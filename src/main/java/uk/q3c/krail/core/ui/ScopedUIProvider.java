@@ -23,7 +23,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
-import uk.q3c.krail.core.guice.uiscope.UIKeyProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 
@@ -41,13 +40,11 @@ import java.util.Map;
 @SuppressFBWarnings("SE_BAD_FIELD")
 public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, Serializable {
     private static Logger log = LoggerFactory.getLogger(ScopedUIProvider.class);
-    protected transient UIKeyProvider uiKeyProvider;
     private transient Map<String, Class<? extends ScopedUI>> uiMapBinder;
     private transient Map<String, Provider<ScopedUI>> uiMapBinderProvider;
 
     @Inject
-    protected void init(UIKeyProvider uiKeyProvider, Map<String, Class<? extends ScopedUI>> uiMapBinder, Map<String, Provider<ScopedUI>> uiMapBinderProvider) {
-        this.uiKeyProvider = uiKeyProvider;
+    protected void init(Map<String, Class<? extends ScopedUI>> uiMapBinder, Map<String, Provider<ScopedUI>> uiMapBinderProvider) {
         this.uiMapBinder = uiMapBinder;
         this.uiMapBinderProvider = uiMapBinderProvider;
     }
@@ -80,7 +77,7 @@ public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, 
     @Override
     public UI createInstance(UICreateEvent event) {
         Class<? extends UI> uiClass = event.getUIClass();
-        UIKey uiKey = uiKeyProvider.get();
+        UIKey uiKey = new UIKey();
         // hold the key while UI is created
         CurrentInstance.set(UIKey.class, uiKey);
         // and set up the scope

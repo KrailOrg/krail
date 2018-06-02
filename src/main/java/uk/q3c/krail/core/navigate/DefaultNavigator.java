@@ -52,7 +52,10 @@ import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.util.guice.SerializationSupport;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -98,14 +101,15 @@ public class DefaultNavigator implements Navigator {
     private UserSitemap userSitemap;
     private final ViewChangeRule viewChangeRule;
     private final ComponentIdGenerator idGenerator;
-    private MessageBus messageBus;
+    private final transient MessageBus messageBus;
+    private SerializationSupport serializationSupport;
 
 
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
             pageAccessController, ScopedUIProvider uiProvider, ViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
                                     loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider uiBusProvider, ViewChangeRule
-                                    viewChangeRule, InvalidURIHandler invalidURIHandler, ComponentIdGenerator idGenerator, MasterSitemap masterSitemap, MessageBus messageBus) {
+                                    viewChangeRule, InvalidURIHandler invalidURIHandler, ComponentIdGenerator idGenerator, MasterSitemap masterSitemap, MessageBus messageBus, SerializationSupport serializationSupport) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -126,6 +130,12 @@ public class DefaultNavigator implements Navigator {
 
         this.idGenerator = idGenerator;
         this.messageBus = messageBus;
+        this.serializationSupport = serializationSupport;
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        serializationSupport.deserialize(this);
     }
 
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")

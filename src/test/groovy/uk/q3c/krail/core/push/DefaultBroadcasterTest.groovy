@@ -86,7 +86,7 @@ class DefaultBroadcasterTest extends Specification {
 
     def "broadcast, push enabled, messages received, using UiKey for sender"() {
         given:
-        UIKey uiKey = new UIKey(55)
+        UIKey uiKey = new UIKey()
         broadcaster.register("a", listener1)
         broadcaster.register(Broadcaster.ALL_MESSAGES, listener2)
 
@@ -97,13 +97,13 @@ class DefaultBroadcasterTest extends Specification {
         1 * applicationConfiguration.getPropertyValue(PushModuleKt.SERVER_PUSH_ENABLED, true) >> true
         1 * listener1.receiveBroadcast("a", "msg", uiKey, 1)
         1 * listener2.receiveBroadcast("a", "msg", uiKey, 1)
-        logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
+        logMonitor.debugLogs().contains("broadcasting message: 1 from: " + uiKey)
 
     }
 
     def "broadcast, push not enabled, messages not received, using UiKey for sender"() {
         given:
-        UIKey uiKey = new UIKey(55)
+        UIKey uiKey = new UIKey(UUID.randomUUID())
         broadcaster.register("a", listener1)
         broadcaster.register(Broadcaster.ALL_MESSAGES, listener2)
 
@@ -120,7 +120,7 @@ class DefaultBroadcasterTest extends Specification {
 
     def "broadcast, push enabled, messages received, using component for sender"() {
         given:
-        UIKey uiKey = new UIKey(55)
+        UIKey uiKey = new UIKey()
         ScopedUI ui = Mock()
         ui.getInstanceKey() >> uiKey
         Component component = Mock()
@@ -135,13 +135,13 @@ class DefaultBroadcasterTest extends Specification {
         1 * applicationConfiguration.getPropertyValue(PushModuleKt.SERVER_PUSH_ENABLED, true) >> true
         1 * listener1.receiveBroadcast("a", "msg", uiKey, 1)
         1 * listener2.receiveBroadcast("a", "msg", uiKey, 1)
-        logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
+        logMonitor.debugLogs().contains("broadcasting message: 1 from: " + uiKey)
 
     }
 
     def "broadcast, push not enabled, messages not received, using component for sender"() {
         given:
-        UIKey uiKey = new UIKey(55)
+        UIKey uiKey = new UIKey()
         ScopedUI ui = Mock()
         ui.getInstanceKey() >> uiKey
         Component component = Mock()

@@ -1,3 +1,5 @@
-# Release notes for 0.16.9.0
+# Release notes for 0.16.10.0
 
-krail-config bug was causing push failure
+`PageLoading` and `PageReady` messages sent via `MessageBus` - primarily to assist with testing but could also be used for application monitoring
+`UIKey` uses UUID instead of sequential count from `UIKeyProvider`.  `UIKeyProvider` removed as now redundant
+Made headerRow accessible in sub-classes of `DefaultApplicationUI`

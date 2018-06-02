@@ -23,6 +23,8 @@ import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.eventbus.BusMessage;
 
+import java.util.UUID;
+
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,7 +49,7 @@ public class DefaultPushMessageRouterTest {
     @Test
     public void messageIn_simple_with_identifiers() {
         // given
-        UIKey uiKey = new UIKey(5);
+        UIKey uiKey = new UIKey(UUID.randomUUID());
         // when
         pmr.messageIn("a", "a1", uiKey, 5);
         // then

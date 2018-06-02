@@ -117,7 +117,7 @@ public class ScopedUITest {
         pushMessageRouter = new DefaultPushMessageRouter(uiBusProvider);
         logMonitor = new LogMonitor();
         logMonitor.addClassFilter(ScopedUI.class);
-        uiKey = new UIKey(33);
+        uiKey = new UIKey();
         pushConfiguration = new DefaultKrailPushConfiguration(RuntimeEnvironment.VERTX);
         ui = new BasicUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfiguration);
         ui.setInstanceKey(uiKey);
@@ -286,11 +286,12 @@ public class ScopedUITest {
         ui.attach();
         ui.setScope(uiScope);
         ui.setInstanceKey(uiKey);
+        String keyId = uiKey.toString();
 
         //when
         ui.receiveBroadcast("group", "message", uiKey, 55);
         //then
-        assertThat(logMonitor.debugLogs()).contains("UI instance UIKey:33 receiving message id: 55 from: UIKey:33");
+        assertThat(logMonitor.debugLogs()).contains("UI instance " + keyId + " receiving message id: 55 from: " + keyId);
     }
 
 

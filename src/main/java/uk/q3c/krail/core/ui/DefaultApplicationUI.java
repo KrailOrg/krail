@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Panel;
@@ -77,29 +78,25 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
             .SubPage_Panel_is_Visible,
             DescriptionKey.SubPage_Panel_is_Visible);
 
-    private final UserNavigationTree navTree;
-    private final Breadcrumb breadcrumb;
-    private final UserStatusPanel userStatus;
-    private final UserNavigationMenu menu;
-    private final SubPagePanel subpage;
-    private final MessageBar messageBar;
-    private final ApplicationLogo logo;
-    private final ApplicationHeader header;
-    private final LocaleSelector localeSelector;
+    protected final UserNavigationTree navTree;
+    protected final Breadcrumb breadcrumb;
+    protected final UserStatusPanel userStatus;
+    protected final UserNavigationMenu menu;
+    protected final SubPagePanel subpage;
+    protected final MessageBar messageBar;
+    protected final ApplicationLogo logo;
+    protected final ApplicationHeader header;
+    protected final LocaleSelector localeSelector;
     // this appears not to be used but does receive bus messages
-    private final VaadinNotification vaadinNotification;
-    private VerticalLayout baseLayout;
-    private HorizontalLayout headerRow;
-    private VerticalLayout mainArea;
-    private Panel nonSplitPanel;
+    protected final VaadinNotification vaadinNotification;
+    protected VerticalLayout baseLayout;
+    protected Component headerRow;
+    protected VerticalLayout mainArea;
+    protected Panel nonSplitPanel;
     private Option option;
-    private HorizontalSplitPanel splitPanel;
+    protected HorizontalSplitPanel splitPanel;
 
-    public ComboBox<Locale> getLocaleCombo() {
-        return localeCombo;
-    }
-
-    private ComboBox<Locale> localeCombo;
+    protected ComboBox<Locale> localeCombo;
 
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
@@ -130,7 +127,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         localeCombo.setEmptySelectionAllowed(false);
         localeCombo.setWidth(250 + "px");
         localeSelector.setCombo(localeCombo);
-        headerRow();
+        headerRow = headerRow();
         messageBar();
         subPagePanel();
         getBaseLayout();
@@ -157,10 +154,11 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         baseLayout.addComponent(messageBar);
     }
 
-    protected void headerRow() {
-        headerRow = new HorizontalLayout(header, localeCombo, userStatus);
+    protected Component headerRow() {
+        HorizontalLayout headerRow = new HorizontalLayout(header, localeCombo, userStatus);
         headerRow.setWidth("100%");
         headerRow.setExpandRatio(header, 1f);
+        return headerRow;
 
     }
 
@@ -312,5 +310,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         }
     }
 
-
+    public ComboBox<Locale> getLocaleCombo() {
+        return localeCombo;
+    }
 }

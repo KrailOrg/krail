@@ -83,6 +83,7 @@ import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
+import uk.q3c.util.guice.SerializationSupport;
 import uk.q3c.util.guice.SerializationSupportModule;
 
 import java.util.LinkedHashMap;
@@ -90,6 +91,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -178,6 +180,9 @@ public class DefaultNavigatorTest {
     @Mock
     private MessageBus messageBus;
 
+    @Mock
+    private SerializationSupport serialisationSupport;
+
     @Before
     public void setup() {
         InjectorHolder.setInjector(injector);
@@ -186,7 +191,7 @@ public class DefaultNavigatorTest {
         when(uiProvider.get()).thenReturn(scopedUI);
         UI.setCurrent(scopedUI);
         when(scopedUI.getPage()).thenReturn(browserPage);
-        when(scopedUI.getInstanceKey()).thenReturn(new UIKey(1));
+        when(scopedUI.getInstanceKey()).thenReturn(new UIKey(UUID.randomUUID()));
         when(scopedUI.getUIId()).thenReturn(99);
         when(errorViewProvider.get()).thenReturn(errorView);
         when(subjectProvider.get()).thenReturn(subject);
@@ -215,7 +220,7 @@ public class DefaultNavigatorTest {
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, componentIdGenerator, masterSitemap, messageBus);
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, componentIdGenerator, masterSitemap, messageBus, serialisationSupport);
         navigator.init();
         return navigator;
     }

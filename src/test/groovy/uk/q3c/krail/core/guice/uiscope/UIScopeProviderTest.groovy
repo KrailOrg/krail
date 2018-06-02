@@ -29,7 +29,7 @@ class UIScopeProviderTest extends Specification {
     Key key = Mock()
     Provider unscoped = Mock()
     ScopedUI ui = Mock()
-    UIKey uiKey = Mock()
+    UIKey uiKey = new UIKey()
     Map<Key<?>, Object> scopedObjects = new HashMap<>()
     Object returnedObject = Mock()
 
@@ -63,7 +63,7 @@ class UIScopeProviderTest extends Specification {
 
     def "uiKey is not null, currentUI is not null, but currentUI has different uiKey, throw UIScopeException"() {
         given:
-        UIKey uiKey2 = Mock()
+        UIKey uiKey2 = new UIKey()
         UI.setCurrent(ui)
         ui.getInstanceKey() >> uiKey2
         CurrentInstance.set(UIKey, uiKey)
