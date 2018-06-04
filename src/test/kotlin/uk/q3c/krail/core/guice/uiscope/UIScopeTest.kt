@@ -88,9 +88,7 @@ import uk.q3c.util.UtilModule
 import uk.q3c.util.guice.InjectorLocator
 import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.guice.SerializationSupportModule
-import uk.q3c.util.serial.tracer.SerializationOutcome
 import uk.q3c.util.serial.tracer.SerializationTracer
-
 import java.util.*
 
 class UIScopeTest {
@@ -168,7 +166,7 @@ class UIScopeTest {
         SerializationUtils.deserialize<UIScope>(output)
         val tracer = SerializationTracer()
         tracer.trace(uiScope)
-        tracer.shouldNotHaveAny(SerializationOutcome.FAIL)
+        tracer.shouldNotHaveAnyDynamicFailures()
     }
 
     protected fun createUI(clazz: Class<out UI>): ScopedUI {

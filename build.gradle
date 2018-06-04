@@ -65,7 +65,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.16.11.0"
+        number = "0.16.11.1"
     }
     changelog {
         maxVersions = 10
@@ -171,7 +171,7 @@ dependencies {
     testCompile "org.amshove.kluent:kluent:1.34"
 
     testCompile 'uk.q3c.util:q3c-testutils:0.11.0.4'
-    testCompile 'uk.q3c.util:serialization-tracer:0.6.0.0'
+    testCompile 'uk.q3c.util:serialization-tracer:0.7.0.0'
 
 
 }
