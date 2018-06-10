@@ -38,9 +38,7 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         checkLock();
         // take a copy to protect the parameter
         NavigationState navState = uriHandler.navigationState(nodeRecord.getUri());
-        if (nodeRecord.getUriSegment() == null) {
-            nodeRecord.setUriSegment(navState.getUriSegment());
-        }
+        nodeRecord.setUriSegment(navState.getUriSegment());
         // find the node (parent) to attach to, by looping and removing the trailing segment each
         // time until we find a matching node or run out of segments
         List<String> segments = new ArrayList(navState.getPathSegments());
@@ -50,7 +48,7 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         while ((segments.size() > 0) && (node == null)) {
             segments.remove(segments.size() - 1);
             String path = Joiner.on("/")
-                                .join(segments);
+                    .join(segments);
             node = nodeFor(path);
         }
 

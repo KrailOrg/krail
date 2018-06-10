@@ -24,6 +24,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.EmptyViewConfiguration;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -52,7 +53,7 @@ public class UserSitemapNodeTest {
     @Test
     public void translate() {
         // given
-        MasterSitemapNode masterNode = new MasterSitemapNode(1, "a", ViewA.class, LabelKey.Home_Page, -1, PageAccessControl.PUBLIC, null);
+        MasterSitemapNode masterNode = new MasterSitemapNode(1, "a", LabelKey.Home_Page, PageAccessControl.PUBLIC, -1, ViewA.class, new EmptyViewConfiguration());
         userNode = new UserSitemapNode(masterNode);
         currentLocale.setLocale(Locale.GERMANY);
         Collator collator = Collator.getInstance(Locale.GERMANY);

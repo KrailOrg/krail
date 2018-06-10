@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * If a Map<String, DirectSitemapEntry> binding has been created (using Guice modules sub-classed from
@@ -55,7 +55,9 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
                 DirectSitemapEntry value = entry.getValue();
                 nodeRecord.setLabelKey(value.getLabelKey());
                 nodeRecord.setPageAccessControl(value.getPageAccessControl());
-                nodeRecord.setViewClass(value.getViewClass());
+                if (value.getViewClass() != null) {
+                    nodeRecord.setViewClass(value.getViewClass());
+                }
                 nodeRecord.setPositionIndex(value.getPositionIndex());
                 sitemap.append(nodeRecord);
                 sourceModules.add(value.getModuleName());

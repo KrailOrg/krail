@@ -1,10 +1,16 @@
 package uk.q3c.krail.core.vaadin
 
+import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
+import uk.q3c.krail.core.form.ConverterFactory
+import uk.q3c.krail.core.form.ConverterModule
+import uk.q3c.krail.core.form.DefaultConverterFactory
+import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.i18n.test.MockTranslate
 
 /**
  * Created by David Sowerby on 12 Oct 2017
@@ -15,7 +21,7 @@ class DataModuleTest {
 
     @Before
     fun setUp() {
-        injector = Guice.createInjector(DataModule())
+        injector = Guice.createInjector(ConverterModule(), DataModuleTestModule())
     }
 
     @Test
@@ -29,4 +35,10 @@ class DataModuleTest {
     }
 
 
+}
+
+class DataModuleTestModule : AbstractModule() {
+    override fun configure() {
+        bind(Translate::class.java).toInstance(MockTranslate())
+    }
 }

@@ -1,3 +1,13 @@
-# Release notes for 0.16.11.0
+# Release notes for 0.16.12.0
 
-Update to Vaadin 8.4.2
+Forms support added
+
+## Ported to Kotlin
+
+MasterSitemapNode, NodeRecord
+
+## Refactoring
+
+- DataModule becomes ConverterModule and is moved to uk.q3c.krail.core.form
+- ConverterFactory and associated classes moved to uk.q3c.krail.core.form
+

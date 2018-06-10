@@ -746,8 +746,7 @@ public class DefaultNavigatorTest {
     private void updatePermissionForA1Node(PageAccessControl pageAccessControl, List<String> roles) {
         MasterSitemapNode oldMaster = userSitemap.a1Node()
                                                  .getMasterNode();
-        MasterSitemapNode masterSitemapNode = new MasterSitemapNode(oldMaster.getId(), oldMaster.getUriSegment(), oldMaster.getViewClass(), oldMaster
-                .getLabelKey(), oldMaster.getPositionIndex(), pageAccessControl, roles);
+        MasterSitemapNode masterSitemapNode = oldMaster.modifyPageAccessControl(pageAccessControl);//new MasterSitemapNode(oldMaster.getId(), oldMaster.getUriSegment(), oldMaster.getViewClass(), oldMaster.getLabelKey(), oldMaster.getPositionIndex(), pageAccessControl, roles, new EmptyViewConfiguration());
 
         UserSitemapNode newNode = new UserSitemapNode(masterSitemapNode);
         newNode.setCollationKey(userSitemap.a1Node()

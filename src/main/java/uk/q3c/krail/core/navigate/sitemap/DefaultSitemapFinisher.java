@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
@@ -83,17 +84,17 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             if (!sitemap.getRedirects()
                         .containsKey(nodeUri)) {
 
-                if (node.getViewClass() == null) {
+                if (node.getViewClass() == EmptyView.class) {
                     missingViewClasses.add(nodeUri);
                 }
 
-                if (node.getLabelKey() == null) {
+                if (node.getLabelKey() == LabelKey.Unnamed) {
                     missingLabelKeys.add(nodeUri);
                 }
 
-                if (node.getPageAccessControl() == null) {
-                    missingPageAccessControl.add(nodeUri);
-                }
+//                if (node.getPageAccessControl() == null) {
+//                    missingPageAccessControl.add(nodeUri);
+//                }
             } else {
                 // if redirected, take the accessControlPermission from the redirect target
                 // note: Sitemap allows for multiple levels of redirect
@@ -106,7 +107,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
                 // of nodes 'above' it, then ensure they all have a label key
                 List<MasterSitemapNode> nodeChainForTarget = sitemap.nodeChainFor(targetNode);
                 for (MasterSitemapNode n : nodeChainForTarget) {
-                    if (n.getLabelKey() == null) {
+                    if (n.getLabelKey() == LabelKey.Unnamed) {
                         missingLabelKeys.add(sitemap.uri(n));
                     }
                 }
@@ -183,7 +184,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             return;
         }
         for (MasterSitemapNode node : sitemap.getAllNodes()) {
-            if (node.getViewClass() == null) {
+            if (node.getViewClass() == EmptyView.class) {
                 MasterSitemapNode newNode = node.modifyView(defaultView);
                 sitemap.replaceNode(node, newNode);
             }
@@ -196,7 +197,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             return;
         }
         for (MasterSitemapNode node : sitemap.getAllNodes()) {
-            if (node.getLabelKey() == null) {
+            if (node.getLabelKey() == LabelKey.Unnamed) {
                 MasterSitemapNode newNode = node.modifyLabelKey(defaultKey);
                 sitemap.replaceNode(node, newNode);
             }

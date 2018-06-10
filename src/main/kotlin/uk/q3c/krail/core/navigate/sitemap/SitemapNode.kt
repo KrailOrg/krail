@@ -10,32 +10,34 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.navigate.sitemap;
+package uk.q3c.krail.core.navigate.sitemap
 
-import uk.q3c.krail.core.shiro.PageAccessControl;
-import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.core.shiro.PageAccessControl
+import uk.q3c.krail.core.view.KrailView
+import uk.q3c.krail.core.view.ViewConfiguration
+import uk.q3c.krail.i18n.I18NKey
 
-import java.io.Serializable;
-import java.util.List;
+import java.io.Serializable
 
-public interface SitemapNode extends Serializable {
+interface SitemapNode : Serializable {
 
-    String getUriSegment();
+    val uriSegment: String
 
-    I18NKey getLabelKey();
+    val labelKey: I18NKey
 
-    Class<? extends KrailView> getViewClass();
+    val viewClass: Class<out KrailView>
 
-    PageAccessControl getPageAccessControl();
+    val pageAccessControl: PageAccessControl
 
-    List<String> getRoles();
+    val roles: List<String>
 
-    int getId();
+    val id: Int
 
     /**
      * Returns the index of the position a node should be compared to its siblings
      * @return The index of the position a node should be compared to its siblings
      */
-    int getPositionIndex();
+    val positionIndex: Int
+
+    val viewConfiguration: ViewConfiguration
 }

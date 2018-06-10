@@ -13,7 +13,7 @@
 
 package fixture;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import fixture.testviews2.TestLoginView;
 import fixture.testviews2.TestLogoutView;
@@ -33,10 +33,12 @@ import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
+import uk.q3c.krail.core.navigate.sitemap.EmptyView;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.EmptyViewConfiguration;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -236,13 +238,18 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 
         Collator collator = Collator.getInstance();
 
-        List<String> r = null;
+        ImmutableList<String> r = ImmutableList.of();
         if (roles != null) {
-            r = Lists.newArrayList(roles);
+            r = ImmutableList.copyOf(roles);
         }
         Integer id = insertionOrder.indexOf(fullURI);
         final Integer positionIndex = positionIndexes.get(fullURI);
-        MasterSitemapNode masterNode = new MasterSitemapNode(id, uriSegment, viewClass, labelKey, positionIndex, pageAccessControl, r);
+
+
+        Class<? extends KrailView> vClass = (viewClass == null) ? EmptyView.class : viewClass;
+
+
+        MasterSitemapNode masterNode = new MasterSitemapNode(id, uriSegment, labelKey, pageAccessControl, positionIndex, vClass, new EmptyViewConfiguration(), r);
 
         UserSitemapNode node = new UserSitemapNode(masterNode);
         node.setLabel(getTranslate().from(labelKey));

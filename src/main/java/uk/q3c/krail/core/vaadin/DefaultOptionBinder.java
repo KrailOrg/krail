@@ -8,6 +8,7 @@ import com.vaadin.ui.AbstractField;
 import net.jodah.typetools.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.form.ConverterFactory;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionKey;
 

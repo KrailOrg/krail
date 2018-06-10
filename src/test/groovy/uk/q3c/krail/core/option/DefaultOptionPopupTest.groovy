@@ -14,22 +14,26 @@
 package uk.q3c.krail.core.option
 
 import com.google.common.collect.ImmutableSet
+import com.google.inject.Provider
 import com.vaadin.ui.*
 import spock.lang.Specification
+import uk.q3c.krail.core.form.BaseConverterSet
+import uk.q3c.krail.core.form.ConverterFactory
+import uk.q3c.krail.core.form.DefaultConverterFactory
+import uk.q3c.krail.core.form.KrailConverterErrorMessageProvider
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.ui.DataTypeToUI
 import uk.q3c.krail.core.ui.DefaultDataTypeToUI
-import uk.q3c.krail.core.vaadin.BaseConverterSet
-import uk.q3c.krail.core.vaadin.ConverterFactory
-import uk.q3c.krail.core.vaadin.DefaultConverterFactory
 import uk.q3c.krail.core.vaadin.DefaultOptionBinder
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.krail.i18n.test.TestLabelKey
 import uk.q3c.krail.option.Option
 import uk.q3c.krail.option.OptionContext
 import uk.q3c.krail.option.OptionKey
 import uk.q3c.krail.option.mock.MockOption
 import uk.q3c.krail.option.option.OptionKeyLocator
+
 /**
  * Created by David Sowerby on 07 Feb 2016
  */
@@ -39,7 +43,9 @@ class DefaultOptionPopupTest extends Specification {
     MockContext context1
     MockContext2 context2
     DataTypeToUI dataTypetoUi = new DefaultDataTypeToUI() {}
-    ConverterFactory converterFactory = new DefaultConverterFactory(ImmutableSet.of(new BaseConverterSet()))
+    KrailConverterErrorMessageProvider emp = new KrailConverterErrorMessageProvider(new MockTranslate())
+    Provider<KrailConverterErrorMessageProvider> empp = Mock()
+    ConverterFactory converterFactory = new DefaultConverterFactory(ImmutableSet.of(new BaseConverterSet(empp)))
     UI ui = Mock()
     Option option = new MockOption()
 
@@ -47,6 +53,7 @@ class DefaultOptionPopupTest extends Specification {
     OptionContext context0
 
     def setup() {
+        empp.get() >> emp
         translate.from(LabelKey.Authorisation) >> "Authorisation"
         translate.from(LabelKey.No_Options_to_Show) >> "No options to show"
         translate.from(TestLabelKey.key1) >> 'key1'

@@ -13,8 +13,8 @@ import net.jodah.typetools.TypeResolver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
+import uk.q3c.krail.core.form.ConverterFactory
 import uk.q3c.krail.core.ui.DataTypeToUI
-import uk.q3c.krail.core.vaadin.ConverterFactory
 import uk.q3c.krail.core.vaadin.DefaultOptionBinder
 import uk.q3c.krail.core.view.component.optionKeyFlagSize
 import uk.q3c.krail.i18n.CurrentLocale

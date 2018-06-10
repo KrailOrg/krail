@@ -88,7 +88,7 @@ public class DefaultStandardPagesModuleTest {
         // then
         assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         assertThat(privateNode.getLabelKey()).isEqualTo(LabelKey.Private);
-        assertThat(privateNode.getViewClass()).isNull();
+        assertThat(privateNode.getViewClass()).isEqualTo(EmptyView.class);
         assertThat(privateNode.getRoles()).isNullOrEmpty();
 
     }

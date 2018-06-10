@@ -15,6 +15,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import org.jetbrains.annotations.NotNull;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.ViewConfiguration;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -119,6 +120,11 @@ public class UserSitemapNode implements SitemapNode, NodeVisitable, Comparable<U
     @Override
     public int getPositionIndex() {
         return positionIndex;
+    }
+
+    @Override
+    public ViewConfiguration getViewConfiguration() {
+        return masterNode.getViewConfiguration();
     }
 
     public void setPositionIndex(int positionIndex) {

@@ -30,6 +30,7 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.core.view.EmptyViewConfiguration;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
@@ -152,7 +153,7 @@ public abstract class TestWithSitemap {
                 masterNode6 = newNode("b11");
                 masterSitemap.addChild(masterNode4, masterNode5);
                 masterSitemap.addChild(masterNode5, masterNode6);
-                masterNode1 = new MasterSitemapNode(id++, "a", null, null, -1, PageAccessControl.PUBLIC, null);
+                masterNode1 = new MasterSitemapNode(id++, "a", LabelKey.Unnamed, PageAccessControl.PUBLIC, -1, EmptyView.class, new EmptyViewConfiguration());
                 masterNode2 = newNode("a1");
                 masterNode3 = newNode("a11");
                 masterSitemap.addChild(masterNode1, masterNode2);
@@ -165,7 +166,8 @@ public abstract class TestWithSitemap {
                 masterNode6 = newNode("b11").modifyPageAccessControl(PageAccessControl.PERMISSION);
                 masterSitemap.addChild(masterNode4, masterNode5);
                 masterSitemap.addChild(masterNode5, masterNode6);
-                masterNode1 = new MasterSitemapNode(id++, "a", null, TestLabelKey.Yes, -1, PageAccessControl.PUBLIC, null);
+                masterNode1 = new MasterSitemapNode(id++, "a", TestLabelKey.Yes, PageAccessControl.PUBLIC, -1, EmptyView.class, new EmptyViewConfiguration())
+                ;
                 masterNode2 = newNode("a1", TestLabelKey.Home);
                 masterNode3 = newNode("a11", TestLabelKey.Yes);
                 masterSitemap.addChild(masterNode1, masterNode2);
@@ -173,7 +175,7 @@ public abstract class TestWithSitemap {
                 break;
 
             case 7: // redirect has no page access control
-                masterNode4 = newNode("b").modifyPageAccessControl(null);
+                masterNode4 = newNode("b").modifyPageAccessControl(PageAccessControl.PUBLIC);
                 masterNode5 = newNode("b1");
                 masterNode6 = newNode("b11");
 
@@ -208,11 +210,11 @@ public abstract class TestWithSitemap {
     }
 
     protected MasterSitemapNode newNode(String urlSegment) {
-        return new MasterSitemapNode(id++, urlSegment, PublicHomeView.class, TestLabelKey.Home, -1, PageAccessControl.PUBLIC, null);
+        return new MasterSitemapNode(id++, urlSegment, TestLabelKey.Home, PageAccessControl.PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
     }
 
     protected MasterSitemapNode newNode(String urlSegment, I18NKey key) {
-        return new MasterSitemapNode(id++, urlSegment, PublicHomeView.class, key, -1, PageAccessControl.PUBLIC, null);
+        return new MasterSitemapNode(id++, urlSegment, key, PageAccessControl.PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
     }
 
     protected void buildStandardPages() {

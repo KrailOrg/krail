@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
@@ -23,6 +23,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.user.LoginView;
+import uk.q3c.krail.core.view.EmptyViewConfiguration;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
@@ -44,7 +45,7 @@ public class MasterSitemapNodeTest {
         // given
 
         // when
-        MasterSitemapNode node = new MasterSitemapNode(1, "a", LoginView.class, TestLabelKey.Yes, 3, PageAccessControl.PERMISSION, Lists.newArrayList("a", "b"));
+        MasterSitemapNode node = new MasterSitemapNode(1, "a", TestLabelKey.Yes, PageAccessControl.PERMISSION, 3, LoginView.class, new EmptyViewConfiguration(), ImmutableList.of("a", "b"));
         // then
         assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
         assertThat(node.getId()).isEqualTo(1);
@@ -56,8 +57,7 @@ public class MasterSitemapNodeTest {
     @Test
     public void modifyPageControl() {
         //given
-        MasterSitemapNode node = new MasterSitemapNode(1, "a", LoginView.class, TestLabelKey.Yes, 3, PageAccessControl.PERMISSION, Lists.newArrayList("a",
-                "b"));
+        MasterSitemapNode node = new MasterSitemapNode(1, "a", TestLabelKey.Yes, PageAccessControl.PERMISSION, 3, LoginView.class, new EmptyViewConfiguration(), ImmutableList.of("a", "b"));
         //when
         MasterSitemapNode modifiedNode = node.modifyPageAccessControl(PageAccessControl.AUTHENTICATION);
         //then

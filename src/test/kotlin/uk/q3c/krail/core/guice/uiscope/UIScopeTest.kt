@@ -49,6 +49,7 @@ import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
 import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.eventbus.UIBus
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
+import uk.q3c.krail.core.form.ConverterModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.TestKrailI18NModule
@@ -69,7 +70,6 @@ import uk.q3c.krail.core.ui.DataTypeModule
 import uk.q3c.krail.core.ui.ScopedUI
 import uk.q3c.krail.core.ui.ScopedUIProvider
 import uk.q3c.krail.core.user.UserModule
-import uk.q3c.krail.core.vaadin.DataModule
 import uk.q3c.krail.core.vaadin.MockVaadinSession
 import uk.q3c.krail.core.view.ViewModule
 import uk.q3c.krail.core.view.component.DefaultComponentModule
@@ -140,7 +140,7 @@ class UIScopeTest {
         val injector = Guice.createInjector(PushModule(), TestModule(), KrailApplicationConfigurationModule(), ViewModule(), UIScopeModule(), ConfigurationFileModule(),
                 OptionModule().activeSource(InMemory::class.java), UserModule(), DefaultComponentModule(), TestKrailI18NModule(),
                 DefaultShiroModule(), ShiroVaadinModule(), VaadinSessionScopeModule(), SitemapModule(), TestUIModule(),
-                NavigationModule(), VaadinEventBusModule(), EventBusModule(), UtilModule(), DataModule(),
+                NavigationModule(), VaadinEventBusModule(), EventBusModule(), UtilModule(), ConverterModule(),
                 DataTypeModule(), UtilsModule(), InMemoryModule().provideOptionDao(), ServletEnvironmentModule(), SerializationSupportModule())
         val injectorLocator = injector.getInstance(InjectorLocator::class.java)
         injectorLocator.put(injector)

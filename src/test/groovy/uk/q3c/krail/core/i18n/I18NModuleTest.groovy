@@ -18,13 +18,13 @@ import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
+import uk.q3c.krail.core.form.ConverterModule
 import uk.q3c.krail.core.guice.GuiceModuleTestBase
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.user.UserModule
-import uk.q3c.krail.core.vaadin.DataModule
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.LocaleDefault
 import uk.q3c.krail.i18n.SupportedLocales
@@ -40,6 +40,7 @@ import uk.q3c.util.UtilModule
 import uk.q3c.util.guice.SerializationSupportModule
 
 import java.lang.annotation.Annotation
+
 /**
  * Unit tests for {@link KrailI18NModule}, and also its ancestor {@link I18NModule}
  *
@@ -223,7 +224,7 @@ class KrailI18NModuleTest extends GuiceModuleTestBase {
         modules.add(new TestOptionModule())
         modules.add(new VaadinSessionScopeModule())
         modules.add(new UIScopeModule())
-        modules.add(new DataModule())
+        modules.add(new ConverterModule())
         modules.add(new DefaultShiroModule())
         modules.add(new InMemoryModule().providePatternDao())
         modules.add(new VaadinEventBusModule())

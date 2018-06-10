@@ -1,4 +1,4 @@
-package uk.q3c.krail.core.vaadin
+package uk.q3c.krail.core.form
 
 import com.google.inject.AbstractModule
 import com.google.inject.multibindings.Multibinder
@@ -18,7 +18,7 @@ import com.google.inject.multibindings.Multibinder
  *
  * Created by David Sowerby on 11 Oct 2017
  */
-open class DataModule : AbstractModule() {
+open class ConverterModule : AbstractModule() {
 
     private lateinit var dataConverters: Multibinder<ConverterSet>
 

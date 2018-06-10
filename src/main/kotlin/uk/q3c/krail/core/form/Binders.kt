@@ -1,6 +1,5 @@
 package uk.q3c.krail.core.form
 
-import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Key
 import com.google.inject.Provider
@@ -46,12 +45,6 @@ class KrailBeanValidator constructor(
 }
 
 
-class FormModule : AbstractModule() {
-    override fun configure() {
-        bind(KrailBeanValidatorFactory::class.java).to(DefaultKrailBeanValidatorFactory::class.java)
-    }
-
-}
 
 
 interface KrailBeanValidatorFactory : Serializable {

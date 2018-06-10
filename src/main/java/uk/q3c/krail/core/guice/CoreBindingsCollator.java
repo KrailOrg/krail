@@ -27,6 +27,7 @@ import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.BindingsCollator;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
+import uk.q3c.krail.core.form.ConverterModule;
 import uk.q3c.krail.core.form.FormModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
@@ -44,7 +45,6 @@ import uk.q3c.krail.core.shiro.aop.KrailShiroAopModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
@@ -173,12 +173,12 @@ public class CoreBindingsCollator implements BindingsCollator {
     }
 
     /**
-     * Override this if you have provided your own {@link DataModule} implementation
+     * Override this if you have provided your own {@link ConverterModule} implementation
      *
-     * @return a new {@link DataModule} instance
+     * @return a new {@link ConverterModule} instance
      */
     protected Module dataModule() {
-        return new DataModule();
+        return new ConverterModule();
     }
 
     /**
