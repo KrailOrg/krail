@@ -76,9 +76,9 @@ public class DefaultMasterSitemapTest {
     public void url() {
 
         // given
-        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
-        MasterSitemapNode parent = new MasterSitemapNode(2, "home", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
-        MasterSitemapNode child = new MasterSitemapNode(3, "login", TestLabelKey.Login, PUBLIC, -1, LoginView.class, new EmptyViewConfiguration());
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, EmptyViewConfiguration.class);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, EmptyViewConfiguration.class);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", TestLabelKey.Login, PUBLIC, -1, LoginView.class, EmptyViewConfiguration.class);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
         // when
@@ -372,10 +372,10 @@ public class DefaultMasterSitemapTest {
     @Test
     public void replaceNode() {
         //given
-        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
-        MasterSitemapNode parent = new MasterSitemapNode(2, "home", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
-        MasterSitemapNode child = new MasterSitemapNode(3, "login", TestLabelKey.Login, PUBLIC, -1, LoginView.class, new EmptyViewConfiguration());
-        MasterSitemapNode newParent = new MasterSitemapNode(4, "home", TestLabelKey.Home, AUTHENTICATION, -1, PublicHomeView.class, new EmptyViewConfiguration());
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, EmptyViewConfiguration.class);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", TestLabelKey.Home, PUBLIC, -1, PublicHomeView.class, EmptyViewConfiguration.class);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", TestLabelKey.Login, PUBLIC, -1, LoginView.class, EmptyViewConfiguration.class);
+        MasterSitemapNode newParent = new MasterSitemapNode(4, "home", TestLabelKey.Home, AUTHENTICATION, -1, PublicHomeView.class, EmptyViewConfiguration.class);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
         //when

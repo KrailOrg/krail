@@ -45,7 +45,7 @@ public class MasterSitemapNodeTest {
         // given
 
         // when
-        MasterSitemapNode node = new MasterSitemapNode(1, "a", TestLabelKey.Yes, PageAccessControl.PERMISSION, 3, LoginView.class, new EmptyViewConfiguration(), ImmutableList.of("a", "b"));
+        MasterSitemapNode node = new MasterSitemapNode(1, "a", TestLabelKey.Yes, PageAccessControl.PERMISSION, 3, LoginView.class, EmptyViewConfiguration.class, ImmutableList.of("a", "b"));
         // then
         assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
         assertThat(node.getId()).isEqualTo(1);
@@ -57,7 +57,7 @@ public class MasterSitemapNodeTest {
     @Test
     public void modifyPageControl() {
         //given
-        MasterSitemapNode node = new MasterSitemapNode(1, "a", TestLabelKey.Yes, PageAccessControl.PERMISSION, 3, LoginView.class, new EmptyViewConfiguration(), ImmutableList.of("a", "b"));
+        MasterSitemapNode node = new MasterSitemapNode(1, "a", TestLabelKey.Yes, PageAccessControl.PERMISSION, 3, LoginView.class, EmptyViewConfiguration.class, ImmutableList.of("a", "b"));
         //when
         MasterSitemapNode modifiedNode = node.modifyPageAccessControl(PageAccessControl.AUTHENTICATION);
         //then

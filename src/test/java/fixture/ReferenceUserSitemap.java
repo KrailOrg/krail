@@ -249,7 +249,7 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         Class<? extends KrailView> vClass = (viewClass == null) ? EmptyView.class : viewClass;
 
 
-        MasterSitemapNode masterNode = new MasterSitemapNode(id, uriSegment, labelKey, pageAccessControl, positionIndex, vClass, new EmptyViewConfiguration(), r);
+        MasterSitemapNode masterNode = new MasterSitemapNode(id, uriSegment, labelKey, pageAccessControl, positionIndex, vClass, EmptyViewConfiguration.class, r);
 
         UserSitemapNode node = new UserSitemapNode(masterNode);
         node.setLabel(getTranslate().from(labelKey));

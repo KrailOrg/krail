@@ -35,7 +35,7 @@ data class NodeRecord(var uri: String) {
     var uriSegment: String = "unspecified"
     var viewClass: Class<out KrailView> = EmptyView::class.java
 
-    var configuration: ViewConfiguration = EmptyViewConfiguration()
+    var configuration: Class<out ViewConfiguration> = EmptyViewConfiguration::class.java
 
 
     fun addRole(role: String) {

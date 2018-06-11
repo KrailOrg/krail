@@ -29,6 +29,7 @@ open class FormModule : AbstractModule() {
         bindBeanValidatorFactory()
         bindFormSupport()
         bindErrorMessageProvider()
+        bindForm()
     }
 
     protected fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>>) {
@@ -50,6 +51,10 @@ open class FormModule : AbstractModule() {
 
     protected fun bindErrorMessageProvider() {
         bind(KrailConverterErrorMessageProvider::class.java)
+    }
+
+    protected fun bindForm() {
+        bind(Form::class.java).to(DefaultForm::class.java)
     }
 
 }

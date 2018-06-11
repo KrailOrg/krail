@@ -39,5 +39,5 @@ interface SitemapNode : Serializable {
      */
     val positionIndex: Int
 
-    val viewConfiguration: ViewConfiguration
+    val viewConfiguration: Class<out ViewConfiguration>
 }

@@ -56,7 +56,7 @@ data class MasterSitemapNode @JvmOverloads constructor(override val id: Int,
                                                        override val pageAccessControl: PageAccessControl = PageAccessControl.PERMISSION,
                                                        override val positionIndex: Int = -1,
                                                        override val viewClass: Class<out KrailView> = EmptyView::class.java,
-                                                       override val viewConfiguration: ViewConfiguration = EmptyViewConfiguration(),
+                                                       override val viewConfiguration: Class<out ViewConfiguration> = EmptyViewConfiguration::class.java,
                                                        override val roles: ImmutableList<String> = ImmutableList.of())
 
 

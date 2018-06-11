@@ -153,7 +153,7 @@ public abstract class TestWithSitemap {
                 masterNode6 = newNode("b11");
                 masterSitemap.addChild(masterNode4, masterNode5);
                 masterSitemap.addChild(masterNode5, masterNode6);
-                masterNode1 = new MasterSitemapNode(id++, "a", LabelKey.Unnamed, PageAccessControl.PUBLIC, -1, EmptyView.class, new EmptyViewConfiguration());
+                masterNode1 = new MasterSitemapNode(id++, "a", LabelKey.Unnamed, PageAccessControl.PUBLIC, -1, EmptyView.class, EmptyViewConfiguration.class);
                 masterNode2 = newNode("a1");
                 masterNode3 = newNode("a11");
                 masterSitemap.addChild(masterNode1, masterNode2);
@@ -166,7 +166,7 @@ public abstract class TestWithSitemap {
                 masterNode6 = newNode("b11").modifyPageAccessControl(PageAccessControl.PERMISSION);
                 masterSitemap.addChild(masterNode4, masterNode5);
                 masterSitemap.addChild(masterNode5, masterNode6);
-                masterNode1 = new MasterSitemapNode(id++, "a", TestLabelKey.Yes, PageAccessControl.PUBLIC, -1, EmptyView.class, new EmptyViewConfiguration())
+                masterNode1 = new MasterSitemapNode(id++, "a", TestLabelKey.Yes, PageAccessControl.PUBLIC, -1, EmptyView.class, EmptyViewConfiguration.class)
                 ;
                 masterNode2 = newNode("a1", TestLabelKey.Home);
                 masterNode3 = newNode("a11", TestLabelKey.Yes);
@@ -210,11 +210,11 @@ public abstract class TestWithSitemap {
     }
 
     protected MasterSitemapNode newNode(String urlSegment) {
-        return new MasterSitemapNode(id++, urlSegment, TestLabelKey.Home, PageAccessControl.PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
+        return new MasterSitemapNode(id++, urlSegment, TestLabelKey.Home, PageAccessControl.PUBLIC, -1, PublicHomeView.class, EmptyViewConfiguration.class);
     }
 
     protected MasterSitemapNode newNode(String urlSegment, I18NKey key) {
-        return new MasterSitemapNode(id++, urlSegment, key, PageAccessControl.PUBLIC, -1, PublicHomeView.class, new EmptyViewConfiguration());
+        return new MasterSitemapNode(id++, urlSegment, key, PageAccessControl.PUBLIC, -1, PublicHomeView.class, EmptyViewConfiguration.class);
     }
 
     protected void buildStandardPages() {
