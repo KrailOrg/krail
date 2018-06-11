@@ -4,7 +4,8 @@ Forms support added
 
 ## Ported to Kotlin
 
-MasterSitemapNode, NodeRecord
+MasterSitemapNode, UserSitemapNode, NodeRecord and NavigationCommand
+A couple of tests which mock UserSitemapNode moved to krail-spek (Mockito cannot mock final classes, Mockk can)
 
 ## Refactoring
 
