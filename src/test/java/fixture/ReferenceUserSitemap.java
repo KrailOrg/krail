@@ -39,6 +39,7 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.EmptyViewConfiguration;
+import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -81,6 +82,9 @@ import java.util.Map;
  */
 @SuppressWarnings("ALL")
 public class ReferenceUserSitemap extends DefaultUserSitemap {
+
+    public String errorFragment = "error";
+    public Class<? extends KrailView> errorClass = ErrorView.class;
 
     public String aFragment = "public/a";
     public Class<? extends KrailView> aViewClass = ViewA.class;
@@ -136,6 +140,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     private UserSitemapNode privateNode;
     private UserSitemapNode publicHomeNode;
     private UserSitemapNode publicNode;
+
+    public UserSitemapNode errorNode;
 
 
     /**
@@ -201,6 +207,9 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 
         insertionOrder.add(privateHomeFragment);
         positionIndexes.put(privateHomeFragment, 13);
+
+        insertionOrder.add(errorFragment);
+        positionIndexes.put(errorFragment, -1);//This one should not be in nav components
 
 
     }
@@ -283,6 +292,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         addChild(b1Node, b12Node);
         addChild(b12Node, b121Node);
         addChild(b12Node, b122Node);
+
+        errorNode = createNode(errorFragment, "error", errorClass, LabelKey.Error, PageAccessControl.PERMISSION);
     }
 
 

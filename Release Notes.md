@@ -2,6 +2,13 @@
 
 Forms support added
 
+## Changes to KrailView
+
+A ``NavigationStateExt`` is passed in the ``KrailView.beforeBuild`` and stored in ``ViewBase``.  this makes passing the ``ViewChangedMessage`` redundant in ``buildView()``, ``doBuild()`` and ``afterBuild()``, as the same information is available within the view from ``NavigationStateExt``
+
+The methods with a parameter have therefore been deprecated and replaced with parameterless versions. 
+
+
 ## Ported to Kotlin
 
 MasterSitemapNode, UserSitemapNode, NodeRecord and NavigationCommand

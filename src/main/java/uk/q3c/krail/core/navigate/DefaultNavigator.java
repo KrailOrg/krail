@@ -46,10 +46,10 @@ import uk.q3c.krail.core.user.UserSitemapRebuilt;
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
 import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.ViewFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.util.guice.SerializationSupport;
@@ -266,10 +266,11 @@ public class DefaultNavigator implements Navigator {
             }
             // now change the view
             KrailView view = viewFactory.get(node.getViewClass());
-            AfterViewChangeBusMessage afterMessage = new AfterViewChangeBusMessage(beforeMessage);
-            changeView(view, afterMessage);
+
+            changeView(view, new NavigationStateExt(previousNavigationState, navigationState, node));
 
             // and tell listeners its changed
+            AfterViewChangeBusMessage afterMessage = new AfterViewChangeBusMessage(beforeMessage);
             publishAfterViewChange(afterMessage);
         } else {
             throw new UnauthorizedException(navigationState.getVirtualPage());
@@ -295,21 +296,21 @@ public class DefaultNavigator implements Navigator {
         }
     }
 
-    protected void changeView(KrailView view, ViewChangeBusMessage busMessage) {
+    protected void changeView(KrailView view, NavigationStateExt navigationStateExt) {
         ScopedUI ui = uiProvider.get();
         log.debug("calling view.beforeBuild(event) for {}", view.getClass()
                 .getName());
-        view.beforeBuild(busMessage);
+        view.beforeBuild(navigationStateExt);
         log.debug("calling view.buildView(event) {}", view.getClass()
                 .getName());
-        view.buildView(busMessage);
+        view.buildView();
         ui.changeView(view);
         log.debug("calling view.afterBuild(event) {}", view.getClass()
                 .getName());
 
         generateAndApplyComponentIds(view);
         generateAndApplyComponentIds(ui);
-        view.afterBuild(new AfterViewChangeBusMessage(busMessage));
+        view.afterBuild();
         HasComponents g;
     }
 
@@ -390,10 +391,10 @@ public class DefaultNavigator implements Navigator {
         log.debug("A {} Error has been thrown, reporting via the Error View", error.getClass()
                 .getName());
         NavigationState navigationState = uriHandler.navigationState("error");
-        ViewChangeBusMessage viewChangeBusMessage = new ViewChangeBusMessage(previousNavigationState, navigationState);
         ErrorView view = viewFactory.get(ErrorView.class);
         view.setError(error);
-        changeView(view, viewChangeBusMessage);
+        UserSitemapNode node = userSitemap.nodeFor(navigationState);
+        changeView(view, new NavigationStateExt(previousNavigationState, navigationState, null));
     }
 
     /**

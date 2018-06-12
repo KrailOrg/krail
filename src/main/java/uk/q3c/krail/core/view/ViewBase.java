@@ -62,6 +62,7 @@ public abstract class ViewBase implements KrailView, Serializable {
     @Deprecated
     private boolean idsAssigned;
     private Component rootComponent;
+    protected NavigationStateExt navigationStateExt;
 
     @Inject
     protected ViewBase(Translate translate, SerializationSupport serializationSupport) {
@@ -93,6 +94,11 @@ public abstract class ViewBase implements KrailView, Serializable {
         log.debug("====> View.init called");
     }
 
+    @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+        this.navigationStateExt = navigationStateExt;
+        beforeBuild(new BeforeViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
+    }
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
@@ -102,6 +108,12 @@ public abstract class ViewBase implements KrailView, Serializable {
             idsAssigned = true;
         }
         loadData(busMessage);
+    }
+
+
+    @Override
+    public void afterBuild() {
+        buildView(new ViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
     }
 
     /**
@@ -166,13 +178,29 @@ public abstract class ViewBase implements KrailView, Serializable {
         componentsConstructed = true;
     }
 
+    @Override
+    public void buildView() {
+        if (!componentsConstructed) {
+            doBuild();
+        }
+        componentsConstructed = true;
+    }
+
+
+
     /**
      * Implement this method to construct your components.  You must also set {@link #rootComponent} (this is the component which will be placed in the parent
      * {@link UI}, and is usually a layout
      *
-     * @param busMessage a message sent by the Event Bus to signify a chnage of View
+     * @param busMessage a message sent by the Event Bus to signify a change of View
+     * @deprecated use {@link #doBuild()}
      */
+    @Deprecated
     protected abstract void doBuild(ViewChangeBusMessage busMessage);
+
+    protected void doBuild() {
+        doBuild(new ViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
+    }
 
     /**
      * {@inheritDoc}

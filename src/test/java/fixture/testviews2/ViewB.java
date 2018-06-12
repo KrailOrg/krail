@@ -17,6 +17,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import uk.q3c.krail.core.navigate.DefaultNavigatorTest;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
@@ -26,6 +27,7 @@ public class ViewB implements KrailView {
 
     private final Label label = new Label("not used");
     private DefaultNavigatorTest.TestViewChangeListener changeListener;
+    private NavigationStateExt navigationStateExt;
 
 
     @Inject
@@ -39,8 +41,19 @@ public class ViewB implements KrailView {
     }
 
     @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+        this.navigationStateExt = navigationStateExt;
+        changeListener.addCall("beforeBuild", new ViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
+    }
+
+    @Override
     public void buildView(ViewChangeBusMessage busMessage) {
         changeListener.addCall("buildView", busMessage);
+    }
+
+    @Override
+    public void buildView() {
+        changeListener.addCall("buildView", new ViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
     }
 
     @Override
@@ -58,6 +71,11 @@ public class ViewB implements KrailView {
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
         changeListener.addCall("afterBuild", busMessage);
+    }
+
+    @Override
+    public void afterBuild() {
+        changeListener.addCall("afterBuild", new AfterViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
     }
 
 

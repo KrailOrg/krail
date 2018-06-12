@@ -29,7 +29,15 @@ abstract class FormConfiguration : ViewConfiguration {
 
 }
 
+class EmptyFormConfiguration : FormConfiguration() {
+
+    override fun config(): FormConfiguration {
+        return this
+    }
+}
+
 class SectionConfiguration : Serializable {
+    var name: String = "unnamed"
     var scanFromEntityClass: Boolean = true
     var excludedProperties: List<String> = listOf()
     val properties: MutableList<PropertyConfiguration> = mutableListOf()
@@ -74,3 +82,7 @@ class MyForm : FormConfiguration() {
     }
 
 }
+
+class FormConfigurationException(msg: String) : RuntimeException(msg)
+
+class FormProperty : Serializable

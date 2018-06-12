@@ -14,6 +14,7 @@ package uk.q3c.krail.core.view.testviews.subview;
 
 import com.vaadin.ui.Component;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
@@ -27,9 +28,19 @@ public class MoneyInOutView implements KrailView {
 
     }
 
+    @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+
+    }
+
 
     @Override
     public void buildView(ViewChangeBusMessage event) {
+    }
+
+    @Override
+    public void buildView() {
+
     }
 
     @Override
@@ -46,6 +57,11 @@ public class MoneyInOutView implements KrailView {
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage event) {
+
+    }
+
+    @Override
+    public void afterBuild() {
 
     }
 

@@ -506,6 +506,7 @@ public class DefaultNavigatorTest {
     public void error() {
 
         // given
+
         navigator = createNavigator();
         // when
         navigator.error(new NullPointerException("test"));

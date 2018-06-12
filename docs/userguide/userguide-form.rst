@@ -5,7 +5,7 @@ Forms
 Overview
 ========
 
-Vaadin provides some support for Forms with ``Binder``, but Krail takes that further.  The process of constructing a form is:
+Vaadin provides some support for Forms with ``Binder``, but Krail takes that further.  The process of constructing a form in Krail is:
 
 - a ``FormConfiguration`` is specified in using either the Direct or Annotation method of creating a ``Sitemap`` entry,
 - the view for that ``Sitemap`` entry must be ``Form.class``

@@ -160,15 +160,15 @@ data class MasterSitemapNode @JvmOverloads constructor(override val id: Int,
      * Hashcode and equals are normally generated automatically in a Kotlin data class, but these are needed toensure that the graph used by [Sitemap] correctly identifies nodes
      */
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
             return true
         }
-        if (o !is MasterSitemapNode) {
+        if (other !is MasterSitemapNode) {
             return false
         }
 
-        val that = o as MasterSitemapNode?
+        val that = other as MasterSitemapNode?
 
         return id == that!!.id
 

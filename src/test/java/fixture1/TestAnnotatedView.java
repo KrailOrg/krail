@@ -15,6 +15,7 @@ package fixture1;
 import com.vaadin.ui.Component;
 import uk.q3c.krail.core.navigate.sitemap.View;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
@@ -35,7 +36,17 @@ public class TestAnnotatedView implements KrailView {
     }
 
     @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+
+    }
+
+    @Override
     public void buildView(ViewChangeBusMessage busMessage) {
+    }
+
+    @Override
+    public void buildView() {
+
     }
 
     @Override
@@ -52,6 +63,11 @@ public class TestAnnotatedView implements KrailView {
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
+
+    }
+
+    @Override
+    public void afterBuild() {
 
     }
 

@@ -19,6 +19,7 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import org.jetbrains.annotations.NotNull;
 import uk.q3c.krail.core.user.LoginView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
@@ -31,7 +32,17 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+
+    }
+
+    @Override
     public void buildView(ViewChangeBusMessage busMessage) {
+
+    }
+
+    @Override
+    public void buildView() {
 
     }
 
@@ -85,6 +96,11 @@ public class TestLoginView implements LoginView {
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
+
+    }
+
+    @Override
+    public void afterBuild() {
 
     }
 

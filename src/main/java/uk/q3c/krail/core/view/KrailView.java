@@ -48,8 +48,12 @@ public interface KrailView extends NamedAndDescribed, Serializable {
      * configuration which affects the way the view is presented.
      *
      * @param busMessage contains information about the change to this View
+     * @deprecated use {@link #beforeBuild(NavigationStateExt)}
      */
+    @Deprecated
     void beforeBuild(ViewChangeBusMessage busMessage);
+
+    void beforeBuild(NavigationStateExt navigationStateExt);
 
     /**
      * Builds the UI components of the view.  MUST set the root component of the View (returned by {@link
@@ -60,8 +64,12 @@ public interface KrailView extends NamedAndDescribed, Serializable {
      * <b>Note:</b> Just after this method is called, the {@link DefaultNavigator} invokes the {@link ComponentIdGenerator} to provide ids to components
      *
      * @param busMessage contains information about the change to this View
+     * @deprecated use {@link #buildView()}
      */
+    @Deprecated
     void buildView(ViewChangeBusMessage busMessage);
+
+    void buildView();
 
     /**
      * To enable implementations to implement this interface without descending from Component. If the implementation
@@ -83,8 +91,12 @@ public interface KrailView extends NamedAndDescribed, Serializable {
      * the view from URL parameters.
      *
      * @param busMessage
+     * @deprecated use {@link #afterBuild()}
      */
+    @Deprecated
     void afterBuild(AfterViewChangeBusMessage busMessage);
+
+    void afterBuild();
 
     /**
      * Notify the view that it needs to rebuild its components.  By default does nothing

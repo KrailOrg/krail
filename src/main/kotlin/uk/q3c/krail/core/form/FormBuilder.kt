@@ -1,6 +1,8 @@
 package uk.q3c.krail.core.form
 
 import com.google.inject.AbstractModule
+import com.google.inject.Inject
+import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import com.google.inject.multibindings.MapBinder
 import com.vaadin.shared.ui.colorpicker.Color
@@ -16,7 +18,44 @@ import java.time.LocalDateTime
 /**
  * Created by David Sowerby on 09 Jun 2018
  */
-interface FormBuilder
+interface FormBuilder {
+    fun selectFormTypeBuilder(configuration: FormConfiguration): FormTypeBuilder
+}
+
+interface FormTypeBuilder {
+    var configuration: FormConfiguration
+    fun build(): FormComponentSet
+}
+
+class SimpleFormTypeBuilder @Inject constructor() : FormTypeBuilder {
+    override lateinit var configuration: FormConfiguration
+    override fun build(): FormComponentSet {
+        TODO()
+    }
+}
+
+
+class DefaultFormBuilder @Inject constructor(private val formTypeBuilders: MutableMap<String, Provider<FormTypeBuilder>>) : FormBuilder {
+    override fun selectFormTypeBuilder(configuration: FormConfiguration): FormTypeBuilder {
+        val typeName = configuration.formType
+        val adjustedTypeName =
+                when (typeName) {
+                    "unnamed", "simple", "" -> "simple"
+                    else -> {
+                        typeName
+                    }
+                }
+
+        val provider = formTypeBuilders[adjustedTypeName]
+        if (provider != null) {
+            val builder = provider.get()
+            builder.configuration = configuration
+            return builder
+        } else {
+            throw FormConfigurationException("unrecognised FormTypeBuilder '$typeName'")
+        }
+    }
+}
 
 
 open class FormModule : AbstractModule() {
@@ -25,11 +64,24 @@ open class FormModule : AbstractModule() {
         val fieldLiteral = object : TypeLiteral<AbstractField<*>>() {}
         val dataClassLiteral = object : TypeLiteral<Class<*>>() {}
         val dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)
+        val stringLiteral = object : TypeLiteral<String>() {}
+        val formTypeBuilderClassLiteral = object : TypeLiteral<FormTypeBuilder>() {}
+        val formTypeBuilderLookup: MapBinder<String, FormTypeBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
+        bindFormTypeBuilders(formTypeBuilderLookup)
         bindDefaultDataClassMappings(dataClassToFieldMap)
         bindBeanValidatorFactory()
         bindFormSupport()
         bindErrorMessageProvider()
         bindForm()
+        bindFormBuilder()
+    }
+
+    protected fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormTypeBuilder>) {
+        formTypeBuilderLookup.addBinding("simple").to(SimpleFormTypeBuilder::class.java)
+    }
+
+    protected fun bindFormBuilder() {
+        bind(FormBuilder::class.java).to(DefaultFormBuilder::class.java)
     }
 
     protected fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>>) {
@@ -40,6 +92,7 @@ open class FormModule : AbstractModule() {
         dataClassToFieldMap.addBinding(Color::class.java).to(ColorPicker::class.java)
         dataClassToFieldMap.addBinding(Boolean::class.java).to(CheckBox::class.java)
     }
+
 
     protected fun bindBeanValidatorFactory() {
         bind(KrailBeanValidatorFactory::class.java).to(DefaultKrailBeanValidatorFactory::class.java)

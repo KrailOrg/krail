@@ -14,6 +14,7 @@ package fixture.testviews2;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.PrivateHomeView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -28,7 +29,17 @@ public class TestPrivateHomeView implements PrivateHomeView {
     }
 
     @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+
+    }
+
+    @Override
     public void buildView(ViewChangeBusMessage busMessage) {
+    }
+
+    @Override
+    public void buildView() {
+
     }
 
     @Override
@@ -43,6 +54,11 @@ public class TestPrivateHomeView implements PrivateHomeView {
     }
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
+
+    }
+
+    @Override
+    public void afterBuild() {
 
     }
 

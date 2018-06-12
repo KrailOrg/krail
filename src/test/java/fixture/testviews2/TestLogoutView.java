@@ -15,6 +15,7 @@ package fixture.testviews2;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import uk.q3c.krail.core.view.LogoutView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
@@ -28,7 +29,17 @@ public class TestLogoutView implements LogoutView {
     }
 
     @Override
+    public void beforeBuild(NavigationStateExt navigationStateExt) {
+
+    }
+
+    @Override
     public void buildView(ViewChangeBusMessage busMessage) {
+    }
+
+    @Override
+    public void buildView() {
+
     }
 
     @Override
@@ -44,6 +55,11 @@ public class TestLogoutView implements LogoutView {
 
     @Override
     public void afterBuild(AfterViewChangeBusMessage busMessage) {
+
+    }
+
+    @Override
+    public void afterBuild() {
 
     }
 

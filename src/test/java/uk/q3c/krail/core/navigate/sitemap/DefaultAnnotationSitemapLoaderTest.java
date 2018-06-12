@@ -36,6 +36,7 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.Ann
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule2;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
@@ -155,9 +156,19 @@ public class DefaultAnnotationSitemapLoaderTest {
 
         }
 
+        @Override
+        public void beforeBuild(NavigationStateExt navigationStateExt) {
+
+        }
+
 
         @Override
         public void buildView(ViewChangeBusMessage busMessage) {
+
+        }
+
+        @Override
+        public void buildView() {
 
         }
 
@@ -174,6 +185,11 @@ public class DefaultAnnotationSitemapLoaderTest {
 
         @Override
         public void afterBuild(AfterViewChangeBusMessage event) {
+
+        }
+
+        @Override
+        public void afterBuild() {
 
         }
 
