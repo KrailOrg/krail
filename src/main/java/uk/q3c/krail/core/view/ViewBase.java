@@ -113,7 +113,7 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     @Override
     public void afterBuild() {
-        buildView(new ViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
+        afterBuild(new AfterViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
     }
 
     /**

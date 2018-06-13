@@ -33,6 +33,7 @@ import uk.q3c.krail.option.OptionContext
 import uk.q3c.krail.option.OptionKey
 import uk.q3c.krail.option.mock.MockOption
 import uk.q3c.krail.option.option.OptionKeyLocator
+import uk.q3c.util.guice.SerializationSupport
 
 /**
  * Created by David Sowerby on 07 Feb 2016
@@ -45,7 +46,8 @@ class DefaultOptionPopupTest extends Specification {
     DataTypeToUI dataTypetoUi = new DefaultDataTypeToUI() {}
     KrailConverterErrorMessageProvider emp = new KrailConverterErrorMessageProvider(new MockTranslate())
     Provider<KrailConverterErrorMessageProvider> empp = Mock()
-    ConverterFactory converterFactory = new DefaultConverterFactory(ImmutableSet.of(new BaseConverterSet(empp)))
+    SerializationSupport serializationSupport = Mock()
+    ConverterFactory converterFactory = new DefaultConverterFactory(ImmutableSet.of(new BaseConverterSet(empp, serializationSupport)))
     UI ui = Mock()
     Option option = new MockOption()
 

@@ -9,6 +9,9 @@ import com.vaadin.data.ValueContext
 import com.vaadin.data.converter.StringToIntegerConverter
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.util.guice.SerializationSupport
+import java.io.IOException
+import java.io.ObjectInputStream
 import java.io.Serializable
 
 /**
@@ -44,7 +47,7 @@ class NoConversionConverter : Converter<Any, Any> {
 
 }
 
-class BaseConverterSet @Inject constructor(override val errorMessageProviderProvider: Provider<KrailConverterErrorMessageProvider>) : ConverterSet {
+class BaseConverterSet @Inject constructor(@field:Transient override val errorMessageProviderProvider: Provider<KrailConverterErrorMessageProvider>, val serializationSupport: SerializationSupport) : ConverterSet {
 
     override fun supports(converterPair: ConverterPair): Boolean {
         return true
@@ -63,6 +66,12 @@ class BaseConverterSet @Inject constructor(override val errorMessageProviderProv
         }
         @Suppress("UNCHECKED_CAST")
         return converter as Converter<Any, Any>
+    }
+
+    @Throws(ClassNotFoundException::class, IOException::class)
+    private fun readObject(inputStream: ObjectInputStream) {
+        inputStream.defaultReadObject()
+        serializationSupport.deserialize(this)
     }
 }
 
@@ -105,7 +114,8 @@ data class ConverterPair(val presentation: Class<out Any>, val model: Class<out 
  * by your own Guice module - see [ConverterModule] for an example of the SetBinder to use.  Once bound via Guice, this factory will use
  * all available [ConverterSet]s
  */
-class DefaultConverterFactory @Inject constructor(val converters: MutableSet<ConverterSet>) : ConverterFactory {
+class DefaultConverterFactory @Inject constructor(private val converters: MutableSet<ConverterSet>) : ConverterFactory {
+
     override fun <P : Any, M : Any> get(presentationClass: Class<out P>, modelClass: Class<out M>): Converter<P, M> {
         @Suppress("UNCHECKED_CAST")
         return get(ConverterPair(presentationClass, modelClass)) as Converter<P, M>
