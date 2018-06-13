@@ -71,7 +71,7 @@ By default there is just one ``ConverterSet``, ``BaseConverterSet``
 Adding / Replacing Converters
 -----------------------------
 
-Converters can be added by defining your own ``ConverterSet``.  This can be added in one of two ways:
+Converters can be added by defining your own ``ConverterSet``, and adding it in one of two ways:
 
 - sub-class ``ConverterModule`` and override the ``define()`` method to provide your own bindings to ``ConverterSet``s, and replace ``ConverterModule`` in your ``BindingsCollator``
 - create a new module using ``ConverterModule`` as an example, and add the new module to your ``BindingsCollator``
