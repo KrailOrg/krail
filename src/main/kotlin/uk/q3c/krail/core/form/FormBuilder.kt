@@ -1,19 +1,18 @@
 package uk.q3c.krail.core.form
 
-import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Provider
-import com.google.inject.TypeLiteral
-import com.google.inject.multibindings.MapBinder
-import com.vaadin.shared.ui.colorpicker.Color
+import com.vaadin.data.Binder
+import com.vaadin.data.Converter
+import com.vaadin.data.Validator
 import com.vaadin.ui.AbstractField
-import com.vaadin.ui.CheckBox
-import com.vaadin.ui.ColorPicker
-import com.vaadin.ui.DateField
-import com.vaadin.ui.DateTimeField
-import com.vaadin.ui.TextField
-import java.time.LocalDate
-import java.time.LocalDateTime
+import org.apache.commons.lang3.reflect.FieldUtils
+import uk.q3c.krail.core.i18n.DescriptionKey
+import uk.q3c.krail.core.i18n.LabelKey
+import java.lang.reflect.Field
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
+import kotlin.reflect.full.memberProperties
 
 /**
  * Created by David Sowerby on 09 Jun 2018
@@ -27,13 +26,159 @@ interface FormTypeBuilder {
     fun build(): FormComponentSet
 }
 
-class SimpleFormTypeBuilder @Inject constructor() : FormTypeBuilder {
+class SimpleFormTypeBuilder @Inject constructor(
+        @field:Transient private val binderFactory: KrailBeanValidationBinderFactory,
+        val propertySpecCreator: PropertySpecCreator,
+        val formSupport: FormSupport) : FormTypeBuilder {
+
     override lateinit var configuration: FormConfiguration
+
     override fun build(): FormComponentSet {
+        val sectionConfiguration = configuration.sectionWithName("simple")
+        if (sectionConfiguration.entityClass == Any::class) {
+            throw FormConfigurationException("entityClass must be specified")
+        }
+        val binder = binderFactory.create(sectionConfiguration.entityClass.java)
+        val builder = SimpleFormSectionBuilder(sectionConfiguration.entityClass, binder, sectionConfiguration, propertySpecCreator, formSupport)
+        return builder.build()
+    }
+
+
+}
+
+/**
+ * In this context, a property is a property of an entity class, and a component is a UI field (TextBox for example)
+ */
+class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder: KrailBeanValidationBinder<BEAN>, val configuration: SectionConfiguration, private val propertySpecCreator: PropertySpecCreator, val formSupport: FormSupport) {
+
+    fun build(): FormComponentSet {
+
+
+        if (configuration.scanEntityClass) {
+            val properties = SectionFieldScanner().scan(configuration)
+            properties.forEach({ p -> propertySpecCreator.createSpec(p, configuration) })
+
+        }
+
+        val entityProperties = configuration.entityClass.memberProperties.toMutableList()
+
+        for (propertySpecEntry in configuration.properties) {
+            val propertySpec = propertySpecEntry.value
+
+
+            val property = propertyFor(propertySpec.name)
+
+            // if the componentClass has not been explicitly set, read from the property
+            val component = if (propertySpec.componentClass == Any::class.java) {
+                formSupport.componentFor(propertySpec.propertyType).get()
+            } else {
+                propertySpec.componentClass.newInstance()
+            }
+            val presentationClass = formSupport.presentationClassOf(component)
+
+            // In core Vaadin code
+            // TARGET or MODEL is the model data type
+            // BEAN or SOURCE is the bean type
+            // FIELDVALUE or PRESENTATION is the data type used by the component
+
+
+            doBind(entityClass = configuration.entityClass, presentationClass = presentationClass, modelClass = propertySpec.propertyType, component = component, propertySpec = propertySpec)//,  presentationClass = presentationClass, modelClass = propertySpec.propertyType, component = component)//,entityClass = configuration.entityClass, presentationClass = presentationClass, modelClass = propertySpec.propertyType, binder = binder)
+
+//            binder.forField(component).bind(property.getter, null)
+        }
+    }
+
+
+    private fun <BEAN : Any, PRESENTATION : Any, MODEL : Any> doBind(entityClass: KClass<BEAN>, presentationClass: KClass<PRESENTATION>, modelClass: KClass<MODEL>, component: AbstractField<*>, propertySpec: PropertyConfiguration) {
+        val converter: Converter<PRESENTATION, MODEL> = formSupport.converterFor(presentationClass = presentationClass, modelClass = modelClass)
+        val typedComponent = component(presentationClass, component)
+        val binderBuilder = binder.forField(typedComponent).withConverter(converter)
+
+        for (validator in propertySpec.validations) {
+            @Suppress("UNCHECKED_CAST")
+            binderBuilder.withValidator(validator as Validator<MODEL>)
+        }
+        binderBuilder.bind(propertySpec.name)
+    }
+
+
+    private fun propertyFor(propertyName: String): KProperty<*> {
+        return configuration.entityClass.memberProperties.first { p -> p.name == propertyName }
+    }
+
+    private fun <BEAN : Any> getBinderForEntity(entityClass: KClass<out BEAN>): Binder<out BEAN> {
+        return Binder(entityClass.java)
+    }
+
+    /**
+     * This is just to get round type checking
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun <PRESENTATION : Any> component(c: KClass<PRESENTATION>, c1: AbstractField<*>): AbstractField<PRESENTATION> {
+        return c as AbstractField<PRESENTATION>
+    }
+}
+
+interface PropertySpecCreator {
+    fun createSpec(property: Field, configuration: SectionConfiguration)
+}
+
+class DefaultPropertySpecCreator @Inject constructor() : PropertySpecCreator {
+
+    override fun createSpec(property: Field, configuration: SectionConfiguration) {
+        val spec = configuration.properties[property.name] ?: PropertyConfiguration(name = property.name)
+        propertyType(property, spec)
+//        fieldClass(property,spec, formSupport)
+//        converterClass(property,spec)
+        caption(property, spec)
+        description(property, spec)
+        validations(property, spec)
+
+
+    }
+
+    private fun propertyType(property: Field, spec: PropertyConfiguration) {
+        if (spec.propertyType == Any::class.java) {
+            spec.propertyType = property.type.kotlin
+        }
+    }
+
+//    private fun fieldClass(property: Field, spec: PropertyConfiguration, formSupport: FormSupport) {
+//        if (spec.fieldClass == AbstractField::class.java) {
+//            spec.fieldClass=formSupport.fieldFor(spec.propertyType)
+//        }
+//    }
+
+//    private fun converterClass(property: Field, spec: PropertyConfiguration) {
+//        if (spec.converterClass == Converter::class.java) {
+//            formSupport.converterFor()
+//        }
+//    }
+
+    private fun caption(property: Field, spec: PropertyConfiguration) {
+        if (spec.caption == LabelKey.Unnamed) {
+            TODO()
+        }
+    }
+
+    private fun description(property: Field, spec: PropertyConfiguration) {
+        if (spec.description == DescriptionKey.No_description_provided) {
+            TODO()
+        }
+    }
+
+    private fun validations(property: Field, spec: PropertyConfiguration) {
         TODO()
     }
 }
 
+
+class SectionFieldScanner {
+    fun scan(configuration: SectionConfiguration): List<Field> {
+        val fieldList = FieldUtils.getAllFieldsList(configuration.entityClass.java)
+        return fieldList.filter({ f -> configuration.excludedProperties.contains(f.name) })
+    }
+}
 
 class DefaultFormBuilder @Inject constructor(private val formTypeBuilders: MutableMap<String, Provider<FormTypeBuilder>>) : FormBuilder {
     override fun selectFormTypeBuilder(configuration: FormConfiguration): FormTypeBuilder {
@@ -58,56 +203,3 @@ class DefaultFormBuilder @Inject constructor(private val formTypeBuilders: Mutab
 }
 
 
-open class FormModule : AbstractModule() {
-
-    override fun configure() {
-        val fieldLiteral = object : TypeLiteral<AbstractField<*>>() {}
-        val dataClassLiteral = object : TypeLiteral<Class<*>>() {}
-        val dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)
-        val stringLiteral = object : TypeLiteral<String>() {}
-        val formTypeBuilderClassLiteral = object : TypeLiteral<FormTypeBuilder>() {}
-        val formTypeBuilderLookup: MapBinder<String, FormTypeBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
-        bindFormTypeBuilders(formTypeBuilderLookup)
-        bindDefaultDataClassMappings(dataClassToFieldMap)
-        bindBeanValidatorFactory()
-        bindFormSupport()
-        bindErrorMessageProvider()
-        bindForm()
-        bindFormBuilder()
-    }
-
-    protected fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormTypeBuilder>) {
-        formTypeBuilderLookup.addBinding("simple").to(SimpleFormTypeBuilder::class.java)
-    }
-
-    protected fun bindFormBuilder() {
-        bind(FormBuilder::class.java).to(DefaultFormBuilder::class.java)
-    }
-
-    protected fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>>) {
-        dataClassToFieldMap.addBinding(String::class.java).to(TextField::class.java)
-        dataClassToFieldMap.addBinding(Integer::class.java).to(TextField::class.java)
-        dataClassToFieldMap.addBinding(LocalDateTime::class.java).to(DateTimeField::class.java)
-        dataClassToFieldMap.addBinding(LocalDate::class.java).to(DateField::class.java)
-        dataClassToFieldMap.addBinding(Color::class.java).to(ColorPicker::class.java)
-        dataClassToFieldMap.addBinding(Boolean::class.java).to(CheckBox::class.java)
-    }
-
-
-    protected fun bindBeanValidatorFactory() {
-        bind(KrailBeanValidatorFactory::class.java).to(DefaultKrailBeanValidatorFactory::class.java)
-    }
-
-    protected fun bindFormSupport() {
-        bind(FormSupport::class.java).to(DefaultFormSupport::class.java)
-    }
-
-    protected fun bindErrorMessageProvider() {
-        bind(KrailConverterErrorMessageProvider::class.java)
-    }
-
-    protected fun bindForm() {
-        bind(Form::class.java).to(DefaultForm::class.java)
-    }
-
-}
