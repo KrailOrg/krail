@@ -6,6 +6,7 @@ import com.vaadin.data.Binder
 import com.vaadin.data.Converter
 import com.vaadin.data.Validator
 import com.vaadin.ui.AbstractField
+import com.vaadin.ui.VerticalLayout
 import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
@@ -86,6 +87,7 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
 
 //            binder.forField(component).bind(property.getter, null)
         }
+        return FormComponentSet(mutableMapOf(), VerticalLayout())
     }
 
 
