@@ -58,6 +58,9 @@ class DefaultForm @Inject constructor(
                 } else {
                     throw FormConfigurationException("Configuration for a Form must be of type FormConfiguration")
                 }
+        if (formConfiguration is EmptyFormConfiguration) {
+            throw FormConfigurationException("An EmptyFormConfiguration is not valid to construct a Form")
+        }
         val formTypeBuilder = formBuilderProvider.get().selectFormTypeBuilder(formConfiguration)
         val componentSet = formTypeBuilder.build()
         rootComponent = componentSet.rootComponent
@@ -87,19 +90,19 @@ open class FormModule : AbstractModule() {
         bindPropertySpecCreator()
     }
 
-    private fun bindPropertySpecCreator() {
+    protected open fun bindPropertySpecCreator() {
         bind(PropertySpecCreator::class.java).to(DefaultPropertySpecCreator::class.java)
     }
 
-    protected fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormTypeBuilder>) {
+    protected open fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormTypeBuilder>) {
         formTypeBuilderLookup.addBinding("simple").to(SimpleFormTypeBuilder::class.java)
     }
 
-    protected fun bindFormBuilder() {
+    protected open fun bindFormBuilder() {
         bind(FormBuilder::class.java).to(DefaultFormBuilder::class.java)
     }
 
-    protected fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>>) {
+    protected open fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>>) {
         dataClassToFieldMap.addBinding(String::class.java).to(TextField::class.java)
         dataClassToFieldMap.addBinding(Integer::class.java).to(TextField::class.java)
         dataClassToFieldMap.addBinding(LocalDateTime::class.java).to(DateTimeField::class.java)
@@ -109,19 +112,19 @@ open class FormModule : AbstractModule() {
     }
 
 
-    protected fun bindBeanValidatorFactory() {
+    protected open fun bindBeanValidatorFactory() {
         bind(KrailBeanValidatorFactory::class.java).to(DefaultKrailBeanValidatorFactory::class.java)
     }
 
-    protected fun bindFormSupport() {
+    protected open fun bindFormSupport() {
         bind(FormSupport::class.java).to(DefaultFormSupport::class.java)
     }
 
-    protected fun bindErrorMessageProvider() {
+    protected open fun bindErrorMessageProvider() {
         bind(KrailConverterErrorMessageProvider::class.java)
     }
 
-    protected fun bindForm() {
+    protected open fun bindForm() {
         bind(Form::class.java).to(DefaultForm::class.java)
     }
 

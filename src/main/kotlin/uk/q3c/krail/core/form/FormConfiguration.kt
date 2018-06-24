@@ -13,19 +13,28 @@ import javax.validation.constraints.Pattern
  * Created by David Sowerby on 07 Jun 2018
  */
 @FormDsl
-abstract class FormConfiguration : ViewConfiguration {
+interface FormConfigurationCommon {
+    var styleAttributes: StyleAttributes
+}
 
-    var formType: String = ""  // has to be String to enable new types by users
+@FormDsl
+interface ChildConfiguration : FormConfigurationCommon {
+    val parentConfiguration: ParentConfiguration
+}
+
+interface ParentConfiguration : FormConfigurationCommon
+
+
+@FormDsl
+abstract class FormConfiguration : ViewConfiguration, ParentConfiguration, FormConfigurationCommon {
+
+
+    var formType: String = "simple"  // has to be String to enable new types by users
+    override var styleAttributes = StyleAttributes()
+
     val sections: MutableList<SectionConfiguration> = mutableListOf()
 
-    fun section(name: String = "", init: SectionConfiguration.() -> Unit): SectionConfiguration {
-        val config = SectionConfiguration()
-        config.init()
-        sections.add(config)
-        return config
-    }
-
-    abstract fun config(): FormConfiguration
+    abstract fun config()
 
     fun sectionWithName(name: String): SectionConfiguration {
         return sections.first { s -> s.name == name }
@@ -35,8 +44,8 @@ abstract class FormConfiguration : ViewConfiguration {
 
 class EmptyFormConfiguration : FormConfiguration() {
 
-    override fun config(): FormConfiguration {
-        return this
+    override fun config() {
+        // do nothing
     }
 }
 
@@ -46,10 +55,16 @@ annotation class FormDsl
 
 class MyForm : FormConfiguration() {
 
-    override fun config(): FormConfiguration {
+    override fun config() {
 
+        style {
+            size = StyleSize.normal
+        }
         section {
             excludedProperties = listOf("a", "b")
+            style {
+                size = StyleSize.normal
+            }
 
             property("first") {
                 componentClass = TextField::class.java
@@ -57,13 +72,11 @@ class MyForm : FormConfiguration() {
                 mustBeTrue()
                 mustBeFalse()
 
+
                 mustBeNull()
                 mustNotBeNull()
 
                 mustMatch("xx", Pattern.Flag.CASE_INSENSITIVE)
-
-
-
                 assertTrue()
                 assertFalse()
                 decimalMax("123.3")
@@ -80,9 +93,10 @@ class MyForm : FormConfiguration() {
                 notNull()
                 size(3, 12)
 
+                style { size = StyleSize.no_change }
+
             }
         }
-        return this
     }
 
 

@@ -8,17 +8,21 @@ import java.io.Serializable
  *
  * [entityClass] must always be provided
  */
-class SectionConfiguration : Serializable {
+@FormDsl
+class SectionConfiguration(override val parentConfiguration: ParentConfiguration) : ChildConfiguration, ParentConfiguration, Serializable {
     var name: String = "unnamed"
     var scanEntityClass: Boolean = true
     var entityClass = Any::class
     var excludedProperties: List<String> = listOf()
     val properties: MutableMap<String, PropertyConfiguration> = mutableMapOf()
+    override var styleAttributes = StyleAttributes()
+    val sections: MutableList<SectionConfiguration> = mutableListOf()
 
-    fun property(name: String, init: PropertyConfiguration.() -> Unit): PropertyConfiguration {
-        val propertyConfiguration = PropertyConfiguration(name = name)
-        propertyConfiguration.init()
-        properties[name] = propertyConfiguration
-        return propertyConfiguration
+    fun sectionWithName(name: String): SectionConfiguration {
+        return sections.first { s -> s.name == name }
+    }
+
+    fun propertyWithName(name: String): PropertyConfiguration {
+        return properties[name] ?: throw NoSuchElementException("$name is not an element of ${this.name}")
     }
 }
