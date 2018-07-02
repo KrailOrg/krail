@@ -15,15 +15,18 @@
 buildscript {
     ext.kotlin_version = '1.2.50'
     ext.kaytee_plugin_version = "0.20.1.0"
+    ext.junit_platform_version = "1.0.3"
     repositories {
         jcenter()
     }
 
     dependencies {
         classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
+
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:$junit_platform_version"
+//        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
+
     }
 }
 
@@ -36,6 +39,8 @@ ext.groovyVersion = '2.4.1'
 ext.guiceVersion = '4.1.0'
 ext.shiroVersion = '1.4.0'
 ext.slf4jVersion = '1.7.6'
+ext.spekVersion = '1.1.5'
+ext.vintageEngineVersion='4.12.3'
 
 
 
@@ -48,6 +53,21 @@ group = 'uk.q3c.krail'
 apply plugin: 'uk.q3c.kaytee'
 apply plugin: 'kotlin'
 apply plugin: "org.jetbrains.kotlin.jvm"
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+junitPlatform {
+    platformVersion = junit_platform_version
+    filters {
+        engines {
+            include 'spek', 'junit-vintage'
+        }
+    }
+}
+
+
+
+
 
 sourceCompatibility = '1.8'
 
@@ -84,6 +104,22 @@ compileKotlin {
 }
 
 dependencies {
+
+    compile "com.natpryce:hamkrest:1.1.0.0"
+
+    compile "com.winterbe:expekt:0.2.0"
+
+
+    compile "org.junit.platform:junit-platform-engine:$junit_platform_version"
+    compile "org.junit.platform:junit-platform-runner:$junit_platform_version"
+    compile "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+
+    compile "org.junit.vintage:junit-vintage-engine:$vintageEngineVersion"
+
+    compile "org.jetbrains.spek:spek-api:$spekVersion"
+    compile "org.jetbrains.spek:spek-subject-extension:$spekVersion"
+    compile "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+
 
     compile "uk.q3c.krail:krail-option-api:0.18.5.0"
 
@@ -201,6 +237,7 @@ configurations.all {
         force 'commons-io:commons-io:2.6'
         force 'uk.q3c.krail:krail-i18n-api:0.15.10.0'
         force "uk.q3c.krail:krail-option-api:0.18.5.0"
+//        force 'org.junit.platform:junit-platform-engine:1.0.0'
 
         dependencySubstitution {
             substitute module ('commons-beanutils:commons-beanutils-core') with module ('commons-beanutils:commons-beanutils:1.9.3')
