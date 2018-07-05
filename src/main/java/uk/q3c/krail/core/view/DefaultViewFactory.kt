@@ -33,7 +33,7 @@ class DefaultViewFactory @Inject constructor(
         val key = Key.get(typeLiteral)
         log.debug("getting or retrieving instance of {}", viewClass)
         val view = injectorLocator.get().getInstance(key)
-        log.debug("Calling view.readFromEnvironment()")
+        log.debug("Calling view.init()")
         view.init()
         return view
     }
@@ -44,5 +44,4 @@ class DefaultViewFactory @Inject constructor(
         log = LoggerFactory.getLogger(DefaultViewFactory::class.java)
         serializationSupport.deserialize(this)
     }
-
 }

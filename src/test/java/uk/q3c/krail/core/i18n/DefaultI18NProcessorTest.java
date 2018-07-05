@@ -30,7 +30,7 @@ import uk.q3c.krail.core.env.ServletEnvironmentModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.vaadin.MockVaadinSession;
+import uk.q3c.krail.core.vaadin.JavaMockVaadinSession;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.option.Option;
@@ -68,7 +68,7 @@ public class DefaultI18NProcessorTest {
 
     @Before
     public void setup() {
-        MockVaadinSession.setup();
+        JavaMockVaadinSession.setup();
         Locale.setDefault(Locale.UK);
         testObject = new I18NTestClass();
         testObject2 = new I18NTestClass2();
@@ -79,7 +79,7 @@ public class DefaultI18NProcessorTest {
 
     @After
     public void teardown() {
-        MockVaadinSession.clear();
+        JavaMockVaadinSession.clear();
     }
 
     @Test

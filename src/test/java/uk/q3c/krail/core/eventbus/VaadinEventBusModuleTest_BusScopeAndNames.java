@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.env.ServletEnvironmentModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.vaadin.MockVaadinSession;
+import uk.q3c.krail.core.vaadin.JavaMockVaadinSession;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
@@ -65,7 +65,7 @@ public class VaadinEventBusModuleTest_BusScopeAndNames {
         // we have to inject providers so that the log monitor can be set up first
         logMonitor.addClassFilter(VaadinEventBusModule.class);
         logMonitor.addClassFilter(EventBusModule.class);
-        MockVaadinSession.setup();
+        JavaMockVaadinSession.setup();
     }
 
 
@@ -103,7 +103,7 @@ public class VaadinEventBusModuleTest_BusScopeAndNames {
     }
 
     public void teardown() {
-        MockVaadinSession.clear();
+        JavaMockVaadinSession.clear();
         logMonitor.close();
     }
 }

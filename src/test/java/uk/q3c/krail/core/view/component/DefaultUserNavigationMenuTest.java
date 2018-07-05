@@ -136,8 +136,8 @@ public class DefaultUserNavigationMenuTest {
 
         MenuItem viewA11 = childWithText("ViewA11", viewA1);
         captions = menuCaptions(viewA11);
-        assertThat(captions).containsOnly();
-        assertThat(viewA11.getCommand()).isNotNull();
+        assertThat(captions).containsOnly("ViewA112", "ViewA113", "ViewA114");
+        assertThat(viewA11.getCommand()).isNull();
 
         MenuItem prvate = childWithText("Private", null);
         captions = menuCaptions(prvate);
@@ -163,10 +163,10 @@ public class DefaultUserNavigationMenuTest {
         MenuItem viewB11 = childWithText("ViewB11", viewB1);
         assertThat(viewB11).isNull();
 
-        //A111 removed by using positionIndex <0, and its parent, A11 has the command
+        //A111 removed by using positionIndex <0, but its parent, A11 has other children and therefore does not have command
         MenuItem viewA111 = childWithText("ViewA111", viewA11);
         assertThat(viewA111).isNull();
-        assertThat(viewA11.getCommand()).isNotNull();
+        assertThat(viewA11.getCommand()).isNull();
 
         //B122 removed by using positionIndex <0, but its parent B12 does not have command as other child B121 is not excluded
         MenuItem viewB12 = childWithText("ViewB12", viewB1);
@@ -361,12 +361,13 @@ public class DefaultUserNavigationMenuTest {
         MenuItem viewA = childWithText("ViewA", pblic);
         MenuItem viewA1 = childWithText("ViewA1", viewA);
         MenuItem viewA11 = childWithText("ViewA11", viewA1);
+        MenuItem viewA112 = childWithText("ViewA112", viewA11);
 
         // when
-        viewA11.getCommand()
-               .menuSelected(viewA11);
+        viewA112.getCommand()
+                .menuSelected(viewA112);
         // then
-        verify(navigator).navigateTo(userSitemap.a11Node());
+        verify(navigator).navigateTo(userSitemap.getA112Node());
     }
 
     @Test

@@ -25,7 +25,7 @@ import uk.q3c.krail.core.env.ServletEnvironmentModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.vaadin.MockVaadinSession;
+import uk.q3c.krail.core.vaadin.JavaMockVaadinSession;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
@@ -54,12 +54,12 @@ public class I18NValueTest {
 
     @Before
     public void setup() {
-        MockVaadinSession.setup();
+        JavaMockVaadinSession.setup();
     }
 
     @After
     public void teardown() {
-        MockVaadinSession.clear();
+        JavaMockVaadinSession.clear();
     }
 
     @Test

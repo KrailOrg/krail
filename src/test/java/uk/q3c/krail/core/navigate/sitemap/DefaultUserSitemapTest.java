@@ -35,7 +35,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.vaadin.MockVaadinSession;
+import uk.q3c.krail.core.vaadin.JavaMockVaadinSession;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -72,12 +72,12 @@ public class DefaultUserSitemapTest {
         Locale.setDefault(Locale.UK);
         labelsChanged = false;
         structureChanged = false;
-        MockVaadinSession.setup();
+        JavaMockVaadinSession.setup();
     }
 
     @After
     public void teardown() {
-        MockVaadinSession.clear();
+        JavaMockVaadinSession.clear();
     }
 
     @Test

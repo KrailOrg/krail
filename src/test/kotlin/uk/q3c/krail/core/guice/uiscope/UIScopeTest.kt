@@ -70,7 +70,7 @@ import uk.q3c.krail.core.ui.DataTypeModule
 import uk.q3c.krail.core.ui.ScopedUI
 import uk.q3c.krail.core.ui.ScopedUIProvider
 import uk.q3c.krail.core.user.UserModule
-import uk.q3c.krail.core.vaadin.MockVaadinSession
+import uk.q3c.krail.core.vaadin.JavaMockVaadinSession
 import uk.q3c.krail.core.view.ViewModule
 import uk.q3c.krail.core.view.component.DefaultComponentModule
 import uk.q3c.krail.eventbus.BusMessage
@@ -99,7 +99,7 @@ class UIScopeTest {
     lateinit var vaadinSessionProvider: VaadinSessionProvider
     lateinit var injector: Injector
     lateinit var ui: ScopedUI
-    lateinit var mockVaadinSession: MockVaadinSession
+    lateinit var mockVaadinSession: JavaMockVaadinSession
     val headlessToken = "eyJzdWIiOiJkYXZpZCIsImtub3duQXMiOiJkYXZpZCIsInJlYWxtTmFtZSI6ImRlZmF1bHRSZWFsbSJ9.QKkeO1w4HwGXLRuTxofDlEp7PsH6N8nYyhak7P0SKnn-OuvG8OTuuFne0bhAmMuN3dY3iOHNvHXzP4uMxr6sQA"
 
     protected val uiProvider: ScopedUIProvider
@@ -108,7 +108,7 @@ class UIScopeTest {
 
     @Before
     fun setup() {
-        mockVaadinSession = MockVaadinSession.setup()
+        mockVaadinSession = JavaMockVaadinSession.setup()
         VaadinSession.getCurrent().setAttribute(SUBJECT_ATTRIBUTE, headlessToken)
         Locale.setDefault(Locale.UK)
         vaadinSessionProvider = mock(VaadinSessionProvider::class.java)
@@ -117,7 +117,7 @@ class UIScopeTest {
 
     @After
     fun teardown() {
-        MockVaadinSession.clear()
+        JavaMockVaadinSession.clear()
     }
 
     @Test
