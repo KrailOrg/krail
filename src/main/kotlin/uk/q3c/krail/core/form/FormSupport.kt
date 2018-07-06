@@ -3,8 +3,7 @@ package uk.q3c.krail.core.form
 import com.google.inject.Inject
 import com.google.inject.Provider
 import com.vaadin.data.Converter
-import com.vaadin.ui.AbstractField
-import net.jodah.typetools.TypeResolver
+import com.vaadin.data.HasValue
 import kotlin.reflect.KClass
 
 /**
@@ -13,37 +12,46 @@ import kotlin.reflect.KClass
 interface FormSupport {
     /**
      * The presentation class may not return with the same type as [dataClass] - for example an Int may be presented in a [TextField].
-     * The class actually used by the component can be retrieved by [presentationClassOf]
+     * The class actually used by the component can be retrieved by [presentationValueClassOf]
      */
-    fun componentFor(dataClass: KClass<*>): Provider<AbstractField<*>>
+    fun componentFor(dataClass: KClass<*>): Provider<HasValue<*>>
 
-    fun <PRESENTATION : Any, MODEL : Any> converterFor(modelClass: KClass<MODEL>, presentationClass: KClass<PRESENTATION>): Converter<PRESENTATION, MODEL>
-    fun presentationClassOf(field: AbstractField<*>): KClass<*>
+    fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL>
+//    fun presentationValueClassOf(component: HasValue<*>): KClass<out HasValue<out Any>>
+    //    fun <PRESENTATION : HasValue<Any>, MODEL : Any> converterFor(modelClass: KClass<MODEL>, presentationClass: KClass<PRESENTATION>): Converter<PRESENTATION, MODEL>
+//    fun <PRESENTATION : HasValue<Any>> presentationValueClassOf(field:  KClass<PRESENTATION>) : KClass<out Any>
+//     fun <PRESENTATIONVALUE:Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> presentationValueClassOf(presentationComponent:  PRESENTATION): KClass<PRESENTATIONVALUE>
 }
 
 /**
- * [dataClassToFieldMap] is provided by one or more Guice modules (see [FormModule])
+ * [dataClassToPresentationMap] is provided by one or more Guice modules (see [FormModule])
  * [converterFactory] is provided by the [ConverterModule] and can be extended with additional [ConverterSet] implementations
  */
 class DefaultFormSupport @Inject constructor(
-        private val dataClassToFieldMap: MutableMap<Class<*>, Provider<AbstractField<*>>>,
+        private val dataClassToPresentationMap: MutableMap<Class<*>, Provider<HasValue<*>>>,
         private val converterFactory: ConverterFactory) :
 
         FormSupport {
 
-    override fun componentFor(dataClass: KClass<*>): Provider<AbstractField<*>> {
-        return dataClassToFieldMap.getOrElse(dataClass.java, { throw DataTypeException(dataClass) })
+    /**
+     * We check for Java primitive types first, wrapper types should not normally be needed
+     */
+    override fun componentFor(dataClass: KClass<*>): Provider<HasValue<*>> {
+        return dataClassToPresentationMap.getOrElse(dataClass.java) { throw DataTypeException(dataClass) }
     }
 
 
-    override fun <PRESENTATION : Any, MODEL : Any> converterFor(modelClass: KClass<MODEL>, presentationClass: KClass<PRESENTATION>): Converter<PRESENTATION, MODEL> {
-        return converterFactory.get(presentationClass.java, modelClass.java)
+    @Suppress("UNCHECKED_CAST")
+    override fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL> {
+        return converterFactory.get(presentationValueClass, modelClass)
     }
 
-
-    override fun presentationClassOf(field: AbstractField<*>): KClass<*> {
-        return TypeResolver.resolveRawArgument(AbstractField::class.java, field.javaClass).kotlin
-    }
+//    @Suppress("UNCHECKED_CAST")
+//    override   fun <PRESENTATIONVALUE:Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> presentationValueClassOf(presentationComponent:  PRESENTATION): KClass<PRESENTATIONVALUE> {
+//        val presentationJavaClass = presentationComponent.javaClass
+//        val presentationValueClass : KClass<PRESENTATIONVALUE> = TypeResolver.resolveRawArgument(HasValue::class.java, presentationJavaClass).kotlin as KClass<PRESENTATIONVALUE>
+//        return presentationValueClass
+//    }
 
 }
 

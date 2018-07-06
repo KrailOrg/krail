@@ -1,7 +1,7 @@
 package uk.q3c.krail.core.form
 
 import com.vaadin.data.Converter
-import com.vaadin.ui.AbstractField
+import com.vaadin.data.HasValue
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.i18n.I18NKey
@@ -9,16 +9,16 @@ import java.io.Serializable
 import kotlin.reflect.KClass
 
 
-enum class StyleSize {
-    tiny, small, normal, large, huge, no_change
+enum class StyleSize(val value: String) {
+    tiny("tiny"), small("small"), normal("normal"), large("large"), huge("huge"), no_change("")
 }
 
 enum class StyleAlignment(val value: String) {
-    align_left(""), align_center("align-center"), align_right("align-right"), no_change("no-change")
+    align_left(""), align_center("align-center"), align_right("align-right"), no_change("")
 }
 
-enum class StyleBorderless {
-    yes, no, no_change
+enum class StyleBorderless(val value: String) {
+    yes("borderless"), no(""), no_change("")
 }
 
 @FormDsl
@@ -38,6 +38,12 @@ class StyleAttributes {
             size = fromParent.size
         }
     }
+
+
+    fun combinedStyle(): String {
+        val all = arrayOf(size.value, borderless.value, alignment.value)
+        return all.joinToString(separator = " ").replace("  ", " ").trim()
+    }
 }
 
 /**
@@ -45,7 +51,7 @@ class StyleAttributes {
  *
  * When [SectionConfiguration] is being scanned automatically, any manually specified values take precedence, (thus overriding the defaults) but otherwise:
  *
- * - [propertyType] is taken from the property declaration in the entity class
+ * - [propertyValueClass] is taken from the property declaration in the entity class
  * - [componentClass] is selected using [FormSupport.componentFor]
  * - [converterClass] is selected using [FormSupport.converterFor]
  * - [validations] are additive - that is, any manually defined [KrailValidator]s are combined with those read from JSR 303 annotations from the entity class.
@@ -56,8 +62,8 @@ class StyleAttributes {
  */
 @FormDsl
 class PropertyConfiguration(val name: String, override val parentConfiguration: ParentConfiguration) : ChildConfiguration, FormConfigurationCommon, Serializable {
-    var propertyType: KClass<out Any> = Any::class
-    var componentClass: Class<out AbstractField<*>> = AbstractField::class.java
+    var propertyValueClass: KClass<out Any> = Any::class
+    var componentClass: Class<out HasValue<*>> = HasValue::class.java
     var converterClass: Class<out Converter<*, *>> = Converter::class.java
     var caption: I18NKey = LabelKey.Unnamed
     var description: I18NKey = DescriptionKey.No_description_provided

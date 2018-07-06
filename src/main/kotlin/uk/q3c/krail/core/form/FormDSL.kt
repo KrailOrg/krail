@@ -170,14 +170,14 @@ fun PropertyConfiguration.decimalMin(min: Byte) {
 
 
 fun PropertyConfiguration.size(min: Int = 0, max: Int = Int.MAX_VALUE) {
-    if (propertyType == String::class) {
+    if (propertyValueClass == String::class) {
         validations.add(StringSize(min = min, max = max))
     } else {
-        if (Collection::class.java.isAssignableFrom(propertyType.java)) {
+        if (Collection::class.java.isAssignableFrom(propertyValueClass.java)) {
             validations.add(CollectionSize(min = min, max = max))
         }
     }
-    throw InvalidTypeForValidator(propertyType, "size")
+    throw InvalidTypeForValidator(propertyValueClass, "size")
 }
 
 

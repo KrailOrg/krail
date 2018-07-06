@@ -5,13 +5,14 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import com.google.inject.multibindings.MapBinder
+import com.vaadin.data.HasValue
 import com.vaadin.shared.ui.colorpicker.Color
-import com.vaadin.ui.AbstractField
+import com.vaadin.ui.AbstractComponent
 import com.vaadin.ui.CheckBox
 import com.vaadin.ui.ColorPicker
-import com.vaadin.ui.Component
 import com.vaadin.ui.DateField
 import com.vaadin.ui.DateTimeField
+import com.vaadin.ui.Layout
 import com.vaadin.ui.TextField
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.view.KrailView
@@ -38,7 +39,7 @@ class DefaultForm @Inject constructor(
 
 
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    private var componentMap: Map<String, FormProperty> = mutableMapOf()
+    private lateinit var componentSet: FormComponentSet
 
     override fun doBuild(busMessage: ViewChangeBusMessage) {
         doBuild()
@@ -62,21 +63,36 @@ class DefaultForm @Inject constructor(
             throw FormConfigurationException("An EmptyFormConfiguration is not valid to construct a Form")
         }
         val formTypeBuilder = formBuilderProvider.get().selectFormTypeBuilder(formConfiguration)
-        val componentSet = formTypeBuilder.build()
+        componentSet = formTypeBuilder.build()
+        componentSet.translate(translate)
         rootComponent = componentSet.rootComponent
-        componentMap = componentSet.componentMap
+    }
+
+
+    fun localeChanged() {
+        componentSet.translate(translate)
     }
 
 }
 
-data class FormComponentSet(val componentMap: Map<String, FormProperty>, val rootComponent: Component)
+data class FormComponentSet(val propertyMap: Map<String, PropertyInfo>, val rootComponent: Layout) {
+    fun translate(translate: Translate) {
+        propertyMap.forEach { k, v ->
+            v.component.caption = translate.from(v.captionKey)
+            // setDescription is not part of Component interface!
+            if (v.component is AbstractComponent) {
+                v.component.description = translate.from(v.descriptionKey)
+            }
+        }
+    }
+}
 
 open class FormModule : AbstractModule() {
 
     override fun configure() {
-        val fieldLiteral = object : TypeLiteral<AbstractField<*>>() {}
+        val fieldLiteral = object : TypeLiteral<HasValue<*>>() {}
         val dataClassLiteral = object : TypeLiteral<Class<*>>() {}
-        val dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)
+        val dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)
         val stringLiteral = object : TypeLiteral<String>() {}
         val formTypeBuilderClassLiteral = object : TypeLiteral<FormTypeBuilder>() {}
         val formTypeBuilderLookup: MapBinder<String, FormTypeBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
@@ -102,13 +118,13 @@ open class FormModule : AbstractModule() {
         bind(FormBuilder::class.java).to(DefaultFormBuilder::class.java)
     }
 
-    protected open fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>>) {
+    protected open fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>>) {
         dataClassToFieldMap.addBinding(String::class.java).to(TextField::class.java)
-        dataClassToFieldMap.addBinding(Integer::class.java).to(TextField::class.java)
+        dataClassToFieldMap.addBinding(Int::class.javaPrimitiveType).to(TextField::class.java)
         dataClassToFieldMap.addBinding(LocalDateTime::class.java).to(DateTimeField::class.java)
         dataClassToFieldMap.addBinding(LocalDate::class.java).to(DateField::class.java)
         dataClassToFieldMap.addBinding(Color::class.java).to(ColorPicker::class.java)
-        dataClassToFieldMap.addBinding(Boolean::class.java).to(CheckBox::class.java)
+        dataClassToFieldMap.addBinding(Boolean::class.javaPrimitiveType).to(CheckBox::class.java)
     }
 
 

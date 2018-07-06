@@ -10,11 +10,15 @@ Vaadin provides some support for Forms with ``Binder``, but Krail takes that fur
 - a ``FormConfiguration`` is specified in using either the Direct or Annotation method of creating a ``Sitemap`` entry,
 - the view for that ``Sitemap`` entry must be ``Form.class``
 
-When the ``Form`` is constructed, the configuration is also applied, and the ``FormBuilder`` selects a ``FormTypeBuilder``, from parameters specified in the  ``FormConfiguration`` to do the actual construction of the form.
+When the ``Form`` is constructed, the configuration is also applied.
 
-Form types currently include "Simple" and "Master-Detail"
+The ``FormBuilder`` then selects a ``FormTypeBuilder``, from parameters specified in the  ``FormConfiguration`` to actually construct the form.
+
+Krail currently only provides a "Simple" type
 
 The ``FormTypeBuilder`` uses the ``FormConfiguration`` to build the form as required - it may construct the UI and bind properties to them, or map existing UI components to those properties.
+
+``FormSupport`` provides the mappings of data types to presentation Fields, along with data converters.  These mappings are defined in Guice and can therefore be easily extended or overruled.
 
 The binding is carried out by ``KrailBeanValidationBinder``, which also takes care of integrating JSR303 validation and I18N.
 
@@ -66,7 +70,7 @@ Where a converter is needed - for example, to display an integer in a TextField,
 
 Ultimately this uses an implementation of ``ConverterFactory`` to instantiate the converter itself. The default implementation ``DefaultConverterFactory``, iterates through all defined ``ConverterSets``s until it finds one to match the desired model and presentation class, or throws an exception if none found.
 
-By default there is just one ``ConverterSet``, ``BaseConverterSet``
+By default there is just one ``ConverterSet``, the ``BaseConverterSet``.
 
 Adding / Replacing Converters
 -----------------------------

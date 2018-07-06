@@ -4,16 +4,17 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.vaadin.data.Binder
 import com.vaadin.data.Converter
-import com.vaadin.data.Validator
-import com.vaadin.ui.AbstractField
+import com.vaadin.data.HasValue
 import com.vaadin.ui.Component
-import com.vaadin.ui.VerticalLayout
+import net.jodah.typetools.TypeResolver
 import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.i18n.I18NKey
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
+import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.memberProperties
 
 /**
@@ -40,72 +41,59 @@ class SimpleFormTypeBuilder @Inject constructor(
         if (sectionConfiguration.entityClass == Any::class) {
             throw FormConfigurationException("entityClass must be specified")
         }
-        val binder = binderFactory.create(sectionConfiguration.entityClass.java)
-        val builder = SimpleFormSectionBuilder(sectionConfiguration.entityClass, binder, sectionConfiguration, propertySpecCreator, formSupport)
-        return builder.build()
+        val sectionBuilder = SimpleFormSectionBuilder(entityClass = sectionConfiguration.entityClass, binderFactory = binderFactory, propertySpecCreator = propertySpecCreator, formSupport = formSupport, configuration = sectionConfiguration)
+        return sectionBuilder.build()
     }
-
-
 }
 
+
 /**
- * In this context, a property is a property of an entity class, and a component is a UI field (TextBox for example)
+ * In this context, a property is a property of an entity class, and a component is a UI field (TextField for example)
  */
-class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder: KrailBeanValidationBinder<BEAN>, val configuration: SectionConfiguration, private val propertySpecCreator: PropertySpecCreator, val formSupport: FormSupport) {
+class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binderFactory: KrailBeanValidationBinderFactory, val configuration: SectionConfiguration, private val propertySpecCreator: PropertySpecCreator, val formSupport: FormSupport) {
 
+    val binder = binderFactory.create(entityClass)
     fun build(): FormComponentSet {
-
+        val componentMap: MutableMap<String, PropertyInfo> = mutableMapOf()
 
         if (configuration.scanEntityClass) {
             val properties = SectionFieldScanner().scan(configuration)
-            properties.forEach({ p -> propertySpecCreator.createSpec(p, configuration) })
+            properties.forEach { p -> propertySpecCreator.createSpec(p, configuration) }
 
         }
-
-        val entityProperties = configuration.entityClass.memberProperties.toMutableList()
 
         for (propertySpecEntry in configuration.properties) {
             val propertySpec = propertySpecEntry.value
-
-
-            val property = propertyFor(propertySpec.name)
+            propertySpec.merge()
 
             // if the componentClass has not been explicitly set, read from the property
-            val component = if (propertySpec.componentClass == Any::class.java) {
-                formSupport.componentFor(propertySpec.propertyType).get()
+            val component: HasValue<*> = if (propertySpec.componentClass == HasValue::class.java) {
+                formSupport.componentFor(propertySpec.propertyValueClass).get()
             } else {
                 propertySpec.componentClass.newInstance()
             }
-            component.styleName = readStyleFromConfig(configuration)
-            val presentationClass = formSupport.presentationClassOf(component)
+            if (component is Component) {
+                component.styleName = propertySpec.styleAttributes.combinedStyle()
+                componentMap[propertySpec.name] = PropertyInfo(component = component, captionKey = propertySpec.caption, descriptionKey = propertySpec.description)
+            }
+            // we have a component but we need to know the type of data it requires so we can select the right converter
+            val presentationValueClass = TypeResolver.resolveRawArgument(HasValue::class.java, component.javaClass).kotlin
+            doBind(propertySpec.propertyValueClass, presentationValueClass, component, propertySpec)
 
-            // In core Vaadin code
-            // TARGET or MODEL is the model data type
-            // BEAN or SOURCE is the bean type
-            // FIELDVALUE or PRESENTATION is the data type used by the component
-
-
-            doBind(entityClass = configuration.entityClass, presentationClass = presentationClass, modelClass = propertySpec.propertyType, component = component, propertySpec = propertySpec)//,  presentationClass = presentationClass, modelClass = propertySpec.propertyType, component = component)//,entityClass = configuration.entityClass, presentationClass = presentationClass, modelClass = propertySpec.propertyType, binder = binder)
-
-//            binder.forField(component).bind(property.getter, null)
         }
-        return FormComponentSet(mutableMapOf(), VerticalLayout() as Component)
-    }
+        val layout = configuration.layout.createInstance()
+        componentMap.forEach { entry -> layout.addComponent(entry.value.component) }
 
-    private fun readStyleFromConfig(configuration: SectionConfiguration): String {
-        return "" // TODO
+        return FormComponentSet(componentMap, layout)
     }
 
 
-    private fun <BEAN : Any, PRESENTATION : Any, MODEL : Any> doBind(entityClass: KClass<BEAN>, presentationClass: KClass<PRESENTATION>, modelClass: KClass<MODEL>, component: AbstractField<*>, propertySpec: PropertyConfiguration) {
-        val converter: Converter<PRESENTATION, MODEL> = formSupport.converterFor(presentationClass = presentationClass, modelClass = modelClass)
-        val typedComponent = component(presentationClass, component)
-        val binderBuilder = binder.forField(typedComponent).withConverter(converter)
-
-        for (validator in propertySpec.validations) {
-            @Suppress("UNCHECKED_CAST")
-            binderBuilder.withValidator(validator as Validator<MODEL>)
-        }
+    @Suppress("UNCHECKED_CAST")
+    private fun <MODEL : Any, PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> doBind(modelClass: KClass<MODEL>, presentationValueClass: KClass<PRESENTATIONVALUE>, component: HasValue<*>, propertySpec: PropertyConfiguration) {
+        val typedComponent: PRESENTATION = component as PRESENTATION
+        val binderBuilder = binder.forField(typedComponent)
+        val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass as KClass<MODEL>)
+        binderBuilder.withConverter(converter)
         binderBuilder.bind(propertySpec.name)
     }
 
@@ -118,14 +106,11 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
         return Binder(entityClass.java)
     }
 
-    /**
-     * This is just to get round type checking
-     */
-    @Suppress("UNCHECKED_CAST")
-    private fun <PRESENTATION : Any> component(c: KClass<PRESENTATION>, c1: AbstractField<*>): AbstractField<PRESENTATION> {
-        return c as AbstractField<PRESENTATION>
-    }
 }
+
+
+data class PropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component)
+
 
 interface PropertySpecCreator {
     fun createSpec(property: Field, configuration: SectionConfiguration)
@@ -136,6 +121,7 @@ class DefaultPropertySpecCreator @Inject constructor() : PropertySpecCreator {
     override fun createSpec(property: Field, configuration: SectionConfiguration) {
         val spec = configuration.properties[property.name]
                 ?: PropertyConfiguration(name = property.name, parentConfiguration = configuration)
+        configuration.properties[property.name] = spec
         propertyType(property, spec)
 //        fieldClass(property,spec, formSupport)
 //        converterClass(property,spec)
@@ -147,8 +133,8 @@ class DefaultPropertySpecCreator @Inject constructor() : PropertySpecCreator {
     }
 
     private fun propertyType(property: Field, spec: PropertyConfiguration) {
-        if (spec.propertyType == Any::class.java) {
-            spec.propertyType = property.type.kotlin
+        if (spec.propertyValueClass == Any::class) {
+            spec.propertyValueClass = property.type.kotlin
         }
     }
 
@@ -166,18 +152,18 @@ class DefaultPropertySpecCreator @Inject constructor() : PropertySpecCreator {
 
     private fun caption(property: Field, spec: PropertyConfiguration) {
         if (spec.caption == LabelKey.Unnamed) {
-            TODO()
+            // TODO use a sample key combined with property name
         }
     }
 
     private fun description(property: Field, spec: PropertyConfiguration) {
         if (spec.description == DescriptionKey.No_description_provided) {
-            TODO()
+            // TODO use a sample key combined with property name
         }
     }
 
     private fun validations(property: Field, spec: PropertyConfiguration) {
-        TODO()
+        // TODO
     }
 }
 
@@ -185,7 +171,7 @@ class DefaultPropertySpecCreator @Inject constructor() : PropertySpecCreator {
 class SectionFieldScanner {
     fun scan(configuration: SectionConfiguration): List<Field> {
         val fieldList = FieldUtils.getAllFieldsList(configuration.entityClass.java)
-        return fieldList.filter({ f -> configuration.excludedProperties.contains(f.name) })
+        return fieldList.filter { f -> !(configuration.excludedProperties.contains(f.name)) }
     }
 }
 

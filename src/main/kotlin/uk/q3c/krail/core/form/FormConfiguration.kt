@@ -10,6 +10,17 @@ import java.time.LocalDateTime
 import javax.validation.constraints.Pattern
 
 /**
+ *
+ * A [Form] is considered to be a set of one or more sections, where each section is potentially supported by an entity or collection of entities.
+ * So, for example, a master-detail form would have a section for the master and a section for the detail.
+ *
+ * Each section then contains a number of properties tied to UI Fields
+ *
+ * A [FormConfiguration] uses the principle of inheritance to minimise the amount of coded configuration required.  Where possible,
+ * an element can be configured at the Form level, but then overridden at the section or property level.
+ *
+ * A [FormConfiguration] contains one or more [SectionConfiguration]s, which contain [PropertyConfiguration]s
+ *
  * Created by David Sowerby on 07 Jun 2018
  */
 @FormDsl
@@ -29,7 +40,7 @@ interface ParentConfiguration : FormConfigurationCommon
 abstract class FormConfiguration : ViewConfiguration, ParentConfiguration, FormConfigurationCommon {
 
 
-    var formType: String = "simple"  // has to be String to enable new types by users
+    var formType: String = "simple"  // has to be String to enable users to add new types
     override var styleAttributes = StyleAttributes()
 
     val sections: MutableList<SectionConfiguration> = mutableListOf()

@@ -2,7 +2,6 @@ package uk.q3c.krail.core.vaadin;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Binder;
-import com.vaadin.data.Converter;
 import com.vaadin.data.HasValue;
 import com.vaadin.ui.AbstractField;
 import net.jodah.typetools.TypeResolver;
@@ -36,8 +35,8 @@ public class DefaultOptionBinder implements OptionBinder {
         Class<P> presentationClass = presentationClass(field);
         Class<M> modelClass = (Class<M>) optionKey.getDefaultValue().getClass();
         Binder<M> binder = new Binder<>();
-        Converter<P, M> converter = converterFactory.get(presentationClass, modelClass);
-        binder.forField(field).withConverter(converter).bind(optionGetter, optionSetter);
+//        Converter<P, M> converter = converterFactory.get(presentationClass, modelClass);
+//        binder.forField(field).withConverter(converter).bind(optionGetter, optionSetter);
         M optionValue = option.get(optionKey);
         log.debug("option value is: ", optionValue);
         binder.setBean(optionValue); // goes to field directly

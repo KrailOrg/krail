@@ -34,6 +34,7 @@ import uk.q3c.util.serial.tracer.SerializationTracer
 import uk.q3c.util.text.DefaultMessageFormat
 import uk.q3c.util.text.MessageFormat2
 import java.io.Serializable
+import java.time.LocalDate
 import javax.validation.constraints.Max
 
 /**
@@ -54,7 +55,7 @@ object BindersTest : Spek({
 
         on("creating a binder via its factory and binding a Field") {
             val binderFactory = injector.getInstance(KrailBeanValidationBinderFactory::class.java)
-            val binder = binderFactory.create(Person::class.java)
+            val binder = binderFactory.create(Person::class)
             binder.bind(nameField, "name")
             binder.bean = Person(title = "Mr", name = "Wiggly", age = 11)
             binder.forField(ageField).withConverter(StringToIntegerConverter("Rubbish error message"))
@@ -76,7 +77,7 @@ object BindersTest : Spek({
 
         on("validating an incorrect value") {
             val binderFactory = injector.getInstance(KrailBeanValidationBinderFactory::class.java)
-            val binder = binderFactory.create(Person::class.java)
+            val binder = binderFactory.create(Person::class)
             binder.bind(nameField, "name")
             binder.forField(ageField).withConverter(StringToIntegerConverter("Rubbish error message"))
                     .bind("age")
@@ -124,7 +125,14 @@ object BindersTest : Spek({
 })
 
 
-class Person(var title: String, var name: String, @field:Max(12) var age: Int) : Serializable
+class Person(
+        var id: Int = 1,
+        var title: String,
+        var name: String,
+        @field:Max(12)
+        var age: Int,
+        var joinDate: LocalDate = LocalDate.parse("2010-12-31"),
+        var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable
 
 private class TestSupportModule : AbstractModule() {
     override fun configure() {

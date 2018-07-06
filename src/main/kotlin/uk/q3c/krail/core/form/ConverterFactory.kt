@@ -13,6 +13,7 @@ import uk.q3c.util.guice.SerializationSupport
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.Serializable
+import kotlin.reflect.KClass
 
 /**
  * A factory to provide data converters which implement [Converter] - a Vaadin defined interface, so this code cannot become
@@ -59,7 +60,7 @@ class BaseConverterSet @Inject constructor(@field:Transient override val errorMe
         }
         val emp = errorMessageProviderProvider.get()
         val converter: Any = when (converterPair) {
-            ConverterPair(String::class.java, Integer::class.java) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class, Int::class) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
             else -> {
                 throw UnsupportedOperationException("Conversion between $converterPair is not supported")
             }
@@ -82,7 +83,7 @@ interface ConverterFactory : ConverterProvider {
      *
      * @throws UnsupportedOperationException if no [Converter] has been defined
      */
-    fun <P : Any, M : Any> get(presentationClass: Class<out P>, modelClass: Class<out M>): Converter<P, M>
+    fun <P : Any, M : Any> get(presentationClass: KClass<out P>, modelClass: KClass<out M>): Converter<P, M>
 
 }
 
@@ -107,7 +108,7 @@ class KrailConverterErrorMessageProvider @Inject constructor(private val transla
 }
 
 
-data class ConverterPair(val presentation: Class<out Any>, val model: Class<out Any>) : Serializable
+data class ConverterPair(val presentation: KClass<out Any>, val model: KClass<out Any>) : Serializable
 
 /**
  * Uses all configured instances of [ConverterSet] to find a suitable [Converter].  Additional [ConverterSet]s can be defined
@@ -116,7 +117,7 @@ data class ConverterPair(val presentation: Class<out Any>, val model: Class<out 
  */
 class DefaultConverterFactory @Inject constructor(private val converters: MutableSet<ConverterSet>) : ConverterFactory {
 
-    override fun <P : Any, M : Any> get(presentationClass: Class<out P>, modelClass: Class<out M>): Converter<P, M> {
+    override fun <P : Any, M : Any> get(presentationClass: KClass<out P>, modelClass: KClass<out M>): Converter<P, M> {
         @Suppress("UNCHECKED_CAST")
         return get(ConverterPair(presentationClass, modelClass)) as Converter<P, M>
     }
