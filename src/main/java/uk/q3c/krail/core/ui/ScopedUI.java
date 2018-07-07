@@ -30,6 +30,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ConfigurationException;
+import uk.q3c.krail.core.form.Form;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
@@ -170,7 +171,12 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         if (content == null) {
             throw new ConfigurationException("The root component for " + toView.getName() + " cannot be null");
         }
-        translator.translate(toView);
+        if (toView instanceof Form) {
+            ((Form) toView).localeChanged();
+        } else {
+            translator.translate(toView);
+        }
+
         content.setSizeFull();
         getViewDisplayPanel().setContent(content);
         this.view = toView;

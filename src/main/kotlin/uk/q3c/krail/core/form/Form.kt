@@ -28,7 +28,9 @@ import java.time.LocalDateTime
  * Created by David Sowerby on 10 Jun 2018
  */
 
-interface Form : KrailView
+interface Form : KrailView {
+    fun localeChanged()
+}
 
 class DefaultForm @Inject constructor(
         translate: Translate,
@@ -69,7 +71,7 @@ class DefaultForm @Inject constructor(
     }
 
 
-    fun localeChanged() {
+    override fun localeChanged() {
         componentSet.translate(translate)
     }
 

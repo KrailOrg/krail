@@ -37,6 +37,7 @@ import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.ConfigurationException;
 import uk.q3c.krail.core.env.RuntimeEnvironment;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
+import uk.q3c.krail.core.form.Form;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.i18n.I18NProcessor;
@@ -60,6 +61,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -264,6 +266,23 @@ public class ScopedUITest {
         verify(viewContent).setSizeFull();
         assertThat(ui.getViewDisplayPanel()
                      .getContent()).isEqualTo(viewContent);
+    }
+
+    @Test
+    public void changeViewToForm() {
+        // given
+        Form form = mock(Form.class);
+        when(form.getRootComponent()).thenReturn(viewContent);
+        when(form.getName()).thenReturn("toForm");
+        // when
+        ui.changeView(form);
+        // then
+        verify(form).getRootComponent();
+        verify(translator, never()).translate(toView);
+        verify(form).localeChanged();
+        verify(viewContent).setSizeFull();
+        assertThat(ui.getViewDisplayPanel()
+                .getContent()).isEqualTo(viewContent);
     }
 
     @Test(expected = ConfigurationException.class)
