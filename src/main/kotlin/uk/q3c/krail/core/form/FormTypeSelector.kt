@@ -2,7 +2,6 @@ package uk.q3c.krail.core.form
 
 import com.google.inject.Inject
 import com.google.inject.Provider
-import com.vaadin.data.Binder
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
 import com.vaadin.ui.Component
@@ -20,19 +19,19 @@ import kotlin.reflect.full.memberProperties
 /**
  * Created by David Sowerby on 09 Jun 2018
  */
-interface FormBuilder {
-    fun selectFormTypeBuilder(configuration: FormConfiguration): FormTypeBuilder
+interface FormTypeSelector {
+    fun selectFormTypeBuilder(configuration: FormConfiguration): FormBuilder
 }
 
-interface FormTypeBuilder {
+interface FormBuilder {
     var configuration: FormConfiguration
     fun build(): FormComponentSet
 }
 
-class SimpleFormTypeBuilder @Inject constructor(
+class SimpleFormBuilder @Inject constructor(
         @field:Transient private val binderFactory: KrailBeanValidationBinderFactory,
-        val propertySpecCreator: PropertySpecCreator,
-        val formSupport: FormSupport) : FormTypeBuilder {
+        private val propertySpecCreator: PropertySpecCreator,
+        private val formSupport: FormSupport) : FormBuilder {
 
     override lateinit var configuration: FormConfiguration
 
@@ -102,9 +101,7 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
         return configuration.entityClass.memberProperties.first { p -> p.name == propertyName }
     }
 
-    private fun <BEAN : Any> getBinderForEntity(entityClass: KClass<out BEAN>): Binder<out BEAN> {
-        return Binder(entityClass.java)
-    }
+
 
 }
 
@@ -175,8 +172,8 @@ class SectionFieldScanner {
     }
 }
 
-class DefaultFormBuilder @Inject constructor(private val formTypeBuilders: MutableMap<String, Provider<FormTypeBuilder>>) : FormBuilder {
-    override fun selectFormTypeBuilder(configuration: FormConfiguration): FormTypeBuilder {
+class DefaultFormTypeSelector @Inject constructor(private val formTypeBuilders: MutableMap<String, Provider<FormBuilder>>) : FormTypeSelector {
+    override fun selectFormTypeBuilder(configuration: FormConfiguration): FormBuilder {
         val typeName = configuration.formType
         val adjustedTypeName =
                 when (typeName) {

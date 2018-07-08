@@ -4,6 +4,7 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
+import net.jodah.typetools.TypeResolver
 import kotlin.reflect.KClass
 
 /**
@@ -16,11 +17,8 @@ interface FormSupport {
      */
     fun componentFor(dataClass: KClass<*>): Provider<HasValue<*>>
 
-    fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL>
-//    fun presentationValueClassOf(component: HasValue<*>): KClass<out HasValue<out Any>>
-    //    fun <PRESENTATION : HasValue<Any>, MODEL : Any> converterFor(modelClass: KClass<MODEL>, presentationClass: KClass<PRESENTATION>): Converter<PRESENTATION, MODEL>
-//    fun <PRESENTATION : HasValue<Any>> presentationValueClassOf(field:  KClass<PRESENTATION>) : KClass<out Any>
-//     fun <PRESENTATIONVALUE:Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> presentationValueClassOf(presentationComponent:  PRESENTATION): KClass<PRESENTATIONVALUE>
+    fun <PRESENTATIONVALUE : Any, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL>
+    fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterForComponent(modelClass: KClass<out MODEL>, componentClass: KClass<PRESENTATION>): Converter<PRESENTATIONVALUE, MODEL>
 }
 
 /**
@@ -42,7 +40,14 @@ class DefaultFormSupport @Inject constructor(
 
 
     @Suppress("UNCHECKED_CAST")
-    override fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL> {
+    override fun <PRESENTATIONVALUE : Any, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL> {
+        return converterFactory.get(presentationValueClass, modelClass)
+
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterForComponent(modelClass: KClass<out MODEL>, componentClass: KClass<PRESENTATION>): Converter<PRESENTATIONVALUE, MODEL> {
+        val presentationValueClass: KClass<PRESENTATIONVALUE> = TypeResolver.resolveRawArgument(HasValue::class.java, componentClass.java).kotlin as KClass<PRESENTATIONVALUE>
         return converterFactory.get(presentationValueClass, modelClass)
     }
 

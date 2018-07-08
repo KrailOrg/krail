@@ -123,9 +123,9 @@ fun selectConfiguration(masterSitemapNode: MasterSitemapNode, configClass: Class
 }
 
 class FormModule1 : FormModule() {
-    val typeBuilder: SimpleFormTypeBuilder = mockk(relaxed = true)
+    val typeBuilder: SimpleFormBuilder = mockk(relaxed = true)
 
-    override fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormTypeBuilder>) {
+    override fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormBuilder>) {
         formTypeBuilderLookup.addBinding("simple").toInstance(typeBuilder)
     }
 }

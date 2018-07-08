@@ -18,7 +18,7 @@ import uk.q3c.krail.i18n.I18NKey
 import java.io.Serializable
 
 /**
- * A simple data class to hold an entry for the Sitemap for use with a [DirectSitemapModule]. Note that if [.pageAccessControl] is [ ][PageAccessControl.ROLES], then roles must be set to a non-empty value, but there is no check for this until the SitemapChecker is invoked. This allows a
+ * A simple data class to hold an entry for the Sitemap for use with a [DirectSitemapModule]. Note that if [pageAccessControl] is [PageAccessControl.ROLES], then roles must be set to a non-empty value, but there is no check for this until the SitemapChecker is invoked. This allows a
  * set of Sitemap errors to be captured at once rather than one at a time.
  *
  * Roles are only used if [pageAccessControl] is [PageAccessControl.ROLES]

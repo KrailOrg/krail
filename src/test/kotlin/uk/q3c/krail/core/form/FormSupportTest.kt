@@ -48,14 +48,14 @@ object FormSupportTest : Spek({
         on("requesting converter where presentation and model type are the same ") {
 
             it("returns an instance of NoConversionConverter ") {
-                formSupport.converterFor(String::class, TextField::class).shouldBeInstanceOf(NoConversionConverter::class.java)
-                formSupport.converterFor(LocalDateTime::class, DateTimeField::class).shouldBeInstanceOf(NoConversionConverter::class.java)
+                formSupport.converterFor(String::class, String::class).shouldBeInstanceOf(NoConversionConverter::class.java)
+                formSupport.converterFor(LocalDateTime::class, LocalDateTime::class).shouldBeInstanceOf(NoConversionConverter::class.java)
             }
 
             on("requesting converter where presentation and model type are different ") {
 
                 it("returns an instance of the correct Converter ") {
-                    formSupport.converterFor(Integer::class, TextField::class).shouldBeInstanceOf(StringToIntegerConverter::class.java)
+                    formSupport.converterFor(Integer::class, String::class).shouldBeInstanceOf(StringToIntegerConverter::class.java)
                 }
             }
 

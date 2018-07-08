@@ -5,26 +5,49 @@ Forms
 Overview
 ========
 
-Vaadin provides some support for Forms with ``Binder``, but Krail takes that further.  The process of constructing a form in Krail is:
+Vaadin provides some support for Forms with ``Binder``, but Krail takes that further.  It makes the definition of a Form part of the Sitemap by assigning a ``FormConfiguration`` to a ``SitemapNode``.
 
-- a ``FormConfiguration`` is specified in using either the Direct or Annotation method of creating a ``Sitemap`` entry,
-- the view for that ``Sitemap`` entry must be ``Form.class``
+The Form class takes that configuration and builds the form with UI components (TextField etc) and integrates Krail's I18N and JSR 303 validation.
 
-When the ``Form`` is constructed, the configuration is also applied.
+Two Form types are currently provided:
 
-The ``FormBuilder`` then selects a ``FormTypeBuilder``, from parameters specified in the  ``FormConfiguration`` to actually construct the form.
+- **simple**, which displays/edits selected properties form a given entity class
+- **list**, which displays a `table` of selected properties, for one more instance of the same entity class
 
-Krail currently only provides a "Simple" type
 
-The ``FormTypeBuilder`` uses the ``FormConfiguration`` to build the form as required - it may construct the UI and bind properties to them, or map existing UI components to those properties.
+Additional form types can easily be added.
 
-``FormSupport`` provides the mappings of data types to presentation Fields, along with data converters.  These mappings are defined in Guice and can therefore be easily extended or overruled.
 
-The binding is carried out by ``KrailBeanValidationBinder``, which also takes care of integrating JSR303 validation and I18N.
+Defining a Form
+===============
+
+To construct a form in Krail:
+
+ 1. Define your form configuration as a sub-class of ``FormConfiguration``, for example ``PersonFormConfiguration``
+ 2. using either the Direct or Annotation method of creating a ``Sitemap`` entry, set the *viewClass* to ``Form.class``
+ 3. set the *viewConfiguration* to ``PersonFormConfiguration.class``
+
+
+Form construction
+=================
+
+As part of Krail's navigation process, the view for a given URI is looked up from the Sitemap.  The *viewClass* is constructed via Guice, and an instance of the *viewConfiguration* passed to it (in this example an instance of ``PersonFormConfiguration``
+
+ 1. ``Form`` invokes ``FormTypeSelector`` to acquire the correct ``FormBuilder``
+ 2. ``FormBuilder`` uses ``FormConfiguration`` in combination with ``FormSupport`` to construct appropriate UI components (TextFields etc) and bind them to enity data. The binding is carried out by ``KrailBeanValidationBinder``, which also takes care of integrating JSR303 validation and I18N.
+
+Validation
+----------
+
+Validation can be defined by JSR303 annotations on the entity or directly within the ``FormConfiguration``
+
 
 
 Model to Presentation mapping
 =============================
+
+``FormSupport`` provides the mappings of data types to presentation Fields, along with data converters.  These mappings are defined in Guice and can therefore be easily extended or overruled.
+
 
 Defaults
 --------
@@ -49,9 +72,9 @@ A new data type can be registered, by creating another Guice module which contri
 .. sourcecode:: kotlin
    :caption: Kotlin
 
-class MyMappingModule : AbstractModule() {
+   class MyMappingModule : AbstractModule() {
 
-    override fun configure() {
+     override fun configure() {
         val fieldLiteral = object : TypeLiteral<AbstractField<*>>() {}
         val dataClassLiteral = object : TypeLiteral<Class<*>>() {}
         val dataClassToFieldMap: MapBinder<Class<*>, AbstractField<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)

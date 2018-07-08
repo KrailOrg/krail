@@ -35,7 +35,7 @@ interface Form : KrailView {
 class DefaultForm @Inject constructor(
         translate: Translate,
         serializationSupport: SerializationSupport,
-        @field:Transient val formBuilderProvider: Provider<FormBuilder>)
+        @field:Transient val formBuilderProvider: Provider<FormTypeSelector>)
 
     : ViewBase(translate, serializationSupport), Form {
 
@@ -96,8 +96,8 @@ open class FormModule : AbstractModule() {
         val dataClassLiteral = object : TypeLiteral<Class<*>>() {}
         val dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)
         val stringLiteral = object : TypeLiteral<String>() {}
-        val formTypeBuilderClassLiteral = object : TypeLiteral<FormTypeBuilder>() {}
-        val formTypeBuilderLookup: MapBinder<String, FormTypeBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
+        val formTypeBuilderClassLiteral = object : TypeLiteral<FormBuilder>() {}
+        val formTypeBuilderLookup: MapBinder<String, FormBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
         bindFormTypeBuilders(formTypeBuilderLookup)
         bindDefaultDataClassMappings(dataClassToFieldMap)
         bindBeanValidatorFactory()
@@ -112,12 +112,12 @@ open class FormModule : AbstractModule() {
         bind(PropertySpecCreator::class.java).to(DefaultPropertySpecCreator::class.java)
     }
 
-    protected open fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormTypeBuilder>) {
-        formTypeBuilderLookup.addBinding("simple").to(SimpleFormTypeBuilder::class.java)
+    protected open fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormBuilder>) {
+        formTypeBuilderLookup.addBinding("simple").to(SimpleFormBuilder::class.java)
     }
 
     protected open fun bindFormBuilder() {
-        bind(FormBuilder::class.java).to(DefaultFormBuilder::class.java)
+        bind(FormTypeSelector::class.java).to(DefaultFormTypeSelector::class.java)
     }
 
     protected open fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>>) {
