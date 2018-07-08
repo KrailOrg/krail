@@ -7,7 +7,6 @@ import com.vaadin.ui.DateField
 import com.vaadin.ui.FormLayout
 import com.vaadin.ui.InlineDateField
 import com.vaadin.ui.TextField
-import io.mockk.mockk
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
@@ -16,6 +15,8 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import uk.q3c.krail.core.env.ServletInjectorLocator
+import uk.q3c.krail.core.guice.InjectorHolder
 import uk.q3c.krail.core.i18n.DescriptionKey.No_description_provided
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
@@ -23,7 +24,10 @@ import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockCurrentLocale
 import uk.q3c.krail.i18n.test.MockTranslate
+import uk.q3c.util.guice.DefaultSerializationSupport
+import uk.q3c.util.guice.InjectorLocator
 import uk.q3c.util.guice.SerializationSupport
+import uk.q3c.util.serial.tracer.SerializationTracer
 import uk.q3c.util.text.DefaultMessageFormat
 import uk.q3c.util.text.MessageFormat2
 
@@ -41,10 +45,12 @@ object SimpleFormSectionBuilderTest : Spek({
         lateinit var configuration: SectionConfiguration
         lateinit var propertySpecCreator: PropertySpecCreator
         lateinit var formSupport: FormSupport
+        lateinit var person: Person
 
 
         beforeEachTest {
             injector = Guice.createInjector(FormModule(), KrailValidationModule(), ConverterModule(), SimpleFormSectionBuilderTestModule())
+            InjectorHolder.setInjector(injector)
             binderFactory = injector.getInstance(KrailBeanValidationBinderFactory::class.java)
             formSupport = injector.getInstance(FormSupport::class.java)
             propertySpecCreator = injector.getInstance(PropertySpecCreator::class.java)
@@ -52,10 +58,14 @@ object SimpleFormSectionBuilderTest : Spek({
             formConfiguration.config()
             configuration = formConfiguration.sectionWithName("single")
             builder = SimpleFormSectionBuilder(entityClass = Person::class, binderFactory = binderFactory, configuration = configuration, propertySpecCreator = propertySpecCreator, formSupport = formSupport)
+            person = Person(title = "Mr", name = "Wiggly", age = 10)
         }
 
         on("creating the section") {
+            val serializationTracer = SerializationTracer()
             val componentSet = builder.build()
+
+
 
             it("has the correct number of components") {
                 componentSet.propertyMap.size.shouldBe(5)
@@ -96,7 +106,19 @@ object SimpleFormSectionBuilderTest : Spek({
                 componentSet.propertyMap["joinDate"]!!.component.caption.shouldBeNull()
                 componentSet.propertyMap["joinDate"]!!.captionKey.shouldBe(TestPersonKey.date_joined)
                 componentSet.propertyMap["joinDate"]!!.descriptionKey.shouldBe(No_description_provided)
+            }
 
+            it("adds a validator from JSR annotations") {
+                componentSet.propertyMap["age"]!!.component
+                TODO()
+            }
+
+            it("adds a validator defined  by the configuration") {
+                TODO()
+            }
+
+            it("creates a serializable componentSet") {
+                serializationTracer.trace(componentSet).shouldNotHaveAnyDynamicFailures()
             }
         }
     }
@@ -137,13 +159,12 @@ private enum class TestPersonKey : I18NKey {
 
 private class SimpleFormSectionBuilderTestModule : AbstractModule() {
 
-    val mockSerializationSupport: SerializationSupport = mockk(relaxed = true)
-
     override fun configure() {
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
-        bind(SerializationSupport::class.java).toInstance(mockSerializationSupport)
+        bind(SerializationSupport::class.java).to(DefaultSerializationSupport::class.java)
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
+        bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
     }
 
 }

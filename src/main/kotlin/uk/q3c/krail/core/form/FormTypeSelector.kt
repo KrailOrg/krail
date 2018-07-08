@@ -10,11 +10,10 @@ import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.i18n.I18NKey
+import java.io.Serializable
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.memberProperties
 
 /**
  * Created by David Sowerby on 09 Jun 2018
@@ -83,7 +82,7 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
         val layout = configuration.layout.createInstance()
         componentMap.forEach { entry -> layout.addComponent(entry.value.component) }
 
-        return FormComponentSet(componentMap, layout)
+        return FormComponentSet(componentMap, layout, binder)
     }
 
 
@@ -96,16 +95,10 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
         binderBuilder.bind(propertySpec.name)
     }
 
-
-    private fun propertyFor(propertyName: String): KProperty<*> {
-        return configuration.entityClass.memberProperties.first { p -> p.name == propertyName }
-    }
-
-
 }
 
 
-data class PropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component)
+data class PropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component) : Serializable
 
 
 interface PropertySpecCreator {

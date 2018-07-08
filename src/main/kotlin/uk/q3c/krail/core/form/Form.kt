@@ -20,6 +20,7 @@ import uk.q3c.krail.core.view.ViewBase
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -77,7 +78,7 @@ class DefaultForm @Inject constructor(
 
 }
 
-data class FormComponentSet(val propertyMap: Map<String, PropertyInfo>, val rootComponent: Layout) {
+data class FormComponentSet(val propertyMap: Map<String, PropertyInfo>, val rootComponent: Layout, val binder: KrailBeanValidationBinder<*>) : Serializable {
     fun translate(translate: Translate) {
         propertyMap.forEach { k, v ->
             v.component.caption = translate.from(v.captionKey)
