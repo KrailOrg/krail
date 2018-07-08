@@ -56,7 +56,7 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
         val componentMap: MutableMap<String, PropertyInfo> = mutableMapOf()
 
         if (configuration.scanEntityClass) {
-            val properties = SectionFieldScanner().scan(configuration)
+            val properties = SectionFieldListBuilder().build(configuration)
             properties.forEach { p -> propertySpecCreator.createSpec(p, configuration) }
 
         }
@@ -100,7 +100,6 @@ class SimpleFormSectionBuilder<BEAN : Any>(entityClass: KClass<BEAN>, val binder
     private fun propertyFor(propertyName: String): KProperty<*> {
         return configuration.entityClass.memberProperties.first { p -> p.name == propertyName }
     }
-
 
 
 }
@@ -165,10 +164,21 @@ class DefaultPropertySpecCreator @Inject constructor() : PropertySpecCreator {
 }
 
 
-class SectionFieldScanner {
-    fun scan(configuration: SectionConfiguration): List<Field> {
-        val fieldList = FieldUtils.getAllFieldsList(configuration.entityClass.java)
-        return fieldList.filter { f -> !(configuration.excludedProperties.contains(f.name)) }
+class SectionFieldListBuilder {
+    fun build(configuration: SectionConfiguration): List<Field> {
+        if (configuration.displayOrder.isEmpty()) {
+            return FieldUtils.getAllFieldsList(configuration.entityClass.java).filter { f -> !(configuration.excludedProperties.contains(f.name)) }
+        } else {
+            val fieldList: MutableList<Field> = mutableListOf()
+            val entityClass = configuration.entityClass
+            configuration.displayOrder
+                    .filter { p -> !(configuration.excludedProperties.contains(p)) }
+                    .forEach { p ->
+                        val field: Field = FieldUtils.getDeclaredField(entityClass.java, p, true)
+                        fieldList.add(field)
+                    }
+            return fieldList
+        }
     }
 }
 

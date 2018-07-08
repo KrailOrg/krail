@@ -91,7 +91,7 @@ Where the model and presentation type are the same, clearly no conversion is nee
 
 Where a converter is needed - for example, to display an integer in a TextField, a ``StringToIntegerConverter`` is needed - this converter type is provided by ``FormSupport.converterFor()``
 
-Ultimately this uses an implementation of ``ConverterFactory`` to instantiate the converter itself. The default implementation ``DefaultConverterFactory``, iterates through all defined ``ConverterSets``s until it finds one to match the desired model and presentation class, or throws an exception if none found.
+Ultimately this uses an implementation of ``ConverterFactory`` to instantiate the converter itself. The default implementation ``DefaultConverterFactory``, iterates through all ``ConverterSets`` classes defined via Guice until it finds one to match the desired model and presentation class, or throws an exception if none found.
 
 By default there is just one ``ConverterSet``, the ``BaseConverterSet``.
 
@@ -100,8 +100,8 @@ Adding / Replacing Converters
 
 Converters can be added by defining your own ``ConverterSet``, and adding it in one of two ways:
 
-- sub-class ``ConverterModule`` and override the ``define()`` method to provide your own bindings to ``ConverterSet``s, and replace ``ConverterModule`` in your ``BindingsCollator``
-- create a new module using ``ConverterModule`` as an example, and add the new module to your ``BindingsCollator``
+- sub-class ``ConverterModule`` and override the ``define()`` method to provide bindings to additional ``ConverterSet`` implementations, and replace ``ConverterModule`` in your ``BindingsCollator``
+- create a new module using ``ConverterModule`` as an example (in particular the MultiBinder), and add the new module to your ``BindingsCollator``
 
 
 
