@@ -17,12 +17,14 @@ import com.vaadin.ui.TextField
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.ViewBase
+import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.reflect.KClass
 
 
 /**
@@ -42,7 +44,7 @@ class DefaultForm @Inject constructor(
 
 
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    private lateinit var componentSet: FormComponentSet
+    private lateinit var section: FormSection<*>
 
     override fun doBuild(busMessage: ViewChangeBusMessage) {
         doBuild()
@@ -66,19 +68,22 @@ class DefaultForm @Inject constructor(
             throw FormConfigurationException("An EmptyFormConfiguration is not valid to construct a Form")
         }
         val formTypeBuilder = formBuilderProvider.get().selectFormTypeBuilder(formConfiguration)
-        componentSet = formTypeBuilder.build()
-        componentSet.translate(translate)
-        rootComponent = componentSet.rootComponent
+        section = formTypeBuilder.build()
+        section.translate(translate)
+        rootComponent = section.rootComponent
     }
 
 
     override fun localeChanged() {
-        componentSet.translate(translate)
+        section.translate(translate)
     }
 
+    override fun loadData(busMessage: AfterViewChangeBusMessage) {
+        section.selectBean(navigationStateExt.to.parameters)
+    }
 }
 
-data class FormComponentSet(val propertyMap: Map<String, PropertyInfo>, val rootComponent: Layout, val binder: KrailBeanValidationBinder<*>) : Serializable {
+data class FormSection<BEAN : Any>(val propertyMap: Map<String, PropertyInfo>, val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : Serializable {
     fun translate(translate: Translate) {
         propertyMap.forEach { k, v ->
             v.component.caption = translate.from(v.captionKey)
@@ -87,6 +92,11 @@ data class FormComponentSet(val propertyMap: Map<String, PropertyInfo>, val root
                 v.component.description = translate.from(v.descriptionKey)
             }
         }
+    }
+
+    fun selectBean(parameters: Map<String, String>) {
+        val bean = dao.get(parameters)
+        binder.readBean(bean)
     }
 }
 
@@ -147,4 +157,16 @@ open class FormModule : AbstractModule() {
         bind(Form::class.java).to(DefaultForm::class.java)
     }
 
+}
+
+interface FormDao<BEAN : Any> {
+
+    fun get(parameters: Map<String, String>): BEAN
+    fun getList(parameters: Map<String, String>): BEAN
+    fun create(): BEAN
+    fun delete(parameters: Map<String, String>): BEAN
+}
+
+interface FormDaoFactory {
+    fun <T : Any> getDao(entityClass: KClass<T>): FormDao<T>
 }

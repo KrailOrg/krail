@@ -125,8 +125,10 @@ object BindersTest : Spek({
 })
 
 
+const val testUuid1 = "123e4567-e89b-12d3-a456-556642440000"
+
 class Person(
-        var id: Int = 1,
+        var id: String = testUuid1,
         var title: String,
         var name: String,
         @field:Max(12)
@@ -142,6 +144,7 @@ private class TestSupportModule : AbstractModule() {
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
+        bind(FormDaoFactory::class.java).toInstance(MockFormDaoFactory())
     }
 
 }

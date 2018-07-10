@@ -13,8 +13,8 @@ import java.util.*
  */
 
 
-fun FormConfiguration.section(name: String = "", init: SectionConfiguration.() -> Unit): SectionConfiguration {
-    val config = SectionConfiguration(this)
+fun FormConfiguration.section(name: String = "", init: FormSectionConfiguration.() -> Unit): FormSectionConfiguration {
+    val config = FormSectionConfiguration(this)
     config.init()
     sections.add(config)
     return config
@@ -227,7 +227,7 @@ fun PropertyConfiguration.mustMatch(pattern: String, vararg flags: javax.validat
 }
 
 
-fun SectionConfiguration.property(name: String, init: PropertyConfiguration.() -> Unit): PropertyConfiguration {
+fun FormSectionConfiguration.property(name: String, init: PropertyConfiguration.() -> Unit): PropertyConfiguration {
     val propertyConfiguration = PropertyConfiguration(name = name, parentConfiguration = this)
     propertyConfiguration.init()
     properties[name] = propertyConfiguration

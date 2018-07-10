@@ -66,11 +66,11 @@ object PropertyConfigurationMergeTest : Spek({
 
 private class TestFormConfig1 : FormConfiguration() {
     override fun config() {
-        val section = SectionConfiguration(this)
+        val section = FormSectionConfiguration(this)
         sections.add(section)
         section.name = "simple"
 
-        val subSection = SectionConfiguration(section)
+        val subSection = FormSectionConfiguration(section)
         subSection.name = "subSection"
         section.sections.add(subSection)
 
@@ -89,12 +89,12 @@ private class TestFormConfig2 : FormConfiguration() {
     override fun config() {
         styleAttributes.alignment = StyleAlignment.align_right
         styleAttributes.size = StyleSize.huge
-        val section = SectionConfiguration(this)
+        val section = FormSectionConfiguration(this)
         sections.add(section)
         section.name = "simple"
 
         section.styleAttributes.size = StyleSize.small
-        val subSection = SectionConfiguration(section)
+        val subSection = FormSectionConfiguration(section)
         subSection.name = "subSection"
         subSection.styleAttributes.borderless = StyleBorderless.yes
         section.sections.add(subSection)
@@ -107,11 +107,11 @@ private class TestFormConfig2 : FormConfiguration() {
 
 private class TestFormConfig3 : FormConfiguration() {
     override fun config() {
-        val section = SectionConfiguration(this)
+        val section = FormSectionConfiguration(this)
         sections.add(section)
         section.name = "simple"
 
-        val subSection = SectionConfiguration(section)
+        val subSection = FormSectionConfiguration(section)
         subSection.name = "subSection"
         section.sections.add(subSection)
 

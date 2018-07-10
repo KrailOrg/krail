@@ -19,7 +19,7 @@ import javax.validation.constraints.Pattern
  * A [FormConfiguration] uses the principle of inheritance to minimise the amount of coded configuration required.  Where possible,
  * an element can be configured at the Form level, but then overridden at the section or property level.
  *
- * A [FormConfiguration] contains one or more [SectionConfiguration]s, which contain [PropertyConfiguration]s
+ * A [FormConfiguration] contains one or more [FormSectionConfiguration]s, which contain [PropertyConfiguration]s
  *
  * Created by David Sowerby on 07 Jun 2018
  */
@@ -43,11 +43,11 @@ abstract class FormConfiguration : ViewConfiguration, ParentConfiguration, FormC
     var formType: String = "simple"  // has to be String to enable users to add new types
     override var styleAttributes = StyleAttributes()
 
-    val sections: MutableList<SectionConfiguration> = mutableListOf()
+    val sections: MutableList<FormSectionConfiguration> = mutableListOf()
 
     abstract fun config()
 
-    fun sectionWithName(name: String): SectionConfiguration {
+    fun sectionWithName(name: String): FormSectionConfiguration {
         return sections.first { s -> s.name == name }
     }
 

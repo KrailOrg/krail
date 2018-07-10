@@ -47,9 +47,9 @@ class StyleAttributes {
 }
 
 /**
- * If [SectionConfiguration] is not being scanned automatically, [PropertyConfiguration] must be fully populated manually.
+ * If [FormSectionConfiguration] is not being scanned automatically, [PropertyConfiguration] must be fully populated manually.
  *
- * When [SectionConfiguration] is being scanned automatically, any manually specified values take precedence, (thus overriding the defaults) but otherwise:
+ * When [FormSectionConfiguration] is being scanned automatically, any manually specified values take precedence, (thus overriding the defaults) but otherwise:
  *
  * - [propertyValueClass] is taken from the property declaration in the entity class
  * - [componentClass] is selected using [FormSupport.componentFor]

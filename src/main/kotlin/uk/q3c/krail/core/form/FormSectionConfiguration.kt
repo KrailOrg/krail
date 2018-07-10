@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
  * [entityClass] must always be provided
  */
 @FormDsl
-class SectionConfiguration(override val parentConfiguration: ParentConfiguration) : ChildConfiguration, ParentConfiguration, Serializable {
+class FormSectionConfiguration(override val parentConfiguration: ParentConfiguration) : ChildConfiguration, ParentConfiguration, Serializable {
     var name: String = "unnamed"
     var layout: KClass<out Layout> = FormLayout::class
     var displayOrder: List<String> = mutableListOf()  // if specified must contain all required properties
@@ -27,9 +27,9 @@ class SectionConfiguration(override val parentConfiguration: ParentConfiguration
     var excludedProperties: List<String> = listOf() // used only if displayOrder not specified
     val properties: MutableMap<String, PropertyConfiguration> = mutableMapOf()
     override var styleAttributes = StyleAttributes()
-    val sections: MutableList<SectionConfiguration> = mutableListOf()
+    val sections: MutableList<FormSectionConfiguration> = mutableListOf()
 
-    fun sectionWithName(name: String): SectionConfiguration {
+    fun sectionWithName(name: String): FormSectionConfiguration {
         return sections.first { s -> s.name == name }
     }
 
