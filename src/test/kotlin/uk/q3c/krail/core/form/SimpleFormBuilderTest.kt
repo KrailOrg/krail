@@ -169,6 +169,7 @@ private class SimpleFormConfiguration1 : FormConfiguration() {
     override fun config() {
         val section = FormSectionConfiguration(this)
         section.name = "single"
+        section.excludedProperties = listOf("id")
         sections.add(section)
         section.entityClass = Person::class
         section.styleAttributes.borderless = StyleBorderless.yes
