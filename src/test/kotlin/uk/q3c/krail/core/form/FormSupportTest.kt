@@ -18,6 +18,7 @@ import uk.q3c.krail.core.env.RunningOn
 import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.navigate.sitemap.Sitemap
+import uk.q3c.krail.core.persist.DaoModule
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
@@ -41,7 +42,7 @@ object FormSupportTest : Spek({
         lateinit var formSupport: FormSupport
 
         beforeEachTest {
-            injector = Guice.createInjector(FormModule(), KrailValidationModule(), FormSupportTestModule(), ConverterModule())
+            injector = Guice.createInjector(FormModule(), KrailValidationModule(), FormSupportTestModule(), ConverterModule(), DaoModule())
             formSupport = injector.getInstance(FormSupport::class.java)
         }
 
@@ -51,35 +52,35 @@ object FormSupportTest : Spek({
                 formSupport.converterFor(String::class, String::class).shouldBeInstanceOf(NoConversionConverter::class.java)
                 formSupport.converterFor(LocalDateTime::class, LocalDateTime::class).shouldBeInstanceOf(NoConversionConverter::class.java)
             }
+        }
 
-            on("requesting converter where presentation and model type are different ") {
+        on("requesting converter where presentation and model type are different ") {
 
-                it("returns an instance of the correct Converter ") {
-                    formSupport.converterFor(Integer::class, String::class).shouldBeInstanceOf(StringToIntegerConverter::class.java)
-                }
+            it("returns an instance of the correct Converter ") {
+                formSupport.converterFor(Integer::class, String::class).shouldBeInstanceOf(StringToIntegerConverter::class.java)
             }
+        }
+        on("requesting a UI Field for a data type") {
 
-            on("requesting a UI Field for a data type") {
-
-                it("returns the correct field type") {
-                    formSupport.componentFor(String::class).get().shouldBeInstanceOf(TextField::class.java)
-                    formSupport.componentFor(Integer::class).get().shouldBeInstanceOf(TextField::class.java)
-                    formSupport.componentFor(Boolean::class).get().shouldBeInstanceOf(CheckBox::class.java)
-                    formSupport.componentFor(LocalDateTime::class).get().shouldBeInstanceOf(DateTimeField::class.java)
-                    formSupport.componentFor(LocalDate::class).get().shouldBeInstanceOf(DateField::class.java)
-                }
+            it("returns the correct field type") {
+                formSupport.componentFor(String::class).get().shouldBeInstanceOf(TextField::class.java)
+                formSupport.componentFor(Int::class).get().shouldBeInstanceOf(TextField::class.java)
+                formSupport.componentFor(Boolean::class).get().shouldBeInstanceOf(CheckBox::class.java)
+                formSupport.componentFor(LocalDateTime::class).get().shouldBeInstanceOf(DateTimeField::class.java)
+                formSupport.componentFor(LocalDate::class).get().shouldBeInstanceOf(DateField::class.java)
             }
+        }
 
-            on("requesting a UI Field for a data type which has not been defined") {
-                val result = { formSupport.componentFor(Sitemap::class) }
+        on("requesting a UI Field for a data type which has not been defined") {
+            val result = { formSupport.componentFor(Sitemap::class) }
 
-                it("throws exception") {
-                    result.shouldThrow(DataTypeException::class)
-                }
+            it("throws exception") {
+                result.shouldThrow(DataTypeException::class)
             }
         }
     }
-})
+}
+)
 
 
 class FormSupportTestModule : AbstractModule() {
