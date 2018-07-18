@@ -18,7 +18,7 @@ import uk.q3c.krail.core.env.RunningOn
 import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.navigate.sitemap.Sitemap
-import uk.q3c.krail.core.persist.DaoModule
+import uk.q3c.krail.core.persist.FormDaoModule
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
@@ -42,7 +42,7 @@ object FormSupportTest : Spek({
         lateinit var formSupport: FormSupport
 
         beforeEachTest {
-            injector = Guice.createInjector(FormModule(), KrailValidationModule(), FormSupportTestModule(), ConverterModule(), DaoModule())
+            injector = Guice.createInjector(FormModule(), KrailValidationModule(), FormSupportTestModule(), ConverterModule(), FormDaoModule())
             formSupport = injector.getInstance(FormSupport::class.java)
         }
 

@@ -40,7 +40,7 @@ interface ParentConfiguration : FormConfigurationCommon
 abstract class FormConfiguration : ViewConfiguration, ParentConfiguration, FormConfigurationCommon {
 
 
-    var formType: String = "simple"  // has to be String to enable users to add new types
+    var formType: String = "standard"  // has to be String to enable users to add new types
     override var styleAttributes = StyleAttributes()
 
     val sections: MutableList<FormSectionConfiguration> = mutableListOf()

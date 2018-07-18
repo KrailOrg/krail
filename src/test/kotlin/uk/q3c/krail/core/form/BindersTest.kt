@@ -21,6 +21,7 @@ import uk.q3c.krail.core.env.RunningOn
 import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.guice.InjectorHolder
+import uk.q3c.krail.core.persist.MapDbFormDaoFactory
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
@@ -128,13 +129,13 @@ object BindersTest : Spek({
 const val testUuid1 = "123e4567-e89b-12d3-a456-556642440000"
 
 class Person(
-        var id: String = testUuid1,
-        var title: String,
+        override var id: String = testUuid1,
+        var title: String = "Mr",
         var name: String,
         @field:Max(12)
         var age: Int,
         var joinDate: LocalDate = LocalDate.parse("2010-12-31"),
-        var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable
+        var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable, Entity
 
 private class TestSupportModule : AbstractModule() {
     override fun configure() {
@@ -144,7 +145,7 @@ private class TestSupportModule : AbstractModule() {
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
-        bind(FormDaoFactory::class.java).toInstance(MockFormDaoFactory())
+        bind(FormDaoFactory::class.java).to(MapDbFormDaoFactory::class.java).asEagerSingleton()
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.*
  */
 
 
-fun FormConfiguration.section(name: String = "", init: FormSectionConfiguration.() -> Unit): FormSectionConfiguration {
+fun FormConfiguration.section(name: String = "standard", init: FormSectionConfiguration.() -> Unit): FormSectionConfiguration {
     val config = FormSectionConfiguration(this)
     config.init()
     sections.add(config)

@@ -38,7 +38,7 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
 import uk.q3c.krail.core.option.KrailOptionModule;
-import uk.q3c.krail.core.persist.DaoModule;
+import uk.q3c.krail.core.persist.FormDaoModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -185,12 +185,12 @@ public class CoreBindingsCollator implements BindingsCollator {
 
 
     /**
-     * Override this if you have provided your own {@link DaoModule} implementation
+     * Override this if you have provided your own {@link FormDaoModule} implementation
      *
      * @return a list of Dao related modules
      */
     protected List<Module> daoModules() {
-        return ImmutableList.of(new DaoModule());
+        return ImmutableList.of(new FormDaoModule());
     }
     /**
      * Override this if you have provided your own {@link VaadinEventBusModule} implementation

@@ -5,13 +5,19 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.vaadin.ui.DateField
 import com.vaadin.ui.FormLayout
+import com.vaadin.ui.Grid
 import com.vaadin.ui.InlineDateField
 import com.vaadin.ui.TextField
+import com.vaadin.ui.components.grid.GridSelectionModel
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldBeNull
+import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
@@ -33,46 +39,51 @@ import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.serial.tracer.SerializationTracer
 import uk.q3c.util.text.DefaultMessageFormat
 import uk.q3c.util.text.MessageFormat2
-import java.io.Serializable
 import java.util.*
-import kotlin.reflect.KClass
 
 /**
  * Created by David Sowerby on 05 Jul 2018
  */
-object SimpleFormSectionBuilderTest : Spek({
+object StandardFormSectionBuilderTest : Spek({
 
-    given(" a simple form section builder, configured with SimpleFormConfiguration1") {
+    given(" a standard form section builder, configured with StandardFormConfiguration1") {
         lateinit var injector: Injector
-        lateinit var builder: SimpleFormSectionBuilder<Person>
+        lateinit var builder: StandardFormSectionBuilder<Person>
         lateinit var binderFactory: KrailBeanValidationBinderFactory
         lateinit var binder: KrailBeanValidationBinder<Person>
         lateinit var formConfiguration: FormConfiguration
         lateinit var configuration: FormSectionConfiguration
-        lateinit var propertySpecCreator: PropertySpecCreator
+        lateinit var propertySpecCreator: PropertyConfigurationCreator
         lateinit var formSupport: FormSupport
         lateinit var translate: Translate
-
-        val formDaoFactory: FormDaoFactory = MockFormDaoFactory()
-
+        lateinit var currentLocale: CurrentLocale
+        lateinit var formDaoFactory: FormDaoFactory
+        lateinit var form: Form
+        lateinit var testModule: StandardFormSectionBuilderTestModule
 
         beforeEachTest {
-            injector = Guice.createInjector(FormModule(), KrailValidationModule(), ConverterModule(), SimpleFormSectionBuilderTestModule())
+            form = mockk(relaxed = true)
+            testModule = StandardFormSectionBuilderTestModule()
+
+            injector = Guice.createInjector(FormModule(), KrailValidationModule(), ConverterModule(), testModule)
             InjectorHolder.setInjector(injector)
+            formDaoFactory = injector.getInstance(FormDaoFactory::class.java)
             binderFactory = injector.getInstance(KrailBeanValidationBinderFactory::class.java)
             formSupport = injector.getInstance(FormSupport::class.java)
-            propertySpecCreator = injector.getInstance(PropertySpecCreator::class.java)
+            propertySpecCreator = injector.getInstance(PropertyConfigurationCreator::class.java)
             formConfiguration = SimpleFormConfiguration1()
             formConfiguration.config()
             configuration = formConfiguration.sectionWithName("single")
             translate = injector.getInstance(Translate::class.java)
-            builder = SimpleFormSectionBuilder(entityClass = Person::class, binderFactory = binderFactory, configuration = configuration, propertySpecCreator = propertySpecCreator, formSupport = formSupport)
+            currentLocale = injector.getInstance(CurrentLocale::class.java)
+            builder = StandardFormSectionBuilder(entityClass = Person::class, binderFactory = binderFactory, configuration = configuration, propertySpecCreator = propertySpecCreator, formSupport = formSupport, currentLocale = currentLocale)
         }
 
-        on("creating the section") {
+        on("creating the detail section") {
+
             val serializationTracer = SerializationTracer()
             val section = builder.buildDetail(formDaoFactory, translate)
-            section.selectBean(mapOf(Pair("id", testUuid1)))
+            section.loadData(mapOf(Pair("id", testUuid1)))
 
 
 
@@ -118,14 +129,16 @@ object SimpleFormSectionBuilderTest : Spek({
             }
 
 
-            it("creates a serializable componentSet") {
+            it("creates a serializable section") {
                 serializationTracer.trace(section).shouldNotHaveAnyDynamicFailures()
             }
+
+
         }
 
         on("setting a value that should fail a JSR annotation validator") {
             val section = builder.buildDetail(formDaoFactory, translate)
-            section.selectBean(mapOf(Pair("id", testUuid1)))
+            section.loadData(mapOf(Pair("id", testUuid1)))
             (section.propertyMap["age"]!!.component as TextField).value = "34"
             val validationResults = section.binder.validate()
 
@@ -141,8 +154,9 @@ object SimpleFormSectionBuilderTest : Spek({
 
 
         on("setting a value that should fail a validator set by configuration") {
+            val serializationTracer = SerializationTracer()
             val section = builder.buildDetail(formDaoFactory, translate)
-            section.selectBean(mapOf(Pair("id", testUuid1)))
+            section.loadData(mapOf(Pair("id", testUuid1)))
             (section.propertyMap["age"]!!.component as TextField).value = "2"
             val validationResults = section.binder.validate()
 
@@ -155,7 +169,65 @@ object SimpleFormSectionBuilderTest : Spek({
 //                r.message.get().shouldBeEqualTo("must be greater than or equal to 3")
                 r.message.get().shouldBeEqualTo("Min")
             }
+
         }
+
+        on("creating a table section") {
+            val serializationTracer = SerializationTracer()
+            val section = builder.buildTable(form, formDaoFactory, translate)
+            section.loadData(mapOf())
+            val grid: Grid<*> = section.rootComponent as Grid<*>
+
+
+            it("has a read-only grid as the root component") {
+                section.rootComponent.shouldBeInstanceOf(Grid::class)
+                grid.editor.isEnabled.shouldBeFalse()
+            }
+
+            it("hides the columns that are not specified in columnOrder") {
+                grid.columns.size.shouldBe(6)
+                grid.getColumn("name").isHidden.shouldBeFalse()
+                grid.getColumn("age").isHidden.shouldBeFalse()
+                grid.getColumn("joinDate").isHidden.shouldBeFalse()
+                grid.getColumn("id").isHidden.shouldBeTrue()
+                grid.getColumn("dob").isHidden.shouldBeTrue()
+                grid.getColumn("title").isHidden.shouldBeTrue()
+            }
+
+            it("has captions correctly set") {
+                grid.getColumn("age").caption.shouldBeEqualTo("Age")
+                grid.getColumn("joinDate").caption.shouldBeEqualTo("date joined")
+            }
+            it("column order is correct") {
+                grid.columns[0].id.shouldBeEqualTo("name")
+                grid.columns[1].id.shouldBeEqualTo("age")
+                grid.columns[2].id.shouldBeEqualTo("joinDate")
+            }
+
+            it("table section is a selection model listener") {
+                val selectionModel: GridSelectionModel<Person> = grid.selectionModel as GridSelectionModel<Person>
+                selectionModel.select(testModule.person2)
+            }
+
+            it("creates a serializable section") {
+                serializationTracer.trace(section).shouldNotHaveAnyDynamicFailures()
+            }
+
+        }
+
+        on("selecting a table item") {
+            val section = builder.buildTable(form, formDaoFactory, translate)
+            section.loadData(mapOf())
+            val grid: Grid<*> = section.rootComponent as Grid<*>
+            val selectionModel: GridSelectionModel<Person> = grid.selectionModel as GridSelectionModel<Person>
+            selectionModel.select(testModule.person2)
+
+            it("calls the form to change route to the selected id") {
+                verify { form.changeRoute(testModule.person2.id) }
+            }
+        }
+
+
     }
 })
 
@@ -167,7 +239,9 @@ object SimpleFormSectionBuilderTest : Spek({
 
 private class SimpleFormConfiguration1 : FormConfiguration() {
     override fun config() {
+
         val section = FormSectionConfiguration(this)
+        section.columnOrder = mutableSetOf("name", "age", "joinDate")
         section.name = "single"
         section.excludedProperties = listOf("id")
         sections.add(section)
@@ -195,11 +269,19 @@ private enum class TestPersonKey : I18NKey {
 }
 
 
-private class SimpleFormSectionBuilderTestModule : AbstractModule() {
+private class StandardFormSectionBuilderTestModule : AbstractModule() {
 
-    val daoFactory: FormDaoFactory = mockk()
+    val daoFactory: FormDaoFactory = mockk(relaxed = true)
+    val dao: FormDao<Person> = mockk()
+    val person1 = Person(name = "mock person 1", age = 12)
+    val person2 = Person(id = "2", name = "mock person 2", age = 32)
+    val person3 = Person(id = "3", name = "mock person 3", age = 42)
+    val people: List<Person> = listOf(person1, person2, person3)
 
     override fun configure() {
+        every { daoFactory.getDao(Person::class) } returns dao
+        every { dao.get(any()) } returns person1
+        every { dao.get() } returns people
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
         bind(SerializationSupport::class.java).to(DefaultSerializationSupport::class.java)
@@ -221,33 +303,5 @@ private class LocalTestI18NModule : KrailI18NModule() {
 
 }
 
-class MockPersonFormDao : FormDao<Person>, Serializable {
-    override fun getList(parameters: Map<String, String>): Person {
-        TODO()
-    }
 
-    override fun create(): Person {
-        TODO()
-    }
 
-    override fun delete(parameters: Map<String, String>): Person {
-        TODO()
-    }
-
-    val people: MutableList<Person> = mutableListOf()
-
-    override fun get(parameters: Map<String, String>): Person {
-        return Person(title = "Mr", name = "Wiggly", age = 10)
-    }
-}
-
-class MockFormDaoFactory : FormDaoFactory {
-    override fun <T : Any> getDao(entityClass: KClass<T>): FormDao<T> {
-        if (entityClass == Person::class) {
-            return MockPersonFormDao() as FormDao<T>
-        } else {
-            throw IllegalArgumentException("only supports Person")
-        }
-    }
-
-}

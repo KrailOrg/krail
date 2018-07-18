@@ -11,27 +11,29 @@ import org.jetbrains.spek.api.dsl.on
 /**
  * Created by David Sowerby on 08 Jul 2018
  */
-object SectionFieldListBuilderTest : Spek({
+object PropertyConfigurationBuilderTest : Spek({
 
-    given("a SectionFieldListBuilder") {
-        val builder = SectionFieldListBuilder()
+    given("a SectionBuilder") {
+        val builder = PropertyConfigurationBuilder()
+        val propertySpecCreator = DefaultPropertyConfigurationCreator()
         val formConfiguration: FormConfiguration = mockk(relaxed = true)
 
 
         on("processing a SectionConfiguration with a specified displayOrder") {
             val config1 = FormSectionConfiguration(formConfiguration)
             config1.entityClass = Person::class
-            config1.displayOrder = listOf("name", "age", "id")
+            config1.fieldOrder = listOf("name", "age", "id")
             config1.excludedProperties = listOf("id")
-            val result = builder.build(config1)
+            builder.build(config1, propertySpecCreator)
+            val propertyIterator = config1.properties.iterator()
 
-            it("produces field list in the order specified") {
-                result[0].name.shouldBeEqualTo("name")
-                result[1].name.shouldBeEqualTo("age")
+            it("produces property list in the order specified") {
+                propertyIterator.next().value.name.shouldBeEqualTo("name")
+                propertyIterator.next().value.name.shouldBeEqualTo("age")
             }
 
             it("does not contain the excluded property") {
-                result.size.shouldBe(2)
+                config1.properties.size.shouldBe(2)
             }
 
         }
@@ -40,16 +42,16 @@ object SectionFieldListBuilderTest : Spek({
             val config1 = FormSectionConfiguration(formConfiguration)
             config1.entityClass = Person::class
             config1.excludedProperties = listOf("id")
-            val result = builder.build(config1)
+            builder.build(config1, propertySpecCreator)
 
             it("contains all the entity properties except the excluded one") {
-                result.size.shouldBe(5)
+                config1.properties.size.shouldBe(5)
                 //These would throw an exception if not found
-                result.first { f -> f.name == "name" }
-                result.first { f -> f.name == "age" }
-                result.first { f -> f.name == "dob" }
-                result.first { f -> f.name == "joinDate" }
-                result.first { f -> f.name == "title" }
+                config1.properties.values.first { f -> f.name == "name" }
+                config1.properties.values.first { f -> f.name == "age" }
+                config1.properties.values.first { f -> f.name == "dob" }
+                config1.properties.values.first { f -> f.name == "joinDate" }
+                config1.properties.values.first { f -> f.name == "title" }
             }
 
 

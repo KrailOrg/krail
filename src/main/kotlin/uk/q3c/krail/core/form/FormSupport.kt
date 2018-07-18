@@ -4,6 +4,8 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
+import com.vaadin.ui.Grid
+import com.vaadin.ui.renderers.AbstractRenderer
 import net.jodah.typetools.TypeResolver
 import kotlin.reflect.KClass
 
@@ -12,30 +14,36 @@ import kotlin.reflect.KClass
  */
 interface FormSupport {
     /**
-     * The presentation class may not return with the same type as [dataClass] - for example an Int may be presented in a [TextField].
+     * The presentation class may not return with the same type as [modelClass] - for example an Int may be presented in a [TextField].
      * The class actually used by the component can be retrieved by [presentationValueClassOf]
      */
-    fun componentFor(dataClass: KClass<*>): Provider<HasValue<*>>
+    fun componentFor(modelClass: KClass<*>): Provider<HasValue<*>>
 
+    fun <G : Grid<Any>, MODEL : Any> rendererFor(modelClass: KClass<out MODEL>, grid: G): AbstractRenderer<in Any, *>
     fun <PRESENTATIONVALUE : Any, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL>
     fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterForComponent(modelClass: KClass<out MODEL>, componentClass: KClass<PRESENTATION>): Converter<PRESENTATIONVALUE, MODEL>
 }
 
 /**
  * [dataClassToPresentationMap] is provided by one or more Guice modules (see [FormModule])
- * [converterFactory] is provided by the [ConverterModule] and can be extended with additional [ConverterSet] implementations
+ * [rendererFactory] is bound in [FormModule] and can be extended with additional [RendererSet] implementations
+ * [converterFactory] is bound in [ConverterModule] and can be extended with additional [ConverterSet] implementations
  */
 class DefaultFormSupport @Inject constructor(
         private val dataClassToPresentationMap: MutableMap<Class<*>, Provider<HasValue<*>>>,
-        private val converterFactory: ConverterFactory) :
+        private val converterFactory: ConverterFactory,
+        private val rendererFactory: RendererFactory) :
 
         FormSupport {
+    override fun <G : Grid<Any>, MODEL : Any> rendererFor(modelClass: KClass<out MODEL>, grid: G): AbstractRenderer<in Any, *> {
+        return rendererFactory.get(modelClass, grid)
+    }
 
     /**
      * We check for Java primitive types first, wrapper types should not normally be needed
      */
-    override fun componentFor(dataClass: KClass<*>): Provider<HasValue<*>> {
-        return dataClassToPresentationMap.getOrElse(dataClass.java) { throw DataTypeException(dataClass) }
+    override fun componentFor(modelClass: KClass<*>): Provider<HasValue<*>> {
+        return dataClassToPresentationMap.getOrElse(modelClass.java) { throw DataTypeException(modelClass) }
     }
 
 

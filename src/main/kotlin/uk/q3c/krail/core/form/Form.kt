@@ -5,13 +5,18 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import com.google.inject.multibindings.MapBinder
+import com.google.inject.multibindings.Multibinder
 import com.vaadin.data.HasValue
+import com.vaadin.event.selection.SelectionEvent
+import com.vaadin.event.selection.SelectionListener
 import com.vaadin.shared.ui.colorpicker.Color
 import com.vaadin.ui.AbstractComponent
 import com.vaadin.ui.CheckBox
 import com.vaadin.ui.ColorPicker
+import com.vaadin.ui.Component
 import com.vaadin.ui.DateField
 import com.vaadin.ui.DateTimeField
+import com.vaadin.ui.Grid
 import com.vaadin.ui.Layout
 import com.vaadin.ui.TextField
 import org.slf4j.LoggerFactory
@@ -19,11 +24,13 @@ import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.ViewBase
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
+import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
+import javax.cache.Cache
 import kotlin.reflect.KClass
 
 
@@ -33,18 +40,30 @@ import kotlin.reflect.KClass
 
 interface Form : KrailView {
     fun localeChanged()
+
+    /**
+     * Change route to the item specified by [id].  [id] is usually from [Entity.id]
+     */
+    fun changeRoute(id: String)
 }
 
 class DefaultForm @Inject constructor(
         translate: Translate,
         serializationSupport: SerializationSupport,
-        @field:Transient val formBuilderProvider: Provider<FormTypeSelector>)
+        val currentLocale: CurrentLocale,
+        @field:Transient val formBuilderSelectorProvider: Provider<FormBuilderSelector>)
 
     : ViewBase(translate, serializationSupport), Form {
 
 
+    override fun changeRoute(newRoute: String) {
+        TODO()
+    }
+
+
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    private lateinit var section: FormSection<*>
+    private lateinit var section: FormSection
+
 
     override fun doBuild(busMessage: ViewChangeBusMessage) {
         doBuild()
@@ -67,36 +86,70 @@ class DefaultForm @Inject constructor(
         if (formConfiguration is EmptyFormConfiguration) {
             throw FormConfigurationException("An EmptyFormConfiguration is not valid to construct a Form")
         }
-        val formTypeBuilder = formBuilderProvider.get().selectFormTypeBuilder(formConfiguration)
-        section = formTypeBuilder.build()
-        section.translate(translate)
+        formConfiguration.config()
+        val formBuilder = formBuilderSelectorProvider.get().selectFormBuilder(formConfiguration)
+        section = formBuilder.build(this, navigationStateExt)
+        if (section is FormDetailSection<*>) {
+            (section as FormDetailSection<*>).translate(translate, currentLocale)
+        }
         rootComponent = section.rootComponent
     }
 
 
     override fun localeChanged() {
-        section.translate(translate)
+        if (section is FormDetailSection<*>) {
+            (section as FormDetailSection<*>).translate(translate, currentLocale)
+        } else {
+            if (section is FormTableSection<*>) {
+                doBuild() // grid columns and renderers hide Locale away so we have to reconstruct
+            }
+        }
+
     }
 
     override fun loadData(busMessage: AfterViewChangeBusMessage) {
-        section.selectBean(navigationStateExt.to.parameters)
+        section.loadData(navigationStateExt.to.parameters)
     }
 }
 
-data class FormSection<BEAN : Any>(val propertyMap: Map<String, PropertyInfo>, val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : Serializable {
-    fun translate(translate: Translate) {
+
+interface FormSection {
+    val rootComponent: Component
+    fun loadData(parameters: Map<String, String>)
+}
+
+class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : Serializable, FormSection {
+
+    fun translate(translate: Translate, currentLocale: CurrentLocale) {
         propertyMap.forEach { k, v ->
             v.component.caption = translate.from(v.captionKey)
             // setDescription is not part of Component interface!
             if (v.component is AbstractComponent) {
+                v.component.locale = currentLocale.locale
                 v.component.description = translate.from(v.descriptionKey)
             }
         }
     }
 
-    fun selectBean(parameters: Map<String, String>) {
-        val bean = dao.get(parameters)
+    override fun loadData(parameters: Map<String, String>) {
+        val bean = dao.get("id")
         binder.readBean(bean)
+    }
+}
+
+class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : Serializable, FormSection, SelectionListener<BEAN> {
+    override fun selectionChange(event: SelectionEvent<BEAN>) {
+        val selectedItem = event.firstSelectedItem
+        if (selectedItem.isPresent) {
+            val bean = selectedItem.get()
+            if (bean is Entity) {
+                form.changeRoute(bean.id)
+            }
+        }
+    }
+
+    override fun loadData(parameters: Map<String, String>) {
+        rootComponent.setItems(dao.get())
     }
 }
 
@@ -104,31 +157,42 @@ open class FormModule : AbstractModule() {
 
     override fun configure() {
         val fieldLiteral = object : TypeLiteral<HasValue<*>>() {}
-        val dataClassLiteral = object : TypeLiteral<Class<*>>() {}
-        val dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>> = MapBinder.newMapBinder(binder(), dataClassLiteral, fieldLiteral)
+        val modelClassLiteral = object : TypeLiteral<Class<*>>() {}
+        val modelClassToUIFieldMap: MapBinder<Class<*>, HasValue<*>> = MapBinder.newMapBinder(binder(), modelClassLiteral, fieldLiteral)
         val stringLiteral = object : TypeLiteral<String>() {}
         val formTypeBuilderClassLiteral = object : TypeLiteral<FormBuilder>() {}
         val formTypeBuilderLookup: MapBinder<String, FormBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
-        bindFormTypeBuilders(formTypeBuilderLookup)
-        bindDefaultDataClassMappings(dataClassToFieldMap)
+        val rendererBinder: Multibinder<RendererSet> = Multibinder.newSetBinder(binder(), RendererSet::class.java)
+        bindFormBuilders(formTypeBuilderLookup)
+        bindDefaultDataClassMappings(modelClassToUIFieldMap)
         bindBeanValidatorFactory()
         bindFormSupport()
         bindErrorMessageProvider()
         bindForm()
-        bindFormBuilder()
+        bindFormBuilderSelector()
         bindPropertySpecCreator()
+        bindRendererFactory()
+        bindRendererSets(rendererBinder)
+    }
+
+    protected open fun bindRendererSets(rendererBinder: Multibinder<RendererSet>) {
+        rendererBinder.addBinding().to(BaseRendererSet::class.java)
+    }
+
+    protected open fun bindRendererFactory() {
+        bind(RendererFactory::class.java).to(DefaultRendererFactory::class.java)
     }
 
     protected open fun bindPropertySpecCreator() {
-        bind(PropertySpecCreator::class.java).to(DefaultPropertySpecCreator::class.java)
+        bind(PropertyConfigurationCreator::class.java).to(DefaultPropertyConfigurationCreator::class.java)
     }
 
-    protected open fun bindFormTypeBuilders(formTypeBuilderLookup: MapBinder<String, FormBuilder>) {
-        formTypeBuilderLookup.addBinding("simple").to(SimpleFormBuilder::class.java)
+    protected open fun bindFormBuilders(formBuilderLookup: MapBinder<String, FormBuilder>) {
+        formBuilderLookup.addBinding("standard").to(StandardFormBuilder::class.java)
     }
 
-    protected open fun bindFormBuilder() {
-        bind(FormTypeSelector::class.java).to(DefaultFormTypeSelector::class.java)
+    protected open fun bindFormBuilderSelector() {
+        bind(FormBuilderSelector::class.java).to(DefaultFormBuilderSelector::class.java)
     }
 
     protected open fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>>) {
@@ -157,16 +221,29 @@ open class FormModule : AbstractModule() {
         bind(Form::class.java).to(DefaultForm::class.java)
     }
 
+
 }
 
-interface FormDao<BEAN : Any> {
+interface BaseDao<BEAN : Any> : Cache<String, BEAN> {
 
-    fun get(parameters: Map<String, String>): BEAN
-    fun getList(parameters: Map<String, String>): BEAN
-    fun create(): BEAN
-    fun delete(parameters: Map<String, String>): BEAN
+    fun put(vararg beans: BEAN)
+    fun get(): List<BEAN>
+
 }
+
 
 interface FormDaoFactory {
     fun <T : Any> getDao(entityClass: KClass<T>): FormDao<T>
+}
+
+
+class FormDao<T : Any>(baseDao: MapDBBaseDao<T>) : BaseDao<T> by baseDao, Serializable {
+    fun applyFilter() {
+        TODO()
+    }
+}
+
+
+interface Entity {
+    val id: String
 }

@@ -27,6 +27,9 @@ interface ConverterSet : ConverterProvider {
 }
 
 interface ConverterProvider : Serializable {
+    /**
+     * Returns a [Converter] to match [converterPair], or a [NoConversionConverter] if the pair is not supported
+     */
     fun get(converterPair: ConverterPair): Converter<Any, Any>
     fun supports(converterPair: ConverterPair): Boolean
 }
@@ -55,9 +58,7 @@ class BaseConverterSet @Inject constructor(@field:Transient override val errorMe
     }
 
     override fun get(converterPair: ConverterPair): Converter<Any, Any> {
-        if (converterPair.model == converterPair.presentation) {
-            return NoConversionConverter()
-        }
+
         val emp = errorMessageProviderProvider.get()
         val converter: Any = when (converterPair) {
             ConverterPair(String::class, Int::class) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
@@ -135,6 +136,9 @@ class DefaultConverterFactory @Inject constructor(private val converters: Mutabl
     }
 
     override fun get(converterPair: ConverterPair): Converter<Any, Any> {
+        if (converterPair.model == converterPair.presentation) {
+            return NoConversionConverter()
+        }
         for (converterSetProvider in converters) {
             val converterSet = converterSetProvider
 //            val converterSet = converterSetProvider.get()
@@ -142,7 +146,7 @@ class DefaultConverterFactory @Inject constructor(private val converters: Mutabl
                 return converterSet.get(converterPair)
             }
         }
-        throw UnsupportedOperationException("Converter Pair not supported $converterPair")
+        throw IllegalArgumentException("Converter Pair not supported $converterPair")
     }
 
 

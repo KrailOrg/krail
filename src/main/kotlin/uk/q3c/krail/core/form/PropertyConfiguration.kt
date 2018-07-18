@@ -2,6 +2,7 @@ package uk.q3c.krail.core.form
 
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
+import com.vaadin.ui.renderers.AbstractRenderer
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.i18n.I18NKey
@@ -54,6 +55,7 @@ class StyleAttributes {
  * - [propertyValueClass] is taken from the property declaration in the entity class
  * - [componentClass] is selected using [FormSupport.componentFor]
  * - [converterClass] is selected using [FormSupport.converterFor]
+ * - [columnRendererClass] is selected [FormSupport.rendererFor]
  * - [validations] are additive - that is, any manually defined [KrailValidator]s are combined with those read from JSR 303 annotations from the entity class.
  *
  * When setting validation, http://piotrnowicki.com/2011/02/float-and-double-in-java-inaccurate-result/
@@ -62,6 +64,8 @@ class StyleAttributes {
  */
 @FormDsl
 class PropertyConfiguration(val name: String, override val parentConfiguration: ParentConfiguration) : ChildConfiguration, FormConfigurationCommon, Serializable {
+    var columnRendererClass: KClass<AbstractRenderer<*, *>> = AbstractRenderer::class
+
     var propertyValueClass: KClass<out Any> = Any::class
     var componentClass: Class<out HasValue<*>> = HasValue::class.java
     var converterClass: Class<out Converter<*, *>> = Converter::class.java
