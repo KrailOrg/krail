@@ -85,7 +85,7 @@ object DefaultSubPagePanelTest : Spek({
             userSitemapProvider = mockk()
             every { userSitemapProvider.get() } returns userSitemap
 
-            every { navigator.currentNode } returnsMany listOf(userSitemap.a11Node(), userSitemap.publicNode())
+            every { navigator.currentNode } returnsMany listOf(userSitemap.a111Node(), userSitemap.publicNode())
 
 
             panel = DefaultSubPagePanel(navigatorProvider = navigatorProvider, userSitemapProvider = userSitemapProvider, serializationSupport = serializationSupport, optionProvider = optionProvider, sorters = sorters)
