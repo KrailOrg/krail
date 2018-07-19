@@ -13,7 +13,7 @@
 
 
 buildscript {
-    ext.kotlin_version = '1.2.50'
+    ext.kotlin_version = '1.2.51'
     ext.kaytee_plugin_version = "0.20.1.0"
     ext.junit_platform_version = "1.0.3"
     repositories {
@@ -22,10 +22,8 @@ buildscript {
 
     dependencies {
         classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
-
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.junit.platform:junit-platform-gradle-plugin:$junit_platform_version"
-//        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
 
     }
 }
