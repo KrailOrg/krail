@@ -61,7 +61,8 @@ class BaseConverterSet @Inject constructor(@field:Transient override val errorMe
 
         val emp = errorMessageProviderProvider.get()
         val converter: Any = when (converterPair) {
-            ConverterPair(String::class, Int::class) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class.java, Int::class.java) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class.java, Integer::class.java) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
             else -> {
                 throw UnsupportedOperationException("Conversion between $converterPair is not supported")
             }
@@ -109,7 +110,9 @@ class KrailConverterErrorMessageProvider @Inject constructor(private val transla
 }
 
 
-data class ConverterPair(val presentation: KClass<out Any>, val model: KClass<out Any>) : Serializable
+data class ConverterPair(val presentation: Class<out Any>, val model: Class<out Any>) : Serializable {
+    constructor(presentation: KClass<out Any>, model: KClass<out Any>) : this(presentation.java, model.java)
+}
 
 /**
  * Uses all configured instances of [ConverterSet] to find a suitable [Converter].  Additional [ConverterSet]s can be defined

@@ -3,7 +3,6 @@ package uk.q3c.krail.core.form
 import com.vaadin.ui.FormLayout
 import com.vaadin.ui.Layout
 import java.io.Serializable
-import kotlin.reflect.KClass
 
 /**
  ** [entityClass] must always be provided
@@ -27,13 +26,13 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
 //    val detailConfiguration = DetailConfiguration()
 
     var name: String = "standard"
-    var entityClass: KClass<*> = Any::class
+    var entityClass: Class<*> = Any::class.java
     override var styleAttributes = StyleAttributes()
     var excludedProperties: List<String> = listOf() // used only if displayOrder not specified
 
     var columnOrder: MutableSet<String> = mutableSetOf()
 
-    var layout: KClass<out Layout> = FormLayout::class
+    var layout: Class<out Layout> = FormLayout::class.java
     var fieldOrder: List<String> = mutableListOf()  // if specified must contain all required properties
 
 

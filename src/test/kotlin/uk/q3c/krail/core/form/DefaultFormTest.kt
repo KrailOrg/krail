@@ -196,7 +196,7 @@ class FormConfiguration1 : FormConfiguration() {
 
     override fun config() {
         section {
-            entityClass = Person::class
+            entityClass = Person::class.java
         }
     }
 

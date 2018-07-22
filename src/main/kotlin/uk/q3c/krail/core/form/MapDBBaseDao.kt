@@ -2,6 +2,7 @@ package uk.q3c.krail.core.form
 
 import org.apache.commons.lang3.NotImplementedException
 import org.mapdb.DB
+import uk.q3c.krail.core.persist.MapDbFormDaoFactory
 import java.util.concurrent.ConcurrentMap
 import javax.cache.Cache
 import javax.cache.CacheManager
@@ -18,12 +19,23 @@ import kotlin.reflect.KClass
  *
  * Created by David Sowerby on 15 Jul 2018
  */
-class MapDBBaseDao<T : Any>(db: DB, entityClass: KClass<T>) : Cache<String, T>, AbstractBaseDao<T>() {
+class MapDBBaseDao<T : Any>(val daoFactory: MapDbFormDaoFactory, entityClass: KClass<T>) : Cache<String, T>, AbstractBaseDao<T>() {
+
+    private val mapName: String = entityClass.java.name
+    private val db: DB
+        get   () {
+            return daoFactory.db()
+        }
+
     override fun get(): List<T> {
         return ArrayList(map.values)
     }
 
-    private val map = db.hashMap(entityClass.java.name).createOrOpen() as ConcurrentMap<String, T>
+    @Suppress("UNCHECKED_CAST")
+    private val map: ConcurrentMap<String, T>
+        get() {
+            return daoFactory.db().hashMap(mapName).createOrOpen() as ConcurrentMap<String, T>
+        }
 
     override fun get(key: String): T? {
         return map[key] // Normally this should invoke the cache loader
@@ -50,16 +62,19 @@ class MapDBBaseDao<T : Any>(db: DB, entityClass: KClass<T>) : Cache<String, T>, 
 
     override fun put(key: String, value: T) {
         map[key] = value
+        db.commit()
     }
 
     override fun getAndPut(key: String, value: T): T? {
         val oldValue = map.get(key = key)
         map[key] = value
+        db.commit()
         return oldValue
     }
 
     override fun putAll(map: Map<out String, T>) {
         map.forEach { (k, v) -> put(k, v) }
+        db.commit()
     }
 
     override fun putIfAbsent(key: String, value: T): Boolean {
@@ -98,10 +113,12 @@ class MapDBBaseDao<T : Any>(db: DB, entityClass: KClass<T>) : Cache<String, T>, 
 
     override fun removeAll() {
         removeAll(map.keys)
+        db.commit()
     }
 
     override fun clear() {
         map.clear()
+        db.commit()
     }
 
     override fun <C : Configuration<String, T>> getConfiguration(clazz: Class<C>): C? {
@@ -126,7 +143,7 @@ class MapDBBaseDao<T : Any>(db: DB, entityClass: KClass<T>) : Cache<String, T>, 
     }
 
     override fun close() {
-
+        daoFactory.db().close()
     }
 
     override fun isClosed(): Boolean {

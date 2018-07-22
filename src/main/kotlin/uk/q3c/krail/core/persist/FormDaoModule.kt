@@ -2,11 +2,15 @@ package uk.q3c.krail.core.persist
 
 import com.google.inject.AbstractModule
 import com.google.inject.Singleton
+import org.apache.commons.io.FileUtils
+import org.mapdb.DB
 import org.mapdb.DBMaker
 import uk.q3c.krail.core.form.BaseDao
 import uk.q3c.krail.core.form.FormDao
 import uk.q3c.krail.core.form.FormDaoFactory
 import uk.q3c.krail.core.form.MapDBBaseDao
+import java.io.File
+import java.io.Serializable
 import kotlin.reflect.KClass
 
 /**
@@ -26,12 +30,28 @@ class FormDaoModule : AbstractModule() {
 /**
  * MapDb implementation of the [BaseDao] interface is very limited - not intended for real use
  */
-class MapDbFormDaoFactory : FormDaoFactory {
+class MapDbFormDaoFactory : FormDaoFactory, Serializable {
 
-    val db = DBMaker.memoryDB().make()
+    @Transient
+    private var db: DB? = null
+    val dbFile: File
+
+    init {
+        val tempDir: File = FileUtils.getTempDirectory()
+        dbFile = File(tempDir, "mapdb.db")
+    }
+
 
     override fun <T : Any> getDao(entityClass: KClass<T>): FormDao<T> {
-        return FormDao<T>(MapDBBaseDao(db = db, entityClass = entityClass))
+        return FormDao(MapDBBaseDao(daoFactory = this, entityClass = entityClass))
+    }
+
+    fun db(): DB {
+        if (db == null) {
+
+            db = DBMaker.fileDB(dbFile).make()
+        }
+        return db as DB
     }
 }
 

@@ -245,7 +245,7 @@ private class SimpleFormConfiguration1 : FormConfiguration() {
         section.name = "single"
         section.excludedProperties = listOf("id")
         sections.add(section)
-        section.entityClass = Person::class
+        section.entityClass = Person::class.java
         section.styleAttributes.borderless = StyleBorderless.yes
         val titleConfig = PropertyConfiguration("title", section)
         section.properties[titleConfig.name] = titleConfig

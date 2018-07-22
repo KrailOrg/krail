@@ -53,7 +53,7 @@ class StandardFormBuilder @Inject constructor(
         if (sectionConfiguration.entityClass == Any::class) {
             throw FormConfigurationException("entityClass must be specified")
         }
-        val sectionBuilder = StandardFormSectionBuilder(entityClass = sectionConfiguration.entityClass, binderFactory = binderFactory, propertySpecCreator = propertySpecCreator, formSupport = formSupport, configuration = sectionConfiguration, currentLocale = currentLocale)
+        val sectionBuilder = StandardFormSectionBuilder(entityClass = sectionConfiguration.entityClass.kotlin, binderFactory = binderFactory, propertySpecCreator = propertySpecCreator, formSupport = formSupport, configuration = sectionConfiguration, currentLocale = currentLocale)
         val pageParams = navigationStateExt.to.parameters
         if (pageParams.containsKey("id")) {
             return sectionBuilder.buildDetail(formDaoFactory, translate)

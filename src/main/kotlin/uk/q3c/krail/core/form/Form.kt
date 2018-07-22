@@ -113,12 +113,12 @@ class DefaultForm @Inject constructor(
 }
 
 
-interface FormSection {
+interface FormSection : Serializable {
     val rootComponent: Component
     fun loadData(parameters: Map<String, String>)
 }
 
-class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : Serializable, FormSection {
+class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : FormSection {
 
     fun translate(translate: Translate, currentLocale: CurrentLocale) {
         propertyMap.forEach { k, v ->
@@ -137,7 +137,7 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
     }
 }
 
-class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : Serializable, FormSection, SelectionListener<BEAN> {
+class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : FormSection, SelectionListener<BEAN> {
     override fun selectionChange(event: SelectionEvent<BEAN>) {
         val selectedItem = event.firstSelectedItem
         if (selectedItem.isPresent) {
@@ -224,7 +224,7 @@ open class FormModule : AbstractModule() {
 
 }
 
-interface BaseDao<BEAN : Any> : Cache<String, BEAN> {
+interface BaseDao<BEAN : Any> : Cache<String, BEAN>, Serializable {
 
     fun put(vararg beans: BEAN)
     fun get(): List<BEAN>
@@ -237,7 +237,7 @@ interface FormDaoFactory {
 }
 
 
-class FormDao<T : Any>(baseDao: MapDBBaseDao<T>) : BaseDao<T> by baseDao, Serializable {
+class FormDao<T : Any>(baseDao: BaseDao<T>) : BaseDao<T> by baseDao, Serializable {
     fun applyFilter() {
         TODO()
     }

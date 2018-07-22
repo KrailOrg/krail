@@ -21,7 +21,7 @@ object PropertyConfigurationBuilderTest : Spek({
 
         on("processing a SectionConfiguration with a specified displayOrder") {
             val config1 = FormSectionConfiguration(formConfiguration)
-            config1.entityClass = Person::class
+            config1.entityClass = Person::class.java
             config1.fieldOrder = listOf("name", "age", "id")
             config1.excludedProperties = listOf("id")
             builder.build(config1, propertySpecCreator)
@@ -40,7 +40,7 @@ object PropertyConfigurationBuilderTest : Spek({
 
         on("processing a SectionConfiguration with no displayOrder specified") {
             val config1 = FormSectionConfiguration(formConfiguration)
-            config1.entityClass = Person::class
+            config1.entityClass = Person::class.java
             config1.excludedProperties = listOf("id")
             builder.build(config1, propertySpecCreator)
 

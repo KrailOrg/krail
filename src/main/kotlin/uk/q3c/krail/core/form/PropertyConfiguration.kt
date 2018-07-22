@@ -23,7 +23,7 @@ enum class StyleBorderless(val value: String) {
 }
 
 @FormDsl
-class StyleAttributes {
+class StyleAttributes : Serializable {
     var size = StyleSize.no_change
     var borderless = StyleBorderless.no_change
     var alignment = StyleAlignment.no_change
@@ -61,12 +61,13 @@ class StyleAttributes {
  * When setting validation, http://piotrnowicki.com/2011/02/float-and-double-in-java-inaccurate-result/
  *
  * [caption] and [description] must be set manually
+ *
+ * Java Class is used rather than Kotlin KClass, because KClass is not serializable
  */
 @FormDsl
 class PropertyConfiguration(val name: String, override val parentConfiguration: ParentConfiguration) : ChildConfiguration, FormConfigurationCommon, Serializable {
-    var columnRendererClass: KClass<AbstractRenderer<*, *>> = AbstractRenderer::class
-
-    var propertyValueClass: KClass<out Any> = Any::class
+    var columnRendererClass: Class<AbstractRenderer<*, *>> = AbstractRenderer::class.java
+    var propertyValueClass: Class<out Any> = Any::class.java
     var componentClass: Class<out HasValue<*>> = HasValue::class.java
     var converterClass: Class<out Converter<*, *>> = Converter::class.java
     var caption: I18NKey = LabelKey.Unnamed

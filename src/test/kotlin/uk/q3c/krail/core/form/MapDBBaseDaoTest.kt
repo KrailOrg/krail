@@ -6,7 +6,7 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import org.mapdb.DBMaker
+import uk.q3c.krail.core.persist.MapDbFormDaoFactory
 
 
 /**
@@ -15,7 +15,7 @@ import org.mapdb.DBMaker
 object MapDBBaseDaoTest : Spek({
 
     given("a MapDb") {
-        val db = DBMaker.memoryDB().make()
+        val dbFactory = MapDbFormDaoFactory()
         lateinit var dao: MapDBBaseDao<Person>
         lateinit var person1: Person
         lateinit var person2: Person
@@ -31,7 +31,12 @@ object MapDBBaseDaoTest : Spek({
             person4 = Person(id = "person4", age = 43, name = "Wiggly4")
             person5 = Person(id = "person5", age = 53, name = "Wiggly5")
             person6 = Person(id = "person6", age = 23, name = "Wiggly6")
-            dao = MapDBBaseDao(db, Person::class)
+            dao = MapDBBaseDao(dbFactory, Person::class)
+        }
+
+        afterEachTest {
+            dbFactory.db().close()
+            dbFactory.dbFile.delete()
         }
 
         on("putting a value") {

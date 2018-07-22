@@ -6,7 +6,6 @@ import com.vaadin.data.HasValue
 import com.vaadin.ui.AbstractComponent
 import com.vaadin.ui.Component
 import com.vaadin.ui.Grid
-import com.vaadin.ui.renderers.AbstractRenderer
 import net.jodah.typetools.TypeResolver
 import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
@@ -17,7 +16,6 @@ import uk.q3c.krail.i18n.Translate
 import java.io.Serializable
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
 
 /**
@@ -37,11 +35,12 @@ class StandardFormSectionBuilder<BEAN : Any>(
 
     var binder: KrailBeanValidationBinder<BEAN> = binderFactory.create(entityClass)
 
+    @Suppress("UNCHECKED_CAST")
     fun buildTable(form: Form, formDaoFactory: FormDaoFactory, translate: Translate): FormSection {
         PropertyConfigurationBuilder().build(configuration, propertySpecCreator)
 //        val propertySet: PropertySet<BEAN> = BeanPropertySet.get(configuration.entityClass.java, false, PropertyFilterDefinition(1,listOf() )) as PropertySet<BEAN>
 //        val grid = Grid<BEAN>(propertySet) this constructor is protected - could sub-class
-        val grid = Grid(configuration.entityClass.java) as Grid<BEAN>
+        val grid = Grid(configuration.entityClass) as Grid<BEAN>
         grid.locale = currentLocale.locale
         grid.setSelectionMode(Grid.SelectionMode.SINGLE)
         grid.setColumnOrder(*(configuration.columnOrder.toTypedArray()))
@@ -52,7 +51,7 @@ class StandardFormSectionBuilder<BEAN : Any>(
                 c.isHidden = true
             }
         }
-        val formDao: FormDao<BEAN> = formDaoFactory.getDao(configuration.entityClass) as FormDao<BEAN>
+        val formDao: FormDao<BEAN> = formDaoFactory.getDao(configuration.entityClass.kotlin) as FormDao<BEAN>
         configuration.columnOrder.forEach { c -> grid.getColumn(c).isHidden = false }
 
 
@@ -67,21 +66,22 @@ class StandardFormSectionBuilder<BEAN : Any>(
         return fts
     }
 
-    private fun <G : Grid<BEAN>> buildTableColumns(grid: G) {
-        for (propertySpecEntry in configuration.properties) {
-            val propertyConfig = propertySpecEntry.value
-
-            // we use the specified renderer if there is one, otherwise get the default from FormSupport
-            val renderer: AbstractRenderer<in Any, out Any> = if (propertyConfig.columnRendererClass == AbstractRenderer::class) {
-                formSupport.rendererFor(propertyConfig.propertyValueClass, grid as Grid<Any>)
-            } else {
-                propertyConfig.columnRendererClass.createInstance() as AbstractRenderer<in Any, out Any> // TODO how do we set the locale for this - Renderer does not surface locale
-            }
-
-            val column: Grid.Column<BEAN, *> = grid.addColumn(propertyConfig.name, renderer)
-
-        }
-    }
+//    @Suppress("UNCHECKED_CAST")
+//    private fun <G : Grid<BEAN>> buildTableColumns(grid: G) {
+//        for (propertySpecEntry in configuration.properties) {
+//            val propertyConfig = propertySpecEntry.value
+//
+//            // we use the specified renderer if there is one, otherwise get the default from FormSupport
+//            val renderer: AbstractRenderer<in Any, out Any> = if (propertyConfig.columnRendererClass == AbstractRenderer::class) {
+//                formSupport.rendererFor(propertyConfig.propertyValueClass.kotlin, grid as Grid<Any>)
+//            } else {
+//                propertyConfig.columnRendererClass.newInstance() as AbstractRenderer<in Any, out Any> // TODO how do we set the locale for this - Renderer does not surface locale
+//            }
+//
+//            val column: Grid.Column<BEAN, *> = grid.addColumn(propertyConfig.name, renderer)
+//
+//        }
+//    }
 
 
     fun buildDetail(formDaoFactory: FormDaoFactory, translate: Translate): FormDetailSection<BEAN> {
@@ -95,7 +95,7 @@ class StandardFormSectionBuilder<BEAN : Any>(
 
             // if the componentClass has not been explicitly set, read from the property
             val component: HasValue<*> = if (propertySpec.componentClass == HasValue::class.java) {
-                formSupport.componentFor(propertySpec.propertyValueClass).get()
+                formSupport.componentFor(propertySpec.propertyValueClass.kotlin).get()
             } else {
                 propertySpec.componentClass.newInstance()
             }
@@ -105,10 +105,10 @@ class StandardFormSectionBuilder<BEAN : Any>(
             }
             // we have a component but we need to know the type of data it requires so we can select the right converter
             val presentationValueClass = TypeResolver.resolveRawArgument(HasValue::class.java, component.javaClass).kotlin
-            doBind(propertySpec.propertyValueClass, presentationValueClass, component, propertySpec, translate)
+            doBind(propertySpec.propertyValueClass.kotlin, presentationValueClass, component, propertySpec, translate)
 
         }
-        val layout = configuration.layout.createInstance()
+        val layout = configuration.layout.newInstance()
         componentMap.forEach { entry -> layout.addComponent(entry.value.component) }
         return FormDetailSection(componentMap, layout, binder, formDaoFactory.getDao(entityClass = entityClass))
 
@@ -117,10 +117,10 @@ class StandardFormSectionBuilder<BEAN : Any>(
 
 
     @Suppress("UNCHECKED_CAST")
-    private fun <MODEL : Any, PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> doBind(modelClass: KClass<MODEL>, presentationValueClass: KClass<PRESENTATIONVALUE>, component: HasValue<*>, propertySpec: PropertyConfiguration, translate: Translate) {
+    private fun <MODEL : Any, PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> doBind(@Suppress("UNUSED_PARAMETER") modelClass: KClass<MODEL>, presentationValueClass: KClass<PRESENTATIONVALUE>, component: HasValue<*>, propertySpec: PropertyConfiguration, translate: Translate) {
         val typedComponent: PRESENTATION = component as PRESENTATION
         val binderBuilder = binder.forField(typedComponent)
-        val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass as KClass<MODEL>)
+        val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass.kotlin as KClass<MODEL>)
         val binderBuilderWithConverter = binderBuilder.withConverter(converter)
         propertySpec.validations.forEach { v ->
             val validator = v as KrailValidator<in MODEL>
@@ -183,8 +183,8 @@ class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfig
     }
 
     private fun propertyType(property: Field, spec: PropertyConfiguration) {
-        if (spec.propertyValueClass == Any::class) {
-            spec.propertyValueClass = property.type.kotlin
+        if (spec.propertyValueClass == Any::class.java) {
+            spec.propertyValueClass = property.type
         }
     }
 
@@ -245,14 +245,14 @@ class PropertyConfigurationBuilder {
      */
     private fun buildFieldList(configuration: FormSectionConfiguration): List<Field> {
         return if (configuration.fieldOrder.isEmpty()) {
-            FieldUtils.getAllFieldsList(configuration.entityClass.java).filter { f -> !(configuration.excludedProperties.contains(f.name)) }
+            FieldUtils.getAllFieldsList(configuration.entityClass).filter { f -> !(configuration.excludedProperties.contains(f.name)) }
         } else {
             val listOfFields: MutableList<Field> = mutableListOf()
             val entityClass = configuration.entityClass
             configuration.fieldOrder
                     .filter { p -> !(configuration.excludedProperties.contains(p)) }
                     .forEach { p ->
-                        val field: Field = FieldUtils.getDeclaredField(entityClass.java, p, true)
+                        val field: Field = FieldUtils.getDeclaredField(entityClass, p, true)
                         listOfFields.add(field)
                     }
             listOfFields
