@@ -7,6 +7,7 @@ import com.vaadin.data.ErrorMessageProvider
 import com.vaadin.data.Result
 import com.vaadin.data.ValueContext
 import com.vaadin.data.converter.StringToIntegerConverter
+import com.vaadin.ui.ComboBox
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
@@ -31,6 +32,7 @@ interface ConverterProvider : Serializable {
      * Returns a [Converter] to match [converterPair], or a [NoConversionConverter] if the pair is not supported
      */
     fun get(converterPair: ConverterPair): Converter<Any, Any>
+
     fun supports(converterPair: ConverterPair): Boolean
 }
 
@@ -165,6 +167,38 @@ inline fun <reified L : Any, reified R : Any> isSubClassOf(): Boolean {
 
 inline fun <reified L : Any, reified R : Any> isSuperClassOf(): Boolean {
     return L::class.java.isAssignableFrom(R::class.java)
+}
+
+class DefaultSingleSelectionComboConverter<T : Any> : Converter<T, DefaultSingleSelectProperty<T>> {
+
+    private lateinit var property: DefaultSingleSelectProperty<T>
+
+    override fun convertToPresentation(value: DefaultSingleSelectProperty<T>, context: ValueContext): T {
+        @Suppress("UNCHECKED_CAST")
+        val c = context.component.get() as ComboBox<T>
+        property = value
+
+        c.isEmptySelectionAllowed = value.allowNoSelection
+        c.setItems(value.permittedValues)
+        if (value.hasValue()) {
+            c.setSelectedItem(value.selected())
+        } else {
+            c.setSelectedItem(null)
+        }
+        return c.selectedItem.get()
+    }
+
+    override fun convertToModel(value: T, context: ValueContext): Result<DefaultSingleSelectProperty<T>> {
+        @Suppress("UNCHECKED_CAST")
+        val c = context.component.get() as ComboBox<T>
+        if (c.selectedItem.isPresent) {
+            property.select(c.selectedItem.get())
+        } else {
+            property.deselect()
+        }
+        return Result.ok(property)
+    }
+
 }
 
 //fun <PRESENTATION : Any, MODEL : Any> createStringConverter(modelType: Class<MODEL>): Converter<PRESENTATION, MODEL> {

@@ -101,7 +101,7 @@ class StandardFormSectionBuilder<BEAN : Any>(
             }
             if (component is AbstractComponent) {
                 component.styleName = propertySpec.styleAttributes.combinedStyle()
-                componentMap[propertySpec.name] = DetailPropertyInfo(component = component, captionKey = propertySpec.caption, descriptionKey = propertySpec.description)
+                componentMap[propertySpec.name] = DetailPropertyInfo(component = component, captionKey = propertySpec.caption, descriptionKey = propertySpec.description, isDelegate = propertySpec.isDelegate)
             }
             // we have a component but we need to know the type of data it requires so we can select the right converter
             val presentationValueClass = TypeResolver.resolveRawArgument(HasValue::class.java, component.javaClass).kotlin
@@ -120,20 +120,25 @@ class StandardFormSectionBuilder<BEAN : Any>(
     private fun <MODEL : Any, PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>> doBind(@Suppress("UNUSED_PARAMETER") modelClass: KClass<MODEL>, presentationValueClass: KClass<PRESENTATIONVALUE>, component: HasValue<*>, propertySpec: PropertyConfiguration, translate: Translate) {
         val typedComponent: PRESENTATION = component as PRESENTATION
         val binderBuilder = binder.forField(typedComponent)
-        val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass.kotlin as KClass<MODEL>)
-        val binderBuilderWithConverter = binderBuilder.withConverter(converter)
-        propertySpec.validations.forEach { v ->
-            val validator = v as KrailValidator<in MODEL>
-            validator.translate = translate
-            binderBuilderWithConverter.withValidator(validator)
-        }
 
-        binderBuilderWithConverter.bind(propertySpec.name)
+        if (SelectPropertyDelegate::class.java.isAssignableFrom(modelClass.java)) {
+            binderBuilder.bind(propertySpec.name)
+        } else {
+            val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass.kotlin as KClass<MODEL>)
+            val binderBuilderWithConverter = binderBuilder.withConverter(converter)
+            propertySpec.validations.forEach { v ->
+                val validator = v as KrailValidator<in MODEL>
+                validator.translate = translate
+                binderBuilderWithConverter.withValidator(validator)
+            }
+
+            binderBuilderWithConverter.bind(propertySpec.name)
+        }
     }
 }
 
 
-data class DetailPropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component) : Serializable
+data class DetailPropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component, val isDelegate: Boolean) : Serializable
 
 
 /**
@@ -169,8 +174,15 @@ interface PropertyConfigurationCreator {
 class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfigurationCreator {
 
     override fun createConfiguration(property: Field, configuration: FormSectionConfiguration) {
-        val spec = configuration.properties[property.name]
-                ?: PropertyConfiguration(name = property.name, parentConfiguration = configuration)
+        if (property.name == "\$\$delegatedProperties") {
+            return
+        }
+        val delegateId = "\$delegate"
+        val refinedName = property.name.removeSuffix(delegateId)
+
+
+        val spec = configuration.properties[refinedName]
+                ?: PropertyConfiguration(name = refinedName, parentConfiguration = configuration)
         configuration.properties[property.name] = spec
         propertyType(property, spec)
 //        fieldClass(property,spec, formSupport)
@@ -186,6 +198,9 @@ class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfig
         if (spec.propertyValueClass == Any::class.java) {
             spec.propertyValueClass = property.type
         }
+        val delegateId = "\$delegate"
+        spec.isDelegate = property.name.contains(delegateId)
+
     }
 
 //    private fun fieldClass(property: Field, spec: PropertyConfiguration, formSupport: FormSupport) {

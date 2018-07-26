@@ -45,7 +45,7 @@ object PropertyConfigurationBuilderTest : Spek({
             builder.build(config1, propertySpecCreator)
 
             it("contains all the entity properties except the excluded one") {
-                config1.properties.size.shouldBe(5)
+                config1.properties.size.shouldBe(6)
                 //These would throw an exception if not found
                 config1.properties.values.first { f -> f.name == "name" }
                 config1.properties.values.first { f -> f.name == "age" }

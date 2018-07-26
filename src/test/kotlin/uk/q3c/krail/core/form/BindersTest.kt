@@ -135,7 +135,17 @@ class Person(
         @field:Max(12)
         var age: Int,
         var joinDate: LocalDate = LocalDate.parse("2010-12-31"),
-        var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable, Entity
+        var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable, Entity {
+
+    var pricePlan: Int by SingleSelectPropertyDelegate<Person, Int>(setOf(1, 3))
+
+    init {
+        pricePlan = 3
+    }
+}
+
+
+
 
 private class TestSupportModule : AbstractModule() {
     override fun configure() {

@@ -13,6 +13,7 @@ import com.vaadin.shared.ui.colorpicker.Color
 import com.vaadin.ui.AbstractComponent
 import com.vaadin.ui.CheckBox
 import com.vaadin.ui.ColorPicker
+import com.vaadin.ui.ComboBox
 import com.vaadin.ui.Component
 import com.vaadin.ui.DateField
 import com.vaadin.ui.DateTimeField
@@ -118,6 +119,7 @@ interface FormSection : Serializable {
     fun loadData(parameters: Map<String, String>)
 }
 
+
 class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : FormSection {
 
     fun translate(translate: Translate, currentLocale: CurrentLocale) {
@@ -131,25 +133,23 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
         }
     }
 
-    override fun loadData(parameters: Map<String, String>) {
-        val bean = dao.get("id")
-        binder.readBean(bean)
-    }
-}
 
-class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : FormSection, SelectionListener<BEAN> {
-    override fun selectionChange(event: SelectionEvent<BEAN>) {
-        val selectedItem = event.firstSelectedItem
-        if (selectedItem.isPresent) {
-            val bean = selectedItem.get()
-            if (bean is Entity) {
-                form.changeRoute(bean.id)
+    override fun loadData(parameters: Map<String, String>) {
+        val bean = dao.get("id") // TODO use params
+        for (entry in propertyMap) {
+            if (entry.value.isDelegate) {
+                val jprops = bean!!::class.java.declaredFields.asList()
+                val propDelegateField = jprops.first { p ->
+                    "${entry.key}\$delegate" == p.name
+                }
+                propDelegateField.isAccessible = true
+
+                val delegate = propDelegateField.get(bean)
+                (delegate as SelectPropertyDelegate).configureComponent(entry.value.component)
             }
         }
-    }
 
-    override fun loadData(parameters: Map<String, String>) {
-        rootComponent.setItems(dao.get())
+        binder.readBean(bean)
     }
 }
 
@@ -202,6 +202,7 @@ open class FormModule : AbstractModule() {
         dataClassToFieldMap.addBinding(LocalDate::class.java).to(DateField::class.java)
         dataClassToFieldMap.addBinding(Color::class.java).to(ColorPicker::class.java)
         dataClassToFieldMap.addBinding(Boolean::class.javaPrimitiveType).to(CheckBox::class.java)
+        dataClassToFieldMap.addBinding(SingleSelectPropertyDelegate::class.java).to(ComboBox::class.java)
     }
 
 
@@ -246,4 +247,21 @@ class FormDao<T : Any>(baseDao: BaseDao<T>) : BaseDao<T> by baseDao, Serializabl
 
 interface Entity {
     val id: String
+}
+
+
+class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : FormSection, SelectionListener<BEAN> {
+    override fun selectionChange(event: SelectionEvent<BEAN>) {
+        val selectedItem = event.firstSelectedItem
+        if (selectedItem.isPresent) {
+            val bean = selectedItem.get()
+            if (bean is Entity) {
+                form.changeRoute(bean.id)
+            }
+        }
+    }
+
+    override fun loadData(parameters: Map<String, String>) {
+        rootComponent.setItems(dao.get())
+    }
 }

@@ -73,6 +73,7 @@ class PropertyConfiguration(val name: String, override val parentConfiguration: 
     var caption: I18NKey = LabelKey.Unnamed
     var description: I18NKey = DescriptionKey.No_description_provided
     var validations: MutableList<KrailValidator<*>> = mutableListOf()
+    var isDelegate: Boolean = false
     override var styleAttributes = StyleAttributes()
 
 

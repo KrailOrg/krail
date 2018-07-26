@@ -1,8 +1,12 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package uk.q3c.krail.core.form
 
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.vaadin.data.provider.ListDataProvider
+import com.vaadin.ui.ComboBox
 import com.vaadin.ui.DateField
 import com.vaadin.ui.FormLayout
 import com.vaadin.ui.Grid
@@ -18,6 +22,7 @@ import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
@@ -88,7 +93,7 @@ object StandardFormSectionBuilderTest : Spek({
 
 
             it("has the correct number of components") {
-                section.propertyMap.size.shouldBe(5)
+                section.propertyMap.size.shouldBe(6)
             }
 
             it("creates default components where none specified") {
@@ -115,7 +120,7 @@ object StandardFormSectionBuilderTest : Spek({
             }
 
             it("has added the components to the layout") {
-                section.rootComponent.componentCount.shouldBe(5)
+                section.rootComponent.componentCount.shouldBe(6)
             }
 
             it("ignores excluded properties") {
@@ -126,6 +131,17 @@ object StandardFormSectionBuilderTest : Spek({
                 section.propertyMap["joinDate"]!!.component.caption.shouldBeNull()
                 section.propertyMap["joinDate"]!!.captionKey.shouldBe(TestPersonKey.date_joined)
                 section.propertyMap["joinDate"]!!.descriptionKey.shouldBe(No_description_provided)
+            }
+
+            it("has configured a combo box") {
+                section.propertyMap["pricePlan"]!!.component is ComboBox<*>
+                val cb = section.propertyMap["pricePlan"]!!.component as ComboBox<Int>
+                with(cb) {
+                    (dataProvider as ListDataProvider<Int>).items.shouldContain(1)
+                    (dataProvider as ListDataProvider<Int>).items.shouldContain(3)
+                    (dataProvider as ListDataProvider<Int>).items.size.shouldBe(2)
+                    isEmptySelectionAllowed.shouldBeFalse()
+                }
             }
 
 
@@ -185,7 +201,7 @@ object StandardFormSectionBuilderTest : Spek({
             }
 
             it("hides the columns that are not specified in columnOrder") {
-                grid.columns.size.shouldBe(6)
+                grid.columns.size.shouldBe(7)
                 grid.getColumn("name").isHidden.shouldBeFalse()
                 grid.getColumn("age").isHidden.shouldBeFalse()
                 grid.getColumn("joinDate").isHidden.shouldBeFalse()
@@ -270,7 +286,6 @@ private enum class TestPersonKey : I18NKey {
 
 
 private class StandardFormSectionBuilderTestModule : AbstractModule() {
-
     val daoFactory: FormDaoFactory = mockk(relaxed = true)
     val dao: FormDao<Person> = mockk()
     val person1 = Person(name = "mock person 1", age = 12)
