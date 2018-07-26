@@ -62,12 +62,13 @@ interface SelectPropertyDelegate {
  * Delegate used to select a single value from potentially multiple options.
  */
 class SingleSelectPropertyDelegate<BEAN : Any, T : Any>(permittedValues: Set<T>, allowNoSelection: Boolean = false) : ReadWriteProperty<BEAN, T>, Serializable, SelectPropertyDelegate {
-    @Suppress("UNCHECKED_CAST")
+
     override fun configureComponent(component: Component) {
         if (component is ComboBox<*>) {
+            @Suppress("UNCHECKED_CAST")
             val c = component as ComboBox<T>
-            component.setItems(selector.permittedValues)
-            component.isEmptySelectionAllowed = selector.allowNoSelection
+            c.setItems(selector.permittedValues)
+            c.isEmptySelectionAllowed = selector.allowNoSelection
         } else {
             throw SingleSelectionException("component not supported")
         }
