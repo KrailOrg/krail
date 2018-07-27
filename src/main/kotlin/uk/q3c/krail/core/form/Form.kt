@@ -19,6 +19,7 @@ import com.vaadin.ui.DateField
 import com.vaadin.ui.DateTimeField
 import com.vaadin.ui.Grid
 import com.vaadin.ui.Layout
+import com.vaadin.ui.ListSelect
 import com.vaadin.ui.TextField
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.view.KrailView
@@ -203,6 +204,7 @@ open class FormModule : AbstractModule() {
         dataClassToFieldMap.addBinding(Color::class.java).to(ColorPicker::class.java)
         dataClassToFieldMap.addBinding(Boolean::class.javaPrimitiveType).to(CheckBox::class.java)
         dataClassToFieldMap.addBinding(SingleSelectPropertyDelegate::class.java).to(ComboBox::class.java)
+        dataClassToFieldMap.addBinding(MultiSelectPropertyDelegate::class.java).to(ListSelect::class.java)
     }
 
 

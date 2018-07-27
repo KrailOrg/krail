@@ -1,9 +1,10 @@
 package uk.q3c.krail.core.form
 
-import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeFalse
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldContain
+import org.amshove.kluent.shouldContainAll
 import org.amshove.kluent.shouldNotThrow
 import org.amshove.kluent.shouldThrow
 import org.apache.commons.lang3.SerializationUtils
@@ -13,15 +14,14 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 
 /**
- * Created by David Sowerby on 23 Jul 2018
+ * Created by David Sowerby on 27 Jul 2018
  */
-object DefaultSingleSelectPropertyTest : Spek({
-
+object DefaultMultiSelectPropertyTest : Spek({
     given("property representing a single selection") {
 
         on("default construction") {
-            val v = DefaultSingleSelectProperty(setOf())
-            val selectedValue = { v.selected() }
+            val v = DefaultMultiSelectProperty(setOf())
+            val selectedValue = v.selected()
 
             it("has no value") {
                 v.hasValue().shouldBeFalse()
@@ -31,48 +31,48 @@ object DefaultSingleSelectPropertyTest : Spek({
                 v.dataProvider.items.shouldBeEmpty()
             }
 
-            it("does not allow selection of no value") {
-                v.allowNoSelection.shouldBeFalse()
+            it("allows selection of no value") {
+                v.allowNoSelection.shouldBeTrue()
             }
 
-            it("should throw exception if select() called") {
-                selectedValue.shouldThrow(SingleSelectException::class)
+            it("should return empty set if select() called") {
+                selectedValue.shouldBeEmpty()
             }
         }
 
         on("setting a permitted value") {
-            val v = DefaultSingleSelectProperty(setOf(1, 3, 7))
+            val v = DefaultMultiSelectProperty(setOf(1, 3, 7))
             v.select(3)
 
             it("returns the selected value") {
-                v.selected().shouldEqual(3)
+                v.selected().shouldContain(3)
             }
         }
 
 
         on("setting a non-permitted value") {
-            val v = DefaultSingleSelectProperty(setOf(1, 3, 7))
+            val v = DefaultMultiSelectProperty(setOf(1, 3, 7))
             val selectResult = { v.select(8) }
 
             it("does not throw exception, we expect value to be valid") {
-                selectResult.shouldNotThrow(SingleSelectException::class)
+                selectResult.shouldNotThrow(MultiSelectException::class)
             }
         }
 
         on("deselecting when not allowed") {
-            val v = DefaultSingleSelectProperty(setOf(1, 3, 7))
+            val v = DefaultMultiSelectProperty(setOf(1, 3, 7), false)
             v.select(3)
-            val deselectResult = { v.deselect() }
+            val deselectResult = { v.deselect(3) }
 
             it("throws an exception") {
-                deselectResult.shouldThrow(SingleSelectException::class)
+                deselectResult.shouldThrow(MultiSelectException::class)
             }
         }
 
         on("deselecting when allowed") {
-            val v = DefaultSingleSelectProperty(setOf(1, 3, 7), true)
+            val v = DefaultMultiSelectProperty(setOf(1, 3, 7))
             v.select(3)
-            v.deselect()
+            v.deselect(3)
 
             it("has no value") {
                 v.hasValue().shouldBeFalse()
@@ -80,17 +80,17 @@ object DefaultSingleSelectPropertyTest : Spek({
         }
 
         on("clearing when not allowed") {
-            val v = DefaultSingleSelectProperty(setOf(1, 3, 7))
+            val v = DefaultMultiSelectProperty(setOf(1, 3, 7), false)
             v.select(3)
             val deselectResult = { v.clear() }
 
             it("throws an exception") {
-                deselectResult.shouldThrow(SingleSelectException::class)
+                deselectResult.shouldThrow(MultiSelectException::class)
             }
         }
 
         on("clearing when allowed") {
-            val v = DefaultSingleSelectProperty(setOf(1, 3, 7), true)
+            val v = DefaultMultiSelectProperty(setOf(1, 3, 7), true)
             v.select(3)
             v.clear()
 
@@ -101,32 +101,25 @@ object DefaultSingleSelectPropertyTest : Spek({
 
         on("setting delegated property to valid value") {
             val p = Person(age = 23, name = "Him")
-            p.pricePlan = 3
+            p.roles = setOf("a", "b")
 
             it("sets the value") {
-                p.pricePlan.shouldBe(3)
+                p.roles.shouldContainAll(listOf("a", "b"))
             }
         }
-
-        on("setting delegated property to invalid value") {
-            val p = Person(age = 23, name = "Him")
-            p.pricePlan = 0
-
-            it("sets the value, as we expect value to be valid") {
-                p.pricePlan.shouldEqual(0)
-            }
-        }
-
 
         on("serialisation") {
             val p = Person(age = 23, name = "Him")
-            p.pricePlan = 3
+            p.roles = setOf("a", "b")
+
             val output = SerializationUtils.serialize(p)
             val p2: Person = SerializationUtils.deserialize(output)
 
             it("should restore delegated value") {
-                p2.pricePlan.shouldBe(3)
+                p2.roles.shouldContainAll(listOf("a", "b"))
             }
         }
     }
+
+
 })

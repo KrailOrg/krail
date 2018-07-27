@@ -93,7 +93,7 @@ object StandardFormSectionBuilderTest : Spek({
 
 
             it("has the correct number of components") {
-                section.propertyMap.size.shouldBe(6)
+                section.propertyMap.size.shouldBe(7)
             }
 
             it("creates default components where none specified") {
@@ -120,7 +120,7 @@ object StandardFormSectionBuilderTest : Spek({
             }
 
             it("has added the components to the layout") {
-                section.rootComponent.componentCount.shouldBe(6)
+                section.rootComponent.componentCount.shouldBe(7)
             }
 
             it("ignores excluded properties") {
@@ -201,7 +201,7 @@ object StandardFormSectionBuilderTest : Spek({
             }
 
             it("hides the columns that are not specified in columnOrder") {
-                grid.columns.size.shouldBe(7)
+                grid.columns.size.shouldBe(8)
                 grid.getColumn("name").isHidden.shouldBeFalse()
                 grid.getColumn("age").isHidden.shouldBeFalse()
                 grid.getColumn("joinDate").isHidden.shouldBeFalse()
@@ -246,6 +246,7 @@ object StandardFormSectionBuilderTest : Spek({
 
     }
 })
+
 
 //object SimpleFormTypeBuilderTest : Spek({
 //

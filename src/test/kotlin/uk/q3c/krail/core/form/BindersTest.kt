@@ -138,13 +138,12 @@ class Person(
         var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable, Entity {
 
     var pricePlan: Int by SingleSelectPropertyDelegate<Person, Int>(setOf(1, 3))
+    var roles: Set<String> by MultiSelectPropertyDelegate<Person, String>(setOf("admin", "manager"))
 
     init {
         pricePlan = 3
     }
 }
-
-
 
 
 private class TestSupportModule : AbstractModule() {

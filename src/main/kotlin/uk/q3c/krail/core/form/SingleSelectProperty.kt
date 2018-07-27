@@ -1,6 +1,6 @@
 package uk.q3c.krail.core.form
 
-import com.vaadin.ui.CheckBoxGroup
+import com.vaadin.data.provider.ListDataProvider
 import com.vaadin.ui.ComboBox
 import com.vaadin.ui.Component
 import com.vaadin.ui.RadioButtonGroup
@@ -13,68 +13,52 @@ import kotlin.reflect.KProperty
  *
  * Created by David Sowerby on 22 Jul 2018
  */
-interface SingleSelectProperty<T> : Serializable {
-
-    /**
-     * The values which could be selected
-     */
-    val permittedValues: Set<T>
-
-    /**
-     * Allow an 'empty' selection
-     */
-    var allowNoSelection: Boolean
-
-    /**
-     * select a value
-     *
-     * @throws SingleSelectionException if the [newValue] is not in [permittedValues]
-     */
-    fun select(newValue: T)
+interface SingleSelectProperty<T : Any> : SelectProperty<T> {
 
     /**
      * Returns the currently selected value
      *
-     * @throws SingleSelectionException is no selection has been made (use [hasValue] to avoid exception
+     * @throws SingleSelectException is no selection has been made (use [hasValue] to avoid exception
      */
     fun selected(): T
 
     /**
-     * 'Clear' the selection, so that it has no value
+     * 'Clear' the selection, so that it has no value (same as [clear])
      */
     fun deselect()
 
-    /**
-     * Returns true if a valid selection has been made
-     */
-    fun hasValue(): Boolean
-}
 
-/**
- * A delegate used to select/lookup values form a list / range to assign to a property.  Component is usually a [ComboBox], [RadioButtonGroup], [CheckBoxGroup] or similar
- */
-interface SelectPropertyDelegate {
-    fun configureComponent(component: Component)
 }
-
 
 /**
  * Delegate used to select a single value from potentially multiple options.
  */
-class SingleSelectPropertyDelegate<BEAN : Any, T : Any>(permittedValues: Set<T>, allowNoSelection: Boolean = false) : ReadWriteProperty<BEAN, T>, Serializable, SelectPropertyDelegate {
+class SingleSelectPropertyDelegate<BEAN : Any, T : Any> @JvmOverloads constructor(dataProvider: ListDataProvider<T>, allowNoSelection: Boolean = false) : ReadWriteProperty<BEAN, T>, Serializable, SelectPropertyDelegate {
+
+    constructor (permittedValues: Set<T>, allowNoSelection: Boolean = false) : this(ListDataProvider(permittedValues), allowNoSelection)
+
+
+    private val selector = DefaultSingleSelectProperty<T>(dataProvider = dataProvider, allowNoSelection = allowNoSelection)
 
     override fun configureComponent(component: Component) {
-        if (component is ComboBox<*>) {
-            @Suppress("UNCHECKED_CAST")
-            val c = component as ComboBox<T>
-            c.setItems(selector.permittedValues)
-            c.isEmptySelectionAllowed = selector.allowNoSelection
-        } else {
-            throw SingleSelectionException("component not supported")
+
+        @Suppress("UNCHECKED_CAST")
+        when (component) {
+            is ComboBox<*> -> {
+                val c = component as ComboBox<T>
+                c.setDataProvider(selector.dataProvider)
+                c.isEmptySelectionAllowed = selector.allowNoSelection
+            }
+            is RadioButtonGroup<*> -> {
+                val c = component as RadioButtonGroup<T>
+                c.dataProvider = selector.dataProvider
+            }
+            else -> {
+                throw SingleSelectException("component not supported: ${component.javaClass}")
+            }
         }
     }
 
-    private val selector = DefaultSingleSelectProperty<T>(permittedValues = permittedValues, allowNoSelection = allowNoSelection)
 
     override fun getValue(thisRef: BEAN, property: KProperty<*>): T {
         return selector.selected()
@@ -87,25 +71,25 @@ class SingleSelectPropertyDelegate<BEAN : Any, T : Any>(permittedValues: Set<T>,
 }
 
 
-class DefaultSingleSelectProperty<T : Any>(override val permittedValues: Set<T> = setOf(), override var allowNoSelection: Boolean = false) : SingleSelectProperty<T> {
+class DefaultSingleSelectProperty<T : Any> @JvmOverloads constructor(override val dataProvider: ListDataProvider<T>, override var allowNoSelection: Boolean = false) : SingleSelectProperty<T> {
+
+    constructor (permittedValues: Set<T> = setOf(), allowNoSelection: Boolean = false) : this(ListDataProvider(permittedValues), allowNoSelection)
 
     private var valueSelected = false
-
     private lateinit var selectedValue: T
 
-    override fun select(newValue: T) {
-        if (permittedValues.contains(newValue)) {
-            selectedValue = newValue
-            valueSelected = true
-        } else {
-            throw SingleSelectionException("$newValue is not a valid selection")
-        }
+    override fun clear() {
+        deselect()
     }
 
+    override fun select(newValue: T) {
+        selectedValue = newValue
+        valueSelected = true
+    }
 
     override fun selected(): T {
         if (!valueSelected) {
-            throw SingleSelectionException("No value has been selected")
+            throw SingleSelectException("No value has been selected")
         }
         return selectedValue
     }
@@ -114,7 +98,7 @@ class DefaultSingleSelectProperty<T : Any>(override val permittedValues: Set<T> 
         if (allowNoSelection) {
             valueSelected = false
         } else {
-            throw SingleSelectionException("An empty selection is not allowed")
+            throw SingleSelectException("An empty selection is not allowed")
         }
 
     }
@@ -125,12 +109,6 @@ class DefaultSingleSelectProperty<T : Any>(override val permittedValues: Set<T> 
 }
 
 
-class SingleSelectionException(msg: String) : RuntimeException(msg)
-
-class KrailComboBox<T : Any>(val property: SingleSelectProperty<T>) : ComboBox<T>() {
-    init {
-        setItems(property.permittedValues)
-    }
+class SingleSelectException(msg: String) : RuntimeException(msg)
 
 
-}
