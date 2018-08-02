@@ -4,8 +4,6 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
-import com.vaadin.ui.Grid
-import com.vaadin.ui.renderers.AbstractRenderer
 import net.jodah.typetools.TypeResolver
 import kotlin.reflect.KClass
 
@@ -19,7 +17,6 @@ interface FormSupport {
      */
     fun componentFor(modelClass: KClass<*>): Provider<HasValue<*>>
 
-    fun <G : Grid<Any>, MODEL : Any> rendererFor(modelClass: KClass<out MODEL>, grid: G): AbstractRenderer<in Any, *>
     fun <PRESENTATIONVALUE : Any, MODEL : Any> converterFor(modelClass: KClass<out MODEL>, presentationValueClass: KClass<out PRESENTATIONVALUE>): Converter<PRESENTATIONVALUE, MODEL>
     fun <PRESENTATIONVALUE : Any, PRESENTATION : HasValue<PRESENTATIONVALUE>, MODEL : Any> converterForComponent(modelClass: KClass<out MODEL>, componentClass: KClass<PRESENTATION>): Converter<PRESENTATIONVALUE, MODEL>
 }
@@ -31,13 +28,10 @@ interface FormSupport {
  */
 class DefaultFormSupport @Inject constructor(
         private val dataClassToPresentationMap: MutableMap<Class<*>, Provider<HasValue<*>>>,
-        private val converterFactory: ConverterFactory,
-        private val rendererFactory: RendererFactory) :
+        private val converterFactory: ConverterFactory) :
 
         FormSupport {
-    override fun <G : Grid<Any>, MODEL : Any> rendererFor(modelClass: KClass<out MODEL>, grid: G): AbstractRenderer<in Any, *> {
-        return rendererFactory.get(modelClass, grid)
-    }
+
 
     /**
      * We check for Java primitive types first, wrapper types should not normally be needed

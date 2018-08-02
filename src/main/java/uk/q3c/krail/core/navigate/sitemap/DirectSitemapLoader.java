@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -32,4 +33,6 @@ public interface DirectSitemapLoader extends SitemapLoader {
 
 
     Set<String> sourceModules();
+
+    Map<String, DirectSitemapEntry> getPageMap();
 }

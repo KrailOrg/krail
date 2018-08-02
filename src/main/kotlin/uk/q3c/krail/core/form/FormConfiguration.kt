@@ -47,10 +47,34 @@ abstract class FormConfiguration : ViewConfiguration, ParentConfiguration, FormC
 
     abstract fun config()
 
-    fun sectionWithName(name: String): FormSectionConfiguration {
+    private fun getSection(name: String): FormSectionConfiguration {
         return sections.first { s -> s.name == name }
     }
 
+    /**
+     * Returns or creates a [FormSectionConfiguration] with [name] - Java fluent API
+     * If none currently exists, an new one is created
+     */
+    fun section(name: String): FormSectionConfiguration {
+        var section: FormSectionConfiguration
+        try {
+            section = getSection(name)
+        } catch (e: NoSuchElementException) {
+            section = FormSectionConfiguration(this, name)
+            sections.add(section)
+        }
+        return section
+    }
+
+    fun type(typeName: String): FormConfiguration {
+        this.formType = typeName
+        return this
+    }
+
+    fun styleAttributes(styleAttributes: StyleAttributes): FormConfiguration {
+        this.styleAttributes = styleAttributes
+        return this
+    }
 }
 
 class EmptyFormConfiguration : FormConfiguration() {
@@ -72,7 +96,7 @@ class MyForm : FormConfiguration() {
             size = StyleSize.normal
         }
         section {
-            excludedProperties = listOf("a", "b")
+            excludedProperties = setOf("a", "b")
             style {
                 size = StyleSize.normal
             }

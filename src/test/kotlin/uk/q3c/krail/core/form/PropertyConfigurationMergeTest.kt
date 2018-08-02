@@ -16,9 +16,9 @@ object PropertyConfigurationMergeTest : Spek({
         on("reading a property with all style attributes changed") {
             val config = TestFormConfig1()
             config.config()
-            val section = config.sectionWithName("simple")
-            val subSection = section.sectionWithName("subSection")
-            val propertyConfig = subSection.propertyWithName("allChanged")
+            val section = config.section("simple")
+            val subSection = section.section("subSection")
+            val propertyConfig = subSection.property("allChanged")
             propertyConfig.merge()
             val result = propertyConfig.styleAttributes
 
@@ -32,9 +32,9 @@ object PropertyConfigurationMergeTest : Spek({
         on("reading a property which inherits attributes from parent chain") {
             val config = TestFormConfig2()
             config.config()
-            val section = config.sectionWithName("simple")
-            val subSection = section.sectionWithName("subSection")
-            val propertyConfig = subSection.propertyWithName("someChanged")
+            val section = config.section("simple")
+            val subSection = section.section("subSection")
+            val propertyConfig = subSection.property("someChanged")
             propertyConfig.merge()
             val result = propertyConfig.styleAttributes
 
@@ -48,9 +48,9 @@ object PropertyConfigurationMergeTest : Spek({
         on("reading a property which has no style attributes set anywhere in the chain") {
             val config = TestFormConfig3()
             config.config()
-            val section = config.sectionWithName("simple")
-            val subSection = section.sectionWithName("subSection")
-            val propertyConfig = subSection.propertyWithName("someChanged")
+            val section = config.section("simple")
+            val subSection = section.section("subSection")
+            val propertyConfig = subSection.property("someChanged")
             propertyConfig.merge()
             val result = propertyConfig.styleAttributes
 
@@ -66,12 +66,10 @@ object PropertyConfigurationMergeTest : Spek({
 
 private class TestFormConfig1 : FormConfiguration() {
     override fun config() {
-        val section = FormSectionConfiguration(this)
+        val section = FormSectionConfiguration(this, "simple")
         sections.add(section)
-        section.name = "simple"
 
-        val subSection = FormSectionConfiguration(section)
-        subSection.name = "subSection"
+        val subSection = FormSectionConfiguration(section, "subSection")
         section.sections.add(subSection)
 
         val propConfig = PropertyConfiguration("allChanged", subSection)
@@ -89,13 +87,11 @@ private class TestFormConfig2 : FormConfiguration() {
     override fun config() {
         styleAttributes.alignment = StyleAlignment.align_right
         styleAttributes.size = StyleSize.huge
-        val section = FormSectionConfiguration(this)
+        val section = FormSectionConfiguration(this, "simple")
         sections.add(section)
-        section.name = "simple"
 
         section.styleAttributes.size = StyleSize.small
-        val subSection = FormSectionConfiguration(section)
-        subSection.name = "subSection"
+        val subSection = FormSectionConfiguration(section, "subSection")
         subSection.styleAttributes.borderless = StyleBorderless.yes
         section.sections.add(subSection)
 
@@ -107,12 +103,10 @@ private class TestFormConfig2 : FormConfiguration() {
 
 private class TestFormConfig3 : FormConfiguration() {
     override fun config() {
-        val section = FormSectionConfiguration(this)
+        val section = FormSectionConfiguration(this, "simple")
         sections.add(section)
-        section.name = "simple"
 
-        val subSection = FormSectionConfiguration(section)
-        subSection.name = "subSection"
+        val subSection = FormSectionConfiguration(section, "subSection")
         section.sections.add(subSection)
 
         val propConfig = PropertyConfiguration("someChanged", subSection)

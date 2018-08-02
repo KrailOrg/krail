@@ -18,6 +18,7 @@ import uk.q3c.krail.core.env.RuntimeEnvironment.SERVLET
 import uk.q3c.krail.core.env.RuntimeEnvironment.VERTX
 import uk.q3c.krail.core.guice.InjectorHolder
 import uk.q3c.krail.core.ui.ScopedUIProvider
+import uk.q3c.krail.startup.VertxApplicationStartup
 import uk.q3c.util.guice.InjectorLocator
 import java.io.InputStream
 import java.nio.file.Paths
@@ -133,23 +134,27 @@ class InjectorFactory {
 
 open class KrailVerticle : VaadinVerticle(), SessionInitListener {
 
+    private var injectorLocator = VertxInjectorLocator()
+
+
     /**
-     * The first call creates the Guice injector if it hasn't been created already.  See [InjectorLocator] for its location
-     * The UIProvider also needs to be registered with the session
+     * The UIProvider is registered for the session
      *
      */
     override fun sessionInit(event: SessionInitEvent) {
-        val injector = getInjector()
-        val uiProvider = injector.getInstance(ScopedUIProvider::class.java)
+        val uiProvider = getInjector().getInstance(ScopedUIProvider::class.java)
         event.session.addUIProvider(uiProvider)
     }
 
-    private var injectorLocator = VertxInjectorLocator()
+
 
     /**
      * When service has been initialised
      */
     override fun serviceInitialized(service: VertxVaadinService, router: Router) {
+        val injector = getInjector()
+        val startupCode = injector.getInstance(VertxApplicationStartup::class.java)
+        startupCode.invoke()
         service.addSessionInitListener(this)
     }
 

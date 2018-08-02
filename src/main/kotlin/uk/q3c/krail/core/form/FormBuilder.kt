@@ -49,7 +49,7 @@ class StandardFormBuilder @Inject constructor(
 
     override fun build(form: Form, navigationStateExt: NavigationStateExt): FormSection {
 
-        val sectionConfiguration = configuration.sectionWithName("standard")
+        val sectionConfiguration = configuration.section("standard")
         if (sectionConfiguration.entityClass == Any::class) {
             throw FormConfigurationException("entityClass must be specified")
         }

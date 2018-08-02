@@ -20,31 +20,89 @@ import java.io.Serializable
 
  */
 @FormDsl
-class FormSectionConfiguration(override val parentConfiguration: ParentConfiguration) : ChildConfiguration, ParentConfiguration, Serializable {
+class FormSectionConfiguration(override val parentConfiguration: ParentConfiguration, val name: String = "standard") : ChildConfiguration, ParentConfiguration, Serializable {
 
 //    val gridConfiguration = TableConfiguration()
 //    val detailConfiguration = DetailConfiguration()
 
-    var name: String = "standard"
+
     var entityClass: Class<*> = Any::class.java
     override var styleAttributes = StyleAttributes()
-    var excludedProperties: List<String> = listOf() // used only if displayOrder not specified
+    var excludedProperties: Set<String> = LinkedHashSet()
 
-    var columnOrder: MutableSet<String> = mutableSetOf()
+    var columnOrder: Set<String> = LinkedHashSet()
 
     var layout: Class<out Layout> = FormLayout::class.java
-    var fieldOrder: List<String> = mutableListOf()  // if specified must contain all required properties
+    var fieldOrder: Set<String> = LinkedHashSet()
 
 
     val properties: MutableMap<String, PropertyConfiguration> = mutableMapOf()
     val sections: MutableList<FormSectionConfiguration> = mutableListOf()
 
-    fun sectionWithName(name: String): FormSectionConfiguration {
+    private fun getSection(name: String): FormSectionConfiguration {
         return sections.first { s -> s.name == name }
     }
 
-    fun propertyWithName(name: String): PropertyConfiguration {
-        return properties[name] ?: throw NoSuchElementException("$name is not an element of ${this.name}")
+    /**
+     * Returns or creates a [PropertyConfiguration] with [name]
+     */
+    fun property(name: String): PropertyConfiguration {
+        return properties[name] ?: newProperty(name)
+    }
+
+    private fun newProperty(name: String): PropertyConfiguration {
+        val prop = PropertyConfiguration(name, this)
+        properties[name] = prop
+        return prop
+    }
+
+    /**
+     * Returns a subsection [FormSectionConfiguration] with [name] - Java fluent API.
+     * If none currently exists, an new one is created
+     */
+    fun section(name: String): FormSectionConfiguration {
+        var section: FormSectionConfiguration
+        try {
+            section = getSection(name)
+        } catch (e: NoSuchElementException) {
+            section = FormSectionConfiguration(this, name)
+            sections.add(section)
+        }
+        return section
+    }
+
+    fun entityClass(entityClass: Class<*>): FormSectionConfiguration {
+        this.entityClass = entityClass
+        return this
+    }
+
+    fun layout(layout: Class<out Layout>): FormSectionConfiguration {
+        this.layout = layout
+        return this
+    }
+
+    fun excludedProperties(vararg propertyNames: String): FormSectionConfiguration {
+        this.excludedProperties = LinkedHashSet(propertyNames.asList())
+        return this
+    }
+
+    /**
+     * A set of property names do determine the order of columns displayed in table view.  As this is order specific,
+     * [columnOrder] must be an ordered Set - probably a [LinkedHashSet]
+     */
+    fun columnOrder(vararg propertyNames: String): FormSectionConfiguration {
+        this.columnOrder = LinkedHashSet(propertyNames.asList())
+        return this
+    }
+
+    fun fieldOrder(vararg propertyNames: String): FormSectionConfiguration {
+        this.fieldOrder = LinkedHashSet(propertyNames.asList())
+        return this
+    }
+
+    fun styleAttributes(styleAttributes: StyleAttributes): FormSectionConfiguration {
+        this.styleAttributes = styleAttributes
+        return this
     }
 }
 

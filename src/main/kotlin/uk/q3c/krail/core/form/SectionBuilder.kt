@@ -126,7 +126,7 @@ class StandardFormSectionBuilder<BEAN : Any>(
         } else {
             val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass.kotlin as KClass<MODEL>)
             val binderBuilderWithConverter = binderBuilder.withConverter(converter)
-            propertySpec.validations.forEach { v ->
+            propertySpec.validators.forEach { v ->
                 val validator = v as KrailValidator<in MODEL>
                 validator.translate = translate
                 binderBuilderWithConverter.withValidator(validator)

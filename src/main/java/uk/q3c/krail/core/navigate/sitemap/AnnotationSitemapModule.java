@@ -15,7 +15,6 @@ package uk.q3c.krail.core.navigate.sitemap;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import org.reflections.Reflections;
-import uk.q3c.krail.core.guice.DefaultServletContextListener;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
@@ -25,7 +24,7 @@ import java.lang.ProcessBuilder.Redirect;
  * If you want to create Sitemap entries for your own code using {@link View} annotations on your {@link KrailView}
  * classes, you can either subclass this module and provide the entries in the {@link #define} method, or just simply
  * use this as an example and create your own. The module then needs to be added to your subclass of
- * {@link DefaultServletContextListener}. By convention, modules relating to the Sitemap are added in the
+ * {@link uk.q3c.krail.core.env.BindingsCollator}. By convention, modules relating to the Sitemap are added in the
  * addSitemapModules()
  * method.
  * <p/>

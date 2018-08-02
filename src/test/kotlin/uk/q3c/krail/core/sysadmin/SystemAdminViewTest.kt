@@ -1,6 +1,5 @@
 package uk.q3c.krail.core.sysadmin
 
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.jetbrains.spek.api.Spek
@@ -8,6 +7,7 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.core.navigate.Navigator
+import uk.q3c.krail.core.view.NavigationStateExt
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.util.guice.SerializationSupport
@@ -22,28 +22,20 @@ object SystemAdminViewTest : Spek({
         lateinit var view: SystemAdminView
         lateinit var serializationSupport: SerializationSupport
         lateinit var busMessage: ViewChangeBusMessage
+        lateinit var navigationStateExt: NavigationStateExt
 
         beforeEachTest {
-            navigator = mockk()
+            navigator = mockk(relaxed = true)
             serializationSupport = mockk()
             busMessage = mockk()
+            navigationStateExt = mockk(relaxed = true)
             view = SystemAdminView(navigator, MockTranslate(), serializationSupport)
+            view.beforeBuild(navigationStateExt)
         }
 
-        on("doBuild") {
-            view.buildView(busMessage)
-
-            it("button has been created") {
-                view.buildReportBtn  // will throw lateinit exception if not
-            }
-        }
 
         on("clicking build report button") {
-            every {
-                navigator.navigateTo("system-admin/sitemap-build-report")
-            } returns
-
-                    view.buildView(busMessage)
+            view.buildView()
             view.buildReportBtn.click()
 
             it("navigates to sitemap report") {

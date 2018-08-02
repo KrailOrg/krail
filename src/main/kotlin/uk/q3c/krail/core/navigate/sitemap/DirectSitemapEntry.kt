@@ -12,8 +12,11 @@
  */
 package uk.q3c.krail.core.navigate.sitemap
 
+import uk.q3c.krail.core.form.EmptyFormConfiguration
+import uk.q3c.krail.core.form.Form
 import uk.q3c.krail.core.shiro.PageAccessControl
 import uk.q3c.krail.core.view.KrailView
+import uk.q3c.krail.core.view.ViewConfiguration
 import uk.q3c.krail.i18n.I18NKey
 import java.io.Serializable
 
@@ -36,16 +39,18 @@ import java.io.Serializable
  * @param positionIndex
  * the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex < 0
  * indicates that the page should not be displayed in a navigation component
+ * @param viewConfiguration the configuration to be applied to [viewClass]
  *
  * @author David Sowerby
  */
 class DirectSitemapEntry @JvmOverloads constructor(
         val moduleName: String,
-        var viewClass: Class<out KrailView>? = null,
+        val viewClass: Class<out KrailView> = Form::class.java,
         val labelKey: I18NKey,
         val pageAccessControl: PageAccessControl,
-        val roles: String? = null,
-        val positionIndex: Int = 0
+        val roles: String = "",
+        val positionIndex: Int = 1,
+        val viewConfiguration: Class<out ViewConfiguration> = EmptyFormConfiguration::class.java
 )
 
 

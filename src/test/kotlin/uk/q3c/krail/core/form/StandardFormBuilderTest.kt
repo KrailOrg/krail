@@ -78,7 +78,7 @@ object StandardFormSectionBuilderTest : Spek({
             propertySpecCreator = injector.getInstance(PropertyConfigurationCreator::class.java)
             formConfiguration = SimpleFormConfiguration1()
             formConfiguration.config()
-            configuration = formConfiguration.sectionWithName("single")
+            configuration = formConfiguration.section("single")
             translate = injector.getInstance(Translate::class.java)
             currentLocale = injector.getInstance(CurrentLocale::class.java)
             builder = StandardFormSectionBuilder(entityClass = Person::class, binderFactory = binderFactory, configuration = configuration, propertySpecCreator = propertySpecCreator, formSupport = formSupport, currentLocale = currentLocale)
@@ -257,10 +257,9 @@ object StandardFormSectionBuilderTest : Spek({
 private class SimpleFormConfiguration1 : FormConfiguration() {
     override fun config() {
 
-        val section = FormSectionConfiguration(this)
+        val section = FormSectionConfiguration(this, "single")
         section.columnOrder = mutableSetOf("name", "age", "joinDate")
-        section.name = "single"
-        section.excludedProperties = listOf("id")
+        section.excludedProperties = setOf("id")
         sections.add(section)
         section.entityClass = Person::class.java
         section.styleAttributes.borderless = StyleBorderless.yes

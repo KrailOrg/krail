@@ -121,8 +121,8 @@ private fun guiceModules(): MutableList<Module> {
 private class TestDirectSitemapModule : DirectSitemapModule() {
 
     override fun define() {
-        addEntry("direct", null, LabelKey.Home_Page, PageAccessControl.PUBLIC)
-        addEntry("direct/a", PublicHomeView::class.java, LabelKey.Home_Page, PageAccessControl.PUBLIC)
+        addEntry("direct", LabelKey.Home_Page, PageAccessControl.PUBLIC)
+        addEntry("direct/a", LabelKey.Home_Page, PageAccessControl.PUBLIC, PublicHomeView::class.java)
         addRedirect("direct", "direct/a")
     }
 }

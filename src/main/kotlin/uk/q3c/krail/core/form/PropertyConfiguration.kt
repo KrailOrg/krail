@@ -2,7 +2,6 @@ package uk.q3c.krail.core.form
 
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
-import com.vaadin.ui.renderers.AbstractRenderer
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.i18n.I18NKey
@@ -45,6 +44,22 @@ class StyleAttributes : Serializable {
         val all = arrayOf(size.value, borderless.value, alignment.value)
         return all.joinToString(separator = " ").replace("  ", " ").trim()
     }
+
+    fun size(size: StyleSize): StyleAttributes {
+        this.size = size
+        return this
+    }
+
+    fun borderless(borderless: StyleBorderless): StyleAttributes {
+        this.borderless = borderless
+        return this
+    }
+
+    fun alignment(alignment: StyleAlignment): StyleAttributes {
+        this.alignment = alignment
+        return this
+    }
+    
 }
 
 /**
@@ -56,7 +71,7 @@ class StyleAttributes : Serializable {
  * - [componentClass] is selected using [FormSupport.componentFor]
  * - [converterClass] is selected using [FormSupport.converterFor]
  * - [columnRendererClass] is selected [FormSupport.rendererFor]
- * - [validations] are additive - that is, any manually defined [KrailValidator]s are combined with those read from JSR 303 annotations from the entity class.
+ * - [validators] are additive - that is, any manually defined [KrailValidator]s are combined with those read from JSR 303 annotations from the entity class.
  *
  * When setting validation, http://piotrnowicki.com/2011/02/float-and-double-in-java-inaccurate-result/
  *
@@ -66,13 +81,15 @@ class StyleAttributes : Serializable {
  */
 @FormDsl
 class PropertyConfiguration(val name: String, override val parentConfiguration: ParentConfiguration) : ChildConfiguration, FormConfigurationCommon, Serializable {
-    var columnRendererClass: Class<AbstractRenderer<*, *>> = AbstractRenderer::class.java
     var propertyValueClass: Class<out Any> = Any::class.java
     var componentClass: Class<out HasValue<*>> = HasValue::class.java
     var converterClass: Class<out Converter<*, *>> = Converter::class.java
     var caption: I18NKey = LabelKey.Unnamed
     var description: I18NKey = DescriptionKey.No_description_provided
-    var validations: MutableList<KrailValidator<*>> = mutableListOf()
+    var validators: MutableList<KrailValidator<*>> = mutableListOf()
+    /**
+     * Set automatically - a manually set value will be overwritten
+     */
     var isDelegate: Boolean = false
     override var styleAttributes = StyleAttributes()
 
@@ -89,6 +106,46 @@ class PropertyConfiguration(val name: String, override val parentConfiguration: 
             }
 
         }
+    }
+
+    fun styleAttributes(styleAttributes: StyleAttributes): PropertyConfiguration {
+        this.styleAttributes = styleAttributes
+        return this
+    }
+
+    fun caption(caption: I18NKey): PropertyConfiguration {
+        this.caption = caption
+        return this
+    }
+
+    fun validators(validations: MutableList<KrailValidator<*>>): PropertyConfiguration {
+        this.validators = validations
+        return this
+    }
+
+    fun validator(validator: KrailValidator<*>): PropertyConfiguration {
+        this.validators.add(validator)
+        return this
+    }
+
+    fun description(description: I18NKey): PropertyConfiguration {
+        this.description = description
+        return this
+    }
+
+    fun converterClass(converterClass: Class<out Converter<*, *>>): PropertyConfiguration {
+        this.converterClass = converterClass
+        return this
+    }
+
+    fun propertyValueClass(propertyValueClass: Class<out Any>): PropertyConfiguration {
+        this.propertyValueClass = propertyValueClass
+        return this
+    }
+
+    fun componentClass(componentClass: Class<out HasValue<*>>): PropertyConfiguration {
+        this.componentClass = componentClass
+        return this
     }
 }
 

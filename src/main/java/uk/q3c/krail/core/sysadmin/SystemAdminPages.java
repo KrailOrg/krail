@@ -28,7 +28,7 @@ import uk.q3c.krail.util.Experimental;
 public class SystemAdminPages extends DirectSitemapModule {
 
     public SystemAdminPages() {
-        rootURI = "system-admin";
+        setRootURI("system-admin");
     }
 
     @Override
@@ -39,8 +39,8 @@ public class SystemAdminPages extends DirectSitemapModule {
 
     @Override
     protected void define() {
-        addEntry("", SystemAdminView.class, LabelKey.System_Administration, PageAccessControl.PERMISSION);
-        addEntry("sitemap-build-report", SitemapReportView.class, LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION);
-        addEntry("entity", I18NView.class, LabelKey.I18N, PageAccessControl.PERMISSION);
+        addEntry("", LabelKey.System_Administration, PageAccessControl.PERMISSION, SystemAdminView.class);
+        addEntry("sitemap-build-report", LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION, SitemapReportView.class);
+        addEntry("entity", LabelKey.I18N, PageAccessControl.PERMISSION, I18NView.class);
     }
 }

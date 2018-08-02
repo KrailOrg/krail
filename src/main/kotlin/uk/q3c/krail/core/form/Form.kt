@@ -58,7 +58,7 @@ class DefaultForm @Inject constructor(
     : ViewBase(translate, serializationSupport), Form {
 
 
-    override fun changeRoute(newRoute: String) {
+    override fun changeRoute(id: String) {
         TODO()
     }
 
@@ -124,7 +124,7 @@ interface FormSection : Serializable {
 class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : FormSection {
 
     fun translate(translate: Translate, currentLocale: CurrentLocale) {
-        propertyMap.forEach { k, v ->
+        propertyMap.forEach { _, v ->
             v.component.caption = translate.from(v.captionKey)
             // setDescription is not part of Component interface!
             if (v.component is AbstractComponent) {
@@ -172,16 +172,11 @@ open class FormModule : AbstractModule() {
         bindForm()
         bindFormBuilderSelector()
         bindPropertySpecCreator()
-        bindRendererFactory()
         bindRendererSets(rendererBinder)
     }
 
     protected open fun bindRendererSets(rendererBinder: Multibinder<RendererSet>) {
         rendererBinder.addBinding().to(BaseRendererSet::class.java)
-    }
-
-    protected open fun bindRendererFactory() {
-        bind(RendererFactory::class.java).to(DefaultRendererFactory::class.java)
     }
 
     protected open fun bindPropertySpecCreator() {

@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 import java.util.HashSet;
@@ -46,6 +47,11 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     }
 
     @Override
+    public Map<String, DirectSitemapEntry> getPageMap() {
+        return ImmutableMap.copyOf(pageMap);
+    }
+
+    @Override
     public boolean load(MasterSitemap sitemap) {
         checkNotNull(sitemap);
         sourceModules = new HashSet<>();
@@ -55,10 +61,9 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
                 DirectSitemapEntry value = entry.getValue();
                 nodeRecord.setLabelKey(value.getLabelKey());
                 nodeRecord.setPageAccessControl(value.getPageAccessControl());
-                if (value.getViewClass() != null) {
-                    nodeRecord.setViewClass(value.getViewClass());
-                }
+                nodeRecord.setViewClass(value.getViewClass());
                 nodeRecord.setPositionIndex(value.getPositionIndex());
+                nodeRecord.setConfiguration(value.getViewConfiguration());
                 sitemap.append(nodeRecord);
                 sourceModules.add(value.getModuleName());
             }
@@ -81,13 +86,12 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
         if (redirects != null) {
             for (Entry<String, RedirectEntry> entry : redirects.entrySet()) {
                 sitemap.addRedirect(entry.getKey(), entry.getValue()
-                                                         .getRedirectTarget());
+                        .getRedirectTarget());
             }
         }
     }
 
     /**
-     *
      * @param map map of {@link DirectSitemapEntry} entries configured through Guice - which may not have happened, hence use of optional
      */
     @Inject(optional = true)
@@ -96,7 +100,6 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     }
 
     /**
-     *
      * @param redirects map of redirect entries configured through Guice - which may not have happened, hence use of optional
      */
     @Inject(optional = true)

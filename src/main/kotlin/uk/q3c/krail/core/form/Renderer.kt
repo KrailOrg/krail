@@ -1,6 +1,5 @@
 package uk.q3c.krail.core.form
 
-import com.google.inject.Inject
 import com.vaadin.ui.Grid
 import com.vaadin.ui.Image
 import com.vaadin.ui.renderers.AbstractRenderer
@@ -57,21 +56,3 @@ class BaseRendererSet : RendererSet {
 
 class RendererNotSupportedException(modelClass: KClass<*>) : RuntimeException("No Renderer has been defined for a model class of $modelClass")
 
-interface RendererFactory {
-    fun <G : Grid<*>> get(modelClass: KClass<*>, grid: G): AbstractRenderer<Any, *>
-}
-
-class DefaultRendererFactory @Inject constructor(private val rendererSets: MutableSet<RendererSet>) : RendererFactory {
-
-    override fun <G : Grid<*>> get(modelClass: KClass<*>, grid: G): AbstractRenderer<Any, *> {
-        for (set in rendererSets) {
-            try {
-                return set.get(modelClass, grid)
-            } catch (e: Exception) {
-                // do nothing, try the next one
-            }
-        }
-        return TextRenderer() // at least we will get a String representation of whatever it is
-    }
-
-}

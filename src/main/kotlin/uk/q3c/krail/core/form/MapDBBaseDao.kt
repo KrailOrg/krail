@@ -163,6 +163,7 @@ class MapDBBaseDao<T : Any>(val daoFactory: MapDbFormDaoFactory, entityClass: KC
     }
 
     override fun iterator(): MutableIterator<Cache.Entry<String, T>> {
+        @Suppress("UNCHECKED_CAST")
         return map.iterator() as MutableIterator<Cache.Entry<String, T>>
     }
 }

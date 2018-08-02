@@ -13,6 +13,10 @@ import uk.q3c.krail.core.persist.MapDbFormDaoFactory
  * Created by David Sowerby on 15 Jul 2018
  */
 object MapDBBaseDaoTest : Spek({
+    beforeGroup {
+        val dbFactory = MapDbFormDaoFactory()
+        dbFactory.dbFile.delete()
+    }
 
     given("a MapDb") {
         val dbFactory = MapDbFormDaoFactory()
@@ -23,6 +27,8 @@ object MapDBBaseDaoTest : Spek({
         lateinit var person4: Person
         lateinit var person5: Person
         lateinit var person6: Person
+
+
 
         beforeEachTest {
             person1 = Person(id = "person1", age = 23, name = "Wiggly")

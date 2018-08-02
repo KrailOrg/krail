@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements AnnotationSitemapLoader {
 
@@ -83,6 +83,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                         nodeRecord.setViewClass(viewClass);
                         nodeRecord.setPageAccessControl(annotation.pageAccessControl());
                         nodeRecord.setPositionIndex(annotation.positionIndex());
+                        nodeRecord.setConfiguration(annotation.viewConfiguration());
                         if (StringUtils.isNotEmpty(annotation.roles())) {
                             Splitter splitter = Splitter.on(",")
                                                         .trimResults();
