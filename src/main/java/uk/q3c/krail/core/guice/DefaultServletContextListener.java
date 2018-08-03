@@ -42,7 +42,7 @@ public class DefaultServletContextListener extends GuiceServletContextListener {
         super.contextInitialized(servletContextEvent);
         log.debug("Servlet context listener initialised");
         ApplicationStartup startup = InjectorHolder.getInjector().getInstance(ServletApplicationStartup.class);
-        startup.invoke();
+        startup.invoke(servletContextEvent);
     }
 
     @Override

@@ -154,7 +154,7 @@ open class KrailVerticle : VaadinVerticle(), SessionInitListener {
     override fun serviceInitialized(service: VertxVaadinService, router: Router) {
         val injector = getInjector()
         val startupCode = injector.getInstance(VertxApplicationStartup::class.java)
-        startupCode.invoke()
+        startupCode.invoke(vertx)
         service.addSessionInitListener(this)
     }
 

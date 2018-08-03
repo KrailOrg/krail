@@ -18,7 +18,7 @@ import java.time.LocalDateTime
  * Created by David Sowerby on 14 Apr 2018
  */
 interface ApplicationStartup {
-    fun invoke()
+    fun invoke(context: Any)
 }
 
 /**
@@ -34,17 +34,22 @@ interface ServletApplicationStartup : ApplicationStartup
  *
  */
 open class DefaultVertxApplicationStartup @Inject constructor() : VertxApplicationStartup {
-    override fun invoke() {
-        val alreadyStarted = checkForMarker()
+    override fun invoke(context: Any) {
+        val vertx = if (context is Vertx) {
+            context
+        } else {
+            throw StartupCodeException("Context for Vertx startup must be a Vertx instance")
+        }
+        val alreadyStarted = checkForMarker(vertx)
         if (!alreadyStarted) {
             executeCode()
-            storeMarker()
+            storeMarker(vertx)
         }
 
     }
 
-    private fun checkForMarker(): Boolean {
-        val sd = Vertx.vertx().sharedData()
+    private fun checkForMarker(vertx: Vertx): Boolean {
+        val sd = vertx.sharedData()
         var exists = false
         sd.getAsyncMap("shared_data") { res: AsyncResult<AsyncMap<String, String>> ->
             if (res.failed()) {
@@ -56,8 +61,8 @@ open class DefaultVertxApplicationStartup @Inject constructor() : VertxApplicati
         return exists
     }
 
-    private fun storeMarker() {
-        val sd = Vertx.vertx().sharedData()
+    private fun storeMarker(vertx: Vertx) {
+        val sd = vertx.sharedData()
         sd.getAsyncMap("shared_data") { res: AsyncResult<AsyncMap<String, String>> ->
             if (res.failed()) {
                 throw StartupCodeException("Failed to access Vertx shared data, cause: ${res.cause().message}")
@@ -80,7 +85,7 @@ open class DefaultVertxApplicationStartup @Inject constructor() : VertxApplicati
 class StartupCodeException(msg: String) : RuntimeException(msg)
 
 class DefaultServletApplicationStartup @Inject constructor() : ServletApplicationStartup {
-    override fun invoke() {
+    override fun invoke(context: Any) {
         // deliberately does nothing, stat up code is application specific
     }
 }
@@ -89,7 +94,7 @@ class DefaultServletApplicationStartup @Inject constructor() : ServletApplicatio
  * You may need to bind this as an alternative to [DefaultVertxApplicationStartup] while testing, to avoid calls to Vertx itself
  */
 class VertxTestApplicationStartup @Inject constructor() : VertxApplicationStartup {
-    override fun invoke() {
+    override fun invoke(context: Any) {
         // deliberately does nothing, stat up code is application specific
     }
 }
