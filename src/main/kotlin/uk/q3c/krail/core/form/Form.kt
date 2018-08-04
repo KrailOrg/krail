@@ -117,6 +117,11 @@ class DefaultForm @Inject constructor(
 
 interface FormSection : Serializable {
     val rootComponent: Component
+    /**
+     * Loads data as specified by the given [parameters]
+     *
+     * @throws NoSuchElementException if the [parameters] specify an item which does not exist
+     */
     fun loadData(parameters: Map<String, String>)
 }
 
@@ -136,23 +141,30 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
 
 
     override fun loadData(parameters: Map<String, String>) {
-        val bean = dao.get("id") // TODO use params
-        for (entry in propertyMap) {
-            if (entry.value.isDelegate) {
-                val jprops = bean!!::class.java.declaredFields.asList()
-                val propDelegateField = jprops.first { p ->
-                    "${entry.key}\$delegate" == p.name
+        val id = parameters.get("id")
+        if (id == null) {
+            throw MissingParameterException("id")
+        } else {
+            val bean = dao.get(id)
+            for (entry in propertyMap) {
+                if (entry.value.isDelegate) {
+                    val jprops = bean::class.java.declaredFields.asList()
+                    val propDelegateField = jprops.first { p ->
+                        "${entry.key}\$delegate" == p.name
+                    }
+                    propDelegateField.isAccessible = true
+
+                    val delegate = propDelegateField.get(bean)
+                    (delegate as SelectPropertyDelegate).configureComponent(entry.value.component)
                 }
-                propDelegateField.isAccessible = true
-
-                val delegate = propDelegateField.get(bean)
-                (delegate as SelectPropertyDelegate).configureComponent(entry.value.component)
             }
-        }
 
-        binder.readBean(bean)
+            binder.readBean(bean)
+        }
     }
 }
+
+class MissingParameterException(val parameter: String) : RuntimeException("There is no parameter '$parameter'")
 
 open class FormModule : AbstractModule() {
 

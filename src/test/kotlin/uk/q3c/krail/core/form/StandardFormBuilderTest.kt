@@ -24,6 +24,7 @@ import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldNotBeEmpty
+import org.amshove.kluent.shouldThrow
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -45,6 +46,7 @@ import uk.q3c.util.serial.tracer.SerializationTracer
 import uk.q3c.util.text.DefaultMessageFormat
 import uk.q3c.util.text.MessageFormat2
 import java.util.*
+import kotlin.NoSuchElementException
 
 /**
  * Created by David Sowerby on 05 Jul 2018
@@ -168,6 +170,22 @@ object StandardFormSectionBuilderTest : Spek({
             }
         }
 
+        on("loading data with no 'id' parameter") {
+            val section = builder.buildDetail(formDaoFactory, translate)
+            val result = { section.loadData(mapOf()) }
+
+            it("throws a MissingParameterException") {
+                result.shouldThrow(MissingParameterException::class)
+            }
+        }
+        on("attempting to load an entity which does not exist") {
+            val section = builder.buildDetail(formDaoFactory, translate)
+            val result = { section.loadData(mapOf(Pair("id", "99"))) }
+
+            it("throws a NoSuchElementException") {
+                result.shouldThrow(NoSuchElementException::class)
+            }
+        }
 
         on("setting a value that should fail a validator set by configuration") {
             val serializationTracer = SerializationTracer()
@@ -248,11 +266,6 @@ object StandardFormSectionBuilderTest : Spek({
 })
 
 
-//object SimpleFormTypeBuilderTest : Spek({
-//
-//    TODO()
-//})
-
 
 private class SimpleFormConfiguration1 : FormConfiguration() {
     override fun config() {
@@ -287,7 +300,7 @@ private enum class TestPersonKey : I18NKey {
 
 private class StandardFormSectionBuilderTestModule : AbstractModule() {
     val daoFactory: FormDaoFactory = mockk(relaxed = true)
-    val dao: FormDao<Person> = mockk()
+    val dao: FormDao<Person> = mockk(relaxed = true)
     val person1 = Person(name = "mock person 1", age = 12)
     val person2 = Person(id = "2", name = "mock person 2", age = 32)
     val person3 = Person(id = "3", name = "mock person 3", age = 42)
@@ -295,7 +308,9 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
 
     override fun configure() {
         every { daoFactory.getDao(Person::class) } returns dao
-        every { dao.get(any()) } returns person1
+        every { dao.get(testUuid1) } returns person1
+        every { dao.get("2") } returns person2
+        every { dao.get("3") } returns person3
         every { dao.get() } returns people
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
