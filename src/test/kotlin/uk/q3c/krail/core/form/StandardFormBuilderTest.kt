@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package uk.q3c.krail.core.form
 
 import com.google.inject.AbstractModule
@@ -31,8 +29,9 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.guice.InjectorHolder
-import uk.q3c.krail.core.i18n.DescriptionKey.No_description_provided
+import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.KrailI18NModule
+import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
@@ -78,7 +77,7 @@ object StandardFormSectionBuilderTest : Spek({
             binderFactory = injector.getInstance(KrailBeanValidationBinderFactory::class.java)
             formSupport = injector.getInstance(FormSupport::class.java)
             propertySpecCreator = injector.getInstance(PropertyConfigurationCreator::class.java)
-            formConfiguration = SimpleFormConfiguration1()
+            formConfiguration = StandardFormConfiguration1()
             formConfiguration.config()
             configuration = formConfiguration.section("single")
             translate = injector.getInstance(Translate::class.java)
@@ -132,7 +131,27 @@ object StandardFormSectionBuilderTest : Spek({
             it("has set captions and descriptions in the property map, but not in component") {
                 section.propertyMap["joinDate"]!!.component.caption.shouldBeNull()
                 section.propertyMap["joinDate"]!!.captionKey.shouldBe(TestPersonKey.date_joined)
-                section.propertyMap["joinDate"]!!.descriptionKey.shouldBe(No_description_provided)
+                section.propertyMap["joinDate"]!!.descriptionKey.shouldBe(TestPersonKey.date_joined)
+            }
+
+            it("should use specified caption key and description key where given") {
+                section.propertyMap["joinDate"]!!.captionKey.shouldBe(TestPersonKey.date_joined)
+                section.propertyMap["joinDate"]!!.descriptionKey.shouldBe(TestPersonKey.date_joined)
+            }
+
+            it("should derive key from property name where there is a match with sample key") {
+                section.propertyMap["age"]!!.captionKey.shouldBe(TestPersonKey.age)
+                section.propertyMap["age"]!!.descriptionKey.shouldBe(TestPersonKey.age)
+            }
+
+            it("should derive key from a delegate property name where there is a match with sample key") {
+                section.propertyMap["roles"]!!.captionKey.shouldBe(TestPersonKey.roles)
+                section.propertyMap["roles"]!!.descriptionKey.shouldBe(TestPersonKey.roles)
+            }
+
+            it("should use defaults where there is no match of property name in sample key") {
+                section.propertyMap["title"]!!.descriptionKey.shouldBe(DescriptionKey.No_description_provided)
+                section.propertyMap["title"]!!.captionKey.shouldBe(LabelKey.Unnamed)
             }
 
             it("has configured a combo box") {
@@ -145,7 +164,6 @@ object StandardFormSectionBuilderTest : Spek({
                     isEmptySelectionAllowed.shouldBeFalse()
                 }
             }
-
 
             it("creates a serializable section") {
                 serializationTracer.trace(section).shouldNotHaveAnyDynamicFailures()
@@ -229,7 +247,7 @@ object StandardFormSectionBuilderTest : Spek({
             }
 
             it("has captions correctly set") {
-                grid.getColumn("age").caption.shouldBeEqualTo("Age")
+                grid.getColumn("age").caption.shouldBeEqualTo("age")
                 grid.getColumn("joinDate").caption.shouldBeEqualTo("date joined")
             }
             it("column order is correct") {
@@ -266,8 +284,7 @@ object StandardFormSectionBuilderTest : Spek({
 })
 
 
-
-private class SimpleFormConfiguration1 : FormConfiguration() {
+private class StandardFormConfiguration1 : FormConfiguration() {
     override fun config() {
 
         val section = FormSectionConfiguration(this, "single")
@@ -283,6 +300,10 @@ private class SimpleFormConfiguration1 : FormConfiguration() {
         section.properties[joinDateConfig.name] = joinDateConfig
         joinDateConfig.componentClass = InlineDateField::class.java
         joinDateConfig.caption = TestPersonKey.date_joined
+        joinDateConfig.description = TestPersonKey.date_joined
+        section.sampleCaptionKey = TestPersonKey.age
+        section.sampleDescriptionKey = TestPersonKey.age
+        val rolesConfig = section.property("roles")
 
 
         val ageConfig = PropertyConfiguration("age", section)
@@ -294,7 +315,7 @@ private class SimpleFormConfiguration1 : FormConfiguration() {
 
 private enum class TestPersonKey : I18NKey {
 
-    date_joined, a_title
+    date_joined, a_title, age, roles
 }
 
 

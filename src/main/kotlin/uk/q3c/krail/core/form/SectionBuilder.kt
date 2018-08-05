@@ -10,9 +10,11 @@ import net.jodah.typetools.TypeResolver
 import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.i18n.NullI18NKey
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.i18n.util.I18NKeyFromSample
 import java.io.Serializable
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
@@ -109,7 +111,14 @@ class StandardFormSectionBuilder<BEAN : Any>(
 
         }
         val layout = configuration.layout.newInstance()
-        componentMap.forEach { entry -> layout.addComponent(entry.value.component) }
+
+        // add to layout in the order specified by configuration.fieldOrder
+        configuration.fieldOrder.forEach { p ->
+            val entry = componentMap[p]
+            if (entry != null) {
+                layout.addComponent(entry.component)
+            }
+        }
         return FormDetailSection(componentMap, layout, binder, formDaoFactory.getDao(entityClass = entityClass))
 
 
@@ -168,12 +177,12 @@ interface ComponentWidthCalculator {
 }
 
 interface PropertyConfigurationCreator {
-    fun createConfiguration(property: Field, configuration: FormSectionConfiguration)
+    fun createConfiguration(property: Field, sectionConfiguration: FormSectionConfiguration)
 }
 
 class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfigurationCreator {
 
-    override fun createConfiguration(property: Field, configuration: FormSectionConfiguration) {
+    override fun createConfiguration(property: Field, sectionConfiguration: FormSectionConfiguration) {
         if (property.name == "\$\$delegatedProperties") {
             return
         }
@@ -181,14 +190,15 @@ class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfig
         val refinedName = property.name.removeSuffix(delegateId)
 
 
-        val spec = configuration.properties[refinedName]
-                ?: PropertyConfiguration(name = refinedName, parentConfiguration = configuration)
-        configuration.properties[property.name] = spec
+        val spec = sectionConfiguration.properties[refinedName]
+                ?: PropertyConfiguration(name = refinedName, parentConfiguration = sectionConfiguration)
+        sectionConfiguration.properties[refinedName] = spec
         propertyType(property, spec)
+
 //        fieldClass(property,spec, formSupport)
 //        converterClass(property,spec)
-        caption(property, spec)
-        description(property, spec)
+        caption(property, spec, sectionConfiguration.sampleCaptionKey)
+        description(property, spec, sectionConfiguration.sampleDescriptionKey)
         validations(property, spec)
 
 
@@ -215,21 +225,50 @@ class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfig
 //        }
 //    }
 
-    private fun caption(property: Field, spec: PropertyConfiguration) {
+    /**
+     * A key is derived from the following sequence
+     *
+     *  - If a key has been explicitly set in the [spec], use that
+     *  - If no key has been explicitly set in the [spec], but there is a genuine [sampleCaptionKey], then try getting a key from that sample by an Enum.valueOf(property.name)
+     *  - If no key has been found, use the default value, [LabelKey.Unnamed]
+     */
+
+    private fun caption(property: Field, spec: PropertyConfiguration, sampleCaptionKey: I18NKey) {
         if (spec.caption == LabelKey.Unnamed) {
-            // TODO use a sample key combined with property name
+            if (sampleCaptionKey != NullI18NKey.none) {
+                try {
+                    val key = I18NKeyFromSample().keyFromName(property.name.removeSuffix("\$delegate"), sampleCaptionKey)
+                    spec.caption = key
+                } catch (e: Exception) {
+                    // do nothing, if conversion fails just stick with LabelKey.Unnamed
+                }
+
+            }
         }
     }
 
-    private fun description(property: Field, spec: PropertyConfiguration) {
+    /**
+     * Same process as [caption]
+     */
+    private fun description(property: Field, spec: PropertyConfiguration, sampleDescriptionKey: I18NKey) {
         if (spec.description == DescriptionKey.No_description_provided) {
-            // TODO use a sample key combined with property name
+            if (sampleDescriptionKey != NullI18NKey.none) {
+                try {
+                    val key = I18NKeyFromSample().keyFromName(property.name.removeSuffix("\$delegate"), sampleDescriptionKey)
+                    spec.description = key
+                } catch (e: Exception) {
+                    // do nothing, if conversion fails just stick with LabelKey.Unnamed
+                }
+
+            }
         }
     }
 
     private fun validations(property: Field, spec: PropertyConfiguration) {
         // TODO
     }
+
+
 }
 
 /**
@@ -267,8 +306,17 @@ class PropertyConfigurationBuilder {
             configuration.fieldOrder
                     .filter { p -> !(configuration.excludedProperties.contains(p)) }
                     .forEach { p ->
-                        val field: Field = FieldUtils.getDeclaredField(entityClass, p, true)
-                        listOfFields.add(field)
+                        try {
+                            val field: Field? = FieldUtils.getDeclaredField(entityClass, p, true)
+                            if (field == null) {
+                                val f2: Field = FieldUtils.getDeclaredField(entityClass, "$p\$delegate", true)
+                                listOfFields.add(f2)
+                            } else {
+                                listOfFields.add(field)
+                            }
+                        } catch (e: Exception) {
+                            throw FormConfigurationException("Property $p does not exist in $entityClass, but has been declared in fieldOrder")
+                        }
                     }
             listOfFields
         }

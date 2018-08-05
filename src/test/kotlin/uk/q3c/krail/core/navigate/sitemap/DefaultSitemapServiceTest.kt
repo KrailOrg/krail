@@ -36,7 +36,6 @@ import uk.q3c.util.clazz.DefaultClassNameUtils
 import uk.q3c.util.guice.SerializationSupport
 import uk.q3c.util.text.DefaultMessageFormat
 import uk.q3c.util.text.MessageFormat2
-import java.io.File
 
 /**
  * Created by David Sowerby on 10 May 2018
@@ -55,7 +54,6 @@ object DefaultSitemapServiceTest : Spek({
             testModule = LocalTestModule()
             mockVaadinSession = createMockVaadinSession()
             config = testModule.applicationConfiguration
-            val inifile = File(resourceUtils.userTempDirectory(), "WEB-INF/krail.ini")
             val modules = guiceModules()
             modules.add(testModule)
             injector = Guice.createInjector(modules)

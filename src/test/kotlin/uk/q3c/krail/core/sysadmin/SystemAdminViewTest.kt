@@ -8,7 +8,6 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.view.NavigationStateExt
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.util.guice.SerializationSupport
 
@@ -21,13 +20,11 @@ object SystemAdminViewTest : Spek({
         lateinit var navigator: Navigator
         lateinit var view: SystemAdminView
         lateinit var serializationSupport: SerializationSupport
-        lateinit var busMessage: ViewChangeBusMessage
         lateinit var navigationStateExt: NavigationStateExt
 
         beforeEachTest {
             navigator = mockk(relaxed = true)
             serializationSupport = mockk()
-            busMessage = mockk()
             navigationStateExt = mockk(relaxed = true)
             view = SystemAdminView(navigator, MockTranslate(), serializationSupport)
             view.beforeBuild(navigationStateExt)

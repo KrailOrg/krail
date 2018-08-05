@@ -42,6 +42,8 @@ object FormConfigurationTest_FluentJava : Spek({
                     columnOrder.shouldContainExactly(listOf("q", "a"))
                     entityClass.shouldEqual(Person::class.java)
                     fieldOrder.shouldContainExactly(listOf("b", "c", "d"))
+                    sampleCaptionKey.shouldEqual(TestLabelKey.key1)
+                    sampleDescriptionKey.shouldEqual(TestLabelKey.key2)
                     excludedProperties.shouldContainAll(listOf("x"))
                     styleAttributes.size.shouldEqual(StyleSize.huge)
                 }

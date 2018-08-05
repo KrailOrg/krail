@@ -59,7 +59,7 @@ class StyleAttributes : Serializable {
         this.alignment = alignment
         return this
     }
-    
+
 }
 
 /**
@@ -75,7 +75,9 @@ class StyleAttributes : Serializable {
  *
  * When setting validation, http://piotrnowicki.com/2011/02/float-and-double-in-java-inaccurate-result/
  *
- * [caption] and [description] must be set manually
+ * The manner in which [caption] and [description] are set is determined by the implementation of [PropertyConfigurationCreator].  For the default implementation, see [DefaultPropertyConfigurationCreator.caption] enables two methods, that is by
+ *
+ *
  *
  * Java Class is used rather than Kotlin KClass, because KClass is not serializable
  */

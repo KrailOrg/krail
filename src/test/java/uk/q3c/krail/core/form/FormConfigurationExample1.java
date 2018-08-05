@@ -29,6 +29,8 @@ public class FormConfigurationExample1 extends FormConfiguration {
                 .columnOrder("q", "a")
                 .entityClass(Person.class)
                 .fieldOrder("b", "c")
+                .sampleCaptionKey(TestLabelKey.key1)
+                .sampleDescriptionKey(TestLabelKey.key2)
                 .excludedProperties("x")
                 .styleAttributes(new StyleAttributes().size(StyleSize.huge)).
                 fieldOrder("b", "c", "d");

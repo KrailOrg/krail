@@ -2,6 +2,8 @@ package uk.q3c.krail.core.form
 
 import com.vaadin.ui.FormLayout
 import com.vaadin.ui.Layout
+import uk.q3c.krail.core.i18n.NullI18NKey
+import uk.q3c.krail.i18n.I18NKey
 import java.io.Serializable
 
 /**
@@ -15,6 +17,10 @@ import java.io.Serializable
  * [excludedProperties] are removed from the fields no matter how the initial list is generated, but is retained as a hidden column the the Table view
  *
  * [columnOrder] determines the order of columns in the Table.  Properties not listed here have their columns hidden
+ *
+ * [sampleDescriptionKey] and [sampleCaptionKey] are just sample values of [I18NKey] enums.  This saves having to declare the
+ * caption and description keys explicitly in each [PropertyConfiguration]. The property name is used to try and lookup a key (an enum constant)
+ * from the sample enum class.  Assuming the sample contains constants for all the property names, all fields will have I18N aware captions and descriptions
  *
  * [name] is there to be used where a [FormBuilder] uses multiple sections
 
@@ -34,6 +40,8 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
 
     var layout: Class<out Layout> = FormLayout::class.java
     var fieldOrder: Set<String> = LinkedHashSet()
+    var sampleCaptionKey: I18NKey = NullI18NKey.none
+    var sampleDescriptionKey: I18NKey = NullI18NKey.none
 
 
     val properties: MutableMap<String, PropertyConfiguration> = mutableMapOf()
@@ -73,6 +81,16 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
 
     fun entityClass(entityClass: Class<*>): FormSectionConfiguration {
         this.entityClass = entityClass
+        return this
+    }
+
+    fun sampleCaptionKey(sampleCaptionKey: I18NKey): FormSectionConfiguration {
+        this.sampleCaptionKey = sampleCaptionKey
+        return this
+    }
+
+    fun sampleDescriptionKey(sampleDescriptionKey: I18NKey): FormSectionConfiguration {
+        this.sampleDescriptionKey = sampleDescriptionKey
         return this
     }
 
