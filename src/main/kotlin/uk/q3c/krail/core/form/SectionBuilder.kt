@@ -112,7 +112,12 @@ class StandardFormSectionBuilder<BEAN : Any>(
         }
         val layout = configuration.layout.newInstance()
 
-        // add to layout in the order specified by configuration.fieldOrder
+        // add to layout in the order specified by configuration.fieldOrder, unless it is empty, in which case we use
+        // the component map - this will return fields in the order Java returned fields by reflection, and is therefore
+        // not predictable
+        if (configuration.fieldOrder.isEmpty()) {
+            configuration.fieldOrder = componentMap.keys
+        }
         configuration.fieldOrder.forEach { p ->
             val entry = componentMap[p]
             if (entry != null) {
