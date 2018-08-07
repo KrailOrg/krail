@@ -11,6 +11,7 @@ import com.vaadin.event.selection.SelectionEvent
 import com.vaadin.event.selection.SelectionListener
 import com.vaadin.shared.ui.colorpicker.Color
 import com.vaadin.ui.AbstractComponent
+import com.vaadin.ui.AbstractField
 import com.vaadin.ui.CheckBox
 import com.vaadin.ui.ColorPicker
 import com.vaadin.ui.ComboBox
@@ -91,6 +92,7 @@ class DefaultForm @Inject constructor(
         formConfiguration.config()
         val formBuilder = formBuilderSelectorProvider.get().selectFormBuilder(formConfiguration)
         section = formBuilder.build(this, navigationStateExt)
+        section.makeReadOnly()
         if (section is FormDetailSection<*>) {
             (section as FormDetailSection<*>).translate(translate, currentLocale)
         }
@@ -123,10 +125,19 @@ interface FormSection : Serializable {
      * @throws NoSuchElementException if the [parameters] specify an item which does not exist
      */
     fun loadData(parameters: Map<String, String>)
+
+    fun makeReadOnly()
 }
 
 
 class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : FormSection {
+    override fun makeReadOnly() {
+        propertyMap.forEach { _, v ->
+            if (v.component is AbstractField<*>) {
+                v.component.isReadOnly = true
+            }
+        }
+    }
 
     fun translate(translate: Translate, currentLocale: CurrentLocale) {
         propertyMap.forEach { _, v ->
@@ -260,6 +271,10 @@ interface Entity {
 
 
 class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : FormSection, SelectionListener<BEAN> {
+    override fun makeReadOnly() {
+        rootComponent.editor.isEnabled = false
+    }
+
     override fun selectionChange(event: SelectionEvent<BEAN>) {
         val selectedItem = event.firstSelectedItem
         if (selectedItem.isPresent) {

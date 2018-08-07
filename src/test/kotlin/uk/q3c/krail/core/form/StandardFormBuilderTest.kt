@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.vaadin.data.provider.ListDataProvider
+import com.vaadin.ui.AbstractField
 import com.vaadin.ui.ComboBox
 import com.vaadin.ui.DateField
 import com.vaadin.ui.FormLayout
@@ -276,6 +277,29 @@ object StandardFormSectionBuilderTest : Spek({
 
             it("calls the form to change route to the selected id") {
                 verify { form.changeRoute(testModule.person2.id) }
+            }
+        }
+
+        on("invoking makeReadOnly() on detail section") {
+            val section = builder.buildDetail(formDaoFactory, translate)
+            section.makeReadOnly()
+
+            it("makes components read only") {
+                with(section) {
+                    (propertyMap["dob"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["title"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["age"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["name"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                }
+            }
+        }
+
+        on("invoking makeReadOnly() on table section") {
+            val section = builder.buildTable(form, formDaoFactory, translate)
+            section.makeReadOnly()
+
+            it("disables Grid editor") {
+                (section.rootComponent as Grid<*>).editor.isEnabled.shouldBeFalse()
             }
         }
 
