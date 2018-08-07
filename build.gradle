@@ -71,7 +71,7 @@ repositories {
 kaytee {
     version {
         number = "0.16.12.0"
-        qualifier="forms2"
+        qualifier="forms3"
     }
     changelog {
         maxVersions = 10
