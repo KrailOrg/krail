@@ -43,6 +43,9 @@ class StandardFormSectionBuilder<BEAN : Any>(
 //        val propertySet: PropertySet<BEAN> = BeanPropertySet.get(configuration.entityClass.java, false, PropertyFilterDefinition(1,listOf() )) as PropertySet<BEAN>
 //        val grid = Grid<BEAN>(propertySet) this constructor is protected - could sub-class
         val grid = Grid(configuration.entityClass) as Grid<BEAN>
+        val formDao: FormDao<BEAN> = formDaoFactory.getDao(configuration.entityClass.kotlin) as FormDao<BEAN>
+        val items = formDao.get()
+        grid.setItems(items)
         grid.locale = currentLocale.locale
         grid.setSelectionMode(Grid.SelectionMode.SINGLE)
         grid.setColumnOrder(*(configuration.columnOrder.toTypedArray()))
@@ -53,7 +56,7 @@ class StandardFormSectionBuilder<BEAN : Any>(
                 c.isHidden = true
             }
         }
-        val formDao: FormDao<BEAN> = formDaoFactory.getDao(configuration.entityClass.kotlin) as FormDao<BEAN>
+
         configuration.columnOrder.forEach { c -> grid.getColumn(c).isHidden = false }
 
 

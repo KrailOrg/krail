@@ -23,6 +23,9 @@ import com.vaadin.ui.Layout
 import com.vaadin.ui.ListSelect
 import com.vaadin.ui.TextField
 import org.slf4j.LoggerFactory
+import uk.q3c.krail.core.navigate.NavigationState
+import uk.q3c.krail.core.navigate.Navigator
+import uk.q3c.krail.core.navigate.StrictURIFragmentHandler
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.ViewBase
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
@@ -53,6 +56,8 @@ interface Form : KrailView {
 class DefaultForm @Inject constructor(
         translate: Translate,
         serializationSupport: SerializationSupport,
+        val navigator: Navigator,
+        val uriFragmentHandler: StrictURIFragmentHandler,
         val currentLocale: CurrentLocale,
         @field:Transient val formBuilderSelectorProvider: Provider<FormBuilderSelector>)
 
@@ -60,7 +65,12 @@ class DefaultForm @Inject constructor(
 
 
     override fun changeRoute(id: String) {
-        TODO()
+        val newState = NavigationState()
+        newState.fragment(navigationStateExt.to.fragment)
+        newState.update(uriFragmentHandler)
+        newState.parameter("id", id)
+        newState.update(uriFragmentHandler)
+        navigator.navigateTo(newState)
     }
 
 
@@ -111,8 +121,14 @@ class DefaultForm @Inject constructor(
 
     }
 
+    /**
+     * Loads data but only for the detail section.  Data for table is 'loaded' (with the Dao as a CallbackProvider) during construction
+     * of the [FormTableSection]
+     */
     override fun loadData(busMessage: AfterViewChangeBusMessage) {
-        section.loadData(navigationStateExt.to.parameters)
+        if (section is FormDetailSection<*>) {
+            (section as FormDetailSection<*>).loadData(navigationStateExt.to.parameters)
+        }
     }
 }
 
@@ -124,7 +140,6 @@ interface FormSection : Serializable {
      *
      * @throws NoSuchElementException if the [parameters] specify an item which does not exist
      */
-    fun loadData(parameters: Map<String, String>)
 
     fun makeReadOnly()
 }
@@ -151,7 +166,7 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
     }
 
 
-    override fun loadData(parameters: Map<String, String>) {
+    fun loadData(parameters: Map<String, String>) {
         val id = parameters.get("id")
         if (id == null) {
             throw MissingParameterException("id")
@@ -285,7 +300,5 @@ class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: G
         }
     }
 
-    override fun loadData(parameters: Map<String, String>) {
-        rootComponent.setItems(dao.get())
-    }
+
 }

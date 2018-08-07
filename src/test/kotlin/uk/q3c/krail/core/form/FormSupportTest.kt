@@ -8,6 +8,7 @@ import com.vaadin.ui.CheckBox
 import com.vaadin.ui.DateField
 import com.vaadin.ui.DateTimeField
 import com.vaadin.ui.TextField
+import io.mockk.mockk
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldThrow
 import org.jetbrains.spek.api.Spek
@@ -17,6 +18,7 @@ import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.core.env.RunningOn
 import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.env.ServletInjectorLocator
+import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.navigate.sitemap.Sitemap
 import uk.q3c.krail.core.persist.FormDaoModule
 import uk.q3c.krail.core.validation.KrailValidationModule
@@ -84,6 +86,7 @@ object FormSupportTest : Spek({
 
 
 class FormSupportTestModule : AbstractModule() {
+    val navigator: Navigator = mockk(relaxed = true)
     override fun configure() {
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
         bind(SerializationSupport::class.java).to(DefaultSerializationSupport::class.java)
@@ -91,5 +94,6 @@ class FormSupportTestModule : AbstractModule() {
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
+        bind(Navigator::class.java).toInstance(navigator)
     }
 }

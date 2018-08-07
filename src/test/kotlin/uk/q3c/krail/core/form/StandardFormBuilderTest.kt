@@ -33,6 +33,7 @@ import uk.q3c.krail.core.guice.InjectorHolder
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.KrailI18NModule
 import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
@@ -48,6 +49,7 @@ import uk.q3c.util.text.MessageFormat2
 import java.util.*
 import kotlin.NoSuchElementException
 
+@Suppress("UNCHECKED_CAST")
 /**
  * Created by David Sowerby on 05 Jul 2018
  */
@@ -228,7 +230,6 @@ object StandardFormSectionBuilderTest : Spek({
         on("creating a table section") {
             val serializationTracer = SerializationTracer()
             val section = builder.buildTable(form, formDaoFactory, translate)
-            section.loadData(mapOf())
             val grid: Grid<*> = section.rootComponent as Grid<*>
 
 
@@ -270,7 +271,6 @@ object StandardFormSectionBuilderTest : Spek({
 
         on("selecting a table item") {
             val section = builder.buildTable(form, formDaoFactory, translate)
-            section.loadData(mapOf())
             val grid: Grid<*> = section.rootComponent as Grid<*>
             val selectionModel: GridSelectionModel<Person> = grid.selectionModel as GridSelectionModel<Person>
             selectionModel.select(testModule.person2)
@@ -351,6 +351,8 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
     val person3 = Person(id = "3", name = "mock person 3", age = 42)
     val people: List<Person> = listOf(person1, person2, person3)
 
+    val navigator: Navigator = mockk(relaxed = true)
+
     override fun configure() {
         every { daoFactory.getDao(Person::class) } returns dao
         every { dao.get(testUuid1) } returns person1
@@ -363,6 +365,7 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
         bind(FormDaoFactory::class.java).toInstance(daoFactory)
+        bind(Navigator::class.java).toInstance(navigator)
     }
 
 }

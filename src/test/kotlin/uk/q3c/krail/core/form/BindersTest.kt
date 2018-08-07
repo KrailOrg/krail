@@ -5,6 +5,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.vaadin.data.converter.StringToIntegerConverter
 import com.vaadin.ui.TextField
+import io.mockk.mockk
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
@@ -21,6 +22,7 @@ import uk.q3c.krail.core.env.RunningOn
 import uk.q3c.krail.core.env.RuntimeEnvironment
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.guice.InjectorHolder
+import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.persist.MapDbFormDaoFactory
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.core.validation.KrailValidationModule
@@ -147,6 +149,8 @@ class Person(
 
 
 private class TestSupportModule : AbstractModule() {
+    val navigator: Navigator = mockk(relaxed = true)
+
     override fun configure() {
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
         bind(SerializationSupport::class.java).to(DefaultSerializationSupport::class.java)
@@ -155,6 +159,7 @@ private class TestSupportModule : AbstractModule() {
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
         bind(FormDaoFactory::class.java).to(MapDbFormDaoFactory::class.java).asEagerSingleton()
+        bind(Navigator::class.java).toInstance(navigator)
     }
 
 }

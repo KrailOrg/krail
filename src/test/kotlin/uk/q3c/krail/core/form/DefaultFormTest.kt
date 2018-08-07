@@ -3,6 +3,7 @@ package uk.q3c.krail.core.form
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.google.inject.Provider
 import com.google.inject.multibindings.MapBinder
 import io.mockk.every
 import io.mockk.mockk
@@ -17,6 +18,8 @@ import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.core.env.ServletEnvironmentModule
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.navigate.NavigationState
+import uk.q3c.krail.core.navigate.Navigator
+import uk.q3c.krail.core.navigate.StrictURIFragmentHandler
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
 import uk.q3c.krail.core.persist.FormDaoModule
@@ -143,8 +146,8 @@ object FormConstructionTest : Spek({
         every { toStateWithoutIdParams.parameters } returns mapOf(Pair("otherParam", "23"))
         lateinit var masterSitemapNode: MasterSitemapNode
         val userSitemapNode: UserSitemapNode = mockk(relaxed = true)
-        val navigationStateWithIdParams: NavigationStateExt = NavigationStateExt(from = fromState, to = toStateWithIdParams, node = userSitemapNode)
-        val navigationStateWithoutIdParams: NavigationStateExt = NavigationStateExt(from = fromState, to = toStateWithoutIdParams, node = userSitemapNode)
+        val navigationStateWithIdParams = NavigationStateExt(from = fromState, to = toStateWithIdParams, node = userSitemapNode)
+        val navigationStateWithoutIdParams = NavigationStateExt(from = fromState, to = toStateWithoutIdParams, node = userSitemapNode)
 
         beforeEachTest {
             formModule = FormModule2()
@@ -177,14 +180,46 @@ object FormConstructionTest : Spek({
     }
 })
 
+object FormChangeRouteSpek : Spek({
+
+    given("Mocked inputs") {
+        val translate: Translate = mockk(relaxed = true)
+        val serializationSupport: SerializationSupport = mockk(relaxed = true)
+        val uriFragmentHandler = StrictURIFragmentHandler()
+        val navigator: Navigator = mockk(relaxed = true)
+        val currentLocale: CurrentLocale = mockk(relaxed = true)
+        val formBuilderSelectorProvider: Provider<FormBuilderSelector> = mockk(relaxed = true)
+        val form = DefaultForm(translate, serializationSupport, navigator, uriFragmentHandler, currentLocale, formBuilderSelectorProvider)
+        val userSitemapNode: UserSitemapNode = mockk(relaxed = true)
+        val navStateTo = NavigationState().fragment("person")
+        navStateTo.update(uriFragmentHandler)
+        val navState = NavigationStateExt(NavigationState(), navStateTo, userSitemapNode)
+
+        on("invoking a route by new id") {
+            val expectedState = NavigationState().fragment("person/id=1")
+            expectedState.update(uriFragmentHandler)
+            form.beforeBuild(navState)
+            form.changeRoute("1")
+
+            it("navigates to detail with id set in params") {
+                verify { navigator.navigateTo(expectedState) }
+            }
+        }
+    }
+})
+
 
 class DefaultFormTestModule : AbstractModule() {
+
+    val navigator: Navigator = mockk(relaxed = true)
+
     override fun configure() {
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
         bind(SerializationSupport::class.java).to(DefaultSerializationSupport::class.java)
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
+        bind(Navigator::class.java).toInstance(navigator)
     }
 
 }
