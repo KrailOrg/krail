@@ -394,7 +394,10 @@ public class DefaultNavigator implements Navigator {
         ErrorView view = viewFactory.get(ErrorView.class);
         view.setError(error);
         UserSitemapNode node = userSitemap.nodeFor(navigationState);
-        changeView(view, new NavigationStateExt(previousNavigationState, navigationState, null));
+        if (node == null) {
+            node = userSitemap.standardPageNode(StandardPageKey.Log_Out); // TODO there should be a node for error https://github.com/KrailOrg/krail/issues/711
+        }
+        changeView(view, new NavigationStateExt(previousNavigationState, navigationState, node));
     }
 
     /**

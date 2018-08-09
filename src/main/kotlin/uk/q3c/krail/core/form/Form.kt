@@ -83,11 +83,11 @@ class DefaultForm @Inject constructor(
     }
 
     override fun doBuild() {
-        val viewConfigurationClass = navigationStateExt.node?.masterNode?.viewConfiguration
+        val viewConfigurationClass = navigationStateExt.node.masterNode.viewConfiguration
         val formConfiguration =
                 if (FormConfiguration::class.java.isAssignableFrom(viewConfigurationClass)) {
                     try {
-                        viewConfigurationClass?.newInstance() as FormConfiguration
+                        viewConfigurationClass.newInstance() as FormConfiguration
                     } catch (e: Exception) {
                         log.error("Failed to set form configuration", e)
                         EmptyFormConfiguration()
