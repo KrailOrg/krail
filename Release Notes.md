@@ -12,6 +12,9 @@ A ``NavigationStateExt`` is passed in the ``KrailView.beforeBuild`` and stored i
 
 The methods with a parameter have therefore been deprecated and replaced with parameterless versions. 
 
+## Navigator
+
+- Has 2 additional methods to access sub-pages and the breadcrumb to the current page
 
 ## Ported to Kotlin
 
