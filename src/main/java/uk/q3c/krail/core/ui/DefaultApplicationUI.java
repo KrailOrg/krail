@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.ui;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.ComboBox;
@@ -36,10 +37,9 @@ import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.ApplicationHeader;
 import uk.q3c.krail.core.view.component.ApplicationLogo;
-import uk.q3c.krail.core.view.component.Breadcrumb;
 import uk.q3c.krail.core.view.component.LocaleSelector;
 import uk.q3c.krail.core.view.component.MessageBar;
-import uk.q3c.krail.core.view.component.SubPagePanel;
+import uk.q3c.krail.core.view.component.PageNavigationPanel;
 import uk.q3c.krail.core.view.component.UserNavigationMenu;
 import uk.q3c.krail.core.view.component.UserNavigationTree;
 import uk.q3c.krail.core.view.component.UserStatusPanel;
@@ -79,10 +79,10 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
             DescriptionKey.SubPage_Panel_is_Visible);
 
     protected final UserNavigationTree navTree;
-    protected final Breadcrumb breadcrumb;
+    protected final PageNavigationPanel breadcrumb;
     protected final UserStatusPanel userStatus;
     protected final UserNavigationMenu menu;
-    protected final SubPagePanel subpage;
+    protected final PageNavigationPanel subpage;
     protected final MessageBar messageBar;
     protected final ApplicationLogo logo;
     protected final ApplicationHeader header;
@@ -93,21 +93,20 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     protected Component headerRow;
     protected VerticalLayout mainArea;
     protected Panel nonSplitPanel;
-    private Option option;
     protected HorizontalSplitPanel splitPanel;
-
     protected ComboBox<Locale> localeCombo;
+    private Option option;
 
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ApplicationLogo logo, ApplicationHeader
-            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
+            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Provider<PageNavigationPanel> pageNavigationPanelProvider, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
         super(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfig);
         this.navTree = navTree;
-        this.breadcrumb = breadcrumb;
+        this.breadcrumb = pageNavigationPanelProvider.get();
         this.userStatus = userStatusPanel;
         this.menu = menu;
-        this.subpage = subpage;
+        this.subpage = pageNavigationPanelProvider.get();
         this.messageBar = messageBar;
         this.logo = logo;
         this.header = header;
@@ -186,10 +185,12 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
     }
 
     protected void subPagePanel() {
+        subpage.configureAsSubPagePanel();
         subpage.setVisible(option.get(optionSubPagePanelVisible));
     }
 
     protected void breadcrumb() {
+        breadcrumb.configureAsBreadcrumb();
         breadcrumb.setVisible(option.get(optionBreadcrumbVisible));
     }
 
@@ -266,7 +267,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         return navTree;
     }
 
-    public Breadcrumb getBreadcrumb() {
+    public PageNavigationPanel getBreadcrumb() {
         return breadcrumb;
     }
 
@@ -278,7 +279,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
         return menu;
     }
 
-    public SubPagePanel getSubpage() {
+    public PageNavigationPanel getSubpage() {
         return subpage;
     }
 
@@ -309,6 +310,7 @@ public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContex
             this.markAsDirtyRecursive();
         }
     }
+
 
     public ComboBox<Locale> getLocaleCombo() {
         return localeCombo;

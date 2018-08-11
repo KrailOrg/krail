@@ -19,10 +19,9 @@ import uk.q3c.krail.core.push.PushMessageRouter
 import uk.q3c.krail.core.user.notify.VaadinNotification
 import uk.q3c.krail.core.view.component.ApplicationHeader
 import uk.q3c.krail.core.view.component.ApplicationLogo
-import uk.q3c.krail.core.view.component.Breadcrumb
 import uk.q3c.krail.core.view.component.LocaleSelector
 import uk.q3c.krail.core.view.component.MessageBar
-import uk.q3c.krail.core.view.component.SubPagePanel
+import uk.q3c.krail.core.view.component.PageNavigationPanel
 import uk.q3c.krail.core.view.component.UserNavigationMenu
 import uk.q3c.krail.core.view.component.UserNavigationTree
 import uk.q3c.krail.core.view.component.UserStatusPanel
@@ -55,6 +54,7 @@ class MockedModule : AbstractModule() {
     val mockBreadcrumb: Breadcrumb = mock()
     val mockOption: Option = mock()
     val mockSerializationSupport: SerializationSupport = mock()
+    val mockPageNavigationPanel: PageNavigationPanel = mock()
 
 
     override fun configure() {
@@ -79,6 +79,7 @@ class MockedModule : AbstractModule() {
         bind(SerializationSupport::class.java).toInstance(mockSerializationSupport)
         bind(KrailPushConfiguration::class.java).to(DefaultKrailPushConfiguration::class.java)
         bind(RuntimeEnvironment::class.java).annotatedWith(RunningOn::class.java).toInstance(RuntimeEnvironment.SERVLET)
+        bind(PageNavigationPanel::class.java).toInstance(mockPageNavigationPanel)
     }
 }
 

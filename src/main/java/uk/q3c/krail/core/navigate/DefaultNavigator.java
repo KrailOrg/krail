@@ -57,6 +57,7 @@ import uk.q3c.util.guice.SerializationSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,13 +96,13 @@ public class DefaultNavigator implements Navigator {
     private final LogoutNavigationRule logoutNavigationRule;
     private final InvalidURIHandler invalidURIHandler;
     private final MasterSitemap masterSitemap;
-    private NavigationState currentNavigationState;
     private final UIBusProvider uiBusProvider;
-    private NavigationState previousNavigationState;
-    private UserSitemap userSitemap;
     private final ViewChangeRule viewChangeRule;
     private final ComponentIdGenerator idGenerator;
     private final transient MessageBus messageBus;
+    private NavigationState currentNavigationState;
+    private NavigationState previousNavigationState;
+    private UserSitemap userSitemap;
     private SerializationSupport serializationSupport;
 
 
@@ -153,6 +154,25 @@ public class DefaultNavigator implements Navigator {
             String msg = "Sitemap service failed to start, application will have no pages";
             log.error(msg);
             throw new IllegalStateException(msg, e);
+        }
+    }
+
+    @Override
+    public List<UserSitemapNode> nodeChainForCurrentNode() {
+        if (getCurrentNode() == null) {
+            return new ArrayList<>();
+        } else {
+            return userSitemap.nodeChainFor(getCurrentNode());
+        }
+
+    }
+
+    @Override
+    public List<UserSitemapNode> subNodes() {
+        if (getCurrentNode() == null) {
+            return new ArrayList<>();
+        } else {
+            return userSitemap.getChildren(getCurrentNode());
         }
     }
 
@@ -409,7 +429,7 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     * Returns the node for the current navigation state.  If the node is not fond in the map, a check is also made to
+     * Returns the node for the current navigation state.  If the node is not found in the map, a check is also made to
      * see whether it is the login node (which will not appear in the map once the user has logged in)
      *
      * @return

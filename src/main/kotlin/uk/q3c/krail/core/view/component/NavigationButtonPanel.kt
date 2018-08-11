@@ -91,7 +91,7 @@ abstract class NavigationButtonPanel @Inject protected constructor(
                 if (i < buttons.size) {
                     button = buttons[i]
                 } else {
-                    button = createButton()
+                    button = createButton(filteredList[i])
                 }
                 setupButton(button, filteredList[i])
             }
@@ -99,8 +99,8 @@ abstract class NavigationButtonPanel @Inject protected constructor(
         }
     }
 
-    protected fun createButton(): NavigationButton {
-        val button = NavigationButton()
+    protected fun createButton(userSitemapNode: UserSitemapNode): NavigationButton {
+        val button = NavigationButton(userSitemapNode, navigatorProvider.get())
         button.addStyleName(ValoTheme.BUTTON_LINK)
         button.addClickListener(this)
         buttons.add(button)

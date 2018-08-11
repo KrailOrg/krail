@@ -11,26 +11,26 @@
  *
  */
 
-package uk.q3c.krail.core.navigate.sitemap.comparator;
+package uk.q3c.krail.core.navigate.sitemap.comparator
 
-import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
-
-import java.io.Serializable;
-import java.util.Comparator;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
+import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType
+import java.io.Serializable
+import java.util.*
 
 /**
- * A set of comparators which can be used to sort {@link UserSitemapNode}s, with a lookup key and name to support
+ * A set of comparators which can be used to sort [UserSitemapNode]s, with a lookup key and name to support
  * selection by an end user
  *
  * @author David Sowerby
  */
-public interface UserSitemapSorters extends Serializable {
+@Deprecated("Replaced by UserSitemapNodeSorter", ReplaceWith("UserSitemapNodeSorter", "uk.q3c.krail.core.navigate.sitemap"))
+interface UserSitemapSorters : Serializable {
 
-    void setOptionSortAscending(boolean ascending);
+    val sortComparator: Comparator<UserSitemapNode>
 
-    void setOptionKeySortType(SortType sortType);
+    fun setOptionSortAscending(ascending: Boolean)
 
-    Comparator<UserSitemapNode> getSortComparator();
+    fun setOptionKeySortType(sortType: SortType)
 
 }

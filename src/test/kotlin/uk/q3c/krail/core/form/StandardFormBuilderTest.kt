@@ -59,7 +59,6 @@ object StandardFormSectionBuilderTest : Spek({
         lateinit var injector: Injector
         lateinit var builder: StandardFormSectionBuilder<Person>
         lateinit var binderFactory: KrailBeanValidationBinderFactory
-        lateinit var binder: KrailBeanValidationBinder<Person>
         lateinit var formConfiguration: FormConfiguration
         lateinit var configuration: FormSectionConfiguration
         lateinit var propertySpecCreator: PropertyConfigurationCreator
@@ -209,7 +208,6 @@ object StandardFormSectionBuilderTest : Spek({
         }
 
         on("setting a value that should fail a validator set by configuration") {
-            val serializationTracer = SerializationTracer()
             val section = builder.buildDetail(formDaoFactory, translate)
             section.loadData(mapOf(Pair("id", testUuid1)))
             (section.propertyMap["age"]!!.component as TextField).value = "2"
@@ -327,7 +325,6 @@ private class StandardFormConfiguration1 : FormConfiguration() {
         joinDateConfig.description = TestPersonKey.date_joined
         section.sampleCaptionKey = TestPersonKey.age
         section.sampleDescriptionKey = TestPersonKey.age
-        val rolesConfig = section.property("roles")
 
 
         val ageConfig = PropertyConfiguration("age", section)

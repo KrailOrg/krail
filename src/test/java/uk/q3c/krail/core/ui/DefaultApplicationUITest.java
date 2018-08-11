@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.ui;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ErrorHandler;
@@ -32,10 +33,9 @@ import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.ApplicationHeader;
 import uk.q3c.krail.core.view.component.ApplicationLogo;
-import uk.q3c.krail.core.view.component.Breadcrumb;
 import uk.q3c.krail.core.view.component.LocaleSelector;
 import uk.q3c.krail.core.view.component.MessageBar;
-import uk.q3c.krail.core.view.component.SubPagePanel;
+import uk.q3c.krail.core.view.component.PageNavigationPanel;
 import uk.q3c.krail.core.view.component.UserNavigationMenu;
 import uk.q3c.krail.core.view.component.UserNavigationTree;
 import uk.q3c.krail.core.view.component.UserStatusPanel;
@@ -67,7 +67,7 @@ public class DefaultApplicationUITest {
     @Mock
     private ApplicationTitle applicationTitle;
     @Mock
-    private Breadcrumb breadcrumb;
+    private Provider<PageNavigationPanel> pageNavigationPanelProvider;
     @Mock
     private DefaultBroadcaster broadcaster;
 
@@ -94,8 +94,6 @@ public class DefaultApplicationUITest {
     @Mock
     private DefaultPushMessageRouter pushMessageRouter;
     @Mock
-    private SubPagePanel subpage;
-    @Mock
     private Translate translate;
     @Mock
     private I18NProcessor translator;
@@ -112,7 +110,7 @@ public class DefaultApplicationUITest {
     public void setup() {
         when(navTree.getTree()).thenReturn(tree);
         when(menu.getMenuBar()).thenReturn(menuBar);
-        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option, serializationSupport, pushConfiguration);
+        ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, pageNavigationPanelProvider, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option, serializationSupport, pushConfiguration);
     }
 
     @Test
@@ -124,9 +122,9 @@ public class DefaultApplicationUITest {
         //then
         verify(navTree).setVisible(true);
         verify(menu).setVisible(true);
-        verify(breadcrumb).setVisible(true);
+        verify(ui.breadcrumb).setVisible(true);
         verify(messageBar).setVisible(true);
-        verify(subpage).setVisible(true);
+        verify(ui.subpage).setVisible(true);
     }
 
     @Test
@@ -143,9 +141,9 @@ public class DefaultApplicationUITest {
         //then
         verify(navTree).setVisible(false);
         verify(menu).setVisible(false);
-        verify(breadcrumb).setVisible(false);
+        verify(ui.breadcrumb).setVisible(false);
         verify(messageBar).setVisible(false);
-        verify(subpage).setVisible(false);
+        verify(ui.subpage).setVisible(false);
         verify(localeSelector).setCombo(anyObject());
     }
 

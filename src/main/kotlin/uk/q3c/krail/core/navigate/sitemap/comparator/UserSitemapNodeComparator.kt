@@ -11,11 +11,17 @@
  *
  */
 
-package uk.q3c.krail.core.navigate.sitemap.comparator;
+package uk.q3c.krail.core.navigate.sitemap.comparator
 
-import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
+import uk.q3c.krail.i18n.I18NKey
+import java.io.Serializable
+import java.util.*
 
-public interface UserSitemapSorter {
+interface UserSitemapNodeComparator : Comparator<UserSitemapNode>, Serializable {
 
-    I18NKey nameKey();
+    fun nameKey(): I18NKey
 }
+
+
+

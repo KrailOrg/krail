@@ -213,7 +213,7 @@ constructor(translate: Translate, uriHandler: URIFragmentHandler, sessionBusProv
         positionIndexes[a112Fragment] = 15
 
         insertionOrder.add(a113Fragment)
-        positionIndexes[a113Fragment] = 16
+        positionIndexes[a113Fragment] = 14
 
         insertionOrder.add(a114Fragment)
         positionIndexes[a114Fragment] = 17

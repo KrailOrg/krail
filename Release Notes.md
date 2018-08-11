@@ -2,7 +2,9 @@
 
 ## Forms
 
-Forms support added, currently just SimpleForm
+Forms support added.  MasterSitemapNode extended to include a configuration, so that a View or Form class can be declared, and its behaviour modified by its configuration
+
+The Form class is supported by FormBuilders - currently the standard form builder provides a table (Grid) or detail view depending on whether the URL has an entity id parameter
 
 ## Changes to KrailView
 
@@ -13,13 +15,18 @@ The methods with a parameter have therefore been deprecated and replaced with pa
 
 ## Ported to Kotlin
 
-MasterSitemapNode, UserSitemapNode, NodeRecord and NavigationCommand
-A couple of tests which mock UserSitemapNode (Mockito cannot mock final classes, Mockk can)
+Includes, but is not limited to:
 
-## Refactoring
+- MasterSitemapNode, UserSitemapNode, NodeRecord and NavigationCommand
+- A couple of tests which mock UserSitemapNode (Mockito cannot mock final classes, Mockk can)
+- All in package uk.q3c.krail.core.navigate.sitemap.comparator
+
+## Refactoring / renaming
 
 - DataModule becomes ConverterModule and is moved to uk.q3c.krail.core.form
 - ConverterFactory and associated classes moved to uk.q3c.krail.core.form
+- UserSitemapSorter becomes UserSitemapNodeComparator
+- SubPagePanel and Breadcrumb replaced by PageNavigationPanel
 
 ## Tests
 
