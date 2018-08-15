@@ -16,6 +16,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.Singleton
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters
+import uk.q3c.krail.core.view.NavigationView
 
 open class SitemapModule : AbstractModule() {
 
@@ -30,7 +31,7 @@ open class SitemapModule : AbstractModule() {
     }
 
     protected fun bindEmptyView() {
-        bind(EmptyView::class.java).to(DefaultEmptyView::class.java)
+        bind(EmptyView::class.java).to(NavigationView::class.java)
     }
 
 

@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.ServletEnvironmentModule;
+import uk.q3c.krail.core.error.ErrorModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -55,7 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule.class, ConfigurationFileModule.class,
-        VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
+        VaadinEventBusModule.class, ErrorModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, InMemoryModule.class, TestOptionModule.class,
         VaadinSessionScopeModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, NavigationModule.class, UtilModule.class, DefaultUIModule.class, UtilsModule.class})
 public class DirectSitemapModuleTest {

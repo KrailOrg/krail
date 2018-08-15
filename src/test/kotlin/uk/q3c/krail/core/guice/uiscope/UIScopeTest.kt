@@ -47,6 +47,7 @@ import org.mockito.stubbing.Answer
 import uk.q3c.krail.config.ConfigurationFileModule
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
 import uk.q3c.krail.core.env.ServletEnvironmentModule
+import uk.q3c.krail.core.error.ErrorModule
 import uk.q3c.krail.core.eventbus.UIBus
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
 import uk.q3c.krail.core.form.ConverterModule
@@ -141,7 +142,7 @@ class UIScopeTest {
                 OptionModule().activeSource(InMemory::class.java), UserModule(), DefaultComponentModule(), TestKrailI18NModule(),
                 DefaultShiroModule(), ShiroVaadinModule(), VaadinSessionScopeModule(), SitemapModule(), TestUIModule(),
                 NavigationModule(), VaadinEventBusModule(), EventBusModule(), UtilModule(), ConverterModule(),
-                DataTypeModule(), UtilsModule(), InMemoryModule().provideOptionDao(), ServletEnvironmentModule(), SerializationSupportModule())
+                DataTypeModule(), UtilsModule(), InMemoryModule().provideOptionDao(), ServletEnvironmentModule(), ErrorModule(), SerializationSupportModule())
         val injectorLocator = injector.getInstance(InjectorLocator::class.java)
         injectorLocator.put(injector)
         provider = injector.getInstance(UIProvider::class.java)

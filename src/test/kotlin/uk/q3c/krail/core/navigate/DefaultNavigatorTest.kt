@@ -65,11 +65,14 @@ import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.user.status.UserStatusChangeSource
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage
 import uk.q3c.krail.core.view.DefaultErrorView
+import uk.q3c.krail.core.view.DefaultNavigationView
 import uk.q3c.krail.core.view.ErrorView
 import uk.q3c.krail.core.view.KrailView
+import uk.q3c.krail.core.view.NavigationView
 import uk.q3c.krail.core.view.ViewFactory
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
 import uk.q3c.krail.core.view.component.ComponentIdGenerator
+import uk.q3c.krail.core.view.component.PageNavigationPanel
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.eventbus.SubscribeTo
@@ -402,14 +405,6 @@ object DefaultNavigatorTest : Spek({
             }
         }
 
-        on("calling the error function") {
-            navigator = createNavigator(navigatorDeps)
-            navigator.error(NullPointerException("test"))
-
-            it("changes to the error view") {
-                verify { scopedUI.changeView(any<ErrorView>()) }
-            }
-        }
 
         /**
          * [PageAccessControl.USER] requires that the user either authenticated or remembered
@@ -694,12 +689,16 @@ fun createInjector(): Injector {
 
 
 internal class DefaultNavigatorTestModule : AbstractModule() {
+    val pnp: PageNavigationPanel = mockk(relaxed = true)
+
     override fun configure() {
         bind(ErrorView::class.java).to(DefaultErrorView::class.java)
         bind(URIFragmentHandler::class.java).to(StrictURIFragmentHandler::class.java)
         bind(UserSitemap::class.java).to(DefaultUserSitemap::class.java)
         bind(LoginNavigationRule::class.java).to(DefaultLoginNavigationRule::class.java)
         bind(LogoutNavigationRule::class.java).to(DefaultLogoutNavigationRule::class.java)
+        bind(NavigationView::class.java).to(DefaultNavigationView::class.java)
+        bind(PageNavigationPanel::class.java).toInstance(pnp)
     }
 
 }

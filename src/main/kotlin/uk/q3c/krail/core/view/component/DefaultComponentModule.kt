@@ -19,10 +19,8 @@ class DefaultComponentModule : AbstractModule() {
 
     override fun configure() {
         bindUserNavigationTree()
-        bindBreadcrumb()
         bindLoginStatusPanel()
         bindNavigationMenu()
-        bindSubpagePanel()
         bindMessageStatusPanel()
         bindApplicationLogo()
         bindApplicationHeader()
@@ -76,14 +74,6 @@ class DefaultComponentModule : AbstractModule() {
     }
 
     /**
-     * Override this method to provide your own implementation of [SubPagePanel] in a sub-class of this module.
-     * Your module will then need to replace this module in [BindingsCollator]
-     */
-    protected fun bindSubpagePanel() {
-        bind(SubPagePanel::class.java).to(DefaultSubPagePanel::class.java)
-    }
-
-    /**
      * Override this method to provide your own implementation of [UserStatusPanel] in a sub-class of this
      * module.
      * Your module will then need to replace this module in [BindingsCollator]
@@ -99,15 +89,6 @@ class DefaultComponentModule : AbstractModule() {
     protected fun bindNavigationMenu() {
         bind(UserNavigationMenu::class.java).to(DefaultUserNavigationMenu::class.java)
         bind(UserNavigationMenuBuilder::class.java).to(DefaultUserNavigationMenuBuilder::class.java)
-    }
-
-    /**
-     * Override this method to provide your own implementation of [Breadcrumb] in a sub-class of this module.
-     * Your
-     * module will then need to replace this module in [BindingsCollator]
-     */
-    protected fun bindBreadcrumb() {
-        bind(Breadcrumb::class.java).to(DefaultBreadcrumb::class.java)
     }
 
     /**

@@ -17,7 +17,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinSession;
-import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +35,11 @@ import uk.q3c.krail.core.shiro.VaadinSessionProvider;
 import uk.q3c.krail.core.user.UserHasLoggedIn;
 import uk.q3c.krail.core.user.UserSitemapRebuilt;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
-import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.core.view.DefaultNavigationView;
+import uk.q3c.krail.core.view.NavigationView;
+import uk.q3c.krail.core.view.component.DefaultPageNavigationButtonBuilder;
+import uk.q3c.krail.core.view.component.PageNavigationButtonBuilder;
+import uk.q3c.krail.core.view.component.PageNavigationPanel;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.test.TestI18NModule;
@@ -49,6 +52,7 @@ import uk.q3c.util.guice.SerializationSupportModule;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
@@ -61,17 +65,9 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
     VaadinSessionProvider mockVaadinSessionProvider;
 
     @Mock
-    UserSitemapNodeModifier nodeModifier;
-
-    @Mock
     VaadinSession vaadinSession;
 
 
-    @Mock
-    MBassador<BusMessage> eventBus;
-
-    @Mock
-    private UserSitemapCopyExtension copyExtension;
     @Mock
     private UserStatusChangeSource userStatusChangeSource;
 
@@ -236,12 +232,16 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
 
     @ModuleProvider
     protected AbstractModule moduleProvider2() {
+        PageNavigationPanel pnp = mock(PageNavigationPanel.class);
         return new AbstractModule() {
 
             @Override
             protected void configure() {
                 bind(VaadinSessionProvider.class).toInstance(mockVaadinSessionProvider);
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(PageNavigationPanel.class).toInstance(pnp);
+                bind(NavigationView.class).to(DefaultNavigationView.class);
+                bind(PageNavigationButtonBuilder.class).to(DefaultPageNavigationButtonBuilder.class);
             }
 
         };

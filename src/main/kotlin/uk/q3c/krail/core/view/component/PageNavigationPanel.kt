@@ -14,6 +14,7 @@ import com.vaadin.ui.themes.ValoTheme
 import net.engio.mbassy.listener.Handler
 import net.engio.mbassy.listener.Listener
 import org.slf4j.LoggerFactory
+import uk.q3c.krail.core.eventbus.SessionBusProvider
 import uk.q3c.krail.core.eventbus.UIBusProvider
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
@@ -21,7 +22,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNodeSortMode
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapSortType.NONE
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapSortType.POSITION
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage
-import uk.q3c.krail.core.ui.ScopedUI
+import uk.q3c.krail.core.ui.ScopedUIProvider
 import uk.q3c.krail.core.view.ViewBase
 import uk.q3c.krail.core.view.component.NodeSelection.SUB_PAGES
 
@@ -77,6 +78,8 @@ interface PageNavigationPanel : NavigationAwareComponent {
 
 @Listener
 class DefaultPageNavigationPanel @Inject constructor(uiBusProvider: UIBusProvider,
+                                                     sessionBusProvider: SessionBusProvider,
+                                                     val uiProvider: ScopedUIProvider,
                                                      private val pageNavigationButtonBuilder: PageNavigationButtonBuilder) : PageNavigationPanel, Panel() {
 
 
@@ -89,6 +92,7 @@ class DefaultPageNavigationPanel @Inject constructor(uiBusProvider: UIBusProvide
 
     init {
         uiBusProvider.get().subscribe(this)
+        sessionBusProvider.get().subscribe(this)
     }
 
     /**
@@ -96,7 +100,8 @@ class DefaultPageNavigationPanel @Inject constructor(uiBusProvider: UIBusProvide
      * [UserSitemapNode.positionIndex]
      */
     override fun update() {
-        val navigator = (ui as ScopedUI).krailNavigator
+        val thisUI = uiProvider.get()
+        val navigator = thisUI.krailNavigator
         val currentNode = navigator.currentNode
         if (currentNode == null) {
             log.warn("Navigator is not ready yet")

@@ -15,6 +15,7 @@ import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.config.ConfigurationFileModule
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule
 import uk.q3c.krail.core.env.ServletEnvironmentModule
+import uk.q3c.krail.core.error.ErrorModule
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule
 import uk.q3c.krail.core.form.FormConfiguration
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
@@ -115,7 +116,7 @@ val page3 = "public/options/detail"
 
 private fun testModules(): List<Module> {
     return listOf(TestDirectSitemapModule_A(), TestDirectSitemapModule_B(), UIScopeModule(), ViewModule(), ConfigurationFileModule(),
-            ShiroVaadinModule(), KrailI18NModule(), SitemapModule(), UserModule(), InMemoryModule(), TestOptionModule(),
+            ShiroVaadinModule(), KrailI18NModule(), SitemapModule(), UserModule(), InMemoryModule(), TestOptionModule(), ErrorModule(),
             KrailApplicationConfigurationModule(), DefaultShiroModule(), DefaultComponentModule(), VaadinSessionScopeModule(), NavigationModule(),
             VaadinEventBusModule(), SerializationSupportModule(), ServletEnvironmentModule(), PushModule(), EventBusModule(), UtilsModule(), DefaultUIModule(), DataTypeModule(), UtilsModule(), UtilModule())
 }

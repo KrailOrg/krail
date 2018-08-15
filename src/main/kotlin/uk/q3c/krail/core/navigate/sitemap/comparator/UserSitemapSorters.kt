@@ -13,6 +13,8 @@
 
 package uk.q3c.krail.core.navigate.sitemap.comparator
 
+import com.google.common.base.Preconditions
+import com.google.inject.Inject
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType
 import java.io.Serializable
@@ -32,5 +34,53 @@ interface UserSitemapSorters : Serializable {
     fun setOptionSortAscending(ascending: Boolean)
 
     fun setOptionKeySortType(sortType: SortType)
+}
+
+
+/**
+ * A set of comparators which can be used to sort [UserSitemapNode]s, with a lookup key and name to support
+ * selection by an end user
+ *
+ * @author dsowerby
+ */
+class DefaultUserSitemapSorters @Inject
+protected constructor(private val alphaAscending: AlphabeticAscending, private val alphaDescending: AlphabeticDescending,
+                      private val insertionAscending: InsertionOrderAscending,
+                      private val insertionDescending: InsertionOrderDescending,
+                      private val positionAscending: PositionIndexAscending,
+                      private val positionDescending: PositionIndexDescending) : UserSitemapNodeSorter {
+    var isAscending = true
+        private set
+    override lateinit var sortComparator: Comparator<UserSitemapNode>
+        private set
+    var sortType = SortType.ALPHA
+        private set
+
+    enum class SortType {
+        ALPHA, INSERTION, POSITION
+    }
+
+    init {
+        select()
+    }
+
+    private fun select() {
+        when (sortType) {
+            DefaultUserSitemapSorters.SortType.ALPHA -> sortComparator = if (isAscending) alphaAscending else alphaDescending
+            DefaultUserSitemapSorters.SortType.INSERTION -> sortComparator = if (isAscending) insertionAscending else insertionDescending
+            DefaultUserSitemapSorters.SortType.POSITION -> sortComparator = if (isAscending) positionAscending else positionDescending
+        }
+    }
+
+    override fun setOptionSortAscending(ascending: Boolean) {
+        this.isAscending = ascending
+        select()
+    }
+
+    override fun setOptionKeySortType(sortType: SortType) {
+        Preconditions.checkNotNull(sortType)
+        this.sortType = sortType
+        select()
+    }
 
 }

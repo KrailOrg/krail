@@ -19,8 +19,9 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.MenuBar.MenuItem;
 import fixture.ReferenceUserSitemap;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,6 +35,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -51,6 +53,7 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static uk.q3c.krail.core.vaadin.MockVaadinSessionKt.createMockVaadinSession;
 
 
 @RunWith(MycilaJunitRunner.class)
@@ -80,18 +83,26 @@ public class DefaultUserNavigationMenuTest {
     DefaultUserNavigationMenuBuilder builder;
 
     private DefaultUserNavigationMenu userNavigationMenu;
+    static MockVaadinSession mockVaadinSession;
+
+    @BeforeClass
+    public static void setupClass() {
+        mockVaadinSession = createMockVaadinSession();
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        mockVaadinSession.clear();
+    }
 
     @Before
     public void setUp() {
+
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         userSitemap.clear();
         userSitemap.populate();
         builder = new DefaultUserNavigationMenuBuilder(userSitemap, navigator);
-    }
-
-    @After
-    public void tearDown() {
 
     }
 
@@ -227,10 +238,10 @@ public class DefaultUserNavigationMenuTest {
 
         //re-instate as 'displayable'
         userSitemap.b11Node()
-                   .setPositionIndex(5);
+                .setPositionIndex(5);
         // hide the b branch
         userSitemap.bNode()
-                   .setPositionIndex(-1);
+                .setPositionIndex(-1);
         //when
         userNavigationMenu.build();
 
@@ -313,7 +324,7 @@ public class DefaultUserNavigationMenuTest {
         assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(3);
         // option has been set
         int result = userNavigationMenu.optionInstance()
-                                       .get(DefaultUserNavigationMenu.optionKeyMaximumDepth);
+                .get(DefaultUserNavigationMenu.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(3);
     }
 

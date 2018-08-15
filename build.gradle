@@ -164,7 +164,9 @@ dependencies {
     compile 'com.vaadin:vaadin-themes:' + vaadinVersion
     compile 'com.vaadin:vaadin-push:' + vaadinVersion
 
-
+    // Vaadin addons
+//    compile 'de.steinwedel.vaadin.addon:messagebox:4.0.21'
+//
 
     //testing
 

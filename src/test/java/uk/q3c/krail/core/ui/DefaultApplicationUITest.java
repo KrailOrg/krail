@@ -68,6 +68,13 @@ public class DefaultApplicationUITest {
     private ApplicationTitle applicationTitle;
     @Mock
     private Provider<PageNavigationPanel> pageNavigationPanelProvider;
+
+    @Mock
+    PageNavigationPanel breadcrumb;
+
+    @Mock
+    PageNavigationPanel subPagePanel;
+
     @Mock
     private DefaultBroadcaster broadcaster;
 
@@ -110,6 +117,7 @@ public class DefaultApplicationUITest {
     public void setup() {
         when(navTree.getTree()).thenReturn(tree);
         when(menu.getMenuBar()).thenReturn(menuBar);
+        when(pageNavigationPanelProvider.get()).thenReturn(breadcrumb, subPagePanel);
         ui = new DefaultApplicationUI(navigator, errorHandler, logo, header, userStatusPanel, menu, navTree, pageNavigationPanelProvider, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option, serializationSupport, pushConfiguration);
     }
 

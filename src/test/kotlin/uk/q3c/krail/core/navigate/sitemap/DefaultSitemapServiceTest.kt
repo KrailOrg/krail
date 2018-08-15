@@ -21,7 +21,12 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler
 import uk.q3c.krail.core.shiro.PageAccessControl
 import uk.q3c.krail.core.vaadin.MockVaadinSession
 import uk.q3c.krail.core.vaadin.createMockVaadinSession
+import uk.q3c.krail.core.view.DefaultNavigationView
+import uk.q3c.krail.core.view.NavigationView
 import uk.q3c.krail.core.view.PublicHomeView
+import uk.q3c.krail.core.view.component.DefaultPageNavigationButtonBuilder
+import uk.q3c.krail.core.view.component.PageNavigationButtonBuilder
+import uk.q3c.krail.core.view.component.PageNavigationPanel
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
@@ -130,6 +135,7 @@ private class LocalTestModule : SitemapModule() {
     val messageBus: MessageBus = mockk(relaxed = true)
     val serialisationSupport: SerializationSupport = mockk()
     val userSitemap: UserSitemap = mockk(relaxed = true)
+    val pnp: PageNavigationPanel = mockk(relaxed = true)
 
     override fun configure() {
         super.configure()
@@ -141,6 +147,9 @@ private class LocalTestModule : SitemapModule() {
         bind(ClassNameUtils::class.java).to(DefaultClassNameUtils::class.java)
         bind(SerializationSupport::class.java).toInstance(serialisationSupport)
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
+        bind(PageNavigationPanel::class.java).toInstance(pnp)
+        bind(NavigationView::class.java).to(DefaultNavigationView::class.java)
+        bind(PageNavigationButtonBuilder::class.java).to(DefaultPageNavigationButtonBuilder::class.java)
     }
 
 

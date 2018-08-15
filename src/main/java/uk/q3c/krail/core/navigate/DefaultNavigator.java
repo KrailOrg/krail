@@ -44,7 +44,6 @@ import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserSitemapRebuilt;
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
-import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.ViewFactory;
@@ -52,6 +51,7 @@ import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.service.State;
 import uk.q3c.util.guice.SerializationSupport;
 
 import java.io.IOException;
@@ -144,6 +144,10 @@ public class DefaultNavigator implements Navigator {
     public void init() {
         log.debug("initialising DefaultNavigator");
         try {
+            if (sitemapService.getState().equals(State.FAILED)) {
+                log.error("Sitemap service had failed with cause: ", sitemapService.getCause());
+                sitemapService.reset();
+            }
             sitemapService.start();
             //take a reference and keep it in case current model changes
             userSitemapBuilder.setMasterSitemap(masterSitemap);
@@ -406,19 +410,6 @@ public class DefaultNavigator implements Navigator {
         previousNavigationState = null;
     }
 
-    @Override
-    public void error(Throwable error) {
-        log.debug("A {} Error has been thrown, reporting via the Error View", error.getClass()
-                .getName());
-        NavigationState navigationState = uriHandler.navigationState("error");
-        ErrorView view = viewFactory.get(ErrorView.class);
-        view.setError(error);
-        UserSitemapNode node = userSitemap.nodeFor(navigationState);
-        if (node == null) {
-            node = userSitemap.standardPageNode(StandardPageKey.Log_Out); // TODO there should be a node for error https://github.com/KrailOrg/krail/issues/711
-        }
-        changeView(view, new NavigationStateExt(previousNavigationState, navigationState, node));
-    }
 
     /**
      * Navigates to a the location represented by {@code node}

@@ -13,6 +13,8 @@ import uk.q3c.util.guice.SerializationSupport
  * the page hierarchy.  For example, when displayed on a mobile, this page may be automatically populated with buttons
  * to navigate to its "child" pages. On a desktop device, maybe something else would be preferred.
  *
+ * Guice binding is in [SitemapModule]
+ *
  * Created by David Sowerby on 29 Apr 2018
  */
 interface EmptyView : KrailView

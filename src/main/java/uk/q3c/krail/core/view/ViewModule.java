@@ -44,7 +44,15 @@ public class ViewModule extends AbstractModule {
         bindRequestSystemAccountRefreshView();
         bindSystemAccountView();
         bindViewFactory();
+        bindNavigationView();
 
+    }
+
+    /**
+     * Override this to provide your own {@link NavigationView}
+     */
+    protected void bindNavigationView() {
+        bind(NavigationView.class).to(DefaultNavigationView.class);
     }
 
     protected void bindViewFactory() {

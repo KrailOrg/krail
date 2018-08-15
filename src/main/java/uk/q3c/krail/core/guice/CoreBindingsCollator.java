@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.BindingsCollator;
+import uk.q3c.krail.core.error.ErrorModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.form.ConverterModule;
 import uk.q3c.krail.core.form.FormModule;
@@ -119,6 +120,7 @@ public class CoreBindingsCollator implements BindingsCollator {
         modules.add(dataTypeModule());
         modules.add(pushModule());
         modules.addAll(daoModules());
+        modules.addAll(errorModules());
 
         addUtilModules(modules);
         addValidationModules(modules);
@@ -130,6 +132,10 @@ public class CoreBindingsCollator implements BindingsCollator {
         addSerializationSupport(modules);
         addFormsModules(modules);
         return modules;
+    }
+
+    private List<Module> errorModules() {
+        return ImmutableList.of(new ErrorModule());
     }
 
     private void addSerializationSupport(List<Module> modules) {

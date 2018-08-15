@@ -15,6 +15,17 @@ The methods with a parameter have therefore been deprecated and replaced with pa
 ## Navigator
 
 - Has 2 additional methods to access sub-pages and the breadcrumb to the current page
+- error() method has been removed - this does not play well when there is an error in the Sitemap (see also the MessageBox and KrailErrorHandler)
+
+## KrailErrorHandler
+
+- Handles uncaught exceptions directly (by logging and popup message box) instead of calling Navigator.error().  The latter does not work well when an error occurs in Sitemap code.
+- binding moved from ShiroVaadinModule to ErrorModule
+
+## Message Box
+
+- The [MessageBox addon](https://vaadin.com/directory/component/messagebox) was intended to be used as a normal addon, but ButtonOption is not serializable.  The only solution unfortunately was to import the source.  There were no tests with it.   [Open Issue](https://github.com/KrailOrg/krail/issues/722) to review  
+ 
 
 ## Ported to Kotlin
 

@@ -67,14 +67,6 @@ public interface Navigator extends Page.PopStateListener {
     KrailView getCurrentView();
 
     /**
-     * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
-     * via the KrailErrorHandler
-     *
-     * @param throwable
-     */
-    void error(Throwable throwable);
-
-    /**
      * Navigates to the location represented by {@code navigationState}, which may include parameters
      *
      * @param navigationState

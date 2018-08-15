@@ -19,10 +19,9 @@ import uk.q3c.krail.core.view.RequestSystemAccountEnableView
 import uk.q3c.krail.core.view.RequestSystemAccountRefreshView
 import uk.q3c.krail.core.view.RequestSystemAccountResetView
 import uk.q3c.krail.core.view.RequestSystemAccountUnlockView
-import uk.q3c.krail.core.view.SystemAccountView
 
 /**
- * A set of pages to support user account management.
+ * EXAMPLE ONLY.  A set of pages to support user account management.
  *
  * @author David Sowerby
  */
@@ -35,7 +34,7 @@ class SystemAccountManagementPages : DirectSitemapModule() {
      * @see uk.q3c.krail.core.navigate.sitemap.DirectSitemapModule.define
      */
     override fun define() {
-        addEntry("", LabelKey.System_Account, PUBLIC, SystemAccountView::class.java)
+        addEntry("", LabelKey.System_Account, PUBLIC, EmptyView::class.java)
         addEntry("request-account", LabelKey.Request_Account, PUBLIC, RequestSystemAccountCreateView::class.java)
         addEntry("enable-account", LabelKey.Enable_Account, PUBLIC, RequestSystemAccountEnableView::class.java)
         addEntry("refresh-account", LabelKey.Refresh_Account, PUBLIC, RequestSystemAccountRefreshView::class.java)
