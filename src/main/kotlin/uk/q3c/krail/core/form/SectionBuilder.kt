@@ -4,6 +4,7 @@ import com.google.inject.Inject
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
 import com.vaadin.ui.AbstractComponent
+import com.vaadin.ui.AbstractOrderedLayout
 import com.vaadin.ui.Component
 import com.vaadin.ui.Grid
 import net.jodah.typetools.TypeResolver
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.NullI18NKey
+import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
@@ -27,13 +29,14 @@ import kotlin.reflect.KClass
  * so that they can be modified if required.
  *
  */
-class StandardFormSectionBuilder<BEAN : Any>(
+class StandardFormSectionBuilder<BEAN : Entity>(
         val entityClass: KClass<BEAN>,
         val binderFactory: KrailBeanValidationBinderFactory,
         val configuration: FormSectionConfiguration,
         private val currentLocale: CurrentLocale,
         private val propertySpecCreator: PropertyConfigurationCreator,
-        val formSupport: FormSupport) {
+        val formSupport: FormSupport,
+        val userNotifier: UserNotifier) {
 
     var binder: KrailBeanValidationBinder<BEAN> = binderFactory.create(entityClass)
 
@@ -71,53 +74,43 @@ class StandardFormSectionBuilder<BEAN : Any>(
         return fts
     }
 
-//    @Suppress("UNCHECKED_CAST")
-//    private fun <G : Grid<BEAN>> buildTableColumns(grid: G) {
-//        for (propertySpecEntry in configuration.properties) {
-//            val propertyConfig = propertySpecEntry.value
-//
-//            // we use the specified renderer if there is one, otherwise get the default from FormSupport
-//            val renderer: AbstractRenderer<in Any, out Any> = if (propertyConfig.columnRendererClass == AbstractRenderer::class) {
-//                formSupport.rendererFor(propertyConfig.propertyValueClass.kotlin, grid as Grid<Any>)
-//            } else {
-//                propertyConfig.columnRendererClass.newInstance() as AbstractRenderer<in Any, out Any> // TODO how do we set the locale for this - Renderer does not surface locale
-//            }
-//
-//            val column: Grid.Column<BEAN, *> = grid.addColumn(propertyConfig.name, renderer)
-//
-//        }
-//    }
 
-
-    fun buildDetail(formDaoFactory: FormDaoFactory, translate: Translate): FormDetailSection<BEAN> {
+    fun buildDetail(formDaoFactory: FormDaoFactory, translate: Translate, editSaveCancelBuilder: EditSaveCancelBuilder): FormDetailSection<BEAN> {
         val componentMap: MutableMap<String, DetailPropertyInfo> = mutableMapOf()
 
         PropertyConfigurationBuilder().build(configuration, propertySpecCreator)
-
+        val dao = formDaoFactory.getDao(entityClass = entityClass)
         for (propertySpecEntry in configuration.properties) {
             val propertySpec = propertySpecEntry.value
             propertySpec.merge()
-
-            // if the componentClass has not been explicitly set, read from the property
-            val component: HasValue<*> = if (propertySpec.componentClass == HasValue::class.java) {
-                formSupport.componentFor(propertySpec.propertyValueClass.kotlin).get()
-            } else {
-                propertySpec.componentClass.newInstance()
-            }
+            val component = formSupport.componentFor(propertySpec)
             if (component is AbstractComponent) {
                 component.styleName = propertySpec.styleAttributes.combinedStyle()
-                componentMap[propertySpec.name] = DetailPropertyInfo(component = component, captionKey = propertySpec.caption, descriptionKey = propertySpec.description, isDelegate = propertySpec.isDelegate)
+                componentMap[propertySpec.name] = DetailPropertyInfo(component = component, captionKey = propertySpec.caption, descriptionKey = propertySpec.description)
             }
             // we have a component but we need to know the type of data it requires so we can select the right converter
-            val presentationValueClass = TypeResolver.resolveRawArgument(HasValue::class.java, component.javaClass).kotlin
+            val presentationValueClass = when (propertySpec.fieldType) {
+                FieldType.STANDARD -> TypeResolver.resolveRawArgument(HasValue::class.java, component.javaClass).kotlin
+                FieldType.SINGLE_SELECT -> propertySpec.propertyValueClass.kotlin
+                FieldType.MULTI_SELECT -> Set::class
+
+            }
             doBind(propertySpec.propertyValueClass.kotlin, presentationValueClass, component, propertySpec, translate)
 
         }
         val layout = configuration.layout.newInstance()
 
-        // add to layout in the order specified by configuration.fieldOrder, unless it is empty, in which case we use
-        // the component map - this will return fields in the order Java returned fields by reflection, and is therefore
-        // not predictable
+        // We need to keep EditSaveCancel component references so that the buttons can be re-translated in the event
+        // of a language change
+        val escList: MutableList<EditSaveCancel> = mutableListOf()
+        // if there is a top aligned EditSaveCancel add it here
+        if (editSaveCancelBuilder.hasTopComponent()) {
+            addEsc(layout, editSaveCancelBuilder.topComponent(), escList)
+        }
+
+        // add fields for properties to the layout in the order specified by configuration.fieldOrder, unless it is empty,
+        // in which case we use component map - this will return fields in the order Java returned fields by reflection,
+        // and is therefore not predictable
         if (configuration.fieldOrder.isEmpty()) {
             configuration.fieldOrder = componentMap.keys
         }
@@ -127,9 +120,20 @@ class StandardFormSectionBuilder<BEAN : Any>(
                 layout.addComponent(entry.component)
             }
         }
-        return FormDetailSection(componentMap, layout, binder, formDaoFactory.getDao(entityClass = entityClass))
+
+        // if there is a bottom aligned EditSaveCancel add it here
+        if (editSaveCancelBuilder.hasBottomComponent()) {
+            addEsc(layout, editSaveCancelBuilder.bottomComponent(), escList)
+        }
+
+        return FormDetailSection(componentMap, layout, binder, dao, escList, userNotifier)
 
 
+    }
+
+    private fun addEsc(layout: AbstractOrderedLayout, esc: EditSaveCancel, escList: MutableList<EditSaveCancel>) {
+        layout.addComponent(esc)
+        escList.add(esc)
     }
 
 
@@ -138,24 +142,21 @@ class StandardFormSectionBuilder<BEAN : Any>(
         val typedComponent: PRESENTATION = component as PRESENTATION
         val binderBuilder = binder.forField(typedComponent)
 
-        if (SelectPropertyDelegate::class.java.isAssignableFrom(modelClass.java)) {
-            binderBuilder.bind(propertySpec.name)
-        } else {
-            val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass.kotlin as KClass<MODEL>)
-            val binderBuilderWithConverter = binderBuilder.withConverter(converter)
-            propertySpec.validators.forEach { v ->
-                val validator = v as KrailValidator<in MODEL>
-                validator.translate = translate
-                binderBuilderWithConverter.withValidator(validator)
-            }
+        val converter: Converter<PRESENTATIONVALUE, MODEL> = formSupport.converterFor(presentationValueClass = presentationValueClass, modelClass = propertySpec.propertyValueClass.kotlin as KClass<MODEL>)
 
-            binderBuilderWithConverter.bind(propertySpec.name)
+        val binderBuilderWithConverter = binderBuilder.withConverter(converter)
+        propertySpec.validators.forEach { v ->
+            val validator = v as KrailValidator<in MODEL>
+            validator.translate = translate
+            binderBuilderWithConverter.withValidator(validator)
         }
+
+        binderBuilderWithConverter.bind(propertySpec.name)
     }
 }
 
 
-data class DetailPropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component, val isDelegate: Boolean) : Serializable
+data class DetailPropertyInfo(val captionKey: I18NKey, val descriptionKey: I18NKey, val component: Component) : Serializable
 
 
 /**
@@ -216,9 +217,6 @@ class DefaultPropertyConfigurationCreator @Inject constructor() : PropertyConfig
         if (spec.propertyValueClass == Any::class.java) {
             spec.propertyValueClass = property.type
         }
-        val delegateId = "\$delegate"
-        spec.isDelegate = property.name.contains(delegateId)
-
     }
 
 //    private fun fieldClass(property: Field, spec: PropertyConfiguration, formSupport: FormSupport) {

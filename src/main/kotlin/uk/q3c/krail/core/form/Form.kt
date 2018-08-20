@@ -5,22 +5,13 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import com.google.inject.multibindings.MapBinder
-import com.google.inject.multibindings.Multibinder
 import com.vaadin.data.HasValue
-import com.vaadin.event.selection.SelectionEvent
-import com.vaadin.event.selection.SelectionListener
 import com.vaadin.shared.ui.colorpicker.Color
-import com.vaadin.ui.AbstractComponent
-import com.vaadin.ui.AbstractField
 import com.vaadin.ui.CheckBox
-import com.vaadin.ui.CheckBoxGroup
 import com.vaadin.ui.ColorPicker
-import com.vaadin.ui.ComboBox
 import com.vaadin.ui.Component
 import com.vaadin.ui.DateField
 import com.vaadin.ui.DateTimeField
-import com.vaadin.ui.Grid
-import com.vaadin.ui.Layout
 import com.vaadin.ui.TextField
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.navigate.NavigationState
@@ -36,7 +27,6 @@ import uk.q3c.util.guice.SerializationSupport
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
-import javax.cache.Cache
 import kotlin.reflect.KClass
 
 
@@ -51,6 +41,7 @@ interface Form : KrailView {
      * Change route to the item specified by [id].  [id] is usually from [Entity.id]
      */
     fun changeRoute(id: String)
+
 }
 
 class DefaultForm @Inject constructor(
@@ -102,7 +93,7 @@ class DefaultForm @Inject constructor(
         formConfiguration.config()
         val formBuilder = formBuilderSelectorProvider.get().selectFormBuilder(formConfiguration)
         section = formBuilder.build(this, navigationStateExt)
-        section.makeReadOnly()
+        section.mode = EditMode.READ_ONLY
         if (section is FormDetailSection<*>) {
             (section as FormDetailSection<*>).translate(translate, currentLocale)
         }
@@ -134,63 +125,69 @@ class DefaultForm @Inject constructor(
 
 
 interface FormSection : Serializable {
+    var mode: EditMode
     val rootComponent: Component
-    /**
-     * Loads data as specified by the given [parameters]
-     *
-     * @throws NoSuchElementException if the [parameters] specify an item which does not exist
-     */
-
-    fun makeReadOnly()
 }
 
-
-class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>) : FormSection {
-    override fun makeReadOnly() {
-        propertyMap.forEach { _, v ->
-            if (v.component is AbstractField<*>) {
-                v.component.isReadOnly = true
-            }
-        }
-    }
-
-    fun translate(translate: Translate, currentLocale: CurrentLocale) {
-        propertyMap.forEach { _, v ->
-            v.component.caption = translate.from(v.captionKey)
-            // setDescription is not part of Component interface!
-            if (v.component is AbstractComponent) {
-                v.component.locale = currentLocale.locale
-                v.component.description = translate.from(v.descriptionKey)
-            }
-        }
-    }
-
-
-    fun loadData(parameters: Map<String, String>) {
-        val id = parameters.get("id")
-        if (id == null) {
-            throw MissingParameterException("id")
-        } else {
-            val bean = dao.get(id)
-            for (entry in propertyMap) {
-                if (entry.value.isDelegate) {
-                    val jprops = bean::class.java.declaredFields.asList()
-                    val propDelegateField = jprops.first { p ->
-                        "${entry.key}\$delegate" == p.name
-                    }
-                    propDelegateField.isAccessible = true
-
-                    val delegate = propDelegateField.get(bean)
-                    (delegate as SelectPropertyDelegate).configureComponent(entry.value.component)
-                }
-            }
-
-            binder.readBean(bean)
-        }
-    }
-}
 
 class MissingParameterException(val parameter: String) : RuntimeException("There is no parameter '$parameter'")
+
+
+interface BaseDao<BEAN : Any> : Serializable {
+
+    /**
+     * Inserts new [beans]
+     */
+    fun insert(vararg beans: BEAN)
+
+    /**
+     * Returns all the entities of type BEAN
+     */
+    fun get(): List<BEAN>
+
+    /**
+     * Gets the first item which has an 'id' property matching [key]
+     *
+     * @throws NoSuchElementException if not found
+     */
+    fun get(key: String): BEAN
+
+
+    /**
+     * Updates an existing element or inserts a new one if one does not exist
+     */
+    fun update(element: BEAN)
+
+    /**
+     * Identical to [update]
+     */
+    fun put(element: BEAN)
+
+    /**
+     * Close the underlying database connection
+     */
+    fun close()
+
+
+    fun isClosed(): Boolean
+}
+
+
+interface FormDaoFactory : Serializable {
+    fun <T : Entity> getDao(entityClass: KClass<T>): FormDao<T>
+}
+
+
+class FormDao<T : Any>(baseDao: BaseDao<T>) : BaseDao<T> by baseDao, Serializable {
+    fun applyFilter() {
+        TODO()
+    }
+}
+
+
+interface Entity {
+    val id: String
+}
 
 open class FormModule : AbstractModule() {
 
@@ -201,7 +198,6 @@ open class FormModule : AbstractModule() {
         val stringLiteral = object : TypeLiteral<String>() {}
         val formTypeBuilderClassLiteral = object : TypeLiteral<FormBuilder>() {}
         val formTypeBuilderLookup: MapBinder<String, FormBuilder> = MapBinder.newMapBinder(binder(), stringLiteral, formTypeBuilderClassLiteral)
-        val rendererBinder: Multibinder<RendererSet> = Multibinder.newSetBinder(binder(), RendererSet::class.java)
         bindFormBuilders(formTypeBuilderLookup)
         bindDefaultDataClassMappings(modelClassToUIFieldMap)
         bindBeanValidatorFactory()
@@ -210,11 +206,17 @@ open class FormModule : AbstractModule() {
         bindForm()
         bindFormBuilderSelector()
         bindPropertySpecCreator()
-        bindRendererSets(rendererBinder)
+        bindEditSaveCancel()
+        bindEditSaveCancelBuilder()
     }
 
-    protected open fun bindRendererSets(rendererBinder: Multibinder<RendererSet>) {
-        rendererBinder.addBinding().to(BaseRendererSet::class.java)
+
+    protected open fun bindEditSaveCancel() {
+        bind(EditSaveCancel::class.java).to(DefaultEditSaveCancel::class.java)
+    }
+
+    protected open fun bindEditSaveCancelBuilder() {
+        bind(EditSaveCancelBuilder::class.java).to(DefaultEditSaveCancelBuilder::class.java)
     }
 
     protected open fun bindPropertySpecCreator() {
@@ -231,13 +233,12 @@ open class FormModule : AbstractModule() {
 
     protected open fun bindDefaultDataClassMappings(dataClassToFieldMap: MapBinder<Class<*>, HasValue<*>>) {
         dataClassToFieldMap.addBinding(String::class.java).to(TextField::class.java)
-        dataClassToFieldMap.addBinding(Int::class.javaPrimitiveType).to(TextField::class.java)
+        dataClassToFieldMap.addBinding(Int::class.java).to(TextField::class.java)
+        dataClassToFieldMap.addBinding(Integer::class.java).to(TextField::class.java)
         dataClassToFieldMap.addBinding(LocalDateTime::class.java).to(DateTimeField::class.java)
         dataClassToFieldMap.addBinding(LocalDate::class.java).to(DateField::class.java)
         dataClassToFieldMap.addBinding(Color::class.java).to(ColorPicker::class.java)
         dataClassToFieldMap.addBinding(Boolean::class.javaPrimitiveType).to(CheckBox::class.java)
-        dataClassToFieldMap.addBinding(SingleSelectPropertyDelegate::class.java).to(ComboBox::class.java)
-        dataClassToFieldMap.addBinding(MultiSelectPropertyDelegate::class.java).to(CheckBoxGroup::class.java)
     }
 
 
@@ -255,49 +256,6 @@ open class FormModule : AbstractModule() {
 
     protected open fun bindForm() {
         bind(Form::class.java).to(DefaultForm::class.java)
-    }
-
-
-}
-
-interface BaseDao<BEAN : Any> : Cache<String, BEAN>, Serializable {
-
-    fun put(vararg beans: BEAN)
-    fun get(): List<BEAN>
-
-}
-
-
-interface FormDaoFactory {
-    fun <T : Any> getDao(entityClass: KClass<T>): FormDao<T>
-}
-
-
-class FormDao<T : Any>(baseDao: BaseDao<T>) : BaseDao<T> by baseDao, Serializable {
-    fun applyFilter() {
-        TODO()
-    }
-}
-
-
-interface Entity {
-    val id: String
-}
-
-
-class FormTableSection<BEAN : Any>(val form: Form, override val rootComponent: Grid<BEAN>, val dao: FormDao<BEAN>) : FormSection, SelectionListener<BEAN> {
-    override fun makeReadOnly() {
-        rootComponent.editor.isEnabled = false
-    }
-
-    override fun selectionChange(event: SelectionEvent<BEAN>) {
-        val selectedItem = event.firstSelectedItem
-        if (selectedItem.isPresent) {
-            val bean = selectedItem.get()
-            if (bean is Entity) {
-                form.changeRoute(bean.id)
-            }
-        }
     }
 
 

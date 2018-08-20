@@ -83,7 +83,7 @@ class DefaultSystemErrorLogNotification : SystemErrorLogNotification {
 
 class DefaultSystemErrorUserNotification @Inject constructor(val userNotifier: UserNotifier) : SystemErrorUserNotification {
     override fun notify(error: Throwable) {
-        userNotifier.notifyError(UserNotificationLabelKey.A_system_error_occurred, ExceptionUtils.getRootCauseStackTrace(error)[0])
+        userNotifier.notifyError(UserNotificationLabelKey.A_system_error_occurred, ExceptionUtils.getRootCauseStackTrace(error))
     }
 
 }

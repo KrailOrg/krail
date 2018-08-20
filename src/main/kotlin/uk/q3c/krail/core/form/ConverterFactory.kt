@@ -62,8 +62,8 @@ class BaseConverterSet @Inject constructor(@field:Transient override val errorMe
 
         val emp = errorMessageProviderProvider.get()
         val converter: Any = when (converterPair) {
-            ConverterPair(String::class.java, Int::class.java) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
-            ConverterPair(String::class.java, Integer::class.java) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class.java, Int::class.java) -> StringToIntegerConverter(0, emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class.java, Integer::class.java) -> StringToIntegerConverter(0, emp.setMessage(ConverterKey.Must_be_a_number))
             else -> {
                 throw UnsupportedOperationException("Conversion between $converterPair is not supported")
             }

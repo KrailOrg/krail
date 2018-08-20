@@ -71,14 +71,14 @@ repositories {
 kaytee {
     version {
         number = "0.16.12.0"
-        qualifier="forms6"
+        qualifier="krail-725"
     }
     changelog {
         maxVersions = 10
     }
 
 }
-
+tasks
 bintray {
     user = 'dsowerby'
 }
@@ -97,12 +97,11 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    // JCache
-    // https://mvnrepository.com/artifact/javax.cache/cache-api
-    compile group: 'javax.cache', name: 'cache-api', version: '1.1.0'
-
     // MapDb
     compile "org.mapdb:mapdb:3.0.7"
+
+    // Db
+     compile 'org.dizitart:potassium-nitrite:3.0.2'
 
 
 
@@ -203,14 +202,16 @@ configurations.all {
         force "com.vaadin:vaadin-server:$vaadinVersion"
         force 'org.codehaus.groovy:groovy-all:2.4.9'
         force 'com.google.guava:guava:22.0'
-        force 'com.fasterxml.jackson.core:jackson-core:2.9.3'
-        force 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+        force 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+        force 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+        force 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
         force "com.google.inject.extensions:guice-multibindings:$guiceVersion"
         force 'com.google.code.findbugs:annotations:3.0.0'
         force 'commons-logging:commons-logging:1.2'
         force 'org.apache.commons:commons-lang3:3.3.2'
         force 'org.assertj:assertj-core:3.8.0'
         force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         force 'org.mockito:mockito-core:2.8.9'
         force 'com.mycila:mycila-log:2.12'
@@ -221,6 +222,7 @@ configurations.all {
         force "net.bytebuddy:byte-buddy:1.7.9"
         force "net.bytebuddy:byte-buddy-agent:1.7.9"
         force "org.objenesis:objenesis:2.6"
+        force 'javax.validation:validation-api:1.0.0.GA'
 
         dependencySubstitution {
             substitute module ('commons-beanutils:commons-beanutils-core') with module ('commons-beanutils:commons-beanutils:1.9.3')

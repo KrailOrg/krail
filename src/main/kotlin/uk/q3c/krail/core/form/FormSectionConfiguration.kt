@@ -1,7 +1,7 @@
 package uk.q3c.krail.core.form
 
+import com.vaadin.ui.AbstractOrderedLayout
 import com.vaadin.ui.FormLayout
-import com.vaadin.ui.Layout
 import uk.q3c.krail.core.i18n.NullI18NKey
 import uk.q3c.krail.i18n.I18NKey
 import java.io.Serializable
@@ -32,13 +32,13 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
 //    val detailConfiguration = DetailConfiguration()
 
 
-    var entityClass: Class<*> = Any::class.java
+    var entityClass: Class<out Entity> = Entity::class.java
     override var styleAttributes = StyleAttributes()
     var excludedProperties: Set<String> = LinkedHashSet()
 
     var columnOrder: Set<String> = LinkedHashSet()
 
-    var layout: Class<out Layout> = FormLayout::class.java
+    var layout: Class<out AbstractOrderedLayout> = FormLayout::class.java
     var fieldOrder: Set<String> = LinkedHashSet()
     var sampleCaptionKey: I18NKey = NullI18NKey.none
     var sampleDescriptionKey: I18NKey = NullI18NKey.none
@@ -79,7 +79,7 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
         return section
     }
 
-    fun entityClass(entityClass: Class<*>): FormSectionConfiguration {
+    fun entityClass(entityClass: Class<out Entity>): FormSectionConfiguration {
         this.entityClass = entityClass
         return this
     }
@@ -94,7 +94,7 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
         return this
     }
 
-    fun layout(layout: Class<out Layout>): FormSectionConfiguration {
+    fun layout(layout: Class<out AbstractOrderedLayout>): FormSectionConfiguration {
         this.layout = layout
         return this
     }
@@ -118,19 +118,15 @@ class FormSectionConfiguration(override val parentConfiguration: ParentConfigura
         return this
     }
 
+    fun styleAttributes(size: StyleSize = StyleSize.no_change,
+                        borderless: StyleBorderless = StyleBorderless.no_change,
+                        alignment: StyleAlignment = StyleAlignment.no_change): FormSectionConfiguration {
+        this.styleAttributes = StyleAttributes(size, borderless, alignment)
+        return this
+    }
+
     fun styleAttributes(styleAttributes: StyleAttributes): FormSectionConfiguration {
         this.styleAttributes = styleAttributes
         return this
     }
-}
-
-class TableConfiguration {
-
-    var hiddenColumns: MutableList<String> = mutableListOf()
-    var styleAttributes = StyleAttributes()
-}
-
-class DetailConfiguration {
-    var styleAttributes = StyleAttributes()
-
 }

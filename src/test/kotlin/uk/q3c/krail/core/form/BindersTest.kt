@@ -14,6 +14,7 @@ import org.apache.bval.guice.ValidationModule
 import org.apache.bval.jsr303.ApacheFactoryContext
 import org.apache.bval.jsr303.ClassValidator
 import org.apache.commons.lang3.reflect.FieldUtils
+import org.dizitart.no2.objects.Id
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -24,6 +25,7 @@ import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.guice.InjectorHolder
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.persist.MapDbFormDaoFactory
+import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
@@ -130,26 +132,22 @@ object BindersTest : Spek({
 
 const val testUuid1 = "123e4567-e89b-12d3-a456-556642440000"
 
-class Person(
-        override var id: String = testUuid1,
+data class Person(
+        @field:Id override var id: String = testUuid1,
         var title: String = "Mr",
         var name: String,
-        @field:Max(12)
-        var age: Int,
+        @field:Max(12) var age: Int,
         var joinDate: LocalDate = LocalDate.parse("2010-12-31"),
-        var dob: LocalDate = LocalDate.parse("1999-12-31")) : Serializable, Entity {
+        var dob: LocalDate = LocalDate.parse("1999-12-31"),
+        var pricePlan: Int = 3,
+        var roles: Set<String> = mutableSetOf()) : Serializable, Entity
 
-    var pricePlan: Int by SingleSelectPropertyDelegate<Person, Int>(setOf(1, 3))
-    var roles: Set<String> by MultiSelectPropertyDelegate<Person, String>(setOf("admin", "manager"))
 
-    init {
-        pricePlan = 3
-    }
-}
 
 
 private class TestSupportModule : AbstractModule() {
     val navigator: Navigator = mockk(relaxed = true)
+    val userNotifier: UserNotifier = mockk(relaxed = true)
 
     override fun configure() {
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
@@ -160,6 +158,7 @@ private class TestSupportModule : AbstractModule() {
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
         bind(FormDaoFactory::class.java).to(MapDbFormDaoFactory::class.java).asEagerSingleton()
         bind(Navigator::class.java).toInstance(navigator)
+        bind(UserNotifier::class.java).toInstance(userNotifier)
     }
 
 }

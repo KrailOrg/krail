@@ -3,7 +3,6 @@ package uk.q3c.krail.core.form
 import com.vaadin.ui.TextField
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.view.ViewConfiguration
-import java.io.Serializable
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -55,7 +54,7 @@ abstract class FormConfiguration : ViewConfiguration, ParentConfiguration, FormC
      * Returns or creates a [FormSectionConfiguration] with [name] - Java fluent API
      * If none currently exists, an new one is created
      */
-    fun section(name: String): FormSectionConfiguration {
+    fun section(name: String = "standard"): FormSectionConfiguration {
         var section: FormSectionConfiguration
         try {
             section = getSection(name)
@@ -138,5 +137,3 @@ class MyForm : FormConfiguration() {
 }
 
 class FormConfigurationException(msg: String) : RuntimeException(msg)
-
-class FormProperty : Serializable

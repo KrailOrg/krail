@@ -5,6 +5,8 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.vaadin.data.provider.ListDataProvider
 import com.vaadin.ui.AbstractField
+import com.vaadin.ui.AbstractMultiSelect
+import com.vaadin.ui.AbstractSingleSelect
 import com.vaadin.ui.ComboBox
 import com.vaadin.ui.DateField
 import com.vaadin.ui.FormLayout
@@ -34,6 +36,7 @@ import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.KrailI18NModule
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
+import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
@@ -68,6 +71,8 @@ object StandardFormSectionBuilderTest : Spek({
         lateinit var formDaoFactory: FormDaoFactory
         lateinit var form: Form
         lateinit var testModule: StandardFormSectionBuilderTestModule
+        lateinit var editSaveCancelBuilder: EditSaveCancelBuilder
+        lateinit var userNotifier: UserNotifier
 
         beforeEachTest {
             form = mockk(relaxed = true)
@@ -84,19 +89,28 @@ object StandardFormSectionBuilderTest : Spek({
             configuration = formConfiguration.section("single")
             translate = injector.getInstance(Translate::class.java)
             currentLocale = injector.getInstance(CurrentLocale::class.java)
-            builder = StandardFormSectionBuilder(entityClass = Person::class, binderFactory = binderFactory, configuration = configuration, propertySpecCreator = propertySpecCreator, formSupport = formSupport, currentLocale = currentLocale)
+            editSaveCancelBuilder = mockk(relaxed = true)
+            userNotifier = mockk(relaxed = true)
+            builder = StandardFormSectionBuilder(entityClass = Person::class, binderFactory = binderFactory, configuration = configuration, propertySpecCreator = propertySpecCreator, formSupport = formSupport, currentLocale = currentLocale, userNotifier = userNotifier)
         }
 
         on("creating the detail section") {
 
-            val serializationTracer = SerializationTracer()
-            val section = builder.buildDetail(formDaoFactory, translate)
-            section.loadData(mapOf(Pair("id", testUuid1)))
+            every { editSaveCancelBuilder.hasTopComponent() } returns true
+            every { editSaveCancelBuilder.hasBottomComponent() } returns true
+            every { editSaveCancelBuilder.topComponent() } returns DefaultEditSaveCancel()
+            every { editSaveCancelBuilder.bottomComponent() } returns DefaultEditSaveCancel()
 
+            val serializationTracer = SerializationTracer()
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
+            section.loadData(mapOf(Pair("id", testUuid1)))
+            val layout = (section.rootComponent as FormLayout)
 
 
             it("has the correct number of components") {
+                layout.getComponent(0).shouldBeInstanceOf(EditSaveCancel::class)
                 section.propertyMap.size.shouldBe(7)
+                layout.getComponent(8).shouldBeInstanceOf(EditSaveCancel::class)
             }
 
             it("creates default components where none specified") {
@@ -122,8 +136,8 @@ object StandardFormSectionBuilderTest : Spek({
                 section.rootComponent.shouldBeInstanceOf(FormLayout::class)
             }
 
-            it("has added the components to the layout") {
-                section.rootComponent.componentCount.shouldBe(7)
+            it("has added the components to the layout, including 2 x EditSaveCancel") {
+                section.rootComponent.componentCount.shouldBe(9)
             }
 
             it("ignores excluded properties") {
@@ -175,7 +189,7 @@ object StandardFormSectionBuilderTest : Spek({
         }
 
         on("setting a value that should fail a JSR annotation validator") {
-            val section = builder.buildDetail(formDaoFactory, translate)
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
             section.loadData(mapOf(Pair("id", testUuid1)))
             (section.propertyMap["age"]!!.component as TextField).value = "34"
             val validationResults = section.binder.validate()
@@ -191,24 +205,17 @@ object StandardFormSectionBuilderTest : Spek({
         }
 
         on("loading data with no 'id' parameter") {
-            val section = builder.buildDetail(formDaoFactory, translate)
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
             val result = { section.loadData(mapOf()) }
 
             it("throws a MissingParameterException") {
                 result.shouldThrow(MissingParameterException::class)
             }
         }
-        on("attempting to load an entity which does not exist") {
-            val section = builder.buildDetail(formDaoFactory, translate)
-            val result = { section.loadData(mapOf(Pair("id", "99"))) }
 
-            it("throws a NoSuchElementException") {
-                result.shouldThrow(NoSuchElementException::class)
-            }
-        }
 
         on("setting a value that should fail a validator set by configuration") {
-            val section = builder.buildDetail(formDaoFactory, translate)
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
             section.loadData(mapOf(Pair("id", testUuid1)))
             (section.propertyMap["age"]!!.component as TextField).value = "2"
             val validationResults = section.binder.validate()
@@ -278,9 +285,8 @@ object StandardFormSectionBuilderTest : Spek({
             }
         }
 
-        on("invoking makeReadOnly() on detail section") {
-            val section = builder.buildDetail(formDaoFactory, translate)
-            section.makeReadOnly()
+        on("detail section should be read only on construction") {
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
 
             it("makes components read only") {
                 with(section) {
@@ -288,16 +294,112 @@ object StandardFormSectionBuilderTest : Spek({
                     (propertyMap["title"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
                     (propertyMap["age"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
                     (propertyMap["name"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["pricePlan"]!!.component as AbstractSingleSelect<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["roles"]!!.component as AbstractMultiSelect<*>).isReadOnly.shouldBeTrue()
+
                 }
             }
         }
 
-        on("invoking makeReadOnly() on table section") {
+        on("attempting to load an entity which does not exist") {
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
+            val result = { section.loadData(mapOf(Pair("id", "99"))) }
+
+            it("throws a NoSuchElementException") {
+                result.shouldThrow(NoSuchElementException::class)
+            }
+        }
+
+        on(" calling editData()") {
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
+            section.editData()
+
+            it("changes to edit mode") {
+                section.mode.shouldBe(EditMode.EDIT)
+            }
+
+            it("updates field read only states") {
+                with(section) {
+                    (propertyMap["dob"]!!.component as AbstractField<*>).isReadOnly.shouldBeFalse()
+                    (propertyMap["title"]!!.component as AbstractField<*>).isReadOnly.shouldBeFalse()
+                    (propertyMap["age"]!!.component as AbstractField<*>).isReadOnly.shouldBeFalse()
+                    (propertyMap["name"]!!.component as AbstractField<*>).isReadOnly.shouldBeFalse()
+                    (propertyMap["pricePlan"]!!.component as AbstractSingleSelect<*>).isReadOnly.shouldBeFalse()
+                    (propertyMap["roles"]!!.component as AbstractMultiSelect<*>).isReadOnly.shouldBeFalse()
+
+                }
+            }
+
+        }
+
+        on(" calling cancelData() after editData()") {
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
+            section.loadData(mapOf(Pair("id", testUuid1)))
+            section.editData()
+            (section.propertyMap["age"]!!.component as AbstractField<String>).value = "11"
+            section.cancelData()
+
+            it("changes to read only mode") {
+                section.mode.shouldBe(EditMode.READ_ONLY)
+            }
+
+            it("updates field read only states") {
+                with(section) {
+                    (propertyMap["dob"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["title"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["age"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["name"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["pricePlan"]!!.component as AbstractSingleSelect<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["roles"]!!.component as AbstractMultiSelect<*>).isReadOnly.shouldBeTrue()
+
+                }
+            }
+
+            it("reloads the displayed fields") {
+                (section.propertyMap["age"]!!.component as AbstractField<String>).value.shouldBeEqualTo("12")
+            }
+
+            it("has not updated the data") {
+                formDaoFactory.getDao(Person::class).get(testUuid1).age.shouldBe(12)
+            }
+
+        }
+
+        on("calling save data after editing data") {
+            val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
+            section.loadData(mapOf(Pair("id", testUuid1)))
+            section.editData()
+            (section.propertyMap["age"]!!.component as AbstractField<String>).value = "11"
+            section.saveData()
+
+            it("changes to read only mode") {
+                section.mode.shouldBe(EditMode.READ_ONLY)
+            }
+
+            it("updates field read only states") {
+                with(section) {
+                    (propertyMap["dob"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["title"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["age"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["name"]!!.component as AbstractField<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["pricePlan"]!!.component as AbstractSingleSelect<*>).isReadOnly.shouldBeTrue()
+                    (propertyMap["roles"]!!.component as AbstractMultiSelect<*>).isReadOnly.shouldBeTrue()
+
+                }
+            }
+
+            it("has updated the data") {
+                formDaoFactory.getDao(Person::class).get(testUuid1).age.shouldBe(11)
+            }
+        }
+
+        on("table section should be readonly") {
             val section = builder.buildTable(form, formDaoFactory, translate)
-            section.makeReadOnly()
 
             it("disables Grid editor") {
+                section.mode.shouldBe(EditMode.READ_ONLY)
                 (section.rootComponent as Grid<*>).editor.isEnabled.shouldBeFalse()
+                (section.rootComponent as Grid<*>).columns.forEach { column -> column.isEditable.shouldBeFalse() }
             }
         }
 
@@ -308,28 +410,18 @@ object StandardFormSectionBuilderTest : Spek({
 
 private class StandardFormConfiguration1 : FormConfiguration() {
     override fun config() {
-
-        val section = FormSectionConfiguration(this, "single")
-        section.columnOrder = mutableSetOf("name", "age", "joinDate")
-        section.excludedProperties = setOf("id")
-        sections.add(section)
-        section.entityClass = Person::class.java
-        section.styleAttributes.borderless = StyleBorderless.yes
-        val titleConfig = PropertyConfiguration("title", section)
-        section.properties[titleConfig.name] = titleConfig
-        titleConfig.styleAttributes.size = StyleSize.huge
-        val joinDateConfig = PropertyConfiguration("joinDate", section)
-        section.properties[joinDateConfig.name] = joinDateConfig
-        joinDateConfig.componentClass = InlineDateField::class.java
-        joinDateConfig.caption = TestPersonKey.date_joined
-        joinDateConfig.description = TestPersonKey.date_joined
-        section.sampleCaptionKey = TestPersonKey.age
-        section.sampleDescriptionKey = TestPersonKey.age
-
-
-        val ageConfig = PropertyConfiguration("age", section)
-        ageConfig.min(3)
-        section.properties[ageConfig.name] = ageConfig
+        section("single")
+                .columnOrder("name", "age", "joinDate")
+                .excludedProperties("id")
+                .entityClass(Person::class.java)
+                .styleAttributes(borderless = StyleBorderless.yes)
+                .sampleCaptionKey(TestPersonKey.age)
+                .sampleDescriptionKey(TestPersonKey.age)
+                .property("title").styleAttributes(size = StyleSize.huge).end()
+                .property("joinDate").componentClass(InlineDateField::class.java).caption(TestPersonKey.date_joined).description(TestPersonKey.date_joined).end()
+                .property("age").min(3).end()
+                .property("pricePlan").fieldType(FieldType.SINGLE_SELECT).selectDataProvider(PricePlanDataProvider::class.java).end()
+                .property("roles").fieldType(FieldType.MULTI_SELECT).selectDataProvider(YesNoDataProvider::class.java)
     }
 
 }
@@ -338,6 +430,8 @@ private enum class TestPersonKey : I18NKey {
 
     date_joined, a_title, age, roles
 }
+
+class PricePlanDataProvider : ListDataProvider<Int>(listOf(1, 3))
 
 
 private class StandardFormSectionBuilderTestModule : AbstractModule() {
@@ -349,6 +443,7 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
     val people: List<Person> = listOf(person1, person2, person3)
 
     val navigator: Navigator = mockk(relaxed = true)
+    val userNotifier: UserNotifier = mockk(relaxed = true)
 
     override fun configure() {
         every { daoFactory.getDao(Person::class) } returns dao
@@ -356,6 +451,7 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
         every { dao.get("2") } returns person2
         every { dao.get("3") } returns person3
         every { dao.get() } returns people
+        every { dao.get("99") } throws (NoSuchElementException())
         bind(Translate::class.java).toInstance(MockTranslate())
         bind(CurrentLocale::class.java).toInstance(MockCurrentLocale())
         bind(SerializationSupport::class.java).to(DefaultSerializationSupport::class.java)
@@ -363,6 +459,7 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
         bind(FormDaoFactory::class.java).toInstance(daoFactory)
         bind(Navigator::class.java).toInstance(navigator)
+        bind(UserNotifier::class.java).toInstance(userNotifier)
     }
 
 }

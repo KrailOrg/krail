@@ -40,8 +40,9 @@ fun PropertyConfiguration.max(max: Int) {
     validators.add(MaxInt(max))
 }
 
-fun PropertyConfiguration.min(min: Int) {
+fun PropertyConfiguration.min(min: Int): PropertyConfiguration {
     validators.add(MinInt(min))
+    return this
 }
 
 fun PropertyConfiguration.max(max: Long) {

@@ -47,9 +47,10 @@ object MapDBBaseDaoTest : Spek({
 
         on("putting a value") {
 
-            dao.put(person1.id, person1)
-            dao.put(person2, person5, person6)
-            dao.putAll(mapOf(Pair(person3.id, person3), Pair(person4.id, person4)))
+            dao.put(person1)
+            dao.insert(person2, person5, person6)
+            dao.put(person3)
+            dao.insert(person4)
 
 
             it("returns what is put") {
@@ -59,7 +60,7 @@ object MapDBBaseDaoTest : Spek({
                 dao.get(person4.id).shouldNotBeNull()
                 dao.get(person5.id).shouldNotBeNull()
                 dao.get(person6.id).shouldNotBeNull()
-                dao.getAll(setOf(person1.id, person2.id)).size.shouldBe(2)
+                dao.get().size.shouldBe(6)
             }
         }
     }

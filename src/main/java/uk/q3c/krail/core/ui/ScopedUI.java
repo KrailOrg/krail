@@ -75,6 +75,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final ApplicationTitle applicationTitle;
     private final Translate translate;
     private final I18NProcessor translator;
+    protected boolean viewDisplayPanelSizeFull = true;
     private SerializationSupport serializationSupport;
     private KrailPushConfiguration pushConfig;
     private Broadcaster broadcaster;
@@ -279,7 +280,9 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
             log.error(msg);
             throw new ConfigurationException(msg);
         }
-        viewDisplayPanel.setSizeFull();
+        if (viewDisplayPanelSizeFull) {
+            viewDisplayPanel.setSizeFull();
+        }
         setContent(screenLayout);
     }
 

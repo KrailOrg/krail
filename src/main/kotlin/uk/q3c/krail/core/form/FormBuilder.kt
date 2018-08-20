@@ -2,6 +2,7 @@ package uk.q3c.krail.core.form
 
 import com.google.inject.Inject
 import com.google.inject.Provider
+import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.view.NavigationStateExt
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
@@ -43,7 +44,9 @@ class StandardFormBuilder @Inject constructor(
         private val formSupport: FormSupport,
         private val formDaoFactory: FormDaoFactory,
         private val currentLocale: CurrentLocale,
-        val translate: Translate) : FormBuilder {
+        private val editSaveCancelBuilder: EditSaveCancelBuilder,
+        val translate: Translate,
+        val userNotifier: UserNotifier) : FormBuilder {
 
     override lateinit var configuration: FormConfiguration
 
@@ -53,10 +56,10 @@ class StandardFormBuilder @Inject constructor(
         if (sectionConfiguration.entityClass == Any::class) {
             throw FormConfigurationException("entityClass must be specified")
         }
-        val sectionBuilder = StandardFormSectionBuilder(entityClass = sectionConfiguration.entityClass.kotlin, binderFactory = binderFactory, propertySpecCreator = propertySpecCreator, formSupport = formSupport, configuration = sectionConfiguration, currentLocale = currentLocale)
+        val sectionBuilder = StandardFormSectionBuilder(entityClass = sectionConfiguration.entityClass.kotlin, binderFactory = binderFactory, propertySpecCreator = propertySpecCreator, formSupport = formSupport, configuration = sectionConfiguration, currentLocale = currentLocale, userNotifier = userNotifier)
         val pageParams = navigationStateExt.to.parameters
         if (pageParams.containsKey("id")) {
-            return sectionBuilder.buildDetail(formDaoFactory, translate)
+            return sectionBuilder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
         } else {
             return sectionBuilder.buildTable(form, formDaoFactory, translate)
         }

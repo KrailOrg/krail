@@ -1,11 +1,13 @@
 package uk.q3c.krail.core.persist
 
 import com.google.inject.AbstractModule
+import com.google.inject.Inject
 import com.google.inject.Singleton
 import org.apache.commons.io.FileUtils
 import org.mapdb.DB
 import org.mapdb.DBMaker
 import uk.q3c.krail.core.form.BaseDao
+import uk.q3c.krail.core.form.Entity
 import uk.q3c.krail.core.form.FormDao
 import uk.q3c.krail.core.form.FormDaoFactory
 import uk.q3c.krail.core.form.MapDBBaseDao
@@ -30,7 +32,8 @@ class FormDaoModule : AbstractModule() {
 /**
  * MapDb implementation of the [BaseDao] interface is very limited - not intended for real use
  */
-class MapDbFormDaoFactory : FormDaoFactory, Serializable {
+
+class MapDbFormDaoFactory @Inject constructor() : FormDaoFactory, Serializable {
 
     @Transient
     private var db: DB? = null
@@ -42,13 +45,12 @@ class MapDbFormDaoFactory : FormDaoFactory, Serializable {
     }
 
 
-    override fun <T : Any> getDao(entityClass: KClass<T>): FormDao<T> {
+    override fun <T : Entity> getDao(entityClass: KClass<T>): FormDao<T> {
         return FormDao(MapDBBaseDao(daoFactory = this, entityClass = entityClass))
     }
 
     fun db(): DB {
         if (db == null) {
-
             db = DBMaker.fileDB(dbFile).make()
         }
         return db as DB

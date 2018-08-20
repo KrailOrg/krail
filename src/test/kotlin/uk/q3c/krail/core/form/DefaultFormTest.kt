@@ -23,6 +23,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
 import uk.q3c.krail.core.persist.FormDaoModule
+import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.core.view.NavigationStateExt
 import uk.q3c.krail.core.view.ViewConfiguration
@@ -212,6 +213,7 @@ object FormChangeRouteSpek : Spek({
 class DefaultFormTestModule : AbstractModule() {
 
     val navigator: Navigator = mockk(relaxed = true)
+    val userNotifier: UserNotifier = mockk(relaxed = true)
 
     override fun configure() {
         bind(Translate::class.java).toInstance(MockTranslate())
@@ -220,6 +222,7 @@ class DefaultFormTestModule : AbstractModule() {
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
         bind(Navigator::class.java).toInstance(navigator)
+        bind(UserNotifier::class.java).toInstance(userNotifier)
     }
 
 }

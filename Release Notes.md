@@ -1,5 +1,13 @@
 # Release notes for 0.16.12.0
 
+## ScopedUI
+
+### Display panel size
+
+Previously the view display panel was always set to size full.  This proved to be inappropriate in some cases but could not be changed.  A protected property `viewDisplayPanelSizeFull` has been added, and the panel size is set only when this property is true.
+
+To maintain existing use, this property is true by default
+
 ## Forms
 
 Forms support added.  MasterSitemapNode extended to include a configuration, so that a View or Form class can be declared, and its behaviour modified by its configuration

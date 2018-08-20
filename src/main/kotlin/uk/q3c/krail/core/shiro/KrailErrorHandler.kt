@@ -16,10 +16,12 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import com.vaadin.server.DefaultErrorHandler
 import com.vaadin.server.ErrorEvent
+import org.apache.bval.jsr303.IncompatiblePropertyValueException
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.shiro.authz.AuthorizationException
 import org.apache.shiro.authz.UnauthenticatedException
 import org.apache.shiro.authz.UnauthorizedException
+import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.error.SystemErrorNotificationGroup
 import uk.q3c.krail.core.shiro.aop.NotAGuestException
 import uk.q3c.krail.core.shiro.aop.NotAUserException
@@ -28,6 +30,7 @@ import uk.q3c.krail.core.view.component.LoginFormException
 import uk.q3c.util.guice.SerializationSupport
 import java.io.IOException
 import java.io.ObjectInputStream
+import javax.validation.ValidationException
 
 /**
  * Extends the [DefaultErrorHandler] to intercept known V& exceptions, including Shiro related exceptions -
@@ -45,8 +48,16 @@ constructor(private val authenticationHandler: UnauthenticatedExceptionHandler, 
 
     : DefaultErrorHandler() {
 
+    private val errorsToIgnore: List<Class<*>> = listOf(ValidationException::class.java, com.vaadin.data.ValidationException::class.java, IncompatiblePropertyValueException::class.java)
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
+
     override fun error(event: ErrorEvent) {
-        val originalError = event.throwable
+        val rootCause = ExceptionUtils.getRootCause(event.throwable)
+        val originalError = if (rootCause == null) {
+            event.throwable
+        } else {
+            rootCause
+        }
 
 
         // handle an unauthorised access attempt
@@ -93,26 +104,8 @@ constructor(private val authenticationHandler: UnauthenticatedExceptionHandler, 
             userNotifier.notifyWarning(lfe.msgKey, *lfe.params)
             return
         }
-
+        log.error("Uncaught exception", event.throwable)
         systemErrorNotificationGroupProvider.get().notify(originalError)
-
-//        log.error("An error has been thrown, reporting via the Error Popup", originalError);
-////        userNotifier.notifyError()
-//        val textArea = TextArea("Exception thrown")
-//        textArea.value = ExceptionUtils.getStackTrace(originalError)
-//        textArea.isWordWrap = true
-//        textArea.isReadOnly = true
-//
-//
-//
-//        MessageBox
-//                .createInfo()
-//                .withIcon(null)
-//                .withWidth("80%")
-//                .withHeight("80%")
-//                .withMessage(textArea)
-//                .withOkButton()
-//                .open()
 
     }
 
