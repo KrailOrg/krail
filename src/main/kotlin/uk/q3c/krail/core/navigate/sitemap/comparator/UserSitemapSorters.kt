@@ -26,7 +26,8 @@ import java.util.*
  *
  * @author David Sowerby
  */
-@Deprecated("Replaced by UserSitemapNodeSorter", ReplaceWith("UserSitemapNodeSorter", "uk.q3c.krail.core.navigate.sitemap"))
+//@Deprecated("Replaced by UserSitemapNodeSorter", ReplaceWith("UserSitemapNodeSorter", "uk.q3c.krail.core.navigate.sitemap"))
+@Deprecated("Replaced by UserSitemapNodeSorter")
 interface UserSitemapSorters : Serializable {
 
     val sortComparator: Comparator<UserSitemapNode>
@@ -48,7 +49,7 @@ protected constructor(private val alphaAscending: AlphabeticAscending, private v
                       private val insertionAscending: InsertionOrderAscending,
                       private val insertionDescending: InsertionOrderDescending,
                       private val positionAscending: PositionIndexAscending,
-                      private val positionDescending: PositionIndexDescending) : UserSitemapNodeSorter {
+                      private val positionDescending: PositionIndexDescending) : UserSitemapSorters {
     var isAscending = true
         private set
     override lateinit var sortComparator: Comparator<UserSitemapNode>
