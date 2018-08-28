@@ -73,7 +73,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final PushMessageRouter pushMessageRouter;
     private final Navigator navigator;
     private final ApplicationTitle applicationTitle;
-    private final Translate translate;
+    protected final Translate translate;
     private final I18NProcessor translator;
     protected boolean viewDisplayPanelSizeFull = true;
     private SerializationSupport serializationSupport;
