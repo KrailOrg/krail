@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.view.component
 
 import com.google.inject.Inject
+import com.vaadin.server.FontAwesome
 import com.vaadin.ui.Button
 import com.vaadin.ui.Button.ClickEvent
 import com.vaadin.ui.Button.ClickListener
@@ -51,7 +52,7 @@ import uk.q3c.krail.i18n.Translate
 class DefaultUserStatusPanel @Inject
 constructor(private val navigator: Navigator, private val subjectProvider: SubjectProvider, private val translate: Translate, private val subjectIdentifier: SubjectIdentifier, private val currentLocale: CurrentLocale) : Panel(), UserStatusPanel, ClickListener, UserStatusChangeSource {
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    private val usernameLabel: Label
+    val usernameLabel: Label
     val login_logout_Button: Button
     private var loggedIn = false
     private var username: String = translate.from(LabelKey.Guest)
@@ -74,9 +75,11 @@ constructor(private val navigator: Navigator, private val subjectProvider: Subje
     fun configureDisplay() {
         log.debug("configuring display with Locale=${currentLocale.locale}")
         if (loggedIn) {
+            login_logout_Button.icon = FontAwesome.SIGN_OUT
             login_logout_Button.caption = translate.from(LoginLabelKey.Log_Out).toLowerCase()
             usernameLabel.value = username
         } else {
+            login_logout_Button.icon = FontAwesome.SIGN_IN
             login_logout_Button.caption = translate.from(LoginLabelKey.Log_In).toLowerCase()
             usernameLabel.value = translate.from(LabelKey.Guest)
         }
