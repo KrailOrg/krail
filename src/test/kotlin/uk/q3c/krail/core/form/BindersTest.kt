@@ -14,7 +14,6 @@ import org.apache.bval.guice.ValidationModule
 import org.apache.bval.jsr303.ApacheFactoryContext
 import org.apache.bval.jsr303.ClassValidator
 import org.apache.commons.lang3.reflect.FieldUtils
-import org.dizitart.no2.objects.Id
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -133,7 +132,7 @@ object BindersTest : Spek({
 const val testUuid1 = "123e4567-e89b-12d3-a456-556642440000"
 
 data class Person(
-        @field:Id override var id: String = testUuid1,
+        override var id: String = testUuid1,
         var title: String = "Mr",
         var name: String,
         @field:Max(12) var age: Int,
