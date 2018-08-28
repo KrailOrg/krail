@@ -10,13 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.q3c.krail.core.view.component;
+package uk.q3c.krail.core.view.component
 
-import com.vaadin.ui.Component;
+import com.vaadin.ui.Button
+import com.vaadin.ui.Component
+import com.vaadin.ui.Label
 
-public interface UserStatusPanel extends Component {
+interface UserStatusPanel : Component {
+    val usernameLabel: Label
+    val login_logout_Button: Button
 
-    String getActionLabel();
-
-    String getUserId();
+    val actionLabel: String
+    val userId: String
 }

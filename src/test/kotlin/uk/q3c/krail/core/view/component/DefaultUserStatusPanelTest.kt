@@ -14,7 +14,6 @@ import org.jetbrains.spek.api.dsl.on
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey
-import uk.q3c.krail.core.shiro.SubjectIdentifier
 import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
@@ -39,7 +38,6 @@ object DefaultUserStatusPanelTest : Spek({
         lateinit var navigator: Navigator
         lateinit var currentLocale: CurrentLocale
         lateinit var translate: Translate
-        lateinit var subjectIdentifier: SubjectIdentifier
 
 
 
@@ -47,11 +45,10 @@ object DefaultUserStatusPanelTest : Spek({
             subject = mock()
             subjectProvider = mock()
             navigator = mock()
-            subjectIdentifier = mock()
             translate = MockTranslate()
             currentLocale = mock()
             whenever(subjectProvider.get()).thenReturn(subject)
-            panel = DefaultUserStatusPanel(navigator = navigator, subjectProvider = subjectProvider, subjectIdentifier = subjectIdentifier, translate = translate, currentLocale = currentLocale)
+            panel = DefaultUserStatusPanel(navigator = navigator, subjectProvider = subjectProvider, translate = translate, currentLocale = currentLocale)
         }
 
         given("an unknown subject") {
@@ -132,7 +129,7 @@ object DefaultUserStatusPanelTest : Spek({
                 translate = mock()
                 whenever(translate.from(LabelKey.Guest)).thenReturn("Guest")
                 whenever(translate.from(LoginLabelKey.Log_In)).thenReturn("log in")
-                panel = DefaultUserStatusPanel(navigator = navigator, subjectProvider = subjectProvider, subjectIdentifier = subjectIdentifier, translate = translate, currentLocale = currentLocale)
+                panel = DefaultUserStatusPanel(navigator = navigator, subjectProvider = subjectProvider, translate = translate, currentLocale = currentLocale)
                 panel.localeChanged(LocaleChangeBusMessage(changeSource, Locale.GERMANY))
 
                 it("rebuilds the display") {

@@ -29,7 +29,6 @@ import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey
-import uk.q3c.krail.core.shiro.SubjectIdentifier
 import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
@@ -50,10 +49,14 @@ import uk.q3c.krail.i18n.Translate
 @SubscribeTo(SessionBus::class)
 @AssignComponentId
 class DefaultUserStatusPanel @Inject
-constructor(private val navigator: Navigator, private val subjectProvider: SubjectProvider, private val translate: Translate, private val subjectIdentifier: SubjectIdentifier, private val currentLocale: CurrentLocale) : Panel(), UserStatusPanel, ClickListener, UserStatusChangeSource {
+constructor(private val navigator: Navigator, private val subjectProvider: SubjectProvider, private val translate: Translate, private val currentLocale: CurrentLocale) : Panel(), UserStatusPanel, ClickListener, UserStatusChangeSource {
+    override val userId: String
+        get() = usernameLabel.value
+    override val actionLabel: String
+        get() = login_logout_Button.caption
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    val usernameLabel: Label
-    val login_logout_Button: Button
+    override val usernameLabel: Label
+    override val login_logout_Button: Button
     private var loggedIn = false
     private var username: String = translate.from(LabelKey.Guest)
 
@@ -101,13 +104,7 @@ constructor(private val navigator: Navigator, private val subjectProvider: Subje
         configureDisplay()
     }
 
-    override fun getActionLabel(): String {
-        return login_logout_Button.caption
-    }
 
-    override fun getUserId(): String {
-        return usernameLabel.value
-    }
 
     override fun buttonClick(event: ClickEvent) {
         if (loggedIn) {
