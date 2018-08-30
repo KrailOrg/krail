@@ -48,7 +48,7 @@ class DefaultOptionBinderTest {
         whenever(dataTypeToUI.componentFor(3)).thenReturn(textField)
         whenever(currentLocale.locale).thenReturn(Locale.GERMANY)
         whenever(option.get(key1)).thenReturn(7)
-        whenever(converterFactory.get(String::class.java, Integer::class.java)).thenReturn(StringToIntegerConverter("X") as Converter<String, Integer>)
+        whenever(converterFactory.get(String::class, Int::class)).thenReturn(StringToIntegerConverter("X") as Converter<String, Int>)
 
         // when initial binding
         optionBinder.bindOption(key1, textField)

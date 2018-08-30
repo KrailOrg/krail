@@ -1,0 +1,25 @@
+ext.spekVersion = '1.1.5'
+ext.vintageEngineVersion='4.12.3'
+
+junitPlatform {
+    platformVersion = junit_platform_version
+    filters {
+        engines {
+            include 'spek', 'junit-vintage'
+        }
+    }
+}
+
+dependencies {
+    testCompile "org.junit.platform:junit-platform-engine:$junit_platform_version"
+    testCompile "org.junit.platform:junit-platform-runner:$junit_platform_version"
+    testCompile "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+
+    testCompile "org.junit.vintage:junit-vintage-engine:$vintageEngineVersion"
+
+    testCompile "org.jetbrains.spek:spek-api:$spekVersion"
+    testCompile "org.jetbrains.spek:spek-subject-extension:$spekVersion"
+    testCompile "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+
+    testCompile "io.mockk:mockk:1.7.15"
+}

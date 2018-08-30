@@ -36,7 +36,6 @@ import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.core.view.Grid3x3ViewBase
 import uk.q3c.krail.core.view.component.AssignComponentId
 import uk.q3c.krail.core.view.component.LoginFormException
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.eventbus.SubscribeTo
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
@@ -71,8 +70,8 @@ class DefaultLoginView @Inject constructor(
         descriptionKey = LoginDescriptionKey.Log_In
     }
 
-    public override fun doBuild(event: ViewChangeBusMessage) {
-        super.doBuild(event)
+    public override fun doBuild() {
+        super.doBuild()
         centrePanel = Panel()
         centrePanel.addStyleName(ValoTheme.PANEL_WELL)
         centrePanel.setSizeUndefined()

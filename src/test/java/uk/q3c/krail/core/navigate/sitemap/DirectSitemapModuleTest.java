@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.ServletEnvironmentModule;
+import uk.q3c.krail.core.error.ErrorModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -37,6 +38,7 @@ import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.LoginLabelKey;
 import uk.q3c.krail.core.user.LoginView;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.view.EmptyViewConfiguration;
 import uk.q3c.krail.core.view.PrivateHomeView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
@@ -54,7 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule.class, ConfigurationFileModule.class,
-        VaadinEventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
+        VaadinEventBusModule.class, ErrorModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, SitemapModule.class, UserModule.class,
         KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, InMemoryModule.class, TestOptionModule.class,
         VaadinSessionScopeModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, NavigationModule.class, UtilModule.class, DefaultUIModule.class, UtilsModule.class})
 public class DirectSitemapModuleTest {
@@ -120,7 +122,7 @@ public class DirectSitemapModuleTest {
         @Override
         protected void define() {
             rootURI("private");
-            addEntry("home", PrivateHomeView.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
+            addEntry("home", LabelKey.Authorisation, PageAccessControl.PERMISSION, PrivateHomeView.class);
             addRedirect("wherever", "landing");
         }
 
@@ -130,10 +132,10 @@ public class DirectSitemapModuleTest {
         @Override
         protected void define() {
             rootURI("");
-            addEntry("public/home", PublicHomeView.class, LabelKey.Home_Page, PageAccessControl.PUBLIC);
-            addEntry("public/login", LoginView.class, LoginLabelKey.Log_In, PageAccessControl.GUEST, "roles");
-            addEntry("private/roles", LoginView.class, LoginLabelKey.Log_In, PageAccessControl.ROLES, "roles", 500);
-            addEntry("private/noroles", LoginView.class, LoginLabelKey.Log_In, PageAccessControl.PUBLIC, 300);
+            addEntry("public/home", LabelKey.Home_Page, PageAccessControl.PUBLIC, PublicHomeView.class);
+            addEntry("public/login", LoginLabelKey.Log_In, PageAccessControl.GUEST, LoginView.class, EmptyViewConfiguration.class, "roles");
+            addEntry("private/roles", LoginLabelKey.Log_In, PageAccessControl.ROLES, LoginView.class, EmptyViewConfiguration.class, "roles", 500);
+            addEntry("private/noroles", LoginLabelKey.Log_In, PageAccessControl.PUBLIC, LoginView.class, EmptyViewConfiguration.class, "", 300);
         }
 
     }

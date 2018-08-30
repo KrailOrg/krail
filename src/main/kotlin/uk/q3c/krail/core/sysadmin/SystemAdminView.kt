@@ -21,7 +21,6 @@ import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.view.Grid3x3ViewBase
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.util.Experimental
 import uk.q3c.util.guice.SerializationSupport
@@ -42,10 +41,12 @@ class SystemAdminView @Inject constructor(
     lateinit var buildReportBtn: Button
         private set
 
-    override fun doBuild(busMessage: ViewChangeBusMessage) {
-        super.doBuild(busMessage)
+    override fun doBuild() {
+        super.doBuild()
         buildReportBtn = Button()
-        buildReportBtn.addClickListener { _ -> navigator.navigateTo("system-admin/sitemap-build-report") }
+        buildReportBtn.addClickListener { _ ->
+            navigator.navigateTo("system-admin/sitemap-build-report")
+        }
         setCentreCell(VerticalLayout(buildReportBtn))
     }
 

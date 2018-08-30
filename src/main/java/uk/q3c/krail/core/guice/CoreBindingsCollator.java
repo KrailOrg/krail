@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.BindingsCollator;
+import uk.q3c.krail.core.error.ErrorModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.form.ConverterModule;
 import uk.q3c.krail.core.form.FormModule;
@@ -38,6 +39,7 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
 import uk.q3c.krail.core.option.KrailOptionModule;
+import uk.q3c.krail.core.persist.FormDaoModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -117,6 +119,8 @@ public class CoreBindingsCollator implements BindingsCollator {
         modules.add(dataModule());
         modules.add(dataTypeModule());
         modules.add(pushModule());
+        modules.addAll(daoModules());
+        modules.addAll(errorModules());
 
         addUtilModules(modules);
         addValidationModules(modules);
@@ -128,6 +132,10 @@ public class CoreBindingsCollator implements BindingsCollator {
         addSerializationSupport(modules);
         addFormsModules(modules);
         return modules;
+    }
+
+    private List<Module> errorModules() {
+        return ImmutableList.of(new ErrorModule());
     }
 
     private void addSerializationSupport(List<Module> modules) {
@@ -181,6 +189,15 @@ public class CoreBindingsCollator implements BindingsCollator {
         return new ConverterModule();
     }
 
+
+    /**
+     * Override this if you have provided your own {@link FormDaoModule} implementation
+     *
+     * @return a list of Dao related modules
+     */
+    protected List<Module> daoModules() {
+        return ImmutableList.of(new FormDaoModule());
+    }
     /**
      * Override this if you have provided your own {@link VaadinEventBusModule} implementation
      *

@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
+import uk.q3c.krail.core.i18n.CommonLabelKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.user.notify.ErrorNotificationMessage;
 import uk.q3c.krail.core.user.notify.InformationNotificationMessage;
@@ -59,7 +60,7 @@ public class DefaultMessageBar extends Panel implements MessageBar {
     @Override
     public void errorMessage(ErrorNotificationMessage message) {
         log.debug("Received error message '{}'", message);
-        String s = translate.from(LabelKey.Error)
+        String s = translate.from(CommonLabelKey.Error)
                             .toUpperCase() + ": " + message.getTranslatedMessage();
         display.setValue(s);
     }
@@ -68,7 +69,7 @@ public class DefaultMessageBar extends Panel implements MessageBar {
     @Override
     public void warningMessage(WarningNotificationMessage message) {
         log.debug("Received warning message '{}'", message);
-        String s = translate.from(LabelKey.Warning) + ": " + message.getTranslatedMessage();
+        String s = translate.from(CommonLabelKey.Warning) + ": " + message.getTranslatedMessage();
         display.setValue(s);
     }
 

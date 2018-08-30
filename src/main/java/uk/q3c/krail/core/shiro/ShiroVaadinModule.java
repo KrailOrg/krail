@@ -14,7 +14,6 @@ package uk.q3c.krail.core.shiro;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.vaadin.server.DefaultErrorHandler;
-import com.vaadin.server.ErrorHandler;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
@@ -26,7 +25,6 @@ public class ShiroVaadinModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bindErrorHandler();
         bindUnauthenticatedHandler();
         bindUnauthorisedHandler();
         bindNotAUserHandler();
@@ -46,13 +44,6 @@ public class ShiroVaadinModule extends AbstractModule {
         bind(NotAUserExceptionHandler.class).to(DefaultNotAUserExceptionHandler.class);
     }
 
-
-    /**
-     * error handler for the VaadinSession, handles Krail (and therefore Shiro) exceptions
-     */
-    protected void bindErrorHandler() {
-        bind(ErrorHandler.class).to(KrailErrorHandler.class);
-    }
 
     /**
      * the {@link DefaultErrorHandler} calls this handler in response to an attempted unauthorised action. If you have

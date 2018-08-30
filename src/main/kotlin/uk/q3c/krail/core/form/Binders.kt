@@ -17,6 +17,7 @@ import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.Serializable
 import javax.validation.Validator
+import kotlin.reflect.KClass
 
 
 /**
@@ -71,8 +72,8 @@ class DefaultKrailBeanValidatorFactory @Inject constructor(
 class KrailBeanValidationBinderFactory @Inject constructor(@field:Transient private val krailBeanValidatorFactory: KrailBeanValidatorFactory, val serializationSupport: SerializationSupport) : Serializable {
 
     @JvmOverloads
-    fun <BEAN> create(beanClass: Class<BEAN>, requiredConfigurator: RequiredFieldConfigurator = RequiredFieldConfigurator.DEFAULT): KrailBeanValidationBinder<BEAN> {
-        return KrailBeanValidationBinder(beanClass, krailBeanValidatorFactory, requiredConfigurator, serializationSupport)
+    fun <BEAN : Any> create(beanClass: KClass<BEAN>, requiredConfigurator: RequiredFieldConfigurator = RequiredFieldConfigurator.DEFAULT): KrailBeanValidationBinder<BEAN> {
+        return KrailBeanValidationBinder(beanClass.java, krailBeanValidatorFactory, requiredConfigurator, serializationSupport)
     }
 
     @Throws(ClassNotFoundException::class, IOException::class)
@@ -94,7 +95,7 @@ class KrailBeanValidationBinderFactory @Inject constructor(@field:Transient priv
  * @throws IllegalStateException if there is no JSR 303 implementation on the classpath
  */
 class KrailBeanValidationBinder<BEAN>(
-        private val beanType: Class<BEAN>,
+        val beanType: Class<BEAN>,
         @field:Transient private var krailBeanValidatorFactory: KrailBeanValidatorFactory,
         private var requiredConfigurator: RequiredFieldConfigurator, val serializationSupport: SerializationSupport) : Binder<BEAN>(beanType) {
 

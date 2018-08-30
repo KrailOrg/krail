@@ -67,20 +67,17 @@ public interface Navigator extends Page.PopStateListener {
     KrailView getCurrentView();
 
     /**
-     * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
-     * via the KrailErrorHandler
-     *
-     * @param throwable
-     */
-    void error(Throwable throwable);
-
-    /**
      * Navigates to the location represented by {@code navigationState}, which may include parameters
      *
      * @param navigationState
      */
     void navigateTo(NavigationState navigationState);
 
+    /**
+     * Returns the current node. Can be null if the call is  made before navigation to the current node is complete
+     *
+     * @return the current node. Can be null if the call is  made before navigation to the current node is complete
+     */
     UserSitemapNode getCurrentNode();
 
     /**
@@ -104,5 +101,21 @@ public interface Navigator extends Page.PopStateListener {
      * Initialises the navigator by preparing the {@link UserSitemap}
      */
     void init();
+
+    /**
+     * Lists the 'path' to the current node
+     *
+     * @return the path to the current node, or an empty list if the current node is null.  This can happen if the call is
+     * made before navigation to the current node is complete
+     */
+    List<UserSitemapNode> nodeChainForCurrentNode();
+
+    /**
+     * Lists the sub-nodes (representing sub-pages) of the current node
+     *
+     * @return a list of sub-nodes (representing sub-pages) of the current node, or an empty list if the current node is null.
+     * This can happen if the call is  made before navigation to the current node is complete
+     */
+    List<UserSitemapNode> subNodes();
 
 }

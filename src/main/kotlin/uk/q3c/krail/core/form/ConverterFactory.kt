@@ -13,6 +13,7 @@ import uk.q3c.util.guice.SerializationSupport
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.Serializable
+import kotlin.reflect.KClass
 
 /**
  * A factory to provide data converters which implement [Converter] - a Vaadin defined interface, so this code cannot become
@@ -26,7 +27,11 @@ interface ConverterSet : ConverterProvider {
 }
 
 interface ConverterProvider : Serializable {
+    /**
+     * Returns a [Converter] to match [converterPair], or a [NoConversionConverter] if the pair is not supported
+     */
     fun get(converterPair: ConverterPair): Converter<Any, Any>
+
     fun supports(converterPair: ConverterPair): Boolean
 }
 
@@ -54,12 +59,11 @@ class BaseConverterSet @Inject constructor(@field:Transient override val errorMe
     }
 
     override fun get(converterPair: ConverterPair): Converter<Any, Any> {
-        if (converterPair.model == converterPair.presentation) {
-            return NoConversionConverter()
-        }
+
         val emp = errorMessageProviderProvider.get()
         val converter: Any = when (converterPair) {
-            ConverterPair(String::class.java, Integer::class.java) -> StringToIntegerConverter(emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class.java, Int::class.java) -> StringToIntegerConverter(0, emp.setMessage(ConverterKey.Must_be_a_number))
+            ConverterPair(String::class.java, Integer::class.java) -> StringToIntegerConverter(0, emp.setMessage(ConverterKey.Must_be_a_number))
             else -> {
                 throw UnsupportedOperationException("Conversion between $converterPair is not supported")
             }
@@ -82,7 +86,7 @@ interface ConverterFactory : ConverterProvider {
      *
      * @throws UnsupportedOperationException if no [Converter] has been defined
      */
-    fun <P : Any, M : Any> get(presentationClass: Class<out P>, modelClass: Class<out M>): Converter<P, M>
+    fun <P : Any, M : Any> get(presentationClass: KClass<out P>, modelClass: KClass<out M>): Converter<P, M>
 
 }
 
@@ -107,7 +111,9 @@ class KrailConverterErrorMessageProvider @Inject constructor(private val transla
 }
 
 
-data class ConverterPair(val presentation: Class<out Any>, val model: Class<out Any>) : Serializable
+data class ConverterPair(val presentation: Class<out Any>, val model: Class<out Any>) : Serializable {
+    constructor(presentation: KClass<out Any>, model: KClass<out Any>) : this(presentation.java, model.java)
+}
 
 /**
  * Uses all configured instances of [ConverterSet] to find a suitable [Converter].  Additional [ConverterSet]s can be defined
@@ -116,7 +122,7 @@ data class ConverterPair(val presentation: Class<out Any>, val model: Class<out 
  */
 class DefaultConverterFactory @Inject constructor(private val converters: MutableSet<ConverterSet>) : ConverterFactory {
 
-    override fun <P : Any, M : Any> get(presentationClass: Class<out P>, modelClass: Class<out M>): Converter<P, M> {
+    override fun <P : Any, M : Any> get(presentationClass: KClass<out P>, modelClass: KClass<out M>): Converter<P, M> {
         @Suppress("UNCHECKED_CAST")
         return get(ConverterPair(presentationClass, modelClass)) as Converter<P, M>
     }
@@ -134,6 +140,9 @@ class DefaultConverterFactory @Inject constructor(private val converters: Mutabl
     }
 
     override fun get(converterPair: ConverterPair): Converter<Any, Any> {
+        if (converterPair.model == converterPair.presentation) {
+            return NoConversionConverter()
+        }
         for (converterSetProvider in converters) {
             val converterSet = converterSetProvider
 //            val converterSet = converterSetProvider.get()
@@ -141,7 +150,7 @@ class DefaultConverterFactory @Inject constructor(private val converters: Mutabl
                 return converterSet.get(converterPair)
             }
         }
-        throw UnsupportedOperationException("Converter Pair not supported $converterPair")
+        throw IllegalArgumentException("Converter Pair not supported $converterPair")
     }
 
 
@@ -158,6 +167,8 @@ inline fun <reified L : Any, reified R : Any> isSubClassOf(): Boolean {
 inline fun <reified L : Any, reified R : Any> isSuperClassOf(): Boolean {
     return L::class.java.isAssignableFrom(R::class.java)
 }
+
+
 
 //fun <PRESENTATION : Any, MODEL : Any> createStringConverter(modelType: Class<MODEL>): Converter<PRESENTATION, MODEL> {
 //    return if (Double::class.java.isAssignableFrom(modelType)) {

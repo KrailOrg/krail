@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.config.ConfigurationFileModule;
 import uk.q3c.krail.core.config.KrailApplicationConfigurationModule;
 import uk.q3c.krail.core.env.ServletEnvironmentModule;
+import uk.q3c.krail.core.error.ErrorModule;
 import uk.q3c.krail.core.eventbus.VaadinEventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -46,7 +47,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, ConfigurationFileModule.class,
+@GuiceContext({SystemAccountManagementPages.class, ErrorModule.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, TestKrailI18NModule.class, ConfigurationFileModule.class,
         SitemapModule.class, UserModule.class, DataTypeModule.class, KrailApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule
         .class, VaadinSessionScopeModule.class, NavigationModule.class, InMemoryModule.class, TestOptionModule.class, VaadinEventBusModule.class,
         DefaultUIModule.class, ServletEnvironmentModule.class, SerializationSupportModule.class, PushModule.class, EventBusModule.class, UtilsModule.class, UtilModule.class})

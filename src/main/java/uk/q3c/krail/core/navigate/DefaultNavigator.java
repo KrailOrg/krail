@@ -44,7 +44,6 @@ import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserSitemapRebuilt;
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
-import uk.q3c.krail.core.view.ErrorView;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.NavigationStateExt;
 import uk.q3c.krail.core.view.ViewFactory;
@@ -52,11 +51,13 @@ import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
 import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.eventbus.SubscribeTo;
+import uk.q3c.krail.service.State;
 import uk.q3c.util.guice.SerializationSupport;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,13 +96,13 @@ public class DefaultNavigator implements Navigator {
     private final LogoutNavigationRule logoutNavigationRule;
     private final InvalidURIHandler invalidURIHandler;
     private final MasterSitemap masterSitemap;
-    private NavigationState currentNavigationState;
     private final UIBusProvider uiBusProvider;
-    private NavigationState previousNavigationState;
-    private UserSitemap userSitemap;
     private final ViewChangeRule viewChangeRule;
     private final ComponentIdGenerator idGenerator;
     private final transient MessageBus messageBus;
+    private NavigationState currentNavigationState;
+    private NavigationState previousNavigationState;
+    private UserSitemap userSitemap;
     private SerializationSupport serializationSupport;
 
 
@@ -143,6 +144,10 @@ public class DefaultNavigator implements Navigator {
     public void init() {
         log.debug("initialising DefaultNavigator");
         try {
+            if (sitemapService.getState().equals(State.FAILED)) {
+                log.error("Sitemap service had failed with cause: ", sitemapService.getCause());
+                sitemapService.reset();
+            }
             sitemapService.start();
             //take a reference and keep it in case current model changes
             userSitemapBuilder.setMasterSitemap(masterSitemap);
@@ -153,6 +158,25 @@ public class DefaultNavigator implements Navigator {
             String msg = "Sitemap service failed to start, application will have no pages";
             log.error(msg);
             throw new IllegalStateException(msg, e);
+        }
+    }
+
+    @Override
+    public List<UserSitemapNode> nodeChainForCurrentNode() {
+        if (getCurrentNode() == null) {
+            return new ArrayList<>();
+        } else {
+            return userSitemap.nodeChainFor(getCurrentNode());
+        }
+
+    }
+
+    @Override
+    public List<UserSitemapNode> subNodes() {
+        if (getCurrentNode() == null) {
+            return new ArrayList<>();
+        } else {
+            return userSitemap.getChildren(getCurrentNode());
         }
     }
 
@@ -386,16 +410,6 @@ public class DefaultNavigator implements Navigator {
         previousNavigationState = null;
     }
 
-    @Override
-    public void error(Throwable error) {
-        log.debug("A {} Error has been thrown, reporting via the Error View", error.getClass()
-                .getName());
-        NavigationState navigationState = uriHandler.navigationState("error");
-        ErrorView view = viewFactory.get(ErrorView.class);
-        view.setError(error);
-        UserSitemapNode node = userSitemap.nodeFor(navigationState);
-        changeView(view, new NavigationStateExt(previousNavigationState, navigationState, null));
-    }
 
     /**
      * Navigates to a the location represented by {@code node}
@@ -406,7 +420,7 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     * Returns the node for the current navigation state.  If the node is not fond in the map, a check is also made to
+     * Returns the node for the current navigation state.  If the node is not found in the map, a check is also made to
      * see whether it is the login node (which will not appear in the map once the user has logged in)
      *
      * @return

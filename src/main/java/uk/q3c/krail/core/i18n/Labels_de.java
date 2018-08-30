@@ -24,25 +24,19 @@ public class Labels_de extends Labels {
     protected void loadMap() {
 
 
-        put(LabelKey.Cancel, "Stornieren");
         put(LabelKey.Enable_Account, "Konto aktivieren");
-        put(LabelKey.Error, "Fehler");
         put(LabelKey.First_Name, "Vorname");
         put(LabelKey.Guest, "Gast");
         put(LabelKey.Home_Page, "Startseite");
         put(LabelKey.Last_Name, "Nachname");
         put(LabelKey.Message_Box, "Nachrichtenfeld");
-        put(LabelKey.No, "Nein");
         put(LabelKey.Notifications, "Benachrichtigungen");
         put(LabelKey.Private, "Privat");
         put(LabelKey.Public, "Öffentlich");
-        put(LabelKey.Push, "Druck");
         put(LabelKey.Refresh_Account, "Konto aktualisieren");
         put(LabelKey.Request_Account, "Konto anfordern");
         put(LabelKey.Reset_Account, "Konto zurücksetzen");
         put(LabelKey.System_Account, "Systemkonto");
-        put(LabelKey.Small, "Klein");
-        put(LabelKey.Yes, "Ja");
         put(LabelKey.Alphabetic_Ascending, "alphabetisch aufsteigend");
         put(LabelKey.Alphabetic_Descending, "alphabetisch absteigend");
         put(LabelKey.Authentication, "Authentifzierung");
@@ -55,7 +49,6 @@ public class Labels_de extends Labels {
         put(LabelKey.Insertion_Order_Descending, "absteigend einfügen");
         put(LabelKey.Message_Bar, "Nachrichtenzeile");
         put(LabelKey.Nested, "verschachtelt");
-        put(LabelKey.Ok, "OK");
         put(LabelKey.Position_Index_Ascending, "Positionsindex aufsteigend");
         put(LabelKey.Position_Index_Descending, "Positionsindex absteigend");
         put(LabelKey.Pull, "ziehen");
@@ -64,7 +57,6 @@ public class Labels_de extends Labels {
         put(LabelKey.Unlock_Account, "Konto entsperren");
         put(LabelKey.Unnamed, "unbenannt");
         put(LabelKey.Krail, "Krail");
-        put(LabelKey.Warning, "Warnung");
 
 
     }

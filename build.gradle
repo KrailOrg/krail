@@ -13,17 +13,18 @@
 
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.61'
     ext.kaytee_plugin_version = "0.20.1.0"
+    ext.junit_platform_version = "1.0.3"
     repositories {
         jcenter()
     }
 
     dependencies {
         classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:$junit_platform_version"
+
     }
 }
 
@@ -39,6 +40,7 @@ ext.slf4jVersion = '1.7.6'
 
 
 
+
 ext.versionDescription = 'No version description provided'
 
 
@@ -48,6 +50,9 @@ group = 'uk.q3c.krail'
 apply plugin: 'uk.q3c.kaytee'
 apply plugin: 'kotlin'
 apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply from: "gradle/spek.gradle"
+
 
 sourceCompatibility = '1.8'
 
@@ -66,13 +71,14 @@ repositories {
 kaytee {
     version {
         number = "0.16.12.0"
+        qualifier="krail-730"
     }
     changelog {
         maxVersions = 10
     }
 
 }
-
+tasks
 bintray {
     user = 'dsowerby'
 }
@@ -90,6 +96,9 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // MapDb
+    compile "org.mapdb:mapdb:3.0.7"
 
     // JWT
     compile 'io.jsonwebtoken:jjwt:0.9.0'
@@ -149,13 +158,17 @@ dependencies {
     compile 'com.vaadin:vaadin-themes:' + vaadinVersion
     compile 'com.vaadin:vaadin-push:' + vaadinVersion
 
-
+    // Vaadin addons
+//    compile 'de.steinwedel.vaadin.addon:messagebox:4.0.21'
+//
+    compile 'org.vaadin.alump.gofullscreen:gofullscreen-addon:0.6.1'
 
     //testing
 
 
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
     testCompile 'org.spockframework:spock-guice:1.1-groovy-2.4'
+    testCompile 'cglib:cglib-nodep:3.2.0' // needed for Spock mocking
 
     testCompile 'org.eclipse.persistence:javax.persistence:2.1.0'
     testCompile 'junit:junit:4.12'
@@ -164,7 +177,7 @@ dependencies {
     testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
     testCompile 'com.mycila:mycila-guice:2.10.ga'
     testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
-    testCompile 'cglib:cglib-nodep:3.2.0' // needed for Spock mocking
+
     testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
     testCompile 'org.mockito:mockito-all:1.10.19'
     testCompile "com.nhaarman:mockito-kotlin:1.5.0"
@@ -172,7 +185,6 @@ dependencies {
 
     testCompile 'uk.q3c.util:q3c-testutils:0.11.0.4'
     testCompile 'uk.q3c.util:serialization-tracer:0.7.0.0'
-
 
 }
 
@@ -186,14 +198,16 @@ configurations.all {
         force "com.vaadin:vaadin-server:$vaadinVersion"
         force 'org.codehaus.groovy:groovy-all:2.4.9'
         force 'com.google.guava:guava:22.0'
-        force 'com.fasterxml.jackson.core:jackson-core:2.9.3'
-        force 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+        force 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+        force 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+        force 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
         force "com.google.inject.extensions:guice-multibindings:$guiceVersion"
         force 'com.google.code.findbugs:annotations:3.0.0'
         force 'commons-logging:commons-logging:1.2'
         force 'org.apache.commons:commons-lang3:3.3.2'
         force 'org.assertj:assertj-core:3.8.0'
         force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         force 'org.mockito:mockito-core:2.8.9'
         force 'com.mycila:mycila-log:2.12'
@@ -201,6 +215,10 @@ configurations.all {
         force 'commons-io:commons-io:2.6'
         force 'uk.q3c.krail:krail-i18n-api:0.15.10.0'
         force "uk.q3c.krail:krail-option-api:0.18.5.0"
+        force "net.bytebuddy:byte-buddy:1.7.9"
+        force "net.bytebuddy:byte-buddy-agent:1.7.9"
+        force "org.objenesis:objenesis:2.6"
+        force 'javax.validation:validation-api:1.0.0.GA'
 
         dependencySubstitution {
             substitute module ('commons-beanutils:commons-beanutils-core') with module ('commons-beanutils:commons-beanutils:1.9.3')
@@ -210,7 +228,7 @@ configurations.all {
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
+    gradleVersion = '4.7'
 }
 
 

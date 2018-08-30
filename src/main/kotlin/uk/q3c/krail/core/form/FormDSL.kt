@@ -13,93 +13,94 @@ import java.util.*
  */
 
 
-fun FormConfiguration.section(name: String = "", init: SectionConfiguration.() -> Unit): SectionConfiguration {
-    val config = SectionConfiguration(this)
+fun FormConfiguration.section(name: String = "standard", init: FormSectionConfiguration.() -> Unit): FormSectionConfiguration {
+    val config = FormSectionConfiguration(this)
     config.init()
     sections.add(config)
     return config
 }
 
 fun PropertyConfiguration.max(max: Byte) {
-    validations.add(MaxByte(max))
+    validators.add(MaxByte(max))
 }
 
 fun PropertyConfiguration.max(max: Short) {
-    validations.add(MaxShort(max))
+    validators.add(MaxShort(max))
 }
 
 fun PropertyConfiguration.min(min: Short) {
-    validations.add(MinShort(min))
+    validators.add(MinShort(min))
 }
 
 fun PropertyConfiguration.min(min: Byte) {
-    validations.add(MinByte(min))
+    validators.add(MinByte(min))
 }
 
 fun PropertyConfiguration.max(max: Int) {
-    validations.add(MaxInt(max))
+    validators.add(MaxInt(max))
 }
 
-fun PropertyConfiguration.min(min: Int) {
-    validations.add(MinInt(min))
+fun PropertyConfiguration.min(min: Int): PropertyConfiguration {
+    validators.add(MinInt(min))
+    return this
 }
 
 fun PropertyConfiguration.max(max: Long) {
-    validations.add(MaxLong(max))
+    validators.add(MaxLong(max))
 }
 
 fun PropertyConfiguration.min(min: Long) {
-    validations.add(MinLong(min))
+    validators.add(MinLong(min))
 }
 
 
 fun PropertyConfiguration.assertTrue() {
-    validations.add(MustBeTrue())
+    validators.add(MustBeTrue())
 }
 
 fun PropertyConfiguration.assertFalse() {
-    validations.add(MustBeFalse())
+    validators.add(MustBeFalse())
 }
 
 
 fun PropertyConfiguration.null_() {
-    validations.add(MustBeNull())
+    validators.add(MustBeNull())
 }
 
 fun PropertyConfiguration.notNull() {
-    validations.add(MustNotBeNull())
+    validators.add(MustNotBeNull())
 }
 
 fun PropertyConfiguration.pattern(pattern: String, vararg flags: javax.validation.constraints.Pattern.Flag) {
-    validations.add(MustMatch(pattern, *flags))
+    validators.add(MustMatch(pattern, *flags))
 }
 
 fun PropertyConfiguration.past(dateTime: LocalDateTime = LocalDateTime.now()) {
-    validations.add(PastLocalDateTime(dateTime))
+    validators.add(PastLocalDateTime(dateTime))
 }
 
 fun PropertyConfiguration.past(dateTime: OffsetDateTime = OffsetDateTime.now()) {
-    validations.add(PastOffsetDateTime(dateTime))
+    validators.add(PastOffsetDateTime(dateTime))
 }
 
 fun PropertyConfiguration.past(date: LocalDate = LocalDate.now()) {
-    validations.add(PastLocalDate(date))
+    validators.add(PastLocalDate(date))
 }
 
 fun PropertyConfiguration.future(date: Date = Date.from(Instant.now())) {
-    validations.add(FutureDate(date))
+    validators.add(FutureDate(date))
 }
 
 fun PropertyConfiguration.future(date: LocalDate = LocalDate.now()) {
-    validations.add(FutureLocalDate(date))
+    validators.add(FutureLocalDate(date))
 }
 
 fun PropertyConfiguration.future(dateTime: OffsetDateTime = OffsetDateTime.now()) {
-    validations.add(FutureOffsetDateTime(dateTime))
+    validators.add(FutureOffsetDateTime(dateTime))
 }
 
 fun PropertyConfiguration.future(dateTime: LocalDateTime = LocalDateTime.now()) {
-    validations.add(FutureLocalDateTime(dateTime))
+    validators.add(FutureLocalDateTime(dateTime))
 }
 
 /**
@@ -109,16 +110,16 @@ String
 byte, short, int, long, and their respective wrappers
  */
 fun PropertyConfiguration.decimalMax(max: BigDecimal) {
-    validations.add(MaxBigDecimal(max))
+    validators.add(MaxBigDecimal(max))
 }
 
 fun PropertyConfiguration.decimalMax(max: BigInteger) {
-    validations.add(MaxBigInteger(max))
+    validators.add(MaxBigInteger(max))
 }
 
 fun PropertyConfiguration.decimalMax(max: String) {
     val bd: BigDecimal = max.toBigDecimal()
-    validations.add(MaxBigDecimal(bd))
+    validators.add(MaxBigDecimal(bd))
 }
 
 fun PropertyConfiguration.decimalMax(max: Int) {
@@ -140,16 +141,16 @@ fun PropertyConfiguration.decimalMax(max: Byte) {
 ////////////////////////////////////
 
 fun PropertyConfiguration.decimalMin(min: BigDecimal) {
-    validations.add(MinBigDecimal(min))
+    validators.add(MinBigDecimal(min))
 }
 
 fun PropertyConfiguration.decimalMin(min: BigInteger) {
-    validations.add(MinBigInteger(min))
+    validators.add(MinBigInteger(min))
 }
 
 fun PropertyConfiguration.decimalMin(min: String) {
     val bd: BigDecimal = min.toBigDecimal()
-    validations.add(MinBigDecimal(bd))
+    validators.add(MinBigDecimal(bd))
 }
 
 fun PropertyConfiguration.decimalMin(min: Int) {
@@ -170,14 +171,14 @@ fun PropertyConfiguration.decimalMin(min: Byte) {
 
 
 fun PropertyConfiguration.size(min: Int = 0, max: Int = Int.MAX_VALUE) {
-    if (propertyType == String::class) {
-        validations.add(StringSize(min = min, max = max))
+    if (propertyValueClass == String::class) {
+        validators.add(StringSize(min = min, max = max))
     } else {
-        if (Collection::class.java.isAssignableFrom(propertyType.java)) {
-            validations.add(CollectionSize(min = min, max = max))
+        if (Collection::class.java.isAssignableFrom(propertyValueClass)) {
+            validators.add(CollectionSize(min = min, max = max))
         }
     }
-    throw InvalidTypeForValidator(propertyType, "size")
+    throw InvalidTypeForValidator(propertyValueClass.kotlin, "size")
 }
 
 
@@ -227,7 +228,7 @@ fun PropertyConfiguration.mustMatch(pattern: String, vararg flags: javax.validat
 }
 
 
-fun SectionConfiguration.property(name: String, init: PropertyConfiguration.() -> Unit): PropertyConfiguration {
+fun FormSectionConfiguration.property(name: String, init: PropertyConfiguration.() -> Unit): PropertyConfiguration {
     val propertyConfiguration = PropertyConfiguration(name = name, parentConfiguration = this)
     propertyConfiguration.init()
     properties[name] = propertyConfiguration

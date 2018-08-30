@@ -26,9 +26,9 @@ import org.apache.shiro.subject.Subject
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.i18n.UserStatusKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey
-import uk.q3c.krail.core.shiro.SubjectIdentifier
 import uk.q3c.krail.core.shiro.SubjectProvider
 import uk.q3c.krail.core.user.LoginLabelKey
 import uk.q3c.krail.core.user.UserHasLoggedIn
@@ -49,10 +49,22 @@ import uk.q3c.krail.i18n.Translate
 @SubscribeTo(SessionBus::class)
 @AssignComponentId
 class DefaultUserStatusPanel @Inject
-constructor(private val navigator: Navigator, private val subjectProvider: SubjectProvider, private val translate: Translate, private val subjectIdentifier: SubjectIdentifier, private val currentLocale: CurrentLocale) : Panel(), UserStatusPanel, ClickListener, UserStatusChangeSource {
+constructor(private val navigator: Navigator,
+            private val subjectProvider: SubjectProvider,
+            private val translate: Translate,
+            private val currentLocale: CurrentLocale,
+            private val iconFactory: IconFactory)
+
+    : Panel(), UserStatusPanel, ClickListener, UserStatusChangeSource {
+
+
+    override val userId: String
+        get() = usernameLabel.value
+    override val actionLabel: String
+        get() = login_logout_Button.caption
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-    private val usernameLabel: Label
-    val login_logout_Button: Button
+    override val usernameLabel: Label
+    override val login_logout_Button: Button
     private var loggedIn = false
     private var username: String = translate.from(LabelKey.Guest)
 
@@ -74,9 +86,11 @@ constructor(private val navigator: Navigator, private val subjectProvider: Subje
     fun configureDisplay() {
         log.debug("configuring display with Locale=${currentLocale.locale}")
         if (loggedIn) {
+            login_logout_Button.icon = iconFactory.iconFor(UserStatusKey.Log_Out)
             login_logout_Button.caption = translate.from(LoginLabelKey.Log_Out).toLowerCase()
             usernameLabel.value = username
         } else {
+            login_logout_Button.icon = iconFactory.iconFor(UserStatusKey.Log_In)
             login_logout_Button.caption = translate.from(LoginLabelKey.Log_In).toLowerCase()
             usernameLabel.value = translate.from(LabelKey.Guest)
         }
@@ -98,13 +112,95 @@ constructor(private val navigator: Navigator, private val subjectProvider: Subje
         configureDisplay()
     }
 
-    override fun getActionLabel(): String {
-        return login_logout_Button.caption
+
+    override fun buttonClick(event: ClickEvent) {
+        if (loggedIn) {
+            subjectProvider.logout(this)
+        } else {
+            navigator.navigateTo(StandardPageKey.Log_In)
+        }
+
     }
 
-    override fun getUserId(): String {
-        return usernameLabel.value
+    @Handler
+    fun localeChanged(busMessage: LocaleChangeBusMessage) {
+        log.debug("locale change to {}", busMessage.newLocale)
+        configureDisplay()
     }
+
+}
+
+
+/**
+ * Represents the "logged in" status of the current [Subject].
+ *
+ * converted to Kotlin  11 Mar 2018
+ * @author David Sowerby 16 Jan 2013
+ */
+@Listener
+@SubscribeTo(SessionBus::class)
+@AssignComponentId
+class DefaultUserStatusComponents @Inject
+constructor(private val navigator: Navigator,
+            private val subjectProvider: SubjectProvider,
+            private val iconFactory: IconFactory,
+            private val translate: Translate,
+            private val currentLocale: CurrentLocale)
+
+    : UserStatusComponents, ClickListener, UserStatusChangeSource {
+
+
+    override val userId: String
+        get() = usernameLabel.value
+    override val actionLabel: String
+        get() = login_logout_Button.caption
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
+    override val usernameLabel: Label
+    override val login_logout_Button: Button
+    private var loggedIn = false
+    private var username: String = translate.from(LabelKey.Guest)
+
+    init {
+        usernameLabel = Label()
+        login_logout_Button = Button()
+        login_logout_Button.addClickListener(this)
+        val hl = HorizontalLayout()
+        hl.isSpacing = true
+        hl.addComponent(usernameLabel)
+        hl.addComponent(login_logout_Button)
+        configureDisplay()
+
+    }
+
+    fun configureDisplay() {
+        log.debug("configuring display with Locale=${currentLocale.locale}")
+        if (loggedIn) {
+            login_logout_Button.icon = iconFactory.iconFor(UserStatusKey.Log_Out)
+            login_logout_Button.caption = translate.from(LoginLabelKey.Log_Out).toLowerCase()
+            usernameLabel.value = username
+        } else {
+            login_logout_Button.icon = iconFactory.iconFor(UserStatusKey.Log_In)
+            login_logout_Button.caption = translate.from(LoginLabelKey.Log_In).toLowerCase()
+            usernameLabel.value = translate.from(LabelKey.Guest)
+        }
+    }
+
+
+    @Handler
+    fun handleUserHasLoggedIn(event: UserHasLoggedIn) {
+        log.debug("user has logged in")
+        loggedIn = true
+        username = event.knownAs
+        configureDisplay()
+    }
+
+    @Handler
+    fun handleUserHasLoggedOut(@Suppress("UNUSED_PARAMETER") event: UserHasLoggedOut) {
+        log.debug("user has logged out")
+        loggedIn = false
+        configureDisplay()
+    }
+
 
     override fun buttonClick(event: ClickEvent) {
         if (loggedIn) {

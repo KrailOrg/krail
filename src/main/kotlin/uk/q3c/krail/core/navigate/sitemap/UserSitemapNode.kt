@@ -27,6 +27,8 @@ import java.util.*
  *
  * The [MasterSitemapNode.positionIndex] is copied into this, to offer the developer the potential to provide a different presentation order in
  * navigation components, depending on some characteristic of the user.
+ *
+ * Set [positionIndex] to <0 to prevent this node from being shown in Navigation components
  */
 data class UserSitemapNode constructor(val masterNode: MasterSitemapNode) : SitemapNode by masterNode, NodeVisitable, Comparable<UserSitemapNode> {
 

@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.env.InjectorFactory;
 import uk.q3c.krail.core.env.RuntimeEnvironment;
 import uk.q3c.krail.service.ServiceMonitor;
+import uk.q3c.krail.startup.ApplicationStartup;
+import uk.q3c.krail.startup.ServletApplicationStartup;
 
 import javax.servlet.ServletContextEvent;
 
@@ -39,8 +41,8 @@ public class DefaultServletContextListener extends GuiceServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
         log.debug("Servlet context listener initialised");
-//        ApplicationStartup startup = InjectorHolder.getInjector().getInstance(ApplicationStartup.class);
-//        startup.invoke();
+        ApplicationStartup startup = InjectorHolder.getInjector().getInstance(ServletApplicationStartup.class);
+        startup.invoke(servletContextEvent);
     }
 
     @Override

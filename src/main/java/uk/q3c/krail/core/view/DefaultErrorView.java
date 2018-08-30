@@ -18,8 +18,8 @@ import com.vaadin.ui.TextArea;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.i18n.CommonLabelKey;
 import uk.q3c.krail.core.i18n.DescriptionKey;
-import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
@@ -36,7 +36,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
     @Inject
     protected DefaultErrorView(Translate translate, SerializationSupport serializationSupport) {
         super(translate, serializationSupport);
-        nameKey = LabelKey.Error;
+        nameKey = CommonLabelKey.Error;
         descriptionKey = DescriptionKey.Error_Information;
     }
 

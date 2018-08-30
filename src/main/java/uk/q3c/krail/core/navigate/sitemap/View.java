@@ -13,7 +13,9 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.EmptyViewConfiguration;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.ViewConfiguration;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -54,4 +56,6 @@ public @interface View {
      * @return
      */
     String roles() default "";
+
+    Class<? extends ViewConfiguration> viewConfiguration() default EmptyViewConfiguration.class;
 }

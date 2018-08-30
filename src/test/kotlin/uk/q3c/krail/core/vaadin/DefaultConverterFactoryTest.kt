@@ -36,7 +36,7 @@ class DefaultConverterFactoryTest {
         val factory = injector.getInstance(ConverterFactory::class.java)
 
         // expect
-        assertThat(factory.get(String::class.java, Integer::class.java)).isInstanceOf(StringToIntegerConverter::class.java)
+        assertThat(factory.get(String::class, Int::class)).isInstanceOf(StringToIntegerConverter::class.java)
     }
 
     @Test(expected = UnsupportedOperationException::class)
@@ -45,7 +45,7 @@ class DefaultConverterFactoryTest {
         val factory = injector.getInstance(ConverterFactory::class.java)
 
         // when
-        factory.get(Option::class.java, PatternDao::class.java)
+        factory.get(Option::class, PatternDao::class)
         // expect exception
     }
 }

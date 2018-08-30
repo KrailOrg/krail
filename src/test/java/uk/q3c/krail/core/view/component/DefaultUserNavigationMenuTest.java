@@ -19,8 +19,9 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.MenuBar.MenuItem;
 import fixture.ReferenceUserSitemap;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,6 +35,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.vaadin.MockVaadinSession;
 import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -51,6 +53,7 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static uk.q3c.krail.core.vaadin.MockVaadinSessionKt.createMockVaadinSession;
 
 
 @RunWith(MycilaJunitRunner.class)
@@ -80,18 +83,26 @@ public class DefaultUserNavigationMenuTest {
     DefaultUserNavigationMenuBuilder builder;
 
     private DefaultUserNavigationMenu userNavigationMenu;
+    static MockVaadinSession mockVaadinSession;
+
+    @BeforeClass
+    public static void setupClass() {
+        mockVaadinSession = createMockVaadinSession();
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        mockVaadinSession.clear();
+    }
 
     @Before
     public void setUp() {
+
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         userSitemap.clear();
         userSitemap.populate();
         builder = new DefaultUserNavigationMenuBuilder(userSitemap, navigator);
-    }
-
-    @After
-    public void tearDown() {
 
     }
 
@@ -136,8 +147,8 @@ public class DefaultUserNavigationMenuTest {
 
         MenuItem viewA11 = childWithText("ViewA11", viewA1);
         captions = menuCaptions(viewA11);
-        assertThat(captions).containsOnly();
-        assertThat(viewA11.getCommand()).isNotNull();
+        assertThat(captions).containsOnly("ViewA112", "ViewA113", "ViewA114");
+        assertThat(viewA11.getCommand()).isNull();
 
         MenuItem prvate = childWithText("Private", null);
         captions = menuCaptions(prvate);
@@ -163,10 +174,10 @@ public class DefaultUserNavigationMenuTest {
         MenuItem viewB11 = childWithText("ViewB11", viewB1);
         assertThat(viewB11).isNull();
 
-        //A111 removed by using positionIndex <0, and its parent, A11 has the command
+        //A111 removed by using positionIndex <0, but its parent, A11 has other children and therefore does not have command
         MenuItem viewA111 = childWithText("ViewA111", viewA11);
         assertThat(viewA111).isNull();
-        assertThat(viewA11.getCommand()).isNotNull();
+        assertThat(viewA11.getCommand()).isNull();
 
         //B122 removed by using positionIndex <0, but its parent B12 does not have command as other child B121 is not excluded
         MenuItem viewB12 = childWithText("ViewB12", viewB1);
@@ -227,10 +238,10 @@ public class DefaultUserNavigationMenuTest {
 
         //re-instate as 'displayable'
         userSitemap.b11Node()
-                   .setPositionIndex(5);
+                .setPositionIndex(5);
         // hide the b branch
         userSitemap.bNode()
-                   .setPositionIndex(-1);
+                .setPositionIndex(-1);
         //when
         userNavigationMenu.build();
 
@@ -313,7 +324,7 @@ public class DefaultUserNavigationMenuTest {
         assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(3);
         // option has been set
         int result = userNavigationMenu.optionInstance()
-                                       .get(DefaultUserNavigationMenu.optionKeyMaximumDepth);
+                .get(DefaultUserNavigationMenu.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(3);
     }
 
@@ -361,12 +372,13 @@ public class DefaultUserNavigationMenuTest {
         MenuItem viewA = childWithText("ViewA", pblic);
         MenuItem viewA1 = childWithText("ViewA1", viewA);
         MenuItem viewA11 = childWithText("ViewA11", viewA1);
+        MenuItem viewA112 = childWithText("ViewA112", viewA11);
 
         // when
-        viewA11.getCommand()
-               .menuSelected(viewA11);
+        viewA112.getCommand()
+                .menuSelected(viewA112);
         // then
-        verify(navigator).navigateTo(userSitemap.a11Node());
+        verify(navigator).navigateTo(userSitemap.getA112Node());
     }
 
     @Test
