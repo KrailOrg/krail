@@ -6,8 +6,6 @@ import com.vaadin.ui.Alignment
 import com.vaadin.ui.Button
 import com.vaadin.ui.Component
 import com.vaadin.ui.HorizontalLayout
-import com.vaadin.ui.Layout
-import com.vaadin.ui.Panel
 import com.vaadin.ui.themes.ValoTheme
 import uk.q3c.krail.core.ConfigurationException
 import uk.q3c.krail.core.form.ButtonPosition.*
@@ -143,7 +141,7 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
 }
 
 
-interface EditSaveCancel : Component, Layout.AlignmentHandler {
+interface EditSaveCancel : Component {
 
     fun translate(translate: Translate, currentLocale: CurrentLocale)
 
@@ -160,15 +158,9 @@ class DefaultEditSaveCancel : HorizontalLayout(), EditSaveCancel {
     override val editButton = Button()
     override val saveButton = Button()
     override val cancelButton = Button()
-    val filler = Panel()
 
     init {
-        addComponent(filler)
-        filler.addStyleName(ValoTheme.PANEL_BORDERLESS)
-        setExpandRatio(filler, 1.0f)
-        editButton.isVisible = true
-        saveButton.isVisible = false
-        cancelButton.isVisible = false
+        addStyleName(ValoTheme.PANEL_BORDERLESS)
 
         editButton.addClickListener { _ ->
             section.editData()
@@ -185,19 +177,12 @@ class DefaultEditSaveCancel : HorizontalLayout(), EditSaveCancel {
 
     override fun updateButtonVisibility() {
         if (section.mode == EDIT) {
-            editButton.isVisible = false
-            removeComponent(editButton)
-            saveButton.isVisible = true
+            removeAllComponents()
             addComponent(saveButton)
-            cancelButton.isVisible = true
             addComponent(cancelButton)
         } else {
-            editButton.isVisible = true
+            removeAllComponents()
             addComponent(editButton)
-            saveButton.isVisible = false
-            removeComponent(saveButton)
-            cancelButton.isVisible = false
-            removeComponent(cancelButton)
         }
     }
 

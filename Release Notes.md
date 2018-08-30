@@ -1,5 +1,11 @@
 # Release notes for 0.16.12.0
 
+## SimpleUI
+
+A lightweight UI, SimpleUI, is available.  It is suggested that this is used where the primary user audience is expected to be using mobile.
+
+There is still more work to do on this, see issues #736 and #737 
+
 ## ScopedUI
 
 ### Display panel size
@@ -10,9 +16,12 @@ To maintain existing use, this property is true by default
 
 ## Forms
 
-Forms support added.  MasterSitemapNode extended to include a configuration, so that a View or Form class can be declared, and its behaviour modified by its configuration
+Forms support added.  MasterSitemapNode extended to include a configuration, so that a View or Form class can be declared, and its behaviour modified by its configuration.
+Views themselves do not yet support the use of configuration objects.
 
 The Form class is supported by FormBuilders - currently the standard form builder provides a table (Grid) or detail view depending on whether the URL has an entity id parameter
+
+Although the configuration supports sub-sections, the Form itself does not do so yet (see #712)
 
 ## Changes to KrailView
 

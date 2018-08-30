@@ -4,9 +4,11 @@ import com.google.inject.Inject
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
 import com.vaadin.ui.AbstractComponent
+import com.vaadin.ui.Alignment
 import com.vaadin.ui.Component
 import com.vaadin.ui.Grid
 import com.vaadin.ui.Panel
+import com.vaadin.ui.VerticalLayout
 import net.jodah.typetools.TypeResolver
 import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
@@ -98,8 +100,9 @@ class StandardFormSectionBuilder<BEAN : Entity>(
             doBind(propertySpec.propertyValueClass.kotlin, presentationValueClass, component, propertySpec, translate)
 
         }
-        val fieldLayout = configuration.layout.newInstance()
-        val panel = Panel(fieldLayout)
+        val baseLayout = VerticalLayout()
+        baseLayout.isSpacing = false
+        val panel = Panel(baseLayout)
         panel.setWidthUndefined()
 
         // We need to keep EditSaveCancel component references so that the buttons can be re-translated in the event
@@ -108,7 +111,8 @@ class StandardFormSectionBuilder<BEAN : Entity>(
         // if there is a top aligned EditSaveCancel add it here
         if (editSaveCancelBuilder.hasTopComponent()) {
             val tc = editSaveCancelBuilder.topComponent()
-            fieldLayout.addComponent(tc)
+            baseLayout.addComponent(tc)
+            baseLayout.setComponentAlignment(tc, Alignment.MIDDLE_RIGHT)
             escList.add(tc)
         }
 
@@ -120,7 +124,8 @@ class StandardFormSectionBuilder<BEAN : Entity>(
         }
 
 
-
+        val fieldLayout = configuration.layout.newInstance()
+        baseLayout.addComponent(fieldLayout)
         configuration.fieldOrder.forEach { p ->
             val entry = componentMap[p]
             if (entry != null) {
@@ -131,7 +136,8 @@ class StandardFormSectionBuilder<BEAN : Entity>(
         // if there is a bottom aligned EditSaveCancel add it here
         if (editSaveCancelBuilder.hasBottomComponent()) {
             val bc = editSaveCancelBuilder.bottomComponent()
-            fieldLayout.addComponent(bc)
+            baseLayout.addComponent(bc)
+            baseLayout.setComponentAlignment(bc, Alignment.MIDDLE_RIGHT)
             escList.add(bc)
         }
 
