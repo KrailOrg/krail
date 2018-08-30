@@ -11,18 +11,16 @@
  *
  */
 
-package uk.q3c.krail.core.view;
+package uk.q3c.krail.core.view
 
-import com.google.inject.Inject;
-import uk.q3c.krail.i18n.Translate;
-import uk.q3c.util.guice.SerializationSupport;
+import com.google.inject.Inject
+import uk.q3c.krail.core.i18n.CommonLabelKey
+import uk.q3c.krail.i18n.Translate
+import uk.q3c.util.guice.SerializationSupport
 
-public class DefaultPublicHomeView extends StandardPageViewBase implements PublicHomeView {
-
-    @Inject
-    protected DefaultPublicHomeView(Translate translate, SerializationSupport serializationSupport) {
-        super(translate, serializationSupport);
+class DefaultPublicHomeView @Inject
+protected constructor(translate: Translate, serializationSupport: SerializationSupport) : StandardPageViewBase(translate, serializationSupport), PublicHomeView {
+    init {
+        nameKey = CommonLabelKey.Home
     }
-
-
 }

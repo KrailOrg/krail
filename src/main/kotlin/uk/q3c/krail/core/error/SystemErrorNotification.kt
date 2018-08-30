@@ -1,10 +1,11 @@
 package uk.q3c.krail.core.error
 
 import com.google.inject.Inject
+import com.vaadin.ui.TextArea
+import de.steinwedel.messagebox.MessageBox
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.LoggerFactory
 import uk.q3c.krail.core.shiro.KrailErrorHandler
-import uk.q3c.krail.core.user.notify.UserNotificationLabelKey
 import uk.q3c.krail.core.user.notify.UserNotifier
 import java.io.Serializable
 
@@ -83,7 +84,17 @@ class DefaultSystemErrorLogNotification : SystemErrorLogNotification {
 
 class DefaultSystemErrorUserNotification @Inject constructor(val userNotifier: UserNotifier) : SystemErrorUserNotification {
     override fun notify(error: Throwable) {
-        userNotifier.notifyError(UserNotificationLabelKey.A_system_error_occurred, ExceptionUtils.getRootCauseStackTrace(error))
+        val textArea = TextArea("System Error")
+        textArea.value = ExceptionUtils.getStackTrace(error)
+        textArea.isWordWrap = true
+        textArea.isReadOnly = true
+        MessageBox
+                .createError()
+                .withIcon(null)
+                .withWidth("80%")
+                .withHeight("80%")
+                .withMessage(textArea)
+                .open()
     }
 
 }

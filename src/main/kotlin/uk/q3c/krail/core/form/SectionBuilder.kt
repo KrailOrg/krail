@@ -4,9 +4,9 @@ import com.google.inject.Inject
 import com.vaadin.data.Converter
 import com.vaadin.data.HasValue
 import com.vaadin.ui.AbstractComponent
-import com.vaadin.ui.AbstractOrderedLayout
 import com.vaadin.ui.Component
 import com.vaadin.ui.Grid
+import com.vaadin.ui.Panel
 import net.jodah.typetools.TypeResolver
 import org.apache.commons.lang3.reflect.FieldUtils
 import uk.q3c.krail.core.i18n.DescriptionKey
@@ -98,14 +98,18 @@ class StandardFormSectionBuilder<BEAN : Entity>(
             doBind(propertySpec.propertyValueClass.kotlin, presentationValueClass, component, propertySpec, translate)
 
         }
-        val layout = configuration.layout.newInstance()
+        val fieldLayout = configuration.layout.newInstance()
+        val panel = Panel(fieldLayout)
+        panel.setWidthUndefined()
 
         // We need to keep EditSaveCancel component references so that the buttons can be re-translated in the event
         // of a language change
         val escList: MutableList<EditSaveCancel> = mutableListOf()
         // if there is a top aligned EditSaveCancel add it here
         if (editSaveCancelBuilder.hasTopComponent()) {
-            addEsc(layout, editSaveCancelBuilder.topComponent(), escList)
+            val tc = editSaveCancelBuilder.topComponent()
+            fieldLayout.addComponent(tc)
+            escList.add(tc)
         }
 
         // add fields for properties to the layout in the order specified by configuration.fieldOrder, unless it is empty,
@@ -114,26 +118,28 @@ class StandardFormSectionBuilder<BEAN : Entity>(
         if (configuration.fieldOrder.isEmpty()) {
             configuration.fieldOrder = componentMap.keys
         }
+
+
+
         configuration.fieldOrder.forEach { p ->
             val entry = componentMap[p]
             if (entry != null) {
-                layout.addComponent(entry.component)
+                fieldLayout.addComponent(entry.component)
             }
         }
 
         // if there is a bottom aligned EditSaveCancel add it here
         if (editSaveCancelBuilder.hasBottomComponent()) {
-            addEsc(layout, editSaveCancelBuilder.bottomComponent(), escList)
+            val bc = editSaveCancelBuilder.bottomComponent()
+            fieldLayout.addComponent(bc)
+            escList.add(bc)
         }
 
-        return FormDetailSection(componentMap, layout, binder, dao, escList, userNotifier)
 
 
-    }
+        return FormDetailSection(translate, currentLocale, componentMap, panel, binder, dao, escList, userNotifier)
 
-    private fun addEsc(layout: AbstractOrderedLayout, esc: EditSaveCancel, escList: MutableList<EditSaveCancel>) {
-        layout.addComponent(esc)
-        escList.add(esc)
+
     }
 
 

@@ -15,7 +15,7 @@ package uk.q3c.krail.core.view.component
 import com.google.inject.AbstractModule
 import uk.q3c.krail.core.env.BindingsCollator
 
-class DefaultComponentModule : AbstractModule() {
+open class DefaultComponentModule : AbstractModule() {
 
     override fun configure() {
         bindUserNavigationTree()
@@ -26,16 +26,26 @@ class DefaultComponentModule : AbstractModule() {
         bindApplicationHeader()
         bindLocaleSelector()
         bindUserStatusPanel()
+        bindUserStatusComponents()
         bindSubPageButtonBuilder()
         bindPageNavigationPanel()
+        bindIconFactory()
     }
 
     /**
      * Override this method to provide your own implementation of [PageNavigationPanel] in a sub-class of this module.
      * Your module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindPageNavigationPanel() {
+    protected open fun bindPageNavigationPanel() {
         bind(PageNavigationPanel::class.java).to(DefaultPageNavigationPanel::class.java)
+    }
+
+    /**
+     * Override this method to provide your own implementation of [IconFactory] in a sub-class of this module.
+     * Your module will then need to replace this module in [BindingsCollator]
+     */
+    protected open fun bindIconFactory() {
+        bind(IconFactory::class.java).to(DefaultIconFactory::class.java)
     }
 
 
@@ -43,7 +53,7 @@ class DefaultComponentModule : AbstractModule() {
      * Override this method to provide your own implementation of [LocaleSelector] in a sub-class of this module.
      * Your module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindLocaleSelector() {
+    protected open fun bindLocaleSelector() {
         bind(LocaleSelector::class.java).to(DefaultLocaleSelector::class.java)
     }
 
@@ -52,7 +62,7 @@ class DefaultComponentModule : AbstractModule() {
      * Your
      * module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindMessageStatusPanel() {
+    protected open fun bindMessageStatusPanel() {
         bind(MessageBar::class.java).to(DefaultMessageBar::class.java)
     }
 
@@ -60,7 +70,7 @@ class DefaultComponentModule : AbstractModule() {
      * Override this method to provide your own implementation of [ApplicationHeader] in a sub-class of this
      * module. Your module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindApplicationHeader() {
+    protected open fun bindApplicationHeader() {
         bind(ApplicationHeader::class.java).to(DefaultApplicationHeader::class.java)
     }
 
@@ -69,7 +79,7 @@ class DefaultComponentModule : AbstractModule() {
      * module.
      * Your module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindApplicationLogo() {
+    protected open fun bindApplicationLogo() {
         bind(ApplicationLogo::class.java).to(DefaultApplicationLogo::class.java)
     }
 
@@ -78,7 +88,7 @@ class DefaultComponentModule : AbstractModule() {
      * module.
      * Your module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindLoginStatusPanel() {
+    protected open fun bindLoginStatusPanel() {
         bind(UserStatusPanel::class.java).to(DefaultUserStatusPanel::class.java)
     }
 
@@ -86,7 +96,7 @@ class DefaultComponentModule : AbstractModule() {
      * Override this method to provide your own implementation of [UserNavigationMenu] in a sub-class of this
      * module. Your module will then need to replace this module in [BindingsCollator]
      */
-    protected fun bindNavigationMenu() {
+    protected open fun bindNavigationMenu() {
         bind(UserNavigationMenu::class.java).to(DefaultUserNavigationMenu::class.java)
         bind(UserNavigationMenuBuilder::class.java).to(DefaultUserNavigationMenuBuilder::class.java)
     }
@@ -96,7 +106,7 @@ class DefaultComponentModule : AbstractModule() {
      * builder, in a sub-class of this module. Your module will then need to replace this module in
      * [BindingsCollator]
      */
-    protected fun bindUserNavigationTree() {
+    protected open fun bindUserNavigationTree() {
         bind(UserNavigationTree::class.java).to(DefaultUserNavigationTree::class.java)
         bind(UserNavigationTreeBuilder::class.java).to(DefaultUserNavigationTreeBuilder::class.java)
     }
@@ -106,8 +116,17 @@ class DefaultComponentModule : AbstractModule() {
      * builder, in a sub-class of this module. Your module will then need to replace this module in
      * [BindingsCollator]
      */
-    protected fun bindUserStatusPanel() {
+    protected open fun bindUserStatusPanel() {
         bind(UserStatusPanel::class.java).to(DefaultUserStatusPanel::class.java)
+    }
+
+    /**
+     * Override this method to provide your own implementation of [UserStatusComponents], and its associated
+     * builder, in a sub-class of this module. Your module will then need to replace this module in
+     * [BindingsCollator]
+     */
+    protected open fun bindUserStatusComponents() {
+        bind(UserStatusComponents::class.java).to(DefaultUserStatusComponents::class.java)
     }
 
     /**
@@ -115,7 +134,7 @@ class DefaultComponentModule : AbstractModule() {
      * builder, in a sub-class of this module. Your module will then need to replace this module in
      * [BindingsCollator]
      */
-    protected fun bindSubPageButtonBuilder() {
+    protected open fun bindSubPageButtonBuilder() {
         bind(PageNavigationButtonBuilder::class.java).to(DefaultPageNavigationButtonBuilder::class.java)
     }
 }

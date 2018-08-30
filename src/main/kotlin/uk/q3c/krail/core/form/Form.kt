@@ -27,6 +27,7 @@ import uk.q3c.util.guice.SerializationSupport
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 import kotlin.reflect.KClass
 
 
@@ -35,7 +36,7 @@ import kotlin.reflect.KClass
  */
 
 interface Form : KrailView {
-    fun localeChanged()
+    fun translate()
 
     /**
      * Change route to the item specified by [id].  [id] is usually from [Entity.id]
@@ -94,22 +95,14 @@ class DefaultForm @Inject constructor(
         val formBuilder = formBuilderSelectorProvider.get().selectFormBuilder(formConfiguration)
         section = formBuilder.build(this, navigationStateExt)
         section.mode = EditMode.READ_ONLY
-        if (section is FormDetailSection<*>) {
-            (section as FormDetailSection<*>).translate(translate, currentLocale)
-        }
+        translate()
         rootComponent = section.rootComponent
+
     }
 
 
-    override fun localeChanged() {
-        if (section is FormDetailSection<*>) {
-            (section as FormDetailSection<*>).translate(translate, currentLocale)
-        } else {
-            if (section is FormTableSection<*>) {
-                doBuild() // grid columns and renderers hide Locale away so we have to reconstruct
-            }
-        }
-
+    override fun translate() {
+        section.translate(translate, currentLocale)
     }
 
     /**
@@ -127,6 +120,7 @@ class DefaultForm @Inject constructor(
 interface FormSection : Serializable {
     var mode: EditMode
     val rootComponent: Component
+    fun translate(translate: Translate, currentLocale: CurrentLocale)
 }
 
 

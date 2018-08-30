@@ -21,7 +21,7 @@ Additional form types can easily be added.
 Defining a Form
 ===============
 
-To construct a form in Krail:
+To construct a form in Krail (using a Person entity as an example):
 
  1. Define your form configuration as a sub-class of ``FormConfiguration``, for example ``PersonFormConfiguration``
  2. using either the Direct or Annotation method of creating a ``Sitemap`` entry, set the *viewClass* to ``Form.class``

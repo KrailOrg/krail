@@ -74,15 +74,15 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final Navigator navigator;
     private final ApplicationTitle applicationTitle;
     protected final Translate translate;
-    private final I18NProcessor translator;
+    protected final I18NProcessor translator;
     protected boolean viewDisplayPanelSizeFull = true;
     private SerializationSupport serializationSupport;
     private KrailPushConfiguration pushConfig;
     private Broadcaster broadcaster;
     private UIKey instanceKey;
-    private AbstractOrderedLayout screenLayout;
+    protected AbstractOrderedLayout screenLayout;
     private UIScope uiScope;
-    private KrailView view;
+    protected KrailView view;
     private Panel viewDisplayPanel;
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
@@ -173,7 +173,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
             throw new ConfigurationException("The root component for " + toView.getName() + " cannot be null");
         }
         if (toView instanceof Form) {
-            ((Form) toView).localeChanged();
+            ((Form) toView).translate();
         } else {
             translator.translate(toView);
         }

@@ -279,7 +279,7 @@ public class ScopedUITest {
         // then
         verify(form).getRootComponent();
         verify(translator, never()).translate(toView);
-        verify(form).localeChanged();
+        verify(form).translate();
         verify(viewContent).setSizeFull();
         assertThat(ui.getViewDisplayPanel()
                 .getContent()).isEqualTo(viewContent);

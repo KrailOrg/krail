@@ -34,6 +34,10 @@ The methods with a parameter have therefore been deprecated and replaced with pa
 
 - The [MessageBox addon](https://vaadin.com/directory/component/messagebox) was intended to be used as a normal addon, but ButtonOption is not serializable.  The only solution unfortunately was to import the source.  There were no tests with it.   [Open Issue](https://github.com/KrailOrg/krail/issues/722) to review  
  
+## UserStatusPanel
+
+- Deprecated and replaced by UserStatusComponents.  Functionally the same, but is not a component - improves flexibility of use
+
 
 ## Ported to Kotlin
 

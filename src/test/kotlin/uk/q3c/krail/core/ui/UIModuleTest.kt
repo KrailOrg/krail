@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import uk.q3c.krail.core.env.RunningOn
 import uk.q3c.krail.core.env.RuntimeEnvironment
+import uk.q3c.krail.core.i18n.CommonLabelKey.Yes
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
@@ -103,7 +104,7 @@ class DefaultUIModuleTest {
 
     @Test
     fun configureWithDefaultsChanged() {
-        val module = DefaultUIModule().uiClass(BasicUI::class.java).applicationTitleKey(LabelKey.Yes)
+        val module = DefaultUIModule().uiClass(BasicUI::class.java).applicationTitleKey(Yes)
 
         // when
         val injector = Guice.createInjector(module, MockedModule())
@@ -111,7 +112,7 @@ class DefaultUIModuleTest {
         val uiProvider = injector.getInstance(ScopedUIProvider::class.java)
         // then
         assertThat(applicationTitle).isNotNull()
-        assertThat(applicationTitle.titleKey).isEqualTo(LabelKey.Yes)
+        assertThat(applicationTitle.titleKey).isEqualTo(Yes)
         assertThat(uiProvider).isNotNull()
 
         assertThat(uiProvider.getUIClass(mockEvent)).isEqualTo(BasicUI::class.java)

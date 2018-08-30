@@ -28,11 +28,11 @@ import java.util.*
 /**
  * Created by David Sowerby on 11 Mar 2018
  */
-object DefaultUserStatusPanelTest : Spek({
+object DefaultUserStatusComponentsTest : Spek({
 
     given("a user status panel") {
         val source: UserStatusChangeSource = mock()
-        lateinit var panel: DefaultUserStatusPanel
+        lateinit var panel: DefaultUserStatusComponents
         lateinit var subject: Subject
         lateinit var subjectProvider: SubjectProvider
         lateinit var navigator: Navigator
@@ -48,7 +48,7 @@ object DefaultUserStatusPanelTest : Spek({
             translate = MockTranslate()
             currentLocale = mock()
             whenever(subjectProvider.get()).thenReturn(subject)
-            panel = DefaultUserStatusPanel(navigator = navigator, subjectProvider = subjectProvider, translate = translate, currentLocale = currentLocale, iconFactory = DefaultIconFactory())
+            panel = DefaultUserStatusComponents(navigator = navigator, subjectProvider = subjectProvider, translate = translate, currentLocale = currentLocale, iconFactory = DefaultIconFactory())
         }
 
         given("an unknown subject") {
@@ -129,11 +129,11 @@ object DefaultUserStatusPanelTest : Spek({
                 translate = mock()
                 whenever(translate.from(LabelKey.Guest)).thenReturn("Guest")
                 whenever(translate.from(LoginLabelKey.Log_In)).thenReturn("log in")
-                panel = DefaultUserStatusPanel(navigator = navigator, subjectProvider = subjectProvider, translate = translate, currentLocale = currentLocale, iconFactory = DefaultIconFactory())
+                panel = DefaultUserStatusComponents(navigator = navigator, subjectProvider = subjectProvider, translate = translate, currentLocale = currentLocale, iconFactory = DefaultIconFactory())
                 panel.localeChanged(LocaleChangeBusMessage(changeSource, Locale.GERMANY))
 
                 it("rebuilds the display") {
-                    verify(translate, times(2)).from(LoginLabelKey.Log_In) // TODO Cannot figure out why this is called twice - once would be correct
+                    verify(translate, times(1)).from(LoginLabelKey.Log_In) // TODO Cannot figure out why this is called twice - once would be correct
                 }
             }
         }

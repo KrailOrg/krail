@@ -21,22 +21,16 @@ public class Labels_it extends Labels {
 
     @Override
     protected void loadMap() {
-        put(LabelKey.Cancel, "Cancellare");
         put(LabelKey.Enable_Account, "Abilita Account");
-        put(LabelKey.Error, "Errore");
         put(LabelKey.First_Name, "Nome");
         put(LabelKey.Guest, "Ospite");
         put(LabelKey.Last_Name, "Cognome");
         put(LabelKey.Message_Box, "Scatola di Messaggio");
         put(LabelKey.Notifications, "Notifiche");
-        put(LabelKey.No, "No");
-        put(LabelKey.Push, "Spinta");
         put(LabelKey.Refresh_Account, "Aggiorna Conto");
         put(LabelKey.Request_Account, "Richiesta Conto");
         put(LabelKey.Reset_Account, "Ripristina Conto");
         put(LabelKey.System_Account, "Conto di Sistema");
-        put(LabelKey.Small, "Piccolo");
-        put(LabelKey.Yes, "Sì");
     }
 
 

@@ -118,10 +118,19 @@ class DefaultPageNavigationPanel @Inject constructor(uiBusProvider: UIBusProvide
                 VERTICAL -> VerticalLayout()
                 HORIZONTAL -> HorizontalLayout()
             }
+            var maxCaption = 0
             buttons.forEach { b ->
+                val i = b.caption.length
+                if (i > maxCaption) maxCaption = i
+            }
+            maxCaption-- // buttons a bit wide
+            buttons.forEach { b ->
+                b.setWidth("${maxCaption}em")
                 layout.addComponent(b)
                 layout.setComponentAlignment(b, buttonAlignment)
+
             }
+
             this.content = layout
         }
     }

@@ -5,13 +5,17 @@ import com.vaadin.ui.AbstractComponent
 import com.vaadin.ui.AbstractField
 import com.vaadin.ui.AbstractMultiSelect
 import com.vaadin.ui.AbstractSingleSelect
-import com.vaadin.ui.Layout
+import com.vaadin.ui.Component
+import uk.q3c.krail.core.i18n.CommonLabelKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 
-class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Layout, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>, val escList: MutableList<EditSaveCancel>, val userNotifier: UserNotifier) : FormSection {
+
+class FormDetailSection<BEAN : Any>(val translate: Translate, val currentLocale: CurrentLocale, val propertyMap: Map<String, DetailPropertyInfo>, override val rootComponent: Component, val binder: KrailBeanValidationBinder<BEAN>, val dao: FormDao<BEAN>, val escList: MutableList<EditSaveCancel>, val userNotifier: UserNotifier) : FormSection {
+
+
     lateinit var originalEntity: BEAN
 
     override var mode: EditMode = EditMode.READ_ONLY
@@ -62,17 +66,6 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
         }
     }
 
-    fun translate(translate: Translate, currentLocale: CurrentLocale) {
-        propertyMap.forEach { _, v ->
-            v.component.caption = translate.from(v.captionKey)
-            // setDescription is not part of Component interface!
-            if (v.component is AbstractComponent) {
-                v.component.locale = currentLocale.locale
-                v.component.description = translate.from(v.descriptionKey)
-            }
-        }
-        escList.forEach { esc -> esc.translate(translate, currentLocale) }
-    }
 
 
     fun loadData(parameters: Map<String, String>) {
@@ -91,7 +84,7 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
             binder.writeBean(originalEntity)
             mode = EditMode.READ_ONLY
             dao.put(originalEntity)
-            userNotifier.notifyInformation(LabelKey.Saved)
+            userNotifier.notifyInformation(CommonLabelKey.Saved)
         } catch (ve: ValidationException) {
             userNotifier.notifyInformation(LabelKey.There_are_validation_errors)
         }
@@ -105,5 +98,17 @@ class FormDetailSection<BEAN : Any>(val propertyMap: Map<String, DetailPropertyI
 
     fun editData() {
         mode = EditMode.EDIT
+    }
+
+    override fun translate(translate: Translate, currentLocale: CurrentLocale) {
+        propertyMap.forEach { _, v ->
+            v.component.caption = translate.from(v.captionKey)
+            // setDescription is not part of Component interface!
+            if (v.component is AbstractComponent) {
+                v.component.locale = currentLocale.locale
+                v.component.description = translate.from(v.descriptionKey)
+            }
+        }
+        escList.forEach { esc -> esc.translate(translate, currentLocale) }
     }
 }

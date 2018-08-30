@@ -13,8 +13,9 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.i18n.CommonLabelKey
 import uk.q3c.krail.core.user.notify.UserNotifier
+import uk.q3c.krail.core.view.component.DefaultIconFactory
 import uk.q3c.util.guice.SerializationSupport
 
 /**
@@ -37,7 +38,7 @@ object DefaultEditSaveCancelBuilderTest : Spek({
                 userNotifier = mockk(relaxed = true)
                 escProvider = mockk(relaxed = true)
                 every { escProvider.get() }.returnsMany(listOf(DefaultEditSaveCancel(), DefaultEditSaveCancel()))
-                builder = DefaultEditSaveCancelBuilder(escProvider, serializationSupport, userNotifier)
+                builder = DefaultEditSaveCancelBuilder(editSaveCancelProvider = escProvider, serializationSupport = serializationSupport, userNotifier = userNotifier, iconFactory = DefaultIconFactory())
             }
 
             on("construction") {
@@ -57,7 +58,7 @@ object DefaultEditSaveCancelBuilderTest : Spek({
                 }
 
                 it("should have I18NKey in data") {
-                    button.data.shouldEqual(LabelKey.Edit)
+                    button.data.shouldEqual(CommonLabelKey.Edit)
                 }
             }
 
@@ -72,7 +73,7 @@ object DefaultEditSaveCancelBuilderTest : Spek({
                 }
 
                 it("should have I18NKey in data") {
-                    button.data.shouldEqual(LabelKey.Save)
+                    button.data.shouldEqual(CommonLabelKey.Save)
                 }
             }
 
@@ -86,7 +87,7 @@ object DefaultEditSaveCancelBuilderTest : Spek({
                 }
 
                 it("should have I18NKey in data") {
-                    button.data.shouldEqual(LabelKey.Cancel)
+                    button.data.shouldEqual(CommonLabelKey.Cancel)
                 }
             }
 
@@ -95,13 +96,13 @@ object DefaultEditSaveCancelBuilderTest : Spek({
                 val bottom = builder.bottomComponent() as DefaultEditSaveCancel
 
                 it("should have edit, cancel, save buttons in that order") {
-                    (top.getComponent(0) as Button).data.shouldEqual(LabelKey.Edit)
-                    (top.getComponent(1) as Button).data.shouldEqual(LabelKey.Cancel)
-                    (top.getComponent(2) as Button).data.shouldEqual(LabelKey.Save)
+                    (top.getComponent(0) as Button).data.shouldEqual(CommonLabelKey.Edit)
+                    (top.getComponent(1) as Button).data.shouldEqual(CommonLabelKey.Cancel)
+                    (top.getComponent(2) as Button).data.shouldEqual(CommonLabelKey.Save)
 
-                    (bottom.getComponent(0) as Button).data.shouldEqual(LabelKey.Edit)
-                    (bottom.getComponent(1) as Button).data.shouldEqual(LabelKey.Cancel)
-                    (bottom.getComponent(2) as Button).data.shouldEqual(LabelKey.Save)
+                    (bottom.getComponent(0) as Button).data.shouldEqual(CommonLabelKey.Edit)
+                    (bottom.getComponent(1) as Button).data.shouldEqual(CommonLabelKey.Cancel)
+                    (bottom.getComponent(2) as Button).data.shouldEqual(CommonLabelKey.Save)
                 }
 
                 it("should have buttons aligned to the right") {

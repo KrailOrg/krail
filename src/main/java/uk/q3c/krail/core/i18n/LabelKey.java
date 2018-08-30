@@ -12,23 +12,23 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import kotlin.Deprecated;
 import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * @author David Sowerby 24 Mar 2013
  * @see Labels
  */
+@Deprecated(message = "Use CommonLabelKey or functional I18NKeys instead - all keys will eventually be moved from this class")
 public enum LabelKey implements I18NKey {
-    Large,
     Alphabetic_Ascending,
     Alphabetic_Descending,
     Authentication,
     Authorisation,
     Broadcast_Messages,
-    Cancel,
+
     Class,
     Enable_Account,
-    Error,
     Field,
     First_Name,
     Guest,
@@ -43,35 +43,30 @@ public enum LabelKey implements I18NKey {
     Message_Bar,
     Message_Box,
     Nested,
-    No,
     No_Options_to_Show,
     Notifications,
-    Ok,
     Position_Index_Ascending,
     Position_Index_Descending,
     Private,
     Public,
     Pull,
-    Push,
     Refresh_Account,
     Request_Account,
     Reset_Account,
     Simple_User_Hierarchy,
     Sitemap_Service,
-    Small,
     Splash,
     System_Account,
     Unlock_Account,
     Unnamed,
 
-    Warning,
     Maxiumum_Depth, Sort_Ascending, Sort_Type, Locale_Flag_Size, Use_Field_Name_in_Validation_Message, Write_Path, Preferred_Locale,
-    Maximum_Cache_Size, Edit, Save, Saved, Breadcrumb_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Message_bar_is_Visible,
+    Maximum_Cache_Size, Breadcrumb_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Message_bar_is_Visible,
     SubPage_Panel_is_Visible, System_Administration, Sitemap_Build_Report, Information, Notification_Options, Reset_to_Default, Username_Cannot_be_Empty,
     Password_Cannot_be_Empty, Application_Options, Options, Description, Connection_URL, Source_Data, In_Memory, Name, Active_Source, Selected_Source,
     Option_Source_Selection, Is_Volatile, Name_Caption_Style, Name_Style, Description_Caption_Style, Description_Style, Default_Caption_Style,
     Default_Value_Style, Connection_url_Caption_Style, Connection_url_Style, Is_volatile_Caption_Style, Is_volatile_Style, I18N, Export, Progress, Locales,
-    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, This_feature_has_not_been_implemented, Yes, There_are_validation_errors
+    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, This_feature_has_not_been_implemented, There_are_validation_errors, Cancel, Ok, Yes, No, Error, Edit
 
 
 }

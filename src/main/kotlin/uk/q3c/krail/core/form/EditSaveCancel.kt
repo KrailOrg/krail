@@ -2,19 +2,19 @@ package uk.q3c.krail.core.form
 
 import com.google.inject.Inject
 import com.google.inject.Provider
-import com.vaadin.server.FontAwesome
-import com.vaadin.server.FontIcon
 import com.vaadin.ui.Alignment
 import com.vaadin.ui.Button
 import com.vaadin.ui.Component
 import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Layout
+import com.vaadin.ui.Panel
 import com.vaadin.ui.themes.ValoTheme
 import uk.q3c.krail.core.ConfigurationException
 import uk.q3c.krail.core.form.ButtonPosition.*
 import uk.q3c.krail.core.form.EditMode.EDIT
-import uk.q3c.krail.core.i18n.LabelKey.*
+import uk.q3c.krail.core.i18n.CommonLabelKey.*
 import uk.q3c.krail.core.user.notify.UserNotifier
+import uk.q3c.krail.core.view.component.IconFactory
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
@@ -31,9 +31,6 @@ class EditSaveCancelConfig : Serializable {
     var editKey: I18NKey = Edit
     var saveKey: I18NKey = Save
     var cancelKey: I18NKey = Cancel
-    var editIcon: FontIcon = FontAwesome.EDIT
-    var saveIcon: FontIcon = FontAwesome.SAVE
-    var cancelIcon: FontIcon = FontAwesome.TIMES_CIRCLE
     var topPosition = TOP_RIGHT
     var bottomPosition = BOTTOM_RIGHT
 }
@@ -64,23 +61,23 @@ interface EditSaveCancelBuilder : Serializable {
     fun editButton(button: Button)
 }
 
-class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private val editSaveCancelProvider: Provider<EditSaveCancel>, val serializationSupport: SerializationSupport, val userNotifier: UserNotifier) : EditSaveCancelBuilder {
+class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private val editSaveCancelProvider: Provider<EditSaveCancel>, val iconFactory: IconFactory, val serializationSupport: SerializationSupport, val userNotifier: UserNotifier) : EditSaveCancelBuilder {
     override val config = EditSaveCancelConfig()
 
     override fun editButton(button: Button) {
-        button.icon = config.editIcon
+        button.icon = iconFactory.iconFor(config.editKey)
         button.data = config.editKey
         button.addStyleName(ValoTheme.BUTTON_FRIENDLY)
     }
 
     override fun cancelButton(button: Button) {
-        button.icon = config.cancelIcon
+        button.icon = iconFactory.iconFor(config.cancelKey)
         button.data = config.cancelKey
         button.addStyleName(ValoTheme.BUTTON_DANGER)
     }
 
     override fun saveButton(button: Button) {
-        button.icon = config.saveIcon
+        button.icon = iconFactory.iconFor(config.saveKey)
         button.data = config.saveKey
         button.addStyleName(ValoTheme.BUTTON_FRIENDLY)
         button.addStyleName(ValoTheme.BUTTON_PRIMARY)
@@ -92,7 +89,7 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
 
     override fun topComponent(): EditSaveCancel {
         val esc = component()
-        alignButtons(esc, true)
+//        alignButtons(esc, true)
         return esc
     }
 
@@ -104,11 +101,11 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
         return esc
     }
 
-    private fun alignButtons(esc: EditSaveCancel, top: Boolean) {
-        esc.setComponentAlignment(esc.editButton, correlateAlignment(top))
-        esc.setComponentAlignment(esc.saveButton, correlateAlignment(top))
-        esc.setComponentAlignment(esc.cancelButton, correlateAlignment(top))
-    }
+//    private fun alignButtons(esc: EditSaveCancel, top: Boolean) {
+//        esc.setComponentAlignment(esc.editButton, correlateAlignment(top))
+//        esc.setComponentAlignment(esc.saveButton, correlateAlignment(top))
+//        esc.setComponentAlignment(esc.cancelButton, correlateAlignment(top))
+//    }
 
     private fun correlateAlignment(top: Boolean): Alignment {
         val kAlign = if (top) {
@@ -123,13 +120,13 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
             ButtonPosition.BOTTOM_LEFT -> Alignment.BOTTOM_LEFT
             ButtonPosition.BOTTOM_CENTER -> Alignment.BOTTOM_CENTER
             ButtonPosition.BOTTOM_RIGHT -> Alignment.BOTTOM_RIGHT
-            ButtonPosition.NO_POSITION -> throw ConfigurationException("Thuis value should never be present at this stage")
+            ButtonPosition.NO_POSITION -> throw ConfigurationException("This value should never be present at this stage")
         }
     }
 
     override fun bottomComponent(): EditSaveCancel {
         val esc = component()
-        alignButtons(esc, false)
+//        alignButtons(esc, false)
         return esc
     }
 
@@ -163,11 +160,12 @@ class DefaultEditSaveCancel : HorizontalLayout(), EditSaveCancel {
     override val editButton = Button()
     override val saveButton = Button()
     override val cancelButton = Button()
+    val filler = Panel()
 
     init {
-        addComponent(editButton)
-        addComponent(cancelButton)
-        addComponent(saveButton)
+        addComponent(filler)
+        filler.addStyleName(ValoTheme.PANEL_BORDERLESS)
+        setExpandRatio(filler, 1.0f)
         editButton.isVisible = true
         saveButton.isVisible = false
         cancelButton.isVisible = false
@@ -188,12 +186,18 @@ class DefaultEditSaveCancel : HorizontalLayout(), EditSaveCancel {
     override fun updateButtonVisibility() {
         if (section.mode == EDIT) {
             editButton.isVisible = false
+            removeComponent(editButton)
             saveButton.isVisible = true
+            addComponent(saveButton)
             cancelButton.isVisible = true
+            addComponent(cancelButton)
         } else {
             editButton.isVisible = true
+            addComponent(editButton)
             saveButton.isVisible = false
+            removeComponent(saveButton)
             cancelButton.isVisible = false
+            removeComponent(cancelButton)
         }
     }
 
