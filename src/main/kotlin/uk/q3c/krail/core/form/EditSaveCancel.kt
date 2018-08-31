@@ -2,13 +2,11 @@ package uk.q3c.krail.core.form
 
 import com.google.inject.Inject
 import com.google.inject.Provider
-import com.vaadin.ui.Alignment
 import com.vaadin.ui.Button
 import com.vaadin.ui.Component
 import com.vaadin.ui.HorizontalLayout
+import com.vaadin.ui.Panel
 import com.vaadin.ui.themes.ValoTheme
-import uk.q3c.krail.core.ConfigurationException
-import uk.q3c.krail.core.form.ButtonPosition.*
 import uk.q3c.krail.core.form.EditMode.EDIT
 import uk.q3c.krail.core.i18n.CommonLabelKey.*
 import uk.q3c.krail.core.user.notify.UserNotifier
@@ -29,12 +27,9 @@ class EditSaveCancelConfig : Serializable {
     var editKey: I18NKey = Edit
     var saveKey: I18NKey = Save
     var cancelKey: I18NKey = Cancel
-    var topPosition = TOP_RIGHT
-    var bottomPosition = BOTTOM_RIGHT
+    var displayAtTop = true
+    var displayAtBottom = true
 }
-
-
-enum class ButtonPosition { TOP_RIGHT, TOP_LEFT, TOP_CENTER, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT, NO_POSITION }
 
 interface EditSaveCancelBuilder : Serializable {
     val config: EditSaveCancelConfig
@@ -82,12 +77,11 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
     }
 
     override fun hasTopComponent(): Boolean {
-        return config.topPosition != NO_POSITION
+        return config.displayAtTop
     }
 
     override fun topComponent(): EditSaveCancel {
         val esc = component()
-//        alignButtons(esc, true)
         return esc
     }
 
@@ -99,37 +93,15 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
         return esc
     }
 
-//    private fun alignButtons(esc: EditSaveCancel, top: Boolean) {
-//        esc.setComponentAlignment(esc.editButton, correlateAlignment(top))
-//        esc.setComponentAlignment(esc.saveButton, correlateAlignment(top))
-//        esc.setComponentAlignment(esc.cancelButton, correlateAlignment(top))
-//    }
 
-    private fun correlateAlignment(top: Boolean): Alignment {
-        val kAlign = if (top) {
-            config.topPosition
-        } else {
-            config.bottomPosition
-        }
-        return when (kAlign) {
-            ButtonPosition.TOP_LEFT -> Alignment.TOP_LEFT
-            ButtonPosition.TOP_CENTER -> Alignment.TOP_CENTER
-            ButtonPosition.TOP_RIGHT -> Alignment.TOP_RIGHT
-            ButtonPosition.BOTTOM_LEFT -> Alignment.BOTTOM_LEFT
-            ButtonPosition.BOTTOM_CENTER -> Alignment.BOTTOM_CENTER
-            ButtonPosition.BOTTOM_RIGHT -> Alignment.BOTTOM_RIGHT
-            ButtonPosition.NO_POSITION -> throw ConfigurationException("This value should never be present at this stage")
-        }
-    }
 
     override fun bottomComponent(): EditSaveCancel {
         val esc = component()
-//        alignButtons(esc, false)
         return esc
     }
 
     override fun hasBottomComponent(): Boolean {
-        return config.bottomPosition != NO_POSITION
+        return config.displayAtBottom
     }
 
     @Throws(ClassNotFoundException::class, IOException::class)
@@ -153,14 +125,16 @@ interface EditSaveCancel : Component {
     fun updateButtonVisibility()
 }
 
-class DefaultEditSaveCancel : HorizontalLayout(), EditSaveCancel {
+class DefaultEditSaveCancel : Panel(), EditSaveCancel {
     override lateinit var section: FormDetailSection<*>
     override val editButton = Button()
     override val saveButton = Button()
     override val cancelButton = Button()
+    private val layout = HorizontalLayout()
 
     init {
         addStyleName(ValoTheme.PANEL_BORDERLESS)
+        content = layout
 
         editButton.addClickListener { _ ->
             section.editData()
@@ -177,12 +151,12 @@ class DefaultEditSaveCancel : HorizontalLayout(), EditSaveCancel {
 
     override fun updateButtonVisibility() {
         if (section.mode == EDIT) {
-            removeAllComponents()
-            addComponent(saveButton)
-            addComponent(cancelButton)
+            layout.removeAllComponents()
+            layout.addComponent(cancelButton)
+            layout.addComponent(saveButton)
         } else {
-            removeAllComponents()
-            addComponent(editButton)
+            layout.removeAllComponents()
+            layout.addComponent(editButton)
         }
     }
 
