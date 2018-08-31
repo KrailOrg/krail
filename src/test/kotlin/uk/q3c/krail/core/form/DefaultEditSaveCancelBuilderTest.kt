@@ -2,13 +2,13 @@ package uk.q3c.krail.core.form
 
 import com.google.inject.Provider
 import com.vaadin.server.FontAwesome
-import com.vaadin.ui.Alignment
 import com.vaadin.ui.Button
 import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -91,28 +91,24 @@ object DefaultEditSaveCancelBuilderTest : Spek({
                 }
             }
 
-            on("getting component") {
-                val top = builder.topComponent() as DefaultEditSaveCancel
-                val bottom = builder.bottomComponent() as DefaultEditSaveCancel
+            on("getting top component") {
+                val top = (builder.topComponent() as DefaultEditSaveCancel)
 
-                it("should have edit, cancel, save buttons in that order") {
-                    (top.getComponent(0) as Button).data.shouldEqual(CommonLabelKey.Edit)
-                    (top.getComponent(1) as Button).data.shouldEqual(CommonLabelKey.Cancel)
-                    (top.getComponent(2) as Button).data.shouldEqual(CommonLabelKey.Save)
-
-                    (bottom.getComponent(0) as Button).data.shouldEqual(CommonLabelKey.Edit)
-                    (bottom.getComponent(1) as Button).data.shouldEqual(CommonLabelKey.Cancel)
-                    (bottom.getComponent(2) as Button).data.shouldEqual(CommonLabelKey.Save)
+                it("should have edit, cancel, save buttons created") {
+                    top.editButton.shouldNotBeNull()
+                    top.saveButton.shouldNotBeNull()
+                    top.cancelButton.shouldNotBeNull()
                 }
 
-                it("should have buttons aligned to the right") {
-                    top.getComponentAlignment(top.getComponent(0)).shouldEqual(Alignment.TOP_RIGHT)
-                    top.getComponentAlignment(top.getComponent(1)).shouldEqual(Alignment.TOP_RIGHT)
-                    top.getComponentAlignment(top.getComponent(2)).shouldEqual(Alignment.TOP_RIGHT)
+            }
 
-                    bottom.getComponentAlignment(bottom.getComponent(0)).shouldEqual(Alignment.BOTTOM_RIGHT)
-                    bottom.getComponentAlignment(bottom.getComponent(1)).shouldEqual(Alignment.BOTTOM_RIGHT)
-                    bottom.getComponentAlignment(bottom.getComponent(2)).shouldEqual(Alignment.BOTTOM_RIGHT)
+            on("getting bottom component") {
+                val top = (builder.bottomComponent() as DefaultEditSaveCancel)
+
+                it("should have edit, cancel, save buttons created") {
+                    top.editButton.shouldNotBeNull()
+                    top.saveButton.shouldNotBeNull()
+                    top.cancelButton.shouldNotBeNull()
                 }
 
             }

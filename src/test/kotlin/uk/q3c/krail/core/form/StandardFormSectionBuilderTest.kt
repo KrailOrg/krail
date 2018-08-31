@@ -12,7 +12,9 @@ import com.vaadin.ui.DateField
 import com.vaadin.ui.FormLayout
 import com.vaadin.ui.Grid
 import com.vaadin.ui.InlineDateField
+import com.vaadin.ui.Panel
 import com.vaadin.ui.TextField
+import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.components.grid.GridSelectionModel
 import io.mockk.every
 import io.mockk.mockk
@@ -38,6 +40,8 @@ import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailValidationModule
+import uk.q3c.krail.core.view.component.DefaultIconFactory
+import uk.q3c.krail.core.view.component.IconFactory
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.Translate
@@ -104,13 +108,13 @@ object StandardFormSectionBuilderTest : Spek({
             val serializationTracer = SerializationTracer()
             val section = builder.buildDetail(formDaoFactory, translate, editSaveCancelBuilder)
             section.loadData(mapOf(Pair("id", testUuid1)))
-            val layout = (section.rootComponent as FormLayout)
+            val layout = (section.rootComponent as Panel).content as VerticalLayout
 
 
             it("has the correct number of components") {
-                layout.getComponent(0).shouldBeInstanceOf(EditSaveCancel::class)
+
                 section.propertyMap.size.shouldBe(7)
-                layout.getComponent(8).shouldBeInstanceOf(EditSaveCancel::class)
+                layout.getComponent(2).shouldBeInstanceOf(EditSaveCancel::class)
             }
 
             it("creates default components where none specified") {
@@ -132,13 +136,14 @@ object StandardFormSectionBuilderTest : Spek({
                 }
             }
 
-            it("uses a FormLayout") {
-                section.rootComponent.shouldBeInstanceOf(FormLayout::class)
-            }
 
             it("has added the components to the layout, including 2 x EditSaveCancel") {
-                section.rootComponent.componentCount.shouldBe(9)
+                layout.getComponent(0).shouldBeInstanceOf(EditSaveCancel::class)
+                layout.getComponent(1).shouldBeInstanceOf(FormLayout::class)
+                layout.getComponent(2).shouldBeInstanceOf(EditSaveCancel::class)
+
             }
+
 
             it("ignores excluded properties") {
                 section.propertyMap["id"].shouldBeNull()
@@ -460,6 +465,7 @@ private class StandardFormSectionBuilderTestModule : AbstractModule() {
         bind(FormDaoFactory::class.java).toInstance(daoFactory)
         bind(Navigator::class.java).toInstance(navigator)
         bind(UserNotifier::class.java).toInstance(userNotifier)
+        bind(IconFactory::class.java).to(DefaultIconFactory::class.java)
     }
 
 }

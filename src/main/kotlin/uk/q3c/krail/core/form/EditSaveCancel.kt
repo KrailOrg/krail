@@ -81,8 +81,7 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
     }
 
     override fun topComponent(): EditSaveCancel {
-        val esc = component()
-        return esc
+        return component()
     }
 
     private fun component(): EditSaveCancel {
@@ -94,10 +93,8 @@ class DefaultEditSaveCancelBuilder @Inject constructor(@field:Transient private 
     }
 
 
-
     override fun bottomComponent(): EditSaveCancel {
-        val esc = component()
-        return esc
+        return component()
     }
 
     override fun hasBottomComponent(): Boolean {

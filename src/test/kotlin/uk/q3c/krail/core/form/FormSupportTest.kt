@@ -32,6 +32,8 @@ import uk.q3c.krail.core.navigate.sitemap.Sitemap
 import uk.q3c.krail.core.persist.FormDaoModule
 import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailValidationModule
+import uk.q3c.krail.core.view.component.DefaultIconFactory
+import uk.q3c.krail.core.view.component.IconFactory
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockCurrentLocale
@@ -194,6 +196,7 @@ private class FormSupportTestModule : AbstractModule() {
         bind(MessageFormat2::class.java).to(DefaultMessageFormat::class.java)
         bind(Navigator::class.java).toInstance(navigator)
         bind(UserNotifier::class.java).toInstance(userNotifier)
+        bind(IconFactory::class.java).to(DefaultIconFactory::class.java)
     }
 }
 

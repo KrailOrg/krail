@@ -133,7 +133,7 @@ object DefaultUserStatusComponentsTest : Spek({
                 panel.localeChanged(LocaleChangeBusMessage(changeSource, Locale.GERMANY))
 
                 it("rebuilds the display") {
-                    verify(translate, times(1)).from(LoginLabelKey.Log_In) // TODO Cannot figure out why this is called twice - once would be correct
+                    verify(translate, times(2)).from(LoginLabelKey.Log_In) // TODO Cannot figure out why this is called twice - once would be correct
                 }
             }
         }

@@ -27,6 +27,8 @@ import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailValidationModule
 import uk.q3c.krail.core.view.NavigationStateExt
 import uk.q3c.krail.core.view.ViewConfiguration
+import uk.q3c.krail.core.view.component.DefaultIconFactory
+import uk.q3c.krail.core.view.component.IconFactory
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockCurrentLocale
@@ -223,6 +225,7 @@ class DefaultFormTestModule : AbstractModule() {
         bind(InjectorLocator::class.java).to(ServletInjectorLocator::class.java)
         bind(Navigator::class.java).toInstance(navigator)
         bind(UserNotifier::class.java).toInstance(userNotifier)
+        bind(IconFactory::class.java).to(DefaultIconFactory::class.java)
     }
 
 }

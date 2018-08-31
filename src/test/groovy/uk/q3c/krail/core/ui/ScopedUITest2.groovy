@@ -71,7 +71,7 @@ class ScopedUITest2 extends Specification {
         ui.changeView(view)
 
         then:
-        logMonitor.debugLogs().contains("Page title set to 'Krail Unnamed'")
+        logMonitor.debugLogs().contains("Page title set to 'Krail Home'")
     }
 
     def "getNavigator() returns null"() {

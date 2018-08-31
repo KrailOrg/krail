@@ -13,9 +13,8 @@
 
 package uk.q3c.krail.core.view
 
+import uk.q3c.krail.core.i18n.CommonLabelKey
 import uk.q3c.krail.core.i18n.DescriptionKey
-import uk.q3c.krail.core.i18n.LabelKey
-
 /**
  * Created by David Sowerby on 09 Feb 2016
  */
@@ -61,7 +60,7 @@ class DefaultErrorViewTest extends ViewTest {
 
     def "keys"() {
         expect:
-        thisView.getNameKey() == LabelKey.Error
+        thisView.getNameKey() == CommonLabelKey.Error
         thisView.getDescriptionKey() == DescriptionKey.Error_Information
     }
 }

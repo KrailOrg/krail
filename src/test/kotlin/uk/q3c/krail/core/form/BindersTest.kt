@@ -27,6 +27,8 @@ import uk.q3c.krail.core.persist.MapDbFormDaoFactory
 import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.core.validation.KrailValidationModule
+import uk.q3c.krail.core.view.component.DefaultIconFactory
+import uk.q3c.krail.core.view.component.IconFactory
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockCurrentLocale
@@ -158,6 +160,7 @@ private class TestSupportModule : AbstractModule() {
         bind(FormDaoFactory::class.java).to(MapDbFormDaoFactory::class.java).asEagerSingleton()
         bind(Navigator::class.java).toInstance(navigator)
         bind(UserNotifier::class.java).toInstance(userNotifier)
+        bind(IconFactory::class.java).to(DefaultIconFactory::class.java)
     }
 
 }

@@ -57,6 +57,8 @@ public class Labels_de extends Labels {
         put(LabelKey.Unlock_Account, "Konto entsperren");
         put(LabelKey.Unnamed, "unbenannt");
         put(LabelKey.Krail, "Krail");
+        put(LabelKey.Yes, "Ja");
+        put(LabelKey.Ok, "OK");
 
 
     }

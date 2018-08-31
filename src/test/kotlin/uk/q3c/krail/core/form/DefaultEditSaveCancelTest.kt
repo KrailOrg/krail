@@ -1,11 +1,11 @@
 package uk.q3c.krail.core.form
 
+import com.vaadin.ui.HorizontalLayout
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldBeFalse
-import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -29,17 +29,15 @@ object DefaultEditSaveCancelTest : Spek({
 
         on("construction") {
 
-            it("has button visibility set up as read only mode") {
-                esc.editButton.isVisible.shouldBeTrue()
-                esc.saveButton.isVisible.shouldBeFalse()
-                esc.cancelButton.isVisible.shouldBeFalse()
+            it("has created all the buttons") {
+                esc.editButton.shouldNotBeNull()
+                esc.saveButton.shouldNotBeNull()
+                esc.cancelButton.shouldNotBeNull()
 
             }
 
-            it("has button order of edit cancel save") {
-                esc.getComponent(0).shouldBe(esc.editButton)
-                esc.getComponent(1).shouldBe(esc.cancelButton)
-                esc.getComponent(2).shouldBe(esc.saveButton)
+            it("layout is empty") {
+                (esc.content as HorizontalLayout).componentCount.shouldBe(0)
             }
 
         }
@@ -80,9 +78,9 @@ object DefaultEditSaveCancelTest : Spek({
             esc.updateButtonVisibility()
 
             it("has button visibility set up as edit mode") {
-                esc.editButton.isVisible.shouldBeFalse()
-                esc.saveButton.isVisible.shouldBeTrue()
-                esc.cancelButton.isVisible.shouldBeTrue()
+                (esc.content as HorizontalLayout).getComponent(0).shouldBe(esc.cancelButton)
+                (esc.content as HorizontalLayout).getComponent(1).shouldBe(esc.saveButton)
+                (esc.content as HorizontalLayout).componentCount.shouldBe(2)
             }
         }
 
@@ -92,9 +90,8 @@ object DefaultEditSaveCancelTest : Spek({
             esc.updateButtonVisibility()
 
             it("has button visibility set up as read only mode") {
-                esc.editButton.isVisible.shouldBeTrue()
-                esc.saveButton.isVisible.shouldBeFalse()
-                esc.cancelButton.isVisible.shouldBeFalse()
+                (esc.content as HorizontalLayout).getComponent(0).shouldBe(esc.editButton)
+                esc.componentCount.shouldBe(1)
             }
         }
 
