@@ -27,6 +27,7 @@ class NavigationButton constructor(var node: UserSitemapNode, val navigator: Nav
     init {
         this.caption = node.label
         this.addClickListener(this)
+        this.id = "navigationbutton-${node.uriSegment}" // TODO this needs to be conditional on using ids https://github.com/KrailOrg/krail/issues/662
 
     }
 

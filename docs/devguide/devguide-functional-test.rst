@@ -51,7 +51,7 @@ Page Loading
 One of the problems with automated testing is knowing when a page is ready to be tested.
 A ``PageLoading`` message is despatched on the ``MessageBus`` as the transition from one page to another is started, followed by a ``Page Ready`` message once the page has been built and data has been loaded.
 
-In ``SimpleUI``, the ``PageReady`` message is used to set the title in the ``NavigationBar`` - this can be used as a signal that the page is ready for testing.
+In ``SimpleUI``, the ``PageLoadingMessage`` sets the ``NavigationBar`` title to "Loading ...".  When the ``PageReadyMessage`` is received, the title is set to the name of the View.  This can be used by functional test code to determine whether the page is ready for testing.
 
 Functional Test Support
 =======================
@@ -73,7 +73,7 @@ Selenide, and could be extended easily for use with Vaadin TestBench -
 the objective it to enable the use of different test tools without
 changing the tests
 
-See ``KotlinPageObjectGenerator`` and the other classes in
+See ``GeneratorPageObjects`` and the other classes in
 uk.q3c.krail.functest, in the `test-app <https://github.com/davidsowerby/krail-testApp>`__ project
 
 The code behind this will eventually become a separate library.

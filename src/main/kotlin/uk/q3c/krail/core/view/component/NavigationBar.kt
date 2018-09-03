@@ -27,15 +27,13 @@ class NavigationBar(val translate: Translate) : HorizontalLayout() {
     var buttonStyle: String = ValoTheme.BUTTON_ICON_ONLY
     var titleStyle: String = ValoTheme.LABEL_BOLD
     var helpPath: String = ""
-    var showUserName = false
     private val titleLabel = Label()
     private lateinit var menuButton: Button
     private lateinit var homeButton: Button
     private lateinit var helpButton: Button
     private lateinit var notificationsButton: Button
-    //    private lateinit var fullScreenButton: FullScreenButton
-    private lateinit var statusComponents: UserStatusComponents
     private lateinit var settingsButton: Button
+    private lateinit var login_logout_Button: Button
 
     fun build(navigator: Navigator, userStatusComponents: UserStatusComponents, iconFactory: IconFactory) {
         this.components.clear() // this method may be re-called when locale changes
@@ -53,35 +51,16 @@ class NavigationBar(val translate: Translate) : HorizontalLayout() {
 
 
         notificationsButton = addButton(translate, CommonLabelKey.Notifications, iconFactory)
-//        fullScreenButton = addFullScreenButton(translate, viewDisplayPanel)
         titleKey = CommonLabelKey.Loading_ // to trigger label value
-        statusComponents = userStatusComponents
-//        statusPanel.login_logout_Button.addStyleName(buttonStyle)
-//        statusPanel.setSizeFull()
+        login_logout_Button = userStatusComponents.login_logout_Button
+        login_logout_Button.addStyleName(buttonStyle)
         settingsButton = addButton(translate, CommonLabelKey.Settings, iconFactory)
-        statusComponents.login_logout_Button.addStyleName(buttonStyle)
 
-//        addComponents(menuButton, homeButton, notificationsButton, fullScreenButton, titleLabel, statusComponents.usernameLabel, statusComponents.login_logout_Button, settingsButton)
-        if (showUserName) {
-            addComponents(menuButton, homeButton, notificationsButton, titleLabel, statusComponents.usernameLabel, statusComponents.login_logout_Button, settingsButton, helpButton)
-        } else {
-            addComponents(menuButton, homeButton, notificationsButton, titleLabel, statusComponents.login_logout_Button, settingsButton, helpButton)
-        }
-
-
-
+        addComponents(menuButton, homeButton, notificationsButton, titleLabel, login_logout_Button, settingsButton, helpButton)
 
         this.setComponentAlignment(titleLabel, Alignment.MIDDLE_CENTER)
         this.setExpandRatio(titleLabel, 1f)
     }
-
-//    private fun addFullScreenButton(translate: Translate): FullScreenButton {
-////        val button = FullScreenButton(FontAwesome.EXPAND)
-////        button.addStyleName(buttonStyle)
-////        button.description = translate.from(CommonLabelKey.Full_Screen)
-////        button.setFullScreenTarget(UI.getCurrent())
-////        return button
-//    }
 
     private fun addButton(translate: Translate, description: I18NKey, icon: IconFactory): Button {
         val button = Button(icon.iconFor(description))

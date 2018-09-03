@@ -159,8 +159,7 @@ dependencies {
 
     // Vaadin addons
 //    compile 'de.steinwedel.vaadin.addon:messagebox:4.0.21'
-//
-    compile 'org.vaadin.alump.gofullscreen:gofullscreen-addon:0.6.1'
+
 
     //testing
 
