@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.testviews2.ViewA;
 import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,16 +57,6 @@ public class DefaultSitemapFinisherTest {
     private MasterSitemapNode nodeNoKey;
 
 
-    @Test(expected = SitemapException.class)
-    public void checkOnly() {
-
-        // given
-        buildSitemap(0);
-        // when
-        checker.check(sitemap);
-        // then
-
-    }
 
     /**
      * the root node "node" will have nothing set except the segment
@@ -135,53 +124,9 @@ public class DefaultSitemapFinisherTest {
     }
 
 
-    @Test(expected = SitemapException.class)
-    public void replaceMissingViews() {
 
-        // given
-        buildSitemap(0);
-        // when
-        checker.replaceMissingViewWith(ViewA.class)
-               .check(sitemap);
-        // then
 
-    }
 
-    @Test(expected = SitemapException.class)
-    public void replaceMissingKeys() {
-
-        // given
-        buildSitemap(0);
-        // when
-        checker.replaceMissingKeyWith(TestLabelKey.Home)
-               .check(sitemap);
-        // then
-
-    }
-
-    @Test
-    public void replaceMissingViewsAndKeys() {
-
-        // given
-        buildSitemap(0);
-        // when
-        checker.replaceMissingViewWith(ViewA.class)
-               .replaceMissingKeyWith(TestLabelKey.Home)
-               .check(sitemap);
-        // then
-        assertThat(checker.getMissingLabelKeys()).isEmpty();
-        assertThat(checker.getMissingViewClasses()).isEmpty();
-        assertThat(checker.getMissingPageAccessControl()).isEmpty();
-        baseNode = sitemap.nodeFor("node");
-        assertThat(baseNode.getLabelKey()).isEqualTo(TestLabelKey.Home);
-        assertThat(baseNode.getViewClass()).isEqualTo(ViewA.class);
-        nodeNoClass = sitemap.nodeFor("undefined1");
-        assertThat(nodeNoClass.getLabelKey()).isEqualTo(TestLabelKey.No);
-        assertThat(nodeNoClass.getViewClass()).isEqualTo(ViewA.class);
-        nodeNoKey = sitemap.nodeFor("undefined2");
-        assertThat(nodeNoKey.getLabelKey()).isEqualTo(TestLabelKey.Home);
-        assertThat(nodeNoKey.getViewClass()).isEqualTo(ViewA1.class);
-    }
 
     @Test(expected = SitemapException.class)
     public void redirectLoop_immediate() {
