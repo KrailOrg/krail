@@ -20,6 +20,7 @@ enum class CommonLabelKey : I18NKey {
     Menu,
     Notifications,
     No,
+    _NullKey_,
     Ok,
     Push,
     Save,

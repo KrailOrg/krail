@@ -1,5 +1,6 @@
 package uk.q3c.krail.core.view.component
 
+import com.google.inject.Inject
 import com.vaadin.ui.Alignment
 import com.vaadin.ui.Button
 import com.vaadin.ui.HorizontalLayout
@@ -17,8 +18,11 @@ import uk.q3c.krail.i18n.Translate
  * A simple 'menu bar' - [build] must be called before using it
  *
  * Attempted to include a "FullScreen" option but that does not work
+ *
+ * Note:  The field declarations for buttons etc could be avoided by just creating the components as part of the [addEntry] call.
+ * However, that would mean that [FunctionalTestSupport] would not create fields for the page objects. (see https://github.com/KrailOrg/krail-testApp/issues/55)
  */
-class NavigationBar(val translate: Translate) : HorizontalLayout() {
+class NavigationBar @Inject constructor(val translate: Translate, val translatableComponents: TranslatableComponents, userStatusComponents: UserStatusComponents) : HorizontalLayout() {
     var titleKey: I18NKey = CommonLabelKey.Loading_
         set(value) {
             field = value
@@ -28,46 +32,53 @@ class NavigationBar(val translate: Translate) : HorizontalLayout() {
     var titleStyle: String = ValoTheme.LABEL_BOLD
     var helpPath: String = ""
     private val titleLabel = Label()
-    private lateinit var menuButton: Button
-    private lateinit var homeButton: Button
-    private lateinit var helpButton: Button
-    private lateinit var notificationsButton: Button
-    private lateinit var settingsButton: Button
-    private lateinit var login_logout_Button: Button
+    private var menuButton = Button()
+    private var homeButton = Button()
+    private var helpButton = Button()
+    private var notificationsButton = Button()
+    private var settingsButton = Button()
+    private var login_logout_Button = Button()
 
-    fun build(navigator: Navigator, userStatusComponents: UserStatusComponents, iconFactory: IconFactory) {
-        this.components.clear() // this method may be re-called when locale changes
+    /**
+     * login_logout_Button is managed by [userStatusComponents], and therefore not added to [translatableComponents]
+     */
+    init {
+        login_logout_Button = userStatusComponents.login_logout_Button
+        with(translatableComponents) {
+            addEntry(component = menuButton, descriptionKey = CommonLabelKey.Menu)
+            addEntry(component = homeButton, descriptionKey = CommonLabelKey.Home)
+            addEntry(component = notificationsButton, descriptionKey = CommonLabelKey.Notifications)
+            addEntry(component = titleLabel, descriptionKey = CommonLabelKey.Title, useIcon = false)
+            addEntry(component = settingsButton, descriptionKey = CommonLabelKey.Settings)
+            addEntry(component = helpButton, descriptionKey = CommonLabelKey.Help)
+        }
+
+    }
+
+    fun build(navigator: Navigator) {
         this.setWidth("100%")
-        menuButton = addButton(translate, CommonLabelKey.Menu, iconFactory)
-        homeButton = addButton(translate, CommonLabelKey.Home, iconFactory)
         homeButton.addClickListener { _ -> navigator.navigateTo(StandardPageKey.Public_Home) }
+        titleLabel.addStyleName(titleStyle)
 
         if (helpPath.isNotEmpty()) {
-            helpButton = addButton(translate, CommonLabelKey.Help, iconFactory)
             helpButton.addClickListener { _ -> navigator.navigateTo(helpPath) }
         } else {
             helpButton.isEnabled = false
         }
-
-
-        notificationsButton = addButton(translate, CommonLabelKey.Notifications, iconFactory)
         titleKey = CommonLabelKey.Loading_ // to trigger label value
-        login_logout_Button = userStatusComponents.login_logout_Button
+
         login_logout_Button.addStyleName(buttonStyle)
-        settingsButton = addButton(translate, CommonLabelKey.Settings, iconFactory)
+
+        translatableComponents.components.keys.forEach { c ->
+            if (c is Button) {
+                c.addStyleName(buttonStyle)
+            }
+        }
 
         addComponents(menuButton, homeButton, notificationsButton, titleLabel, login_logout_Button, settingsButton, helpButton)
 
         this.setComponentAlignment(titleLabel, Alignment.MIDDLE_CENTER)
         this.setExpandRatio(titleLabel, 1f)
     }
-
-    private fun addButton(translate: Translate, description: I18NKey, icon: IconFactory): Button {
-        val button = Button(icon.iconFor(description))
-        button.addStyleName(buttonStyle)
-        button.description = translate.from(description)
-        return button
-    }
-
-
 }
+

@@ -30,7 +30,18 @@ open class DefaultComponentModule : AbstractModule() {
         bindSubPageButtonBuilder()
         bindPageNavigationPanel()
         bindIconFactory()
+        bindTranslatableComponents()
     }
+
+
+    /**
+     * Override this method to provide your own implementation of [TranslatableComponents] in a sub-class of this module.
+     * Your module will then need to replace this module in [BindingsCollator]
+     */
+    protected open fun bindTranslatableComponents() {
+        bind(TranslatableComponents::class.java).to(DefaultTranslatableComponents::class.java)
+    }
+
 
     /**
      * Override this method to provide your own implementation of [PageNavigationPanel] in a sub-class of this module.

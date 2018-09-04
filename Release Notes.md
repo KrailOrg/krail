@@ -1,8 +1,12 @@
 # Release notes for 0.16.12.0
 
+The original objective for this release was to provide a meaningful level of Forms support.  That has happened, but the release was extended to include a simpler, lightweight UI as well (`SimpleUI`).
+
+This also inspired some improvements in handling I18N for components
+
 ## SimpleUI
 
-A lightweight UI, SimpleUI, is available.  It is suggested that this is used where the primary user audience is expected to be using mobile.
+A lightweight UI, `SimpleUI`, is available.  It is suggested that this is used where the primary user audience is expected to be using mobile.
 
 There is still more work to do on this, see issues #736 and #737 
 
@@ -41,6 +45,9 @@ The methods with a parameter have therefore been deprecated and replaced with pa
 
 - The [MessageBox addon](https://vaadin.com/directory/component/messagebox) was intended to be used as a normal addon, but ButtonOption is not serializable.  The only solution unfortunately was to import the source.  There were no tests with it.   [Open Issue](https://github.com/KrailOrg/krail/issues/722) to review
 
+### NavigationBar
+
+A new component used in `SimpleUI` - a minimal form of application men bar
 
 ### Navigator
 
@@ -49,16 +56,21 @@ The methods with a parameter have therefore been deprecated and replaced with pa
 
 ### SitemapFinisher
 
-Redundant checks removed.  Only the redirect loop check remains 
+Redundant checks removed.  Only the redirect loop check remains
+
+### TranslatableComponents
+
+Added to simplify the I18N management of dynamically created components.  It can also be a simpler alternative to using @Caption
+Used in `NavigationBar`
   
 ### UserStatusPanel
 
-- Deprecated and replaced by UserStatusComponents.  Functionally the same, but is not a component - improves flexibility of use
+- Deprecated and replaced by `UserStatusComponents`.  Functionally the same, but is not a component - improves flexibility of use
 
 
 ## Ported to Kotlin
 
-Includes, but is not limited to:
+New classes are in Kotlin. Quite a few classes were ported, this is just a few of them:
 
 - MasterSitemapNode, UserSitemapNode, NodeRecord, SitemapFinisher and NavigationCommand
 - A couple of tests which mock UserSitemapNode (Mockito cannot mock final classes, Mockk can)
@@ -66,10 +78,10 @@ Includes, but is not limited to:
 
 ## Refactoring / renaming
 
-- DataModule becomes ConverterModule and is moved to uk.q3c.krail.core.form
-- ConverterFactory and associated classes moved to uk.q3c.krail.core.form
-- UserSitemapSorter becomes UserSitemapNodeComparator
-- SubPagePanel and Breadcrumb replaced by PageNavigationPanel
+- `DataModule` becomes `ConverterModule` and is moved to uk.q3c.krail.core.form
+- `ConverterFactory` and associated classes moved to uk.q3c.krail.core.form
+- `UserSitemapSorter` becomes `UserSitemapNodeComparator`
+- `SubPagePanel` and `Breadcrumb` replaced by `PageNavigationPanel`
 
 ## Tests
 

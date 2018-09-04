@@ -14,7 +14,6 @@
 package uk.q3c.krail.core.ui
 
 import com.google.inject.Inject
-import com.google.inject.Provider
 import com.vaadin.annotations.Push
 import com.vaadin.annotations.Theme
 import com.vaadin.annotations.Viewport
@@ -36,11 +35,8 @@ import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.push.Broadcaster
 import uk.q3c.krail.core.push.KrailPushConfiguration
 import uk.q3c.krail.core.push.PushMessageRouter
-import uk.q3c.krail.core.user.notify.VaadinNotification
 import uk.q3c.krail.core.view.KrailView
-import uk.q3c.krail.core.view.component.IconFactory
 import uk.q3c.krail.core.view.component.NavigationBar
-import uk.q3c.krail.core.view.component.UserStatusComponents
 import uk.q3c.krail.eventbus.MessageBus
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
@@ -69,17 +65,15 @@ protected constructor(navigator: Navigator,
                       translator: I18NProcessor,
                       serializationSupport: SerializationSupport,
                       pushConfiguration: KrailPushConfiguration,
-                      val iconFactory: IconFactory,
-                      val vaadinNotification: VaadinNotification,
-                      @field:Transient private val userStatusComponentsProvider: Provider<UserStatusComponents>,
+                      val topBar: NavigationBar,
                       @field:Transient private val messageBus: MessageBus)
 
     : ScopedUI(navigator, errorHandler, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, serializationSupport, pushConfiguration) {
-    val topBar = NavigationBar(translate)
+
     private val log = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun screenLayout(): AbstractOrderedLayout {
-        topBar.build(navigator = krailNavigator, userStatusComponents = userStatusComponentsProvider.get(), iconFactory = iconFactory)
+        topBar.build(navigator = krailNavigator)
         val layout = VerticalLayout(topBar)
         return layout
     }
