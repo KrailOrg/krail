@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.vaadin.ui.Alignment
 import com.vaadin.ui.Button
 import com.vaadin.ui.HorizontalLayout
-import com.vaadin.ui.Label
 import com.vaadin.ui.themes.ValoTheme
 import uk.q3c.krail.core.i18n.CommonLabelKey
 import uk.q3c.krail.core.navigate.Navigator
@@ -26,12 +25,13 @@ class NavigationBar @Inject constructor(val translate: Translate, val translatab
     var titleKey: I18NKey = CommonLabelKey.Loading_
         set(value) {
             field = value
+            titleLabel.valueKey = value
             titleLabel.value = translate.from(titleKey)
         }
     var buttonStyle: String = ValoTheme.BUTTON_ICON_ONLY
     var titleStyle: String = ValoTheme.LABEL_BOLD
     var helpPath: String = ""
-    private val titleLabel = Label()
+    private val titleLabel = MutableI18NLabel(CommonLabelKey.Loading_)
     private var menuButton = Button()
     private var homeButton = Button()
     private var helpButton = Button()
@@ -65,7 +65,6 @@ class NavigationBar @Inject constructor(val translate: Translate, val translatab
         } else {
             helpButton.isEnabled = false
         }
-        titleKey = CommonLabelKey.Loading_ // to trigger label value
 
         login_logout_Button.addStyleName(buttonStyle)
 

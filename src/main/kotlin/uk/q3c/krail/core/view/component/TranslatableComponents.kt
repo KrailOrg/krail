@@ -17,6 +17,8 @@ import java.io.Serializable
  * Maintains a map of components which use Krail's I18NKey to set caption and description.  It responds to changes in Locale
  * by updating those components.
  *
+ * Supports [I18NLabel] by changing the label's value in response to a Locale change
+ *
  * The [addEntry] method also sets the component icon (assuming icon is in use) - this is done here because the icon is looked up
  * from the [IconFactory] using an I18NKey
  */
@@ -44,9 +46,14 @@ class DefaultTranslatableComponents @Inject constructor(val translate: Translate
                 component.description = translate.from(keys.descriptionKey)
             }
             component.locale = currentLocale.locale
-
+            if (component is I18NLabel) {
+                component.value = translate.from(component.valueKey)
+            } else if (component is MutableI18NLabel) {
+                component.value = translate.from(component.valueKey)
+            }
         }
     }
+
 
     @Handler
     fun localeChanged(@Suppress("UNUSED_PARAMETER") msg: LocaleChangeBusMessage) {

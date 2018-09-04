@@ -41,9 +41,11 @@ object DefaultTranslatableComponentsTest : Spek({
             val button1 = Button()
             val button2 = Button()
             val button3 = Button()
+
             dtc.addEntry(component = button1, captionKey = CommonLabelKey.Settings, descriptionKey = CommonLabelKey.Settings)
             dtc.addEntry(component = button2, captionKey = CommonLabelKey.Title, descriptionKey = CommonLabelKey.Title, useIcon = false)
             dtc.addEntry(component = button3, captionKey = CommonLabelKey._NullKey_, descriptionKey = CommonLabelKey.Yes)
+
 
 
             it("retains the component with I18NKey information") {
@@ -73,8 +75,10 @@ object DefaultTranslatableComponentsTest : Spek({
             val localeMessage: LocaleChangeBusMessage = mockk(relaxed = true)
             val button1 = Button()
             val button2 = Button()
+            val label = I18NLabel(CommonLabelKey.Settings)
             dtc.addEntry(component = button1, captionKey = CommonLabelKey.Settings, descriptionKey = CommonLabelKey.Settings, useIcon = true)
             dtc.addEntry(component = button2, captionKey = CommonLabelKey.Title, descriptionKey = CommonLabelKey.Title, useIcon = true)
+            dtc.addEntry(component = label, captionKey = CommonLabelKey._NullKey_, descriptionKey = CommonLabelKey.Yes)
             dtc.localeChanged(localeMessage)
 
             it("translates component captions and descriptions") {
@@ -82,6 +86,7 @@ object DefaultTranslatableComponentsTest : Spek({
                 button1.description.shouldBeEqualTo("Settings")
                 button2.caption.shouldBeEqualTo("Title")
                 button2.description.shouldBeEqualTo("Title")
+                label.value.shouldBe("Settings")
             }
         }
     }

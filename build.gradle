@@ -70,7 +70,7 @@ repositories {
 kaytee {
     version {
         number = "0.16.12.0"
-        qualifier="krail-681"
+        qualifier="krail-743"
     }
     changelog {
         maxVersions = 10
