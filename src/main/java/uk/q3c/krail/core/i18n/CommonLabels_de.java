@@ -64,6 +64,8 @@ public class CommonLabels_de extends CommonLabels {
 //        put(CommonLabelKey.Unlock_Account, "Konto entsperren");
 //        put(CommonLabelKey.Unnamed, "unbenannt");
 //        put(CommonLabelKey.Krail, "Krail");
+        put(CommonLabelKey.Settings, "Einstellungen");
+        put(CommonLabelKey.Title, "Titel");
         put(CommonLabelKey.Warning, "Warnung");
 
 
