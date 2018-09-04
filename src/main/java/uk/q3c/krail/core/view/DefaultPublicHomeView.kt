@@ -19,7 +19,7 @@ import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
 
 class DefaultPublicHomeView @Inject
-protected constructor(translate: Translate, serializationSupport: SerializationSupport) : StandardPageViewBase(translate, serializationSupport), PublicHomeView {
+constructor(translate: Translate, serializationSupport: SerializationSupport) : StandardPageViewBase(translate, serializationSupport), PublicHomeView {
     init {
         nameKey = CommonLabelKey.Home
     }

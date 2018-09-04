@@ -30,6 +30,8 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ConfigurationException;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.form.Form;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
@@ -42,6 +44,7 @@ import uk.q3c.krail.core.push.KrailPushConfiguration;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewHolder;
+import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
@@ -65,6 +68,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author David Sowerby
  */
 @Listener
+@SubscribeTo({UIBus.class, SessionBus.class})
 public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener {
     private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
     protected final CurrentLocale currentLocale;
@@ -74,7 +78,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final Navigator navigator;
     private final ApplicationTitle applicationTitle;
     protected final Translate translate;
-    protected final I18NProcessor translator;
+    protected final I18NProcessor i18NProcessor;
     protected boolean viewDisplayPanelSizeFull = true;
     private SerializationSupport serializationSupport;
     private KrailPushConfiguration pushConfig;
@@ -86,7 +90,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private Panel viewDisplayPanel;
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, Broadcaster broadcaster, PushMessageRouter
-            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
+            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor i18NProcessor, SerializationSupport serializationSupport, KrailPushConfiguration pushConfig) {
         super();
         this.errorHandler = errorHandler;
         this.navigator = navigator;
@@ -95,7 +99,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         this.pushMessageRouter = pushMessageRouter;
         this.applicationTitle = applicationTitle;
         this.translate = translate;
-        this.translator = translator;
+        this.i18NProcessor = i18NProcessor;
         this.currentLocale = currentLocale;
         this.serializationSupport = serializationSupport;
         registerWithBroadcaster();
@@ -175,16 +179,21 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         if (toView instanceof Form) {
             ((Form) toView).translate();
         } else {
-            translator.translate(toView);
+            i18NProcessor.translate(toView);
         }
 
         content.setSizeFull();
         getViewDisplayPanel().setContent(content);
         this.view = toView;
+        updatePageTitle();
+    }
+
+    protected void updatePageTitle() {
         String pageTitle = pageTitle();
         getPage().setTitle(pageTitle);
         log.debug("Page title set to '{}'", pageTitle);
     }
+
 
     public Panel getViewDisplayPanel() {
         if (viewDisplayPanel == null) {
@@ -226,7 +235,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
         // now that browser is active, and user sitemap loaded, and UI constructed, set up currentLocale
         currentLocale.readFromEnvironment();
-        translator.translate(this);
+        i18NProcessor.translate(this);
         // Navigate to the correct start point
         String fragment = getPage().getUriFragment();
         getKrailNavigator().navigateTo(fragment);
@@ -322,11 +331,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     @SuppressWarnings("UnusedParameters")
     @Handler
     public void localeChanged(LocaleChangeBusMessage busMessage) {
-        translator.translate(this);
-        //during initial set up view has not been created but locale change gets called for other components
-        if (getView() != null) {
-            translator.translate(getView());
-        }
+        updatePageTitle();
     }
 
     public KrailView getView() {

@@ -29,7 +29,7 @@ public class CommonLabels_de extends CommonLabels {
         put(CommonLabelKey.Error, "Fehler");
 //        put(CommonLabelKey.First_Name, "Vorname");
 //        put(CommonLabelKey.Guest, "Gast");
-//        put(CommonLabelKey.Home_Page, "Startseite");
+        put(CommonLabelKey.Home, "Startseite");
 //        put(CommonLabelKey.Last_Name, "Nachname");
 //        put(CommonLabelKey.Message_Box, "Nachrichtenfeld");
         put(CommonLabelKey.No, "Nein");

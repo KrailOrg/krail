@@ -97,7 +97,7 @@ protected constructor(navigator: Navigator,
         if (toView is Form) {
             toView.translate()
         } else {
-            translator.translate(toView)
+            i18NProcessor.translate(toView)
         }
         if (view != null) {
             screenLayout.removeComponent(view.rootComponent)
