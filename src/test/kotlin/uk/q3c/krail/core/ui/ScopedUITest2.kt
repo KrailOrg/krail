@@ -63,7 +63,7 @@ object ScopedUITest2 : Spek({
 
         on("changing view") {
             val view = DefaultPublicHomeView(translate, serializationSupport)
-            view.buildView(null)
+            view.buildView()
             ui.changeView(view)
 
             it("updates the page title") {
@@ -74,7 +74,7 @@ object ScopedUITest2 : Spek({
         on("changing locale") {
             val busMessage: LocaleChangeBusMessage = mockk(relaxed = true)
             val view = DefaultPublicHomeView(translate, serializationSupport)
-            view.buildView(null)
+            view.buildView()
             ui.localeChanged(busMessage)
 
             it("updates the page title") {

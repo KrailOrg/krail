@@ -16,40 +16,30 @@ import com.vaadin.ui.Component
 import com.vaadin.ui.Label
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.NavigationStateExt
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.I18NKey
 
+
+/**
+ * Changed construction of label during #749
+ */
 class ViewA11 : KrailView {
-    override fun beforeBuild(navigationStateExt: NavigationStateExt?) {
+    private lateinit var label: Label
+    override lateinit var rootComponent: Component
+    override fun beforeBuild(navigationStateExt: NavigationStateExt) {
     }
 
-    override fun buildView() {
-    }
 
     override fun afterBuild() {
     }
 
-    private var label: Label? = null
 
-    override fun beforeBuild(busMessage: ViewChangeBusMessage) {
-
-    }
-
-    override fun buildView(busMessage: ViewChangeBusMessage) {
+    override fun buildView() {
         label = Label("Wiggly")
+        rootComponent = label
     }
 
-    override fun getRootComponent(): Component {
-        // return null;
-        throw RuntimeException("not yet implemented")
-    }
 
     override fun init() {}
-
-    override fun afterBuild(busMessage: AfterViewChangeBusMessage) {
-
-    }
 
 
     override fun getNameKey(): I18NKey? {

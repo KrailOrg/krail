@@ -15,7 +15,6 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
 
@@ -30,7 +29,7 @@ public abstract class StandardPageViewBase extends ViewBase {
     }
 
     @Override
-    public void doBuild(ViewChangeBusMessage busMessage) {
+    public void doBuild() {
 
         label = new Label("This is the " + this.getClass()
                                                .getSimpleName());

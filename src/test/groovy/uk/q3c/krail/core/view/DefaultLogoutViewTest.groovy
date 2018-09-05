@@ -27,7 +27,7 @@ class DefaultLogoutViewTest extends ViewTest {
 
     def "doBuild"() {
         given:
-        view.buildView(busMessage)
+        view.buildView()
 
         expect:
         view.getRootComponent() instanceof VerticalLayout

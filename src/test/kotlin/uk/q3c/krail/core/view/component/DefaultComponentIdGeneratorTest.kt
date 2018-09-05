@@ -27,7 +27,7 @@ class DefaultComponentIdGeneratorTest : Spek({
 
         given("a view with a single component") {
             val view = TestView1(translate, serializationSupport)
-            view.buildView(message)
+            view.buildView()
 
 
             on("generate") {
@@ -43,7 +43,7 @@ class DefaultComponentIdGeneratorTest : Spek({
 
         given("a view with no components") {
             val view = TestView0(translate, serializationSupport)
-            view.buildView(message)
+            view.buildView()
 
             on("generate") {
                 val result = generator.generateAndApply(view)
@@ -57,7 +57,7 @@ class DefaultComponentIdGeneratorTest : Spek({
 
         given("a view with components and layout components") {
             val view = TestView2(translate, serializationSupport)
-            view.buildView(message)
+            view.buildView()
 
             on("apply") {
                 val result = generator.generateAndApply(view)
@@ -72,7 +72,7 @@ class DefaultComponentIdGeneratorTest : Spek({
 
         given("a view with all combinations of components") {
             val view = FullMontyView(translate, serializationSupport)
-            view.buildView(message)
+            view.buildView()
 
             on("generate and apply") {
                 val result = generator.generateAndApply(view)

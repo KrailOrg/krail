@@ -19,6 +19,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Component;
 import fixture.testviews2.TestAnnotatedView;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,8 +38,6 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.Ann
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.NavigationStateExt;
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.mbassador.EventBusModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.test.TestLabelKey;
@@ -151,10 +150,6 @@ public class DefaultAnnotationSitemapLoaderTest {
 
 
 
-        @Override
-        public void beforeBuild(ViewChangeBusMessage busMessage) {
-
-        }
 
         @Override
         public void beforeBuild(NavigationStateExt navigationStateExt) {
@@ -162,10 +157,6 @@ public class DefaultAnnotationSitemapLoaderTest {
         }
 
 
-        @Override
-        public void buildView(ViewChangeBusMessage busMessage) {
-
-        }
 
         @Override
         public void buildView() {
@@ -183,10 +174,6 @@ public class DefaultAnnotationSitemapLoaderTest {
         public void init() {
         }
 
-        @Override
-        public void afterBuild(AfterViewChangeBusMessage event) {
-
-        }
 
         @Override
         public void afterBuild() {
@@ -222,6 +209,16 @@ public class DefaultAnnotationSitemapLoaderTest {
         @Override
         public String getDescription() {
             return null;
+        }
+
+        @Override
+        public void setRootComponent(@NotNull Component component) {
+
+        }
+
+        @Override
+        public void rebuild() {
+
         }
     }
 }

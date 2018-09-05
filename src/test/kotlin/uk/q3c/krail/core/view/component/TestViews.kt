@@ -18,7 +18,7 @@ import uk.q3c.util.guice.SerializationSupport
 class TestView0 @Inject constructor(translate: Translate, serialisationSupport: SerializationSupport) : ViewBase(translate, serialisationSupport) {
 
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
 
     }
 
@@ -26,7 +26,7 @@ class TestView0 @Inject constructor(translate: Translate, serialisationSupport: 
 
 class TestView1 @Inject constructor(translate: Translate, serialisationSupport: SerializationSupport) : ViewBase(translate, serialisationSupport) {
     lateinit var box1: TextField
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
         box1 = TextField()
     }
 }
@@ -34,7 +34,7 @@ class TestView1 @Inject constructor(translate: Translate, serialisationSupport: 
 class TestView2 @Inject constructor(translate: Translate, serialisationSupport: SerializationSupport) : ViewBase(translate, serialisationSupport) {
     lateinit var box1: TextField
     lateinit var layout1: VerticalLayout
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
         box1 = TextField()
         layout1 = VerticalLayout(box1)
     }
@@ -85,7 +85,7 @@ class FullMontyView @Inject constructor(translate: Translate, serialisationSuppo
     lateinit var declaredByInterface: SpecialComponentInterface
 
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
         componentInView = TextField()
         componentInViewExcluded = TextField()
         layoutInView = VerticalLayout(componentInView)

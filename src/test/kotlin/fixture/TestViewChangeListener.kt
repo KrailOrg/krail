@@ -5,8 +5,8 @@ import net.engio.mbassy.listener.Handler
 import net.engio.mbassy.listener.Listener
 import uk.q3c.krail.core.eventbus.UIBus
 import uk.q3c.krail.core.view.BeforeViewChangeBusMessage
+import uk.q3c.krail.core.view.NavigationStateExt
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.eventbus.SubscribeTo
 import java.util.*
 
@@ -18,15 +18,15 @@ import java.util.*
 @SubscribeTo(UIBus::class)
 class TestViewChangeListener {
 
-    var calls: MutableMap<String, ViewChangeBusMessage> = LinkedHashMap()
+    var calls: MutableMap<String, Any?> = LinkedHashMap()
 
     fun getCalls(): Set<String> {
         return calls.keys
     }
 
     @Handler
-    fun beforeViewChange(busMessage: BeforeViewChangeBusMessage) {
-        calls["beforeViewChange"] = busMessage
+    fun beforeViewChange(msg: BeforeViewChangeBusMessage) {
+        calls["beforeViewChange"] = msg
     }
 
     /**
@@ -35,15 +35,15 @@ class TestViewChangeListener {
      * unbounded recursion if you decide to change the view again in the
      * listener.
      *
-     * @param busMessage view change event
+     * @param navStateExt view change event
      */
     @Handler
-    fun afterViewChange(busMessage: AfterViewChangeBusMessage) {
-        calls["afterViewChange"] = busMessage
+    fun afterViewChange(msg: AfterViewChangeBusMessage) {
+        calls["afterViewChange"] = msg
     }
 
-    fun addCall(call: String, busMessage: ViewChangeBusMessage) {
-        calls[call] = busMessage
+    fun addCall(call: String, navStateExt: NavigationStateExt?) {
+        calls[call] = navStateExt
     }
 
 

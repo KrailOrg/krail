@@ -20,7 +20,6 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.Experimental;
 import uk.q3c.util.guice.SerializationSupport;
@@ -43,8 +42,8 @@ public class SitemapReportView extends Grid3x3ViewBase {
     }
 
     @Override
-    protected void doBuild(ViewChangeBusMessage busMessage) {
-        super.doBuild(busMessage);
+    protected void doBuild() {
+        super.doBuild();
         reportArea = new TextArea();
         //        reportArea.setEnabled(false);
         reportArea.setSizeFull();

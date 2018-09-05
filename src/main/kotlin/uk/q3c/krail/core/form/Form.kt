@@ -19,8 +19,6 @@ import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.ViewBase
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
@@ -70,10 +68,6 @@ class DefaultForm @Inject constructor(
     private lateinit var section: FormSection
 
 
-    override fun doBuild(busMessage: ViewChangeBusMessage) {
-        doBuild()
-    }
-
     override fun doBuild() {
         val viewConfigurationClass = navigationStateExt.node.masterNode.viewConfiguration
         val formConfiguration =
@@ -109,7 +103,7 @@ class DefaultForm @Inject constructor(
      * Loads data but only for the detail section.  Data for table is 'loaded' (with the Dao as a CallbackProvider) during construction
      * of the [FormTableSection]
      */
-    override fun loadData(busMessage: AfterViewChangeBusMessage) {
+    override fun loadData() {
         if (section is FormDetailSection<*>) {
             (section as FormDetailSection<*>).loadData(navigationStateExt.to.parameters)
         }

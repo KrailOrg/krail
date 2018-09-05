@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.vaadin.ui.Label
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.ViewBase
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
 
@@ -21,7 +20,7 @@ interface EmptyView : KrailView
 
 class DefaultEmptyView @Inject constructor(translate: Translate, serializationSupport: SerializationSupport) : ViewBase(translate, serializationSupport), EmptyView {
 
-    override fun doBuild(busMessage: ViewChangeBusMessage) {
+    override fun doBuild() {
         rootComponent = Label("empty view")
     }
 

@@ -19,11 +19,11 @@ import com.vaadin.ui.PasswordField
 import com.vaadin.ui.TextField
 import uk.q3c.krail.core.user.LoginView
 import uk.q3c.krail.core.view.NavigationStateExt
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.I18NKey
 
 class TestLoginView : LoginView {
+    override lateinit var rootComponent: Component
+
     override fun buildView() {
     }
 
@@ -46,17 +46,7 @@ class TestLoginView : LoginView {
     override val password: PasswordField
         get() = PasswordField()
 
-    override fun beforeBuild(busMessage: ViewChangeBusMessage) {
 
-    }
-
-    override fun buildView(busMessage: ViewChangeBusMessage) {
-
-    }
-
-    override fun getRootComponent(): Component {
-        return Label("not used")
-    }
 
     override fun setUsername(username: String) {
 
@@ -74,9 +64,6 @@ class TestLoginView : LoginView {
 
     override fun init() {}
 
-    override fun afterBuild(busMessage: AfterViewChangeBusMessage) {
-
-    }
 
     override fun rebuild() {
 

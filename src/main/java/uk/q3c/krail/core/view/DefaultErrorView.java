@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.CommonLabelKey;
 import uk.q3c.krail.core.i18n.DescriptionKey;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
 
@@ -57,7 +56,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
 
     @Override
-    public void doBuild(ViewChangeBusMessage busMessage) {
+    public void doBuild() {
         textArea = new TextArea();
         textArea.setSizeFull();
         textArea.setReadOnly(false);

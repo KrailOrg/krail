@@ -32,7 +32,7 @@ class SitemapReportViewTest extends ViewTest {
 
     def "do build"() {
         given:
-        view.buildView(busMessage)
+        view.buildView()
 
         expect:
         thisView.getReportArea() != null

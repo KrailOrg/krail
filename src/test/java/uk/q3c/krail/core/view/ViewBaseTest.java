@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.MockTranslate;
 import uk.q3c.util.guice.SerializationSupport;
@@ -54,8 +53,8 @@ public class ViewBaseTest {
         //given
 
         //when
-        view2.buildView(null);
-        view2.afterBuild(null);
+        view2.buildView();
+        view2.afterBuild();
         //then
 
         assertThat(view2.isComponentsConstructed()).isTrue();
@@ -100,7 +99,7 @@ public class ViewBaseTest {
         }
 
         @Override
-        public void doBuild(ViewChangeBusMessage event) {
+        public void doBuild() {
 
         }
     }
@@ -113,7 +112,7 @@ public class ViewBaseTest {
         }
 
         @Override
-        public void doBuild(ViewChangeBusMessage event) {
+        public void doBuild() {
             setRootComponent(new Label("blank"));
         }
     }

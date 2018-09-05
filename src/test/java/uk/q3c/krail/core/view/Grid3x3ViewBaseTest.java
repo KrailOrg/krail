@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
 
@@ -46,9 +45,6 @@ public class Grid3x3ViewBaseTest {
     Translate translate;
 
     @Mock
-    private ViewChangeBusMessage busMessage;
-
-    @Mock
     private SerializationSupport serializationSupport;
 
     @Before
@@ -68,7 +64,7 @@ public class Grid3x3ViewBaseTest {
     @Test
     public void setCells() {
         //given
-        view.doBuild(busMessage);
+        view.doBuild();
         //when
         view.setTopLeft(topLeft);
         view.setTopCentre(topCentre);
@@ -106,7 +102,7 @@ public class Grid3x3ViewBaseTest {
     @Test
     public void defaultSizes() {
         //given
-        view.doBuild(busMessage);
+        view.doBuild();
         //when
 
         //then

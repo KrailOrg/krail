@@ -29,7 +29,6 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.MessageKey;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
@@ -83,8 +82,8 @@ public class I18NView extends Grid3x3ViewBase {
      * {@inheritDoc}
      */
     @Override
-    protected void doBuild(ViewChangeBusMessage busMessage) {
-        super.doBuild(busMessage);
+    protected void doBuild() {
+        super.doBuild();
         instructions1 = new Label();
         instructions2 = new Label();
         localeList = new TextArea();

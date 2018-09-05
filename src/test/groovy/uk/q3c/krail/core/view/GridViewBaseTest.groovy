@@ -14,7 +14,6 @@
 package uk.q3c.krail.core.view
 
 import com.vaadin.ui.Label
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
 
@@ -30,7 +29,8 @@ class GridViewBaseTest extends ViewTest {
         }
 
         @Override
-        protected void doBuild(ViewChangeBusMessage busMessage) {
+        void doBuild() {
+            super.doBuild()
             gridLayout.addComponent(new Label())
         }
     }

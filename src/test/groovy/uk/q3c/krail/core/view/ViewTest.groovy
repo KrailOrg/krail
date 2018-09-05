@@ -40,7 +40,7 @@ abstract class ViewTest extends Specification {
 
     def "root component set"() {
         given:
-        view.buildView(busMessage)
+        view.buildView()
 
         expect:
         view.getRootComponent() != null
@@ -49,7 +49,7 @@ abstract class ViewTest extends Specification {
     def "check captions and Ids"() {
         given:
         ViewFieldChecker checker = new ViewFieldChecker(view, ImmutableSet.copyOf(fieldsWithoutCaptions), ImmutableSet.copyOf(fieldsWIthoutIds))
-        view.buildView(busMessage)
+        view.buildView()
         view.setIds()
 
         expect:

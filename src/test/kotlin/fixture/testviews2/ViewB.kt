@@ -17,45 +17,35 @@ import com.vaadin.ui.Component
 import com.vaadin.ui.Label
 import fixture.TestViewChangeListener
 import uk.q3c.krail.core.navigate.NavigationState
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode
+import uk.q3c.krail.core.navigate.sitemap.NodeRecord
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.NavigationStateExt
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.I18NKey
 
 class ViewB @Inject
 constructor(private val changeListener: TestViewChangeListener) : KrailView {
-    override fun beforeBuild(navigationStateExt: NavigationStateExt?) {
+    private val label = Label("not used")
+    override var rootComponent: Component = label
+    lateinit var navigationStateExt: NavigationStateExt
+
+    override fun beforeBuild(navigationStateExt: NavigationStateExt) {
+        this.navigationStateExt = navigationStateExt
+        changeListener.addCall("beforeBuild", navigationStateExt)
     }
 
     override fun buildView() {
-    }
-
-    override fun afterBuild() {
-    }
-
-
-    private val label = Label("not used")
-
-    override fun beforeBuild(busMessage: ViewChangeBusMessage) {
-        changeListener.addCall("beforeBuild", busMessage)
-    }
-
-    override fun buildView(busMessage: ViewChangeBusMessage) {
-        changeListener.addCall("buildView", busMessage)
-    }
-
-    override fun getRootComponent(): Component {
-        return label
+        changeListener.addCall("buildView", navigationStateExt)
     }
 
 
     override fun init() {
-        changeListener.addCall("init", EmptyViewChangeBusMessage())
+        changeListener.addCall("init", NavigationStateExt(NavigationState(), NavigationState(), UserSitemapNode(MasterSitemapNode(1, NodeRecord("?")))))
     }
 
-    override fun afterBuild(busMessage: AfterViewChangeBusMessage) {
-        changeListener.addCall("afterBuild", busMessage)
+    override fun afterBuild() {
+        changeListener.addCall("afterBuild", navigationStateExt)
     }
 
 
@@ -84,5 +74,3 @@ constructor(private val changeListener: TestViewChangeListener) : KrailView {
     }
 }
 
-class EmptyViewChangeBusMessage : ViewChangeBusMessage(NavigationState(), NavigationState())
-class EmptyAfterViewChangeBusMessage : AfterViewChangeBusMessage(NavigationState(), NavigationState())

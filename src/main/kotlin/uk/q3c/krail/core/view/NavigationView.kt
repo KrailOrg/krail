@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import uk.q3c.krail.core.navigate.sitemap.EmptyView
 import uk.q3c.krail.core.view.component.PageNavigationPanel
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.SerializationSupport
 
@@ -18,7 +17,7 @@ interface NavigationView : EmptyView
 class DefaultNavigationView @Inject constructor(serialisationSupport: SerializationSupport, translate: Translate, @field:Transient val navigationPanelProvider: Provider<PageNavigationPanel>) : ViewBase(translate, serialisationSupport), NavigationView {
 
 
-    override fun doBuild(busMessage: ViewChangeBusMessage) {
+    override fun doBuild() {
         val navigationPanel = navigationPanelProvider.get()
         rootComponent = navigationPanel
     }

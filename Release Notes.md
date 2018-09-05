@@ -1,24 +1,44 @@
 # Release notes for 0.16.12.0
 
-The original objective for this release was to provide a meaningful level of Forms support.  That has happened, but the release was extended to include a simpler, lightweight UI as well (`SimpleUI`).
+## Overview
 
-This also inspired some improvements in handling I18N for components
+The original objective for this release was to provide a meaningful level of Forms support.  This required the ability to use a `FormConfiguration`, which necessitated some changeds to `KrailView`
 
-## SimpleUI
+The release was alos extended to include a simpler, lightweight UI as well (`SimpleUI`). This inspired some improvements in handling I18N for components
+
+## Breaking Changes
+
+### KrailView
+
+A number of methods in `KrailView` passed as `BeforeViewChangeBusMessage` or `AfterViewChangeBusMessage`.  These have now all had the parameter removed.  The same information is now available in an instance of `NavigationStateExt`, which is passed via the *beforeBuild* method 
+
+### Refactoring / renaming
+
+- `DataModule` becomes `ConverterModule` and is moved to uk.q3c.krail.core.form
+- `ConverterFactory` and associated classes moved to uk.q3c.krail.core.form
+- `UserSitemapSorter` becomes `UserSitemapNodeComparator`
+- `SubPagePanel` and `Breadcrumb` replaced by `PageNavigationPanel`
+
+
+### Navigator
+- error() method has been removed - this does not play well when there is an error in the Sitemap (see also the notes on MessageBox and KrailErrorHandler)
+
+
+## Other Changes
+
+### SimpleUI
 
 A lightweight UI, `SimpleUI`, is available.  It is suggested that this is used where the primary user audience is expected to be using mobile.
 
 There is still more work to do on this, see issues #736 and #737 
 
-## ScopedUI
-
-### Display panel size
+### ScopedUI
 
 Previously the view display panel was always set to size full.  This proved to be inappropriate in some cases but could not be changed.  A protected property `viewDisplayPanelSizeFull` has been added, and the panel size is set only when this property is true.
 
 To maintain existing use, this property is true by default
 
-## Forms
+### Forms
 
 Forms support added.  MasterSitemapNode extended to include a configuration, so that a View or Form class can be declared, and its behaviour modified by its configuration.
 Views themselves do not yet support the use of configuration objects.
@@ -27,19 +47,12 @@ The Form class is supported by FormBuilders - currently the standard form builde
 
 Although the configuration supports sub-sections, the Form itself does not do so yet (see #712)
 
-## Changes to existing classes / interfaces
-
 ### KrailErrorHandler
 
 - Handles uncaught exceptions directly (by logging and popup message box) instead of calling Navigator.error().  The latter does not work well when an error occurs in Sitemap code.
 - binding moved from ShiroVaadinModule to ErrorModule
 - introduces [SystemErrorNotification] and [SystemErrorNotificationGroup] to improve flexibility in defining how to report errors
 
-### KrailView
-
-A ``NavigationStateExt`` is passed in the ``KrailView.beforeBuild`` and stored in ``ViewBase``.  this makes passing the ``ViewChangedMessage`` redundant in ``buildView()``, ``doBuild()`` and ``afterBuild()``, as the same information is available within the view from ``NavigationStateExt``
-
-The methods with a parameter have therefore been deprecated and replaced with parameterless versions. 
 
 ### Message Box
 
@@ -75,13 +88,9 @@ New classes are in Kotlin. Quite a few classes were ported, this is just a few o
 - MasterSitemapNode, UserSitemapNode, NodeRecord, SitemapFinisher and NavigationCommand
 - A couple of tests which mock UserSitemapNode (Mockito cannot mock final classes, Mockk can)
 - All in package uk.q3c.krail.core.navigate.sitemap.comparator
+- KrailView
 
-## Refactoring / renaming
 
-- `DataModule` becomes `ConverterModule` and is moved to uk.q3c.krail.core.form
-- `ConverterFactory` and associated classes moved to uk.q3c.krail.core.form
-- `UserSitemapSorter` becomes `UserSitemapNodeComparator`
-- `SubPagePanel` and `Breadcrumb` replaced by `PageNavigationPanel`
 
 ## Tests
 

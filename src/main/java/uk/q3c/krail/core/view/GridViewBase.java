@@ -18,7 +18,6 @@ import com.vaadin.ui.GridLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
 
@@ -43,12 +42,9 @@ public abstract class GridViewBase extends ViewBase implements KrailView {
      * need to check whether components have already been constructed, as this method may be called when the View is
      * selected again after initial construction.
      *
-     * @param event
-     *         contains information about the change to this View
      */
     @Override
-    public void buildView(ViewChangeBusMessage event) {
-        super.buildView(event);
+    public void doBuild() {
         setRootComponent(gridLayout);
         setIds();
     }

@@ -19,7 +19,6 @@ import org.jetbrains.spek.api.dsl.on
 import org.mockito.Mockito
 import uk.q3c.krail.core.env.ServletInjectorLocator
 import uk.q3c.krail.core.view.ViewBase
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.guice.DefaultSerializationSupport
 import uk.q3c.util.guice.InjectorLocator
@@ -188,7 +187,7 @@ class Dummy1Module : AbstractModule() {
 
 class ClassWithNoGuiceInjections @Inject constructor(translate: Translate, serializationSupport: SerializationSupport) : Serializable, ViewBase(translate, serializationSupport) {
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
 
     }
 
@@ -197,7 +196,7 @@ class ClassWithNoGuiceInjections @Inject constructor(translate: Translate, seria
 
 class ClassWithTwoGuiceInjections @Inject constructor(translate: Translate, serializationSupport: SerializationSupport, @Transient val dummy1: Dummy1, @Transient val dummy2: Dummy2) : Serializable, ViewBase(translate, serializationSupport) {
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
 
     }
 }
@@ -208,7 +207,7 @@ open class ClassWithTwoAnnotatedGuiceInjections @Inject constructor(
         @field:Named("1") @param:Named("1") @Transient var dummy1: Dummy1,
         @field:Named("2") @param:Named("2") @Transient var dummy2: Dummy1) : Serializable, ViewBase(translate, serializationSupport) {
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
 
     }
 }
@@ -220,7 +219,7 @@ open class ClassWithMissingGuiceFieldAnnotation @Inject constructor(
         @field:Named("1") @param:Named("1") @Transient val dummy1: Dummy1,
         @Named("2") @Transient val dummy2: Dummy1) : Serializable, ViewBase(translate, serializationSupport) {
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
 
     }
 }
@@ -231,7 +230,7 @@ open class ClassWithExcludedField @Inject constructor(
         @param:Named("1") @Transient val dummy1: Dummy1,
         @field:Named("2") @param:Named("2") @Transient val dummy2: Dummy1) : Serializable, ViewBase(translate, serializationSupport) {
 
-    override fun doBuild(busMessage: ViewChangeBusMessage?) {
+    override fun doBuild() {
 
     }
 

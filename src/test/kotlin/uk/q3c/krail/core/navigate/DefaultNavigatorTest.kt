@@ -630,18 +630,21 @@ object DefaultNavigatorTest : Spek({
             val view = viewFactory.lastView as ViewB1
 
             it("listeners receive messages in the correct order") {
-                changeListener.getCalls().size.shouldBe(3)
+                changeListener.getCalls().size.shouldBe(6)
                 val iter = changeListener.calls.iterator()
                 iter.next().key.shouldBeEqualTo("beforeViewChange")
                 iter.next().key.shouldBeEqualTo("init")
+                iter.next().key.shouldBeEqualTo("beforeBuild")
+                iter.next().key.shouldBeEqualTo("buildView")
+                iter.next().key.shouldBeEqualTo("afterBuild")
                 iter.next().key.shouldBeEqualTo("afterViewChange")
             }
 
             it("has the correct content in the event") {
-                changeListener.calls["beforeViewChange"]!!.toState.fragment.shouldBeEqualTo(userSitemap.b1Fragment)
-                changeListener.calls["beforeViewChange"]!!.fromState.fragment.shouldBeEqualTo(userSitemap.bFragment)
-                changeListener.calls["afterViewChange"]!!.toState.fragment.shouldBeEqualTo(userSitemap.b1Fragment)
-                changeListener.calls["afterViewChange"]!!.fromState.fragment.shouldBeEqualTo(userSitemap.bFragment)
+                (changeListener.calls["beforeViewChange"] as BeforeViewChangeBusMessage).toState.fragment.shouldBeEqualTo(userSitemap.b1Fragment)
+                (changeListener.calls["beforeViewChange"] as BeforeViewChangeBusMessage).fromState.fragment.shouldBeEqualTo(userSitemap.bFragment)
+                (changeListener.calls["afterViewChange"] as AfterViewChangeBusMessage).toState.fragment.shouldBeEqualTo(userSitemap.b1Fragment)
+                (changeListener.calls["afterViewChange"] as AfterViewChangeBusMessage).fromState.fragment.shouldBeEqualTo(userSitemap.bFragment)
             }
 
             it("calls the view methods in the correct order") {

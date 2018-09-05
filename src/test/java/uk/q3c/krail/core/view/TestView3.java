@@ -2,7 +2,6 @@ package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
 
@@ -48,7 +47,7 @@ class TestView3 extends ViewBase {
     }
 
     @Override
-    protected void doBuild(ViewChangeBusMessage busMessage) {
+    protected void doBuild() {
 
     }
 

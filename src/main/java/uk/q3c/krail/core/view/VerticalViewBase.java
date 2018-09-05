@@ -18,7 +18,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
 
@@ -39,15 +38,13 @@ public abstract class VerticalViewBase extends ViewBase implements KrailView {
     /**
      * Override this method to build the layout and components for this View
      *
-     * @param event
      *
      * @return
      */
     @Override
-    public void buildView(ViewChangeBusMessage event) {
+    public void doBuild() {
         layout = new VerticalLayout();
         setRootComponent(layout);
-        super.buildView(event);
 
     }
 

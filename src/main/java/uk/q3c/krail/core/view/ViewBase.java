@@ -21,9 +21,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.DefaultNavigator;
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ComponentIdGenerator;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.guice.SerializationSupport;
@@ -53,16 +51,14 @@ public abstract class ViewBase implements KrailView, Serializable {
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
     protected I18NKey nameKey = LabelKey.Unnamed;
     protected I18NKey descriptionKey = DescriptionKey.No_description_provided;
-    private Translate translate;
-
-
     protected SerializationSupport serializationSupport;
+    protected NavigationStateExt navigationStateExt;
+    private Translate translate;
     private boolean componentsConstructed;
     private boolean dirty;
     @Deprecated
     private boolean idsAssigned;
     private Component rootComponent;
-    protected NavigationStateExt navigationStateExt;
 
     @Inject
     protected ViewBase(Translate translate, SerializationSupport serializationSupport) {
@@ -97,24 +93,18 @@ public abstract class ViewBase implements KrailView, Serializable {
     @Override
     public void beforeBuild(NavigationStateExt navigationStateExt) {
         this.navigationStateExt = navigationStateExt;
-        beforeBuild(new BeforeViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
     }
 
     @Override
-    public void afterBuild(AfterViewChangeBusMessage busMessage) {
+    public void afterBuild() {
         log.debug("View.afterBuild called");
         if (!idsAssigned) {
             setIds();
             idsAssigned = true;
         }
-        loadData(busMessage);
+        loadData();
     }
 
-
-    @Override
-    public void afterBuild() {
-        afterBuild(new AfterViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
-    }
 
     /**
      * As of 0.14.0.0 ids are assigned by automatically by the {@link DefaultNavigator}, which invokes {@link ComponentIdGenerator}.
@@ -150,32 +140,10 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     /**
      * Default does nothing, overload to load your data
-     *
-     * @param busMessage
      */
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
-    public void loadData(AfterViewChangeBusMessage busMessage) {
+    public void loadData() {
         log.debug("====> View.loadData called");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
-    @Override
-    public void beforeBuild(ViewChangeBusMessage busMessage) {
-        log.debug("====> View.beforeBuild called");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void buildView(ViewChangeBusMessage busMessage) {
-        if (!componentsConstructed) {
-            doBuild(busMessage);
-        }
-        componentsConstructed = true;
     }
 
     @Override
@@ -187,20 +155,11 @@ public abstract class ViewBase implements KrailView, Serializable {
     }
 
 
-
     /**
      * Implement this method to construct your components.  You must also set {@link #rootComponent} (this is the component which will be placed in the parent
      * {@link UI}, and is usually a layout
-     *
-     * @param busMessage a message sent by the Event Bus to signify a change of View
-     * @deprecated use {@link #doBuild()}
      */
-    @Deprecated
-    protected abstract void doBuild(ViewChangeBusMessage busMessage);
-
-    protected void doBuild() {
-        doBuild(new ViewChangeBusMessage(navigationStateExt.getFrom(), navigationStateExt.getTo()));
-    }
+    abstract protected void doBuild();
 
     /**
      * {@inheritDoc}

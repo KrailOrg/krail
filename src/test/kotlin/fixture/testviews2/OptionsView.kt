@@ -16,12 +16,13 @@ import com.vaadin.ui.Component
 import com.vaadin.ui.Label
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.NavigationStateExt
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.I18NKey
 
 class OptionsView : KrailView {
-    override fun beforeBuild(navigationStateExt: NavigationStateExt?) {
+
+    override lateinit var rootComponent: Component
+
+    override fun beforeBuild(navigationStateExt: NavigationStateExt) {
         TODO()
     }
 
@@ -35,22 +36,10 @@ class OptionsView : KrailView {
 
     private val label = Label("not used")
 
-    override fun beforeBuild(busMessage: ViewChangeBusMessage) {
-
-    }
-
-    override fun buildView(busMessage: ViewChangeBusMessage) {}
-
-    override fun getRootComponent(): Component {
-        return label
-    }
 
 
     override fun init() {}
 
-    override fun afterBuild(event: AfterViewChangeBusMessage) {
-
-    }
 
 
     override fun getNameKey(): I18NKey? {

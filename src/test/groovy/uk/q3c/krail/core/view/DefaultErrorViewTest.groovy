@@ -40,7 +40,7 @@ class DefaultErrorViewTest extends ViewTest {
 
     def "do build without error set, shows info message"() {
         when:
-        thisView.doBuild(null)
+        thisView.doBuild()
 
         then:
         thisView.getTextArea().getValue().equals('Error view has been called but no error has been set.  This should not happen')
@@ -52,7 +52,7 @@ class DefaultErrorViewTest extends ViewTest {
         thisView.setError(error)
 
         when:
-        thisView.doBuild(null)
+        thisView.doBuild()
 
         then:
         thisView.getTextArea().getValue().contains('java.lang.RuntimeException')

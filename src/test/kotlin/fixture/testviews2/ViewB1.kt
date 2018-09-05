@@ -16,15 +16,15 @@ import com.vaadin.ui.Component
 import com.vaadin.ui.Label
 import uk.q3c.krail.core.view.KrailView
 import uk.q3c.krail.core.view.NavigationStateExt
-import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.I18NKey
 
 class ViewB1 : KrailView {
+    private val label = Label("not used")
+    override var rootComponent: Component = label
     val calls: MutableList<String> = mutableListOf()
 
 
-    override fun beforeBuild(navigationStateExt: NavigationStateExt?) {
+    override fun beforeBuild(navigationStateExt: NavigationStateExt) {
         calls.add("beforeBuild")
     }
 
@@ -36,28 +36,11 @@ class ViewB1 : KrailView {
         calls.add("afterBuild")
     }
 
-    private val label = Label("not used")
 
-
-    override fun beforeBuild(busMessage: ViewChangeBusMessage) {
-        calls.add("beforeBuild")
-    }
-
-    override fun buildView(busMessage: ViewChangeBusMessage) {
-        calls.add("buildView")
-    }
-
-    override fun getRootComponent(): Component {
-        return label
-    }
 
 
     override fun init() {
         calls.add("init")
-    }
-
-    override fun afterBuild(busMessage: AfterViewChangeBusMessage) {
-        calls.add("afterBuild")
     }
 
 
