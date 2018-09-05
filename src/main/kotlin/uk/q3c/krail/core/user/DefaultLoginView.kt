@@ -71,6 +71,7 @@ class DefaultLoginView @Inject constructor(
     }
 
     public override fun doBuild() {
+        super.doBuild()
         centrePanel = Panel()
         centrePanel.addStyleName(ValoTheme.PANEL_WELL)
         centrePanel.setSizeUndefined()
