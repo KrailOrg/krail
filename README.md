@@ -18,31 +18,26 @@ This core library provides:
 * User options
 * Application configuration through ini files, database etc
 * JSR 303 Validation (integrated with I18N)
-* Forms support through [EasyBinder](https://github.com/ljessendk/easybinder)
+* Forms support
 * User notifications
 
-Additional libraries, integrated and configured through Guice, provide:
+The framework is highly configurable, and virtually any element of it can be replaced by using Guice bindings.  
 
-* JPA persistence - [krail-jpa](https://github.com/davidsowerby/krail-jpa), using [Apache Onami persist](http://onami.apache.org/persist/) and EclipseLink
-* Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
+## Development Focus
+
+The current focus for development is to provide full Forms support, running on Vertx.  So far, thanks to the great contribution from [Marco Collovati](https://github.com/mcollovati), running on Vertx has shown no specific issues.
+
+It is intended that the same code can be run both on Vertx and a conventional web server environment, and a bootstrapping mechanism is provided for that purpose.
 
 
-The [Documentation](http://krail.readthedocs.io/en/master/), which includes a Tutorial, user Guide and Developer Guide, provides more information
- 
+The extensive [Documentation](http://krail.readthedocs.io/en/master/), includes a Tutorial, user Guide and Developer Guide.  The Tutorial is currently limited to the Vaadin 7 version, and needs rewriting to include new features. 
 
----
 
-## Notice
+## Source Code
 
----
+Originally written in Java the source is gradually being migrated to Kotlin.  Tests are a mix of JUnit, Spock and Spek.  The intention is to end up with an all-Kotlin solution, but porting is usually only done when code changes are required for other reasons.
 
-Krail has now been updated to Vaadin 8, and Serialization implemented (though with some fixes still required) to enable use in a clustered environment.
-
-Vaadin Push is temporarily broken
-
-The next step is to try migrating to [Eclipse Vert.x](http://vertx.io/).  If that is successful, from that point, the emphasis will be on providing user interface platform designed for use within a distributed environment, and specifically on vertx.
-
-Normally the versions of the various libraries are independent, but to simplify the transition to Vaadin 8, they are being brought temporarily into line:
+## Versions
 
 | Krail version  |   Vaadin    | 
 |---------|------------|
@@ -66,7 +61,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail:0.16.1.0'
+'uk.q3c.krail:krail:0.16.12.0'
 ```
 ## Maven
 
@@ -82,7 +77,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail</artifactId>
-	<version>0.16.1.0</version>
+	<version>0.16.12.0</version>
 </dependency>
 ```
 ## Direct
@@ -91,7 +86,7 @@ repositories {
 
 # Limitations
 
-Would not work in a [clustered environment](https://github.com/davidsowerby/krail/issues/425)
+Testing on Vertx has been limited, particularly on clustered Vertx.  Having said that, functional tests run on Vertx have shown no issues except that Push does not correctly disable.
 
 # Status
 
@@ -103,7 +98,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 * Guava cache
 
 
-## testApp
+## Functional Test Application
 
 There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality - though the [Tutorial](http://krail.readthedocs.org/en/latest/) may be better for that
 
@@ -120,7 +115,7 @@ Thanks to:
 [Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial<br>
 [Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration<br>
 
-[EasyBinder](https://github.com/ljessendk/easybinder)<br>
+
 [ej technologies](http://www.ej-technologies.com/index.html) for an open source licence of [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
 [Vaadin](https://vaadin.com/home)<br>
 [Guice](https://github.com/google/guice)<br>
@@ -144,4 +139,4 @@ Thanks to:
 [spock](https://github.com/spockframework/spock)<br>
 [Spek](http://spekframework.org/)<br>
 [FindBugs](http://findbugs.sourceforge.net/)
-
+[Mockk](https://mockk.io/)

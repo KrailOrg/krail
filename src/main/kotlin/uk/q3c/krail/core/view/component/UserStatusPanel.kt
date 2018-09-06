@@ -24,7 +24,6 @@ import java.io.Serializable
  *
  *
  */
-@Deprecated("replaced by UserStatusComponents")
 interface UserStatusPanel : Component {
     val usernameLabel: Label
     val login_logout_Button: Button

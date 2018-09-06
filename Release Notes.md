@@ -2,15 +2,15 @@
 
 ## Overview
 
-The original objective for this release was to provide a meaningful level of Forms support.  This required the ability to use a `FormConfiguration`, which necessitated some changeds to `KrailView`
+The original objective for this release was to provide a meaningful level of Forms support.  This required the ability to use a `FormConfiguration`, which necessitated some changes to `KrailView`
 
-The release was alos extended to include a simpler, lightweight UI as well (`SimpleUI`). This inspired some improvements in handling I18N for components
+The release was also extended to include a simpler, lightweight UI as well (`SimpleUI`). This inspired some improvements in handling I18N for components
 
 ## Breaking Changes
 
 ### KrailView
 
-A number of methods in `KrailView` passed as `BeforeViewChangeBusMessage` or `AfterViewChangeBusMessage`.  These have now all had the parameter removed.  The same information is now available in an instance of `NavigationStateExt`, which is passed via the *beforeBuild* method 
+A number of methods in `KrailView` passed `BeforeViewChangeBusMessage` or `AfterViewChangeBusMessage` as a parameter.  These have now all had the parameter removed.  The same information is now available in an instance of `NavigationStateExt`, which is passed via the *beforeBuild* method 
 
 ### Refactoring / renaming
 
@@ -49,7 +49,7 @@ Although the configuration supports sub-sections, the Form itself does not do so
 
 ### KrailErrorHandler
 
-- Handles uncaught exceptions directly (by logging and popup message box) instead of calling Navigator.error().  The latter does not work well when an error occurs in Sitemap code.
+- Handles uncaught exceptions directly (by logging and popup message box) instead of calling Navigator.error().  The latter did not work well when an error occurs in Sitemap code.
 - binding moved from ShiroVaadinModule to ErrorModule
 - introduces [SystemErrorNotification] and [SystemErrorNotificationGroup] to improve flexibility in defining how to report errors
 
@@ -73,12 +73,11 @@ Redundant checks removed.  Only the redirect loop check remains
 
 ### TranslatableComponents
 
-Added to simplify the I18N management of dynamically created components.  It can also be a simpler alternative to using @Caption
-Used in `NavigationBar`
+Added to simplify the I18N management of dynamically created components.  It can also be a simpler alternative to using @Caption.  Used in `NavigationBar`
   
 ### UserStatusPanel
 
-- Deprecated and replaced by `UserStatusComponents`.  Functionally the same, but is not a component - improves flexibility of use
+- Replaced by `UserStatusComponents` - but this is temporary (see #751).  Functionally this is the same as `UserStatusPanel`, but is not a component - improves flexibility of use.
 
 
 ## Ported to Kotlin
