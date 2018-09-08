@@ -69,7 +69,7 @@ repositories {
 
 kaytee {
     version {
-        number = "0.16.12.0"
+        number = "0.16.13.0"
     }
     changelog {
         maxVersions = 10
