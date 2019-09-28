@@ -5,6 +5,18 @@
 [![Build Status](https://travis-ci.org/davidsowerby/krail.svg?branch=master)](https://travis-ci.org/davidsowerby/krail)
 [![Coverage Status](https://coveralls.io/repos/github/davidsowerby/krail/badge.svg?branch=master)](https://coveralls.io/github/davidsowerby/krail?branch=master)
 
+==========================================================
+# NOTICE
+
+28 Sep 2019
+
+It is with great regret that I have decided not to develop Krail any further.  A lot of work went into it, and although it received some interest, sadly not enough to make it worth maintaining.
+
+==========================================================
+
+
+
+
 Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/master/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial)).  Note that the tutorial is based on the Vaadin 7 version of Krail - it should still be possible to follow it, but it will not be updated until the move to Eclipse Vert.x is done (or fails!) 
 
 
